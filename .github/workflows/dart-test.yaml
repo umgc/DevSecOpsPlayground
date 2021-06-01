@@ -1,5 +1,5 @@
-on: [pull_request]
-
+name: dart-test
+on: [push]
 jobs:
   linter:
     runs-on: ubuntu-latest
