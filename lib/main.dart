@@ -9,7 +9,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Hello, World!',
+      title: 'DevSecOps Pipeline Demo',
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'DevSecOps Hello, World!'),
+      home: MyHomePage(title: 'DevSecOps Pipeline Demo'),
     );
   }
 }
@@ -94,12 +94,20 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              'Hello, World',
+              'You have pushed the DevSecOps Pipeline Demo button this many times:',
+            ),
+            Text(
+              '$_counter',
               style: Theme.of(context).textTheme.headline4,
             ),
           ],
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _incrementCounter,
+        tooltip: 'Increment',
+        child: Icon(Icons.add),
+      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
