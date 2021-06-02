@@ -29,7 +29,12 @@ jobs:
       # https://github.com/dart-lang/setup-dart/blob/main/README.md
       # - uses: dart-lang/setup-dart@v1
       - uses: dart-lang/setup-dart@9a04e6d73cca37bd455e0608d7e5092f881fd603
-
+      
+      # Install Analyzer which is a dependency of test
+      - name: Install test
+        run: flutter pub add test
+        
+      # Install dependencies
       - name: Install dependencies
         run: flutter pub get
 
@@ -37,10 +42,7 @@ jobs:
       # - name: Verify formatting
       #   run: dart format --output=none --set-exit-if-changed .
 
-      # Consider passing '--fatal-infos' for slightly stricter analysis.
-      - name: Install Analyzer
-        run: flutter pub add test
-        
+      # Consider passing '--fatal-infos' for slightly stricter analysis.        
       - name: Analyze
         run: flutter analyze
 
