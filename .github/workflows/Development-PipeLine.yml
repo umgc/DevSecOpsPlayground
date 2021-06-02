@@ -65,13 +65,6 @@ jobs:
         with:
           name: hello-flutter-web-${{env.FLUTTER_VERSION}}
           path: build/web/**/*.*
-          
-      - name: Create a Release
-        uses: elgohr/Github-Release-Action@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
-        with:
-          args: "Developer Release posting"
         
   test:
     name: Run Unit Tests
