@@ -22,16 +22,19 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-        #Setup Flutter
+      # Setup Flutter
       - name: Set up Flutter
         uses: subosito/flutter-action@v1
+        
+      # Add formating standards
+      - run: flutter pub add --dev effective_dart
       - run: flutter pub get
 
       # Analyze
       - name: Analyze Flutter
         uses: ValentinVignal/action-dart-analyze@v0.11
         with:
-          fail-on: "warning"
+          fail-on: "format"
 
   build:
     runs-on: ubuntu-latest
