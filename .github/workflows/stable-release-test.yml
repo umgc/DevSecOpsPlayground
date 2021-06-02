@@ -16,7 +16,7 @@ jobs:
         name: my-artifact
         path: my_file-dev.txt
     - name: GitHub Release Action
-      uses: 1fxe/GitHub-Release-Action@developer
+      uses: 1fxe/GitHub-Release-Action@main
       with:
         release_token: ${{ secrets.RELEASE_TOKEN }}
         release_tag: v0.0.1
