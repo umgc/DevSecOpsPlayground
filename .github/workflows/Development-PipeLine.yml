@@ -54,11 +54,17 @@ jobs:
       - name: Build Web
         run: flutter build web
      
-      - name: 'Uploud artifact'
+      - name: 'Upload APK Artifact'
         uses: 'actions/upload-artifact@v2'
         with:
-          name: hello-flutter-apk-$FLUTTER_VERSION
+          name: hello-flutter-apk-${FLUTTER_VERSION}
           path: build/app/outputs/apk/release/*.apk
+          
+      - name: 'Upload Web Artifacts'
+        uses: 'actions/upload-artifact@v2'
+        with:
+          name: hello-flutter-web-${FLUTTER_VERSION}
+          path: build/web/**/*.*
       
       - name: GH Release
         # You may pin to the exact commit or the version.
@@ -76,9 +82,7 @@ jobs:
           # Identify the release as a prerelease. Defaults to false
           prerelease: true # optional
           # Newline-delimited list of path globs for asset files to upload
-          #files: # optional
-          tag_name: 'v0.0.1'
-        
+          #files: # optional        
         
   test:
     name: Run Unit Tests
