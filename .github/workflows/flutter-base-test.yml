@@ -39,7 +39,7 @@ jobs:
 
       # Consider passing '--fatal-infos' for slightly stricter analysis.
       - name: Install Analyzer
-        run: flutter pub add analyzer
+        run: flutter pub add test
         
       - name: Analyze
         run: flutter analyze
