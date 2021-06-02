@@ -6,4 +6,4 @@ Just a playground to try things.
 
 Set Default Branch to Developer
 
-[![Flutter Linter, Build, Unit Test](https://github.com/umgc/DevSecOpsPlayground/actions/workflows/flutter-base-test.yml/badge.svg)](https://github.com/umgc/DevSecOpsPlayground/actions/workflows/flutter-base-test.yml)
+[![Developer Branch](https://github.com/umgc/DevSecOpsPlayground/actions/workflows/flutter-base-test.yml/badge.svg)](https://github.com/umgc/DevSecOpsPlayground/actions/workflows/flutter-base-test.yml)
