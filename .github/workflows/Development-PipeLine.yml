@@ -57,7 +57,7 @@ jobs:
         uses: 'actions/upload-artifact@v2'
         with:
           name: hello-flutter
-          path: /**/*.apk
+          path: build/app/outputs/apk/release/*.apk
       
       - name: GH Release
         # You may pin to the exact commit or the version.
