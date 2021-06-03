@@ -7,7 +7,6 @@ name: Dev Linter, Build, Unit Test
 
 env:
   FLUTTER_VERSION: "dev"
-  GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
   
 on:
   push:
@@ -44,9 +43,9 @@ jobs:
     steps:
       - name: Echo GITHUB variables
         run: |
-          echo Github Run ID: ${{ GITHUB_RUN_ID }}
-          echo Github Action ID: ${{ GITHUB_ACTION }}
-          echo Github Run Number: ${{ GITHUB_RUN_NUMBER }}
+          echo "Github Run ID-$GITHUB_RUN_ID"
+          echo "Github Action ID-$GITHUB_ACTION"
+          echo "Github Run Number-$GITHUB_RUN_NUMBER"
           
       - uses: actions/checkout@v2
         with:
