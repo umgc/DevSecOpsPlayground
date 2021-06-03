@@ -60,6 +60,11 @@ jobs:
         
       - name: Build Web
         run: flutter build web
+
+      - name: Copy to SonarCloud
+        run: |
+          mkdir sonar
+          cp -r ./build/web ./sonar
         
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master

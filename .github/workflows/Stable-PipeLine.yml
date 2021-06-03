@@ -6,7 +6,7 @@
 name: Stable Linter, Build, Unit Test
 
 env:
-  FLUTTER_VERSION: "stable"
+  FLUTTER_VERSION: "release"
   
 on:
   push:
@@ -54,6 +54,11 @@ jobs:
         
       - name: Build Web
         run: flutter build web
+
+      - name: Copy to SonarCloud
+        run: |
+          mkdir sonar
+          cp -r ./build/web ./sonar
         
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
@@ -65,7 +70,7 @@ jobs:
         uses: 'actions/upload-artifact@v2'
         with:
           name: hello-flutter-apk-${{env.FLUTTER_VERSION}}
-          path: build/app/outputs/apk/release/*.apk
+          path: build/app/outputs/flutter-apk/*.apk
           
       - name: 'Upload Web Artifacts'
         uses: 'actions/upload-artifact@v2'
