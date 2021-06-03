@@ -42,6 +42,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Echo GITHUB variables
+        run: |
+          echo Github Run ID: ${{ GITHUB_RUN_ID }}
+          echo Github Action ID: ${{ GITHUB_ACTION }}
+          echo Github Run Number: ${{ GITHUB_RUN_NUMBER }}
+          
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
@@ -58,6 +64,7 @@ jobs:
         
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
+        with: ${{ GITHUB_WORKSPACE }}/build/web
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
