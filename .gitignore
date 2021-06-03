@@ -1,8 +1,9 @@
 # Ignore local build
-\build
+/build/app
+/build/kotlin
 
 # Ignore dart tools on client
-\.dart_tool
+/.dart_tool
 
 # Ignore local package file
 /*.packages
