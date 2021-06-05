@@ -14,3 +14,4 @@ Set Default Branch to Developer
 
 
 Induce merge conflict
+Attempt to resolve conflict.
