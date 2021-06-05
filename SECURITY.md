@@ -20,6 +20,11 @@ To change who can access your repository and adjust permissions, click Manage ac
 The dependency graph is automatically generated for all public repositories and you can choose to enable it for private repositories.
 
 
+code checks completed via codacy-analysis.yml file
+Dependabot alerts all enabled.
+To enable Dependabot version updates, you must create a dependabot.yml configuration file.
+Dependabot security updates all enabled.
+
 
 | Version | Supported          |
 | ------- | ------------------ |
@@ -35,3 +40,6 @@ Use this section to tell people how to report a vulnerability.
 Tell them where to go, how often they can expect to get an update on a
 reported vulnerability, what to expect if the vulnerability is accepted or
 declined, etc.
+
+
+
