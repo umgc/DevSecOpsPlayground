@@ -36,6 +36,20 @@ jobs:
         with:
           fail-on: "format"
 
+  test:
+    name: Run Unit Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v1
+      - run: flutter pub get
+      
+      - name: Run tests
+        run: flutter test
+
   build:
     name: Build Project
     runs-on: ubuntu-latest
@@ -78,17 +92,25 @@ jobs:
         with:
           name: hello-flutter-web-${{env.FLUTTER_VERSION}}
           path: build/web/**/*.*
-        
-  test:
-    name: Run Unit Tests
-    runs-on: ubuntu-latest
 
-    steps:
-      - uses: actions/checkout@v2
-      
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v1
-      - run: flutter pub get
-      
-      - name: Run tests
-        run: flutter test
+  deploy:
+     runs-on: ubuntu-latest
+      needs: build
+      environment:
+      name: 'production'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+
+      steps:
+        - name: Download artifact from build job
+          uses: actions/download-artifact@v2
+          with:
+          name: hello-flutter-web-${{env.FLUTTER_VERSION}}
+
+      - name: 'Deploy to Azure Web App'
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v2
+        with:
+        app-name: 'Swen670-Summer-Hello-Flutter'
+        slot-name: 'production'
+        publish-profile: ${{ secrets.AzureAppService_PublishProfile_b1736b63ddf94fa0826be54892949c3b }}
+        package: .
