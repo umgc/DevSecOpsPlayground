@@ -11,27 +11,46 @@ on:
 
 jobs:
   build:
+    name: Build Project
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+      - name: Echo GITHUB variables
+        run: |
+          echo "Github Run ID- $GITHUB_RUN_ID "
+          echo "Github Action ID- $GITHUB_ACTION "
+          echo "Github Run Number- $GITHUB_RUN_NUMBER "
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
 
-    - name: Set up .NET Core
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: '5.0.x'
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v1
+      - run: flutter pub get
 
-    - name: Build with dotnet
-      run: dotnet build --configuration Release
+      - name: Build APK
+        run: flutter build apk --${{env.FLUTTER_VERSION}}
 
-    - name: dotnet publish
-      run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+      - name: Build Web
+        run: flutter build web
 
-    - name: Upload artifact for deployment job
-      uses: actions/upload-artifact@v2
-      with:
-        name: .net-app
-        path: ${{env.DOTNET_ROOT}}/myapp
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+      - name: 'Upload APK Artifact'
+        uses: 'actions/upload-artifact@v2'
+        with:
+          name: hello-flutter-apk-${{env.FLUTTER_VERSION}}
+          path: build/app/outputs/flutter-apk/*.apk
+
+      - name: 'Upload Web Artifacts'
+        uses: 'actions/upload-artifact@v2'
+        with:
+          name: hello-flutter-web-${{env.FLUTTER_VERSION}}
+          path: build/web/**/*.*
 
   deploy:
     runs-on: ubuntu-latest
