@@ -71,6 +71,4 @@ jobs:
           uses: azure/webapps-deploy@v2
           with:
             app-name: 'Swen670-Summer-Hello-Flutter'
-            slot-name: 'production'
             publish-profile: ${{ secrets.AzureAppService_PublishProfile_a773b7a957fd4299a216b6188d1add27 }}
-            package: .
