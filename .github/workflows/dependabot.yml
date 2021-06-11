@@ -22,14 +22,14 @@ updates:
     schedule:
       interval: "daily"
       
-#   # Maintain dependencies for flutter
-#   - package-ecosystem: "flutter"
-#     directory: "/"
-#     schedule:
-#       interval: "daily"
+  # Maintain dependencies for flutter
+  - package-ecosystem: "flutter"
+    directory: "/"
+    schedule:
+      interval: "daily"
       
-#   # Maintain dependencies for dart
-#   - package-ecosystem: "dart"
-#     directory: "/"
-#     schedule:
-#       interval: "daily"
+  # Maintain dependencies for dart
+  - package-ecosystem: "dart"
+    directory: "/"
+    schedule:
+      interval: "daily"
