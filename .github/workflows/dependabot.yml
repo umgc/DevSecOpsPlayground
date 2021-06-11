@@ -1,12 +1,13 @@
 version: 2
 updates:
-
-  # Maintain dependencies for GitHub Actions
-  - package-ecosystem: "github-actions"
+      
+# Maintain dependencies for GitHub Wrokflows
+  - package-ecosystem: "github/workflows"
     directory: "/"
     schedule:
       interval: "daily"
-
+      
+      
   # Maintain dependencies for npm
   - package-ecosystem: "npm"
     directory: "/"
