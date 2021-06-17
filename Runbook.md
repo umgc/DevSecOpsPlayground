@@ -5,10 +5,7 @@
 
 This document was dervied froma template generated [Skelton Thatcher Consulting](https://skeltonthatcher.com/) Copyright © 2014-2016
 
-See [`README.md`](README.md) for details of how to use this **Run Book / System Operation Manual** template.
-
-
-
+See (https://github.com/SkeltonThatcher/run-book-template) for details of how to use this **Run Book / System Operation Manual** template.
 
 
 ## Service or system overview
