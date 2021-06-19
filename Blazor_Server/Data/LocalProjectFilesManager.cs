@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Security.Principal;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Blazor_Server.Data
@@ -12,9 +13,31 @@ namespace Blazor_Server.Data
     [Authorize]
     public class LocalProjectFilesManager : IProjectFileManager
     {
-        private DirectoryInfo baseLocation = new (Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "StoredData"));
+        public LocalProjectFilesManager()
+        {
+            if (!FileDirInfo.Exists)
+            {
+                FileDirInfo.Create();
 
-        public async Task<bool> Delete(string fileLocation, IPrincipal principal)
+                // Reassign it to force object update based on new directory.
+                FileDirInfo = new DirectoryInfo(FileDirInfo.FullName);
+            }
+        }
+
+        public DirectoryInfo FileDirInfo = new (Path.Combine(ProjectManagerService.BaseDirInfo.FullName, "files"));
+
+        /// <summary>
+        /// For Test method only. Checks to ensure delete is from debug folder.
+        /// </summary>
+        /// <param name="fileLocation"></param>
+        /// <returns></returns>
+        public async Task<bool> DeleteAsync(string fileLocation)
+        {
+            return await DeleteAsync(fileLocation, true);
+        }
+
+        /// <inheritdoc/>
+        public async Task<bool> DeleteAsync(string fileLocation, IPrincipal principal)
         {
             if (!principal.Identity.IsAuthenticated)
             {
@@ -22,11 +45,11 @@ namespace Blazor_Server.Data
                 return false;
             }
 
-            var filePath = Path.Combine(baseLocation.FullName, fileLocation);
+            var filePath = Path.Combine(this.FileDirInfo.FullName, fileLocation);
 
             filePath = Path.GetFullPath(filePath);            
 
-            if (!filePath.StartsWith(baseLocation.FullName))
+            if (!filePath.StartsWith(this.FileDirInfo.FullName))
             {
                 // Maybe log this in
                 Debug.WriteLine($"Path not within the specified storage location. Attempted path: {filePath}");
@@ -40,48 +63,71 @@ namespace Blazor_Server.Data
                 return false;
             }
 
-            return await Task.Run(() =>
+
+            return await DeleteAsync(fileLocation, false);
+        }
+
+        /// <inheritdoc/>
+        public async Task<Stream> ReadAsync(string fileLocation)
+        {
+            var file = new FileInfo(Path.Combine(FileDirInfo.FullName, fileLocation));
+
+            if (!file.Exists)
             {
-                if (File.Exists(filePath))
-                {
-                    File.Delete(filePath);
-                    return true;
-                }
+                return null;
+            }
 
-                return false;
-            });
+            return await Task.FromResult(file.OpenRead());
         }
 
-        public Task<Stream> Read(string fileLocation)
+        /// <inheritdoc/>
+        public async Task<string> SaveAsync(Stream stream, string extention)
         {
-            throw new NotImplementedException();
-        }
-
-        public async Task<bool> Save(Stream stream, string fileLocation)
-        {
-            var filePath = Path.Combine(baseLocation.FullName, fileLocation);
+            var fileName = Guid.NewGuid().ToString() + extention;
+            var filePath = Path.Combine(FileDirInfo.FullName, fileName);
 
             filePath = Path.GetFullPath(filePath);
             
-            if (!filePath.StartsWith(baseLocation.FullName))
+            if (!filePath.StartsWith(FileDirInfo.FullName))
             {
                 // Maybe log this in
                 Debug.WriteLine($"Path not within the specified storage location. Attempted path: {filePath}");
-                return false;
+                return null;
             }
 
             if (File.Exists(filePath))
             {
                 Debug.WriteLine($"Path not within the specified storage location. Attempted path: {filePath}");
-                return false;
+                return null;
             }
 
-            using(var fs = new FileStream(fileLocation, FileMode.Create, FileAccess.Write))
+            using(var fs = new FileStream(filePath, FileMode.Create, FileAccess.Write))
             {
                 await stream.CopyToAsync(fs);
             }
 
-            return true;
+            return fileName;
+        }
+
+        private async Task<bool> DeleteAsync(string fileLocation, bool fromTest)
+        {
+            Regex testLocation = new Regex(@"[\\/][Bb]in[\\/][Dd]ebug[\\/]");
+
+            if (fromTest && !testLocation.IsMatch(fileLocation))
+            {
+                return false;
+            }
+
+            return await Task.Run(() =>
+            {
+                if (File.Exists(fileLocation))
+                {
+                    File.Delete(fileLocation);
+                    return true;
+                }
+
+                return false;
+            });
         }
     }
 }

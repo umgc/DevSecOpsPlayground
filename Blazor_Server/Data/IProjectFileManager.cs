@@ -9,10 +9,16 @@ namespace Blazor_Server.Data
 {
     interface IProjectFileManager
     {
-        Task<bool> Save(Stream stream, string fileLocation);
+        /// <summary>
+        /// Saves in coming stream.
+        /// </summary>
+        /// <param name="stream">Stream to save.</param>
+        /// <param name="extention">File Extention of attachment.</param>
+        /// <returns>File name the file was stored under.</returns>
+        Task<string> SaveAsync(Stream stream, string extention);
 
-        Task<bool> Delete(string fileLocation, IPrincipal principal);
+        Task<bool> DeleteAsync(string fileLocation, IPrincipal principal);
 
-        Task<Stream> Read(string fileLocation);
+        Task<Stream> ReadAsync(string fileLocation);
     }
 }
