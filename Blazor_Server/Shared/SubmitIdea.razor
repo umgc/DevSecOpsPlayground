@@ -1,0 +1,107 @@
+﻿@using Blazor_Server.Data
+
+<div class="rounded jumbotron text-black-50">
+    <div class="d-flex">
+        <div class="col rounded jumbotron">
+            <img src="https://c.pxhere.com/images/ed/4a/500355c50b78b829c2d4138321da-1583793.jpg!d" style="max-width:50%" alt="Idea" />
+        </div>
+        <div class="col rounded jumbotron justify-content-md-center p-2 m-2 shadow">
+            <div class="rounded p-3" style="background-color:darkred; color:yellow;">
+                Software Development Project Proposal
+            </div>
+            <div>
+                <EditForm Model="@formModel" OnValidSubmit="@HandleValidSubmit">
+                    <DataAnnotationsValidator />
+                    <ValidationSummary />
+                    <table class="table w-50">
+                        <tr class="row w-25">
+                            <td>
+                                <label>
+                                    First Name:
+                                    <InputText id="firstName" @bind-Value="formModel.FirstName" />
+                                </label>
+                            </td>
+                        </tr>
+                        <tr class="row w-25">
+                            <td>
+                                <label>
+                                    Last Name:
+                                    <InputText id="lastName" @bind-Value="formModel.LastName" />
+                                </label>
+                            </td>
+                        </tr>
+                        <tr class="row w-25">
+                            <td>
+                                <label>
+                                    Email:
+                                    <InputText id="email" @bind-Value="formModel.Email" />
+                                </label>
+                            </td>
+                        </tr>
+                        <tr class="row w-25">
+                            <td>
+                                <label>
+                                    Phone:
+                                    <InputText id="phone" @bind-Value="formModel.Phone" />
+                                </label>
+                            </td>
+                        </tr>
+                        <tr class="row w-25">
+                            <td>
+                                <label>
+                                    Project Title:
+                                    <InputText id="projectTitle" @bind-Value="formModel.ProjectTilte" />
+                                </label>
+                            </td>
+                        </tr>
+                        <tr class="row w-25">
+                            <td>
+                                <label>
+                                    Project Description:
+                                    <InputTextArea id="projectDescription" @bind-Value="formModel.ProjectDescription" />
+                                </label>
+                            </td>
+                        </tr>
+                        <tr class="row w-25">
+                            <td>
+                                <label>
+                                    Attachement:
+                                    <InputFile id="attachment" @bind-Value="formModel.Attachement" />
+                                </label>
+                            </td>
+                        </tr>
+                        <tr class="row w-25">
+                            <td>
+                                <label>
+                                    Website:
+                                    <InputText id="url" @bind-Value="formModel.Url" />
+                                </label>
+                            </td>
+                        </tr>
+                        <tr class="row w-25">
+                            <td>
+                                <label>
+                                    Are you the sponsor?
+                                    <InputCheckbox id="isSponsor" @bind-Value="formModel.IsSponsor" />
+                                </label>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <button type="submit" class="btn-primary">Submit</button> <button type="reset" class="btn-danger">Reset</button>
+                </EditForm>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@code {
+
+    private IdeaFormModel formModel = new();
+
+    private void HandleValidSubmit()
+    {
+        Console.WriteLine("Must I handle this?");
+    }
+}

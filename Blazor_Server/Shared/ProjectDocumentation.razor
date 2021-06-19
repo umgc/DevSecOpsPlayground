@@ -1,0 +1,53 @@
+﻿@using Blazor_Server.Data
+@using Octokit
+@inject GitHubService GitHubService
+
+<h5>Documents</h5>
+<br><span><span class="oi oi-reload"></span><a href="#" @onclick="GetDocumentation">Refresh</a></span>
+<br />
+
+<div class="jumbotron-fluid">
+    @{
+        if (this.LoadRepo)
+        {
+            GetDocumentation(EventArgs.Empty);
+        }
+
+
+        if (this.repositoryContents != null)
+        {
+            int i = 0;
+            foreach (var content in this.repositoryContents)
+            {
+
+                @if (content.Type == ContentType.Dir)
+                {
+                    <br /><span class="oi oi-folder"></span><a href="@content.HtmlUrl" target="@content.Name">@content.Path</a><br />
+                }
+
+
+                <span><span class="m-5 oi oi-file"></span>@content.Name</span>
+            }
+            i++;
+        }
+    }
+</div>
+
+@code {
+
+    [Parameter]
+    public string Orgranization { get; set; }
+
+    [Parameter]
+    public string Repository { get; set; }
+
+    [Parameter]
+    public bool LoadRepo { get; set; }
+
+    private IReadOnlyList<RepositoryContent> repositoryContents { get; set; }
+
+    private void GetDocumentation(EventArgs args)
+    {
+        this.repositoryContents = Task.Run(async () => await this.GitHubService.GetFilesAsync(this.Orgranization, this.Repository, null)).Result;
+    }
+}
