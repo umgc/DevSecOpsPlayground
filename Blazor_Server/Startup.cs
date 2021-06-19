@@ -37,11 +37,11 @@ namespace Blazor_Server
             services.AddControllersWithViews()
                 .AddMicrosoftIdentityUI();
 
-            services.AddAuthorization(options =>
-            {
-                // By default, all incoming requests will be authorized according to the default policy
-                options.FallbackPolicy = options.DefaultPolicy;
-            });
+            //services.AddAuthorization(options =>
+            //{
+            //    // By default, all incoming requests will be authorized according to the default policy
+            //    options.FallbackPolicy = options.DefaultPolicy;
+            //});
 
             services.AddRazorPages();
             services.AddServerSideBlazor()
