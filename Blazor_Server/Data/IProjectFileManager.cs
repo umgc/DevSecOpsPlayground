@@ -16,8 +16,19 @@ namespace Blazor_Server.Data
         /// <returns>File name the file was stored under.</returns>
         Task<string> SaveAsync(Stream stream, string fileName);
 
+        /// <summary>
+        /// Deletes specified file from storage.
+        /// </summary>
+        /// <param name="fileLocation">Location of the stored file.</param>
+        /// <param name="principal">User making the request.</param>
+        /// <returns></returns>
         Task<bool> DeleteAsync(string fileLocation, IPrincipal principal);
 
+        /// <summary>
+        /// Reads the file stream.
+        /// </summary>
+        /// <param name="fileLocation">The location of the stored file.</param>
+        /// <returns>The data as <see cref="Stream"/></returns>
         Task<Stream> ReadAsync(string fileLocation);
     }
 }
