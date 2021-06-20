@@ -4,15 +4,17 @@ using System.Threading.Tasks;
 
 namespace Blazor_Server.Data
 {
-    interface IProjectFileManager
+    public interface IProjectFileManager
     {
+        static string Delimiter { get; }
+
         /// <summary>
         /// Saves in coming stream.
         /// </summary>
         /// <param name="stream">Stream to save.</param>
-        /// <param name="extention">File Extention of attachment.</param>
+        /// <param name="fileName">File Extention of attachment.</param>
         /// <returns>File name the file was stored under.</returns>
-        Task<string> SaveAsync(Stream stream, string extention);
+        Task<string> SaveAsync(Stream stream, string fileName);
 
         Task<bool> DeleteAsync(string fileLocation, IPrincipal principal);
 

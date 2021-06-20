@@ -11,6 +11,8 @@ namespace Blazor_Server.Data
     [Authorize]
     public class LocalProjectFilesManager : IProjectFileManager
     {
+        public static string Delimiter { get; } = "----";
+
         public LocalProjectFilesManager()
         {
             if (!FileDirInfo.Exists)
@@ -79,10 +81,10 @@ namespace Blazor_Server.Data
         }
 
         /// <inheritdoc/>
-        public async Task<string> SaveAsync(Stream stream, string extention)
+        public async Task<string> SaveAsync(Stream stream, string fileName)
         {
-            var fileName = Guid.NewGuid().ToString() + extention;
-            var filePath = Path.Combine(FileDirInfo.FullName, fileName);
+            fileName = Guid.NewGuid().ToString() + Delimiter + fileName;
+            var filePath = Path.Combine(FileDirInfo.FullName, (string)fileName);
 
             filePath = Path.GetFullPath(filePath);
             
