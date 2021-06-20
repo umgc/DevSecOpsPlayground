@@ -1,9 +1,15 @@
-﻿<AuthorizeView>
+﻿ <ul class="navbar-nav navbar-right">
+<AuthorizeView>
     <Authorized>
+           <li class = "nav-item">
         Hello, @context.User.Identity.Name!
         <a href="MicrosoftIdentity/Account/SignOut">Log out</a>
+        </li>
     </Authorized>
     <NotAuthorized>
+        <li>
         <a href="MicrosoftIdentity/Account/SignIn">Log in</a>
+        </li>
     </NotAuthorized>
 </AuthorizeView>
+</ul>
