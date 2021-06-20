@@ -1,4 +1,5 @@
 ﻿@using Blazor_Server.Data
+@inject ProjectManagerService ProjectManager
 
 <div class="rounded jumbotron text-black-50">
     <div class="d-flex">
@@ -10,86 +11,140 @@
                 Software Development Project Proposal
             </div>
             <div>
-                <EditForm Model="@formModel" OnValidSubmit="@HandleValidSubmit">
-                    <DataAnnotationsValidator />
-                    <ValidationSummary />
-                    <table class="table w-50">
-                        <tr class="row w-25">
-                            <td>
-                                <label>
-                                    First Name:
-                                    <InputText id="firstName" @bind-Value="formModel.FirstName" />
-                                </label>
-                            </td>
-                        </tr>
-                        <tr class="row w-25">
-                            <td>
-                                <label>
-                                    Last Name:
-                                    <InputText id="lastName" @bind-Value="formModel.LastName" />
-                                </label>
-                            </td>
-                        </tr>
-                        <tr class="row w-25">
-                            <td>
-                                <label>
-                                    Email:
-                                    <InputText id="email" @bind-Value="formModel.Email" />
-                                </label>
-                            </td>
-                        </tr>
-                        <tr class="row w-25">
-                            <td>
-                                <label>
-                                    Phone:
-                                    <InputText id="phone" @bind-Value="formModel.Phone" />
-                                </label>
-                            </td>
-                        </tr>
-                        <tr class="row w-25">
-                            <td>
-                                <label>
-                                    Project Title:
-                                    <InputText id="projectTitle" @bind-Value="formModel.ProjectTilte" />
-                                </label>
-                            </td>
-                        </tr>
-                        <tr class="row w-25">
-                            <td>
-                                <label>
-                                    Project Description:
-                                    <InputTextArea id="projectDescription" @bind-Value="formModel.ProjectDescription" />
-                                </label>
-                            </td>
-                        </tr>
-                        <tr class="row w-25">
-                            <td>
-                                <label>
-                                    Attachement:
-                                    <InputFile id="attachment" @bind-Value="formModel.Attachement" />
-                                </label>
-                            </td>
-                        </tr>
-                        <tr class="row w-25">
-                            <td>
-                                <label>
-                                    Website:
-                                    <InputText id="url" @bind-Value="formModel.Url" />
-                                </label>
-                            </td>
-                        </tr>
-                        <tr class="row w-25">
-                            <td>
-                                <label>
-                                    Are you the sponsor?
-                                    <InputCheckbox id="isSponsor" @bind-Value="formModel.IsSponsor" />
-                                </label>
-                            </td>
-                        </tr>
-                    </table>
+                @if (isUploading)
+                {
+                    // TODO: [rwilson127] We need a nice waiting ring while doing something we are waiting on.
+                }
+                else
+                {
+                    <EditForm Model="@formModel" OnValidSubmit="@HandleValidSubmit">
+                        <DataAnnotationsValidator />
+                        <ValidationSummary />
+                        <table class="table w-50">
+                            <tr class="row w-25">
+                                <td>
+                                    <label>
+                                        First Name:
+                                        <InputText id="firstName" @bind-Value="formModel.FirstName" />
+                                    </label>
+                                </td>
+                            </tr>
+                            <tr class="row w-25">
+                                <td>
+                                    <label>
+                                        Last Name:
+                                        <InputText id="lastName" @bind-Value="formModel.LastName" />
+                                    </label>
+                                </td>
+                            </tr>
+                            <tr class="row w-25">
+                                <td>
+                                    <label>
+                                        Email:
+                                        <InputText id="email" @bind-Value="formModel.Email" />
+                                    </label>
+                                </td>
+                            </tr>
+                            <tr class="row w-25">
+                                <td>
+                                    <label>
+                                        Phone:
+                                        <InputText id="phone" @bind-Value="formModel.Phone" />
+                                    </label>
+                                </td>
+                            </tr>
+                            <tr class="row w-25">
+                                <td>
+                                    <label>
+                                        Project Title:
+                                        <InputText id="projectTitle" @bind-Value="formModel.ProjectTilte" />
+                                    </label>
+                                </td>
+                            </tr>
+                            <tr class="row w-25">
+                                <td>
+                                    <label>
+                                        Project Description:
+                                        <InputTextArea id="projectDescription" @bind-Value="formModel.ProjectDescription" />
+                                    </label>
+                                </td>
+                            </tr>
+                            <tr class="row w-25">
+                                <td>
+                                    <label>
+                                        Attachement:
+                                        <InputFile id="attachment" OnChange="LoadFiles" multiple />
+                                    </label>
+                                </td>
+                            </tr>
+                            <tr class="row w-25">
+                                <td>
+                                    <label>
+                                        Website:
+                                        <InputText id="url" @bind-Value="formModel.Url" />
+                                    </label>
+                                </td>
+                            </tr>
+                            <tr class="row w-25">
+                                <td>
+                                    <label>
+                                        Self Sponsored:
+                                        <InputCheckbox id="isSponsor" @bind-Value="formModel.IsSponsor" @onclick="SponsorCheckBox_Changed" />
+                                    </label>
+                                </td>
+                            </tr>
+                        </table>
 
-                    <button type="submit" class="btn-primary">Submit</button> <button type="reset" class="btn-danger">Reset</button>
-                </EditForm>
+                        @if (!formModel.IsSponsor)
+                        {
+                            <h4>Sponsor Information...</h4>
+                            <table class="table w-50">
+                                <tr class="row w-25">
+                                    <td>
+                                        <label>
+                                            Sponsor First Name:
+                                            <InputText id="firstName" @bind-Value="formModel.SponsorFirstName" />
+                                        </label>
+                                    </td>
+                                </tr>
+                                <tr class="row w-25">
+                                    <td>
+                                        <label>
+                                            Sponsor Last Name:
+                                            <InputText id="lastName" @bind-Value="formModel.SponsorLastName" />
+                                        </label>
+                                    </td>
+                                </tr>
+                                <tr class="row w-25">
+                                    <td>
+                                        <label>
+                                            Sponsor Email:
+                                            <InputText id="email" @bind-Value="formModel.SponsorEmail" />
+                                        </label>
+                                    </td>
+                                </tr>
+                                <tr class="row w-25">
+                                    <td>
+                                        <label>
+                                            Sponsor Phone:
+                                            <InputText id="phone" @bind-Value="formModel.SponsorPhone" />
+                                        </label>
+                                    </td>
+                                </tr>
+                                <tr class="row w-25">
+                                    <td>
+                                        <label>
+                                            Sponsor Website:
+                                            <InputText id="url" @bind-Value="formModel.SponsorUrl" />
+                                        </label>
+                                    </td>
+                                </tr>
+                            </table>
+                        }
+
+                        <button type="submit" @onclick="SponsorCheck" class="btn-primary">Submit</button> <button type="reset" class="btn-danger">Reset</button>
+                    </EditForm>
+                }
             </div>
         </div>
     </div>
@@ -98,10 +153,80 @@
 
 @code {
 
-    private IdeaFormModel formModel = new();
+    private IdeaFormModel formModel = new IdeaFormModel();
 
-    private void HandleValidSubmit()
+    private List<IBrowserFile> loadedFiles = new ();
+
+    private long maxFileSize => ProjectManager.MaxFileSize;
+
+    private int maxAllowedFiles = 4;
+
+    private bool isUploading = false;
+
+    private async Task HandleValidSubmit()
     {
-        Console.WriteLine("Must I handle this?");
+        formModel.Attachements = loadedFiles;
+        var uploaded = await ProjectManager.AddAsync(formModel);
+
+        if (uploaded)
+        {
+            loadedFiles.Clear();
+        }
+
+        formModel = new IdeaFormModel();
+    }
+
+    private void LoadFiles(InputFileChangeEventArgs inputFile)
+    {
+        isUploading = true;
+
+        this.loadedFiles.Clear();
+
+        foreach(var file in inputFile.GetMultipleFiles().Take(maxAllowedFiles))
+        {
+            if (file.Size > maxFileSize)
+            {
+                continue;
+            }
+
+            this.loadedFiles.Add(file);
+        }
+
+        isUploading = false;
+    }
+
+    private void SponsorCheckBox_Changed(EventArgs e)
+    {
+        this.formModel.IsSponsor = !this.formModel.IsSponsor;
+
+        if (!this.formModel.IsSponsor)
+        {
+            ResetSponsor();
+        }
+    }
+
+    /// <summary>
+    /// Sponsor is required so if the project is self sponsored, fill in own information on submit.
+    /// </summary>
+    /// <param name="e"></param>
+    private void SponsorCheck(EventArgs e)
+    {
+        if (formModel.IsSponsor)
+        {
+            formModel.SponsorFirstName = formModel.FirstName;
+            formModel.SponsorLastName = formModel.LastName;
+            formModel.SponsorEmail = formModel.Email;
+            formModel.SponsorPhone = formModel.Phone;
+            formModel.SponsorUrl = formModel.Url;
+        }
+    }
+
+    private void ResetSponsor()
+    {
+        formModel.SponsorFirstName = string.Empty;
+        formModel.SponsorLastName = string.Empty;
+        formModel.SponsorEmail = string.Empty;
+        formModel.SponsorPhone = string.Empty;
+        formModel.SponsorUrl = string.Empty;
     }
 }

@@ -46,8 +46,9 @@ namespace Blazor_Server
             services.AddRazorPages();
             services.AddServerSideBlazor()
                 .AddMicrosoftIdentityConsentHandler();
-            services.AddSingleton<WeatherForecastService>();
+            // services.AddSingleton<WeatherForecastService>();
             services.AddSingleton<GitHubService>();
+            services.AddSingleton<ProjectManagerService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
