@@ -28,11 +28,12 @@ jobs:
       - name: Change dir to Blazor
         run: |
           cd ./Blazor_Server
-          echo $PWD
 
-      # Runs a single command using the runners shell
+      # Restores Nuget packages
       - name: Restore Nuget
-        run: dotnet restore
+        run: |
+          echo $PWD
+          dotnet restore
 
       # Runs a set of commands using the runners shell
       - name: Build Project
