@@ -1,0 +1,17 @@
+# Basic set up for three package managers
+# Example: https://github.com/dotnet/samples/blob/main/.github/dependabot.yml
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/.github/workfows" #Blazor_Server.csproj
+    schedule:
+      interval: "weekly"
+      day: "wednesday"
+    open-pull-requests-limit: 5
+  - package-ecosystem: "nuget"
+    directory: "/Blazor_Server" #Blazor_Server.csproj
+    schedule:
+      interval: "weekly"
+      day: "wednesday"
+    open-pull-requests-limit: 5
+  
