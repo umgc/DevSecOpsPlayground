@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
 using System.ComponentModel;
-using Microsoft.AspNetCore.Components.Forms;
 
 namespace Blazor_Server.Data
 {
@@ -10,6 +9,8 @@ namespace Blazor_Server.Data
         private Contact Sponsor { get; set; } = new();
 
         private Contact Submitter { get; set; } = new();
+
+        public bool IsDirty { get; set; }
 
         [Required]
         [StringLength(255, ErrorMessage = "First Name is too long")]
@@ -23,6 +24,7 @@ namespace Blazor_Server.Data
             set
             {
                 this.Submitter.FirstName = value;
+                this.IsDirty = true;
             }
         }
 
@@ -38,6 +40,7 @@ namespace Blazor_Server.Data
             set
             {
                 this.Submitter.LastName = value;
+                this.IsDirty = true;
             }
         }
 
@@ -51,6 +54,7 @@ namespace Blazor_Server.Data
             set
             {
                 this.Submitter.Email = value;
+                this.IsDirty = true;
             }
         }
 
@@ -64,6 +68,7 @@ namespace Blazor_Server.Data
             set
             {
                 this.Submitter.Phone = value;
+                this.IsDirty = true;
             }
         }
 
@@ -78,6 +83,7 @@ namespace Blazor_Server.Data
             set
             {
                 this.Submitter.Url = value;
+                this.IsDirty = true;
             }
         }
 
@@ -85,13 +91,13 @@ namespace Blazor_Server.Data
         [Required]
         [StringLength(50, ErrorMessage = "Title is either too short or too long. We have confidence you can figure out which.", MinimumLength = 5)]
         [DisplayName("Project Title")]
-        public string ProjectTilte { get; set; } = string.Empty;
+        public string ProjectTitle { get; set; } = string.Empty;
 
         [Required]
         [DisplayName("Project Description")]
         public string ProjectDescription { get; set; } = string.Empty;
 
-        public IReadOnlyList<IBrowserFile> Attachements { get; set; } = new List<IBrowserFile>();
+        public IReadOnlyList<IProjectFile> Attachements { get; set; } = new List<IProjectFile>();
 
         [DisplayName("Are you the sponsor")]
         public bool IsSponsor { get; set; } = true;
@@ -108,6 +114,7 @@ namespace Blazor_Server.Data
             set
             {
                 this.Sponsor.FirstName = value;
+                this.IsDirty = true;
             }
         }
 
@@ -123,6 +130,7 @@ namespace Blazor_Server.Data
             set
             {
                 this.Sponsor.LastName = value;
+                this.IsDirty = true;
             }
         }
 
@@ -137,6 +145,7 @@ namespace Blazor_Server.Data
             set
             {
                 this.Sponsor.Email = value;
+                this.IsDirty = true;
             }
         }
         
@@ -151,6 +160,7 @@ namespace Blazor_Server.Data
             set
             {
                 this.Sponsor.Phone = value;
+                this.IsDirty = true;
             }
 
         }
@@ -165,6 +175,7 @@ namespace Blazor_Server.Data
             set
             {
                 this.Sponsor.Url = value;
+                this.IsDirty = true;
             }
         }
     }

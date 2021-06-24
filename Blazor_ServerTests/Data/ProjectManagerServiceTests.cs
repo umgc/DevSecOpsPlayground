@@ -16,7 +16,7 @@ namespace Blazor_Server.Data.Tests
         public void Add()
         {
             ProjectManagerService projectManagerService = new ProjectManagerService();
-            Task.Run(async () => await projectManagerService.AddAsync(CreateIdea())).Wait();
+            Assert.IsTrue(Task.Run(async () => await projectManagerService.AddAsync(CreateIdea())).Result);
             Assert.AreEqual(1, projectManagerService.GetIdeaTitles().Count());
         }
 
@@ -31,7 +31,7 @@ namespace Blazor_Server.Data.Tests
 
             IPrincipal principal = new GenericPrincipal(new GenericIdentity("test@greatTest.com"), new string[] { "owner" });
 
-            Task.Run(async () => await projectManagerService.RemoveAsync(idea, principal)).Wait();
+            Assert.IsTrue(Task.Run(async () => await projectManagerService.RemoveAsync(idea, principal)).Result);
             Assert.AreEqual(0, projectManagerService.GetIdeaTitles().Count());
         }
 
@@ -42,23 +42,30 @@ namespace Blazor_Server.Data.Tests
             Task.Run(async () => await projectManagerService.AddAsync(CreateIdea())).Wait();
 
             // Wait on second to over come flaky test syndrome.
-            Task.Run(async () => await Task.Delay(TimeSpan.FromSeconds(5))).Wait();
+            Task.Delay(TimeSpan.FromSeconds(10)).Wait();
 
-            var filePath = Path.Combine(ProjectManagerService.BaseDirInfo.FullName, "projects.json");
+            var filePath = GetProjectFilePath();
 
             Assert.IsTrue(File.Exists(filePath));
 
             var fileData = File.ReadAllText(filePath);
 
-            var projectData = JsonConvert.DeserializeObject<Dictionary<string, Tuple<IdeaFormModel, HashSet<string>>>>(fileData);
+            var projectData = JsonConvert.DeserializeObject<Dictionary<string, IdeaFormModel>>(fileData);
             Assert.AreEqual(1, projectData.Count);
         }
 
         [TestCleanup]
         public void Cleanup()
         {
-            var filePath = Path.Combine(ProjectManagerService.BaseDirInfo.FullName, "projects.json");
+            // Delete projects file.
+            string filePath = GetProjectFilePath();
+            if (File.Exists(filePath))
+            {
+                File.Delete(filePath);
+            }
 
+            // Now delete any temp files.
+            filePath = filePath + ".temp";
             if (File.Exists(filePath))
             {
                 File.Delete(filePath);
@@ -72,7 +79,7 @@ namespace Blazor_Server.Data.Tests
                 FirstName = "InitialTestFirstName",
                 LastName = "InitialTestLastName",
                 IsSponsor = false,
-                ProjectTilte = $"InitialTestProjectTitle-{DateTime.Now}",
+                ProjectTitle = $"InitialTestProjectTitle-{DateTime.Now}",
                 ProjectDescription = "InitialTestDescription",
                 Email = "Initial@test.com",
                 Phone = "555-555-8378",
@@ -85,6 +92,11 @@ namespace Blazor_Server.Data.Tests
             };
 
             return idea;
+        }
+
+        private string GetProjectFilePath()
+        {
+            return Path.Combine(ProjectManagerService.BaseDirInfo.FullName, "projects.json");
         }
     }
 }
