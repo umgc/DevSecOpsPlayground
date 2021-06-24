@@ -30,7 +30,7 @@ namespace Blazor_Server.Data
 
             if (projectsDbFile.Exists)
             {
-                var ideas = JsonConvert.DeserializeObject<Dictionary<string, Tuple<IdeaFormModel, HashSet<string>>>>(File.ReadAllText(projectsDbFile.FullName));
+                var ideas = JsonConvert.DeserializeObject<Dictionary<string, IdeaFormModel>>(File.ReadAllText(projectsDbFile.FullName));
             }
 
             ProjectFileManager = new LocalProjectFilesManager();
@@ -38,7 +38,7 @@ namespace Blazor_Server.Data
             ProjectIdeasChanged += ProjectManagerService_ProjectIdeasChanged;
         }
 
-        public ConcurrentDictionary<string, Tuple<IdeaFormModel, HashSet<string>>> ProjectIdeas { get; } = new ();
+        public ConcurrentDictionary<string, IdeaFormModel> ProjectIdeas { get; } = new ();
 
         public IProjectFileManager ProjectFileManager { get; private set; }
 
@@ -52,30 +52,29 @@ namespace Blazor_Server.Data
 
         public async Task<bool> AddAsync(IdeaFormModel idea)
         {
-            HashSet<string> files = new HashSet<string>();
             foreach(var file in idea.Attachements)
             {
-                files.Add(await ProjectFileManager.SaveAsync(file.OpenReadStream(1024 * 1024 * 2), file.Name));
+                file.Location = await ProjectFileManager.SaveAsync(file.BrowserFile.OpenReadStream(ProjectFile.MaxFileSize), file.Name);
             }
 
-            if (!ProjectIdeas.TryAdd(idea.ProjectTilte, Tuple.Create(idea, files)))
+            if (!ProjectIdeas.TryAdd(idea.ProjectTitle, idea))
             {
-                return false;    
+                return false;
             }
 
             ProjectIdeasChanged?.Invoke(ProjectIdeas, EventArgs.Empty);
             return true;
         }
 
-        public async Task RemoveAsync(IdeaFormModel idea, IPrincipal user)
+        public async Task<bool> RemoveAsync(IdeaFormModel idea, IPrincipal user)
         {
-            if (this.ProjectIdeas.TryGetValue(idea.ProjectTilte, out Tuple<IdeaFormModel, HashSet<string>> ideaTuple))
+            if (this.ProjectIdeas.TryGetValue(idea.ProjectTitle, out idea))
             {
                 bool didDelete = await Task.Run(async () =>
                 {
-                    foreach(var file in ideaTuple.Item2)
+                    foreach(var file in idea.Attachements)
                     {
-                        if(!await this.ProjectFileManager.DeleteAsync(file, user))
+                        if(!await this.ProjectFileManager.DeleteAsync(file.Location, user))
                         {
                             return false;
                         }
@@ -86,14 +85,18 @@ namespace Blazor_Server.Data
 
                 if (didDelete)
                 {
-                    _ = this.ProjectIdeas.Remove(idea.ProjectTilte, out Tuple<IdeaFormModel, HashSet<string>> _);
+                    didDelete = this.ProjectIdeas.Remove(idea.ProjectTitle, out IdeaFormModel _);
                     this.ProjectIdeasChanged?.Invoke(this.ProjectIdeas, EventArgs.Empty);
                 }
                 else
                 {
                     throw new InvalidOperationException($"Could not finish the operation. Either the user did not have permissions or the file no longer exists");
                 }
+
+                return didDelete;
             }
+
+            return false;
         }
 
         private void ProjectManagerService_ProjectIdeasChanged(object sender, EventArgs e)
