@@ -46,7 +46,6 @@ namespace Blazor_Server
             services.AddRazorPages();
             services.AddServerSideBlazor()
                 .AddMicrosoftIdentityConsentHandler();
-            // services.AddSingleton<WeatherForecastService>();
             services.AddSingleton<GitHubService>();
             services.AddSingleton<ProjectManagerService>();
         }
