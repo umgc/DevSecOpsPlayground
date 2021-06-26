@@ -50,7 +50,7 @@ namespace Blazor_Server.Data.Tests
 
             var fileData = File.ReadAllText(filePath);
 
-            var projectData = JsonConvert.DeserializeObject<Dictionary<string, IdeaFormModel>>(fileData);
+            var projectData = JsonConvert.DeserializeObject<Dictionary<string, ProjectInformation>>(fileData);
             Assert.AreEqual(1, projectData.Count);
         }
 
@@ -72,9 +72,9 @@ namespace Blazor_Server.Data.Tests
             }
         }
 
-        private IdeaFormModel CreateIdea()
+        private ProjectInformation CreateIdea()
         {
-            var idea = new IdeaFormModel
+            var idea = new ProjectInformation
             {
                 FirstName = "InitialTestFirstName",
                 LastName = "InitialTestLastName",
@@ -87,8 +87,7 @@ namespace Blazor_Server.Data.Tests
                 SponsorEmail = "Sponsor@greatTests.com",
                 SponsorFirstName = "SponsorInitialFirstname",
                 SponsorLastName = "SponsorInitialLastname",
-                SponsorPhone = "555-555-8379",
-                SponsorUrl = "www.sponsorsrus.io"
+                SponsorPhone = "555-555-8379"
             };
 
             return idea;
