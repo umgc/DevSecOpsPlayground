@@ -1,15 +1,18 @@
 ﻿using Microsoft.AspNetCore.Components.Forms;
+using System;
 
 namespace Blazor_Server.Data
 {
     public class ProjectFile : IProjectFile
     {
-        public const long MaxFileSize = 1024 * 1024 * 2;
+        public Guid File_ID { get; set; } = Guid.NewGuid();
 
-        public IBrowserFile BrowserFile { get; set; }
+        public const long MaxFileSize = 1024 * 1024 * 2;
 
         public string Location { get; set; } = string.Empty;
 
         public string Name => BrowserFile.Name;
+        
+        public IBrowserFile BrowserFile { get; set; }
     }
 }
