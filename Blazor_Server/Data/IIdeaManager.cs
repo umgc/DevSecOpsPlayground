@@ -4,8 +4,25 @@ namespace Blazor_Server.Data
 {
     public interface IIdeaManager
     {
-        Task<bool> UpdateAsync(IdeaFormModel idea);
+        /// <summary>
+        /// Update project on system.
+        /// </summary>
+        /// <param name="projectInformation"></param>
+        /// <returns></returns>
+        Task<bool> UpdateAsync(ProjectInformation projectInformation);
 
-        Task<bool> DeleteAsync(IdeaFormModel idea);
+        /// <summary>
+        /// Delete project from system.
+        /// </summary>
+        /// <param name="projectInformation"></param>
+        /// <returns></returns>
+        Task<bool> DeleteAsync(ProjectInformation projectInformation);
+
+        /// <summary>
+        /// Export project from system.
+        /// </summary>
+        /// <param name="idea"></param>
+        /// <returns></returns>
+        Task<string> ExportAsync(ProjectInformation idea);
     }
 }
