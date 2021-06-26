@@ -7,20 +7,23 @@ namespace Blazor_Server.Data
 {
     public class ProjectInformation
     {
+        [Export]
         [Browsable(false)]
         public Guid ProjectID { get; set; } = Guid.NewGuid();
 
+        [Export]
         [Browsable(false)]
         private Contact Sponsor { get; set; } = new();
 
-
+        [Export]
         [Browsable(false)]
         private Contact Submitter { get; set; } = new();
 
-
+        [Export]
         [Browsable(false)]
         public bool IsDirty { get; set; }
 
+        [Export(true)]
         [Required]
         [StringLength(50, ErrorMessage = "First Name is too long")]
         [DisplayName("First Name")]
@@ -38,6 +41,7 @@ namespace Blazor_Server.Data
             }
         }
 
+        [Export(true)]
         [Required]
         [StringLength(50, ErrorMessage = "Last Name is too long")]
         [DisplayName("Last Name")]
@@ -55,6 +59,7 @@ namespace Blazor_Server.Data
             }
         }
 
+        [Export(true)]
         [EmailAddress]
         [Browsable(true)]
         public string Email
@@ -70,6 +75,7 @@ namespace Blazor_Server.Data
             }
         }
 
+        [Export(true)]
         [Phone]
         [Browsable(true)]
         public string Phone
@@ -85,28 +91,34 @@ namespace Blazor_Server.Data
             }
         }
 
+        [Export(true)]
         [Required]
         [StringLength(50, ErrorMessage = "Title is either too short or too long. We have confidence you can figure out which.", MinimumLength = 5)]
         [DisplayName("Project Title")]
         [Browsable(true)]
         public string ProjectTitle { get; set; } = string.Empty;
 
+        [Export(true)]
         [Required]
         [DisplayName("Project Description")]
         [Browsable(true)]
         public string ProjectDescription { get; set; } = string.Empty;
 
+        [Export(true)]
         [DisplayName("Project Website")]
         [Browsable(true)]
         public string Url { get; set; } = string.Empty;
 
+        [Export(true)]
         [Browsable(true)]
         public IReadOnlyList<IProjectFile> Attachements { get; set; } = new List<IProjectFile>();
 
+        [Export(true)]
         [DisplayName("Are you the sponsor")]
         [Browsable(true)]
         public bool IsSponsor { get; set; } = true;
 
+        [Export(true)]
         [Required]
         [StringLength(255, ErrorMessage = "First Name is too long")]
         [DisplayName("Sponsor First Name")]
@@ -124,6 +136,7 @@ namespace Blazor_Server.Data
             }
         }
 
+        [Export(true)]
         [Required]
         [StringLength(255, ErrorMessage = "Last Name is too long")]
         [DisplayName("Sponsor Last Name")]
@@ -141,6 +154,7 @@ namespace Blazor_Server.Data
             }
         }
 
+        [Export(true)]
         [EmailAddress]
         [DisplayName("Sponsor Email")]
         [Browsable(true)]
@@ -156,7 +170,8 @@ namespace Blazor_Server.Data
                 this.IsDirty = true;
             }
         }
-        
+
+        [Export(true)]
         [Phone]
         [DisplayName("Sponsor Phone")]
         [Browsable(true)]
