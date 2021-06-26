@@ -117,14 +117,6 @@
                         </label>
                     </td>
                 </tr>
-                <tr class="row w-25">
-                    <td class="d-xl-table-cell">
-                        <label>
-                            Sponsor Website:
-                            <InputText id="url" @bind-Value="formModel.SponsorUrl" />
-                        </label>
-                    </td>
-                </tr>
             </table>
         }
 
@@ -185,11 +177,11 @@
     [Parameter]
     public IIdeaManager Manager { get; set; } = null;
 
-    private IdeaFormModel formModel = new IdeaFormModel();
+    private ProjectInformation formModel = new ProjectInformation();
 
     private List<IProjectFile> loadedFiles = new();
 
-    private long maxFileSize => ProjectManager.MaxFileSize;
+    private long maxFileSize => ProjectFile.MaxFileSize;
 
     private int maxAllowedFiles = 4;
 
@@ -207,7 +199,7 @@
             loadedFiles.Clear();
         }
 
-        formModel = new IdeaFormModel();
+        formModel = new ProjectInformation();
     }
 
     private void LoadFiles(InputFileChangeEventArgs inputFile)
@@ -248,7 +240,6 @@
             formModel.SponsorLastName = formModel.LastName;
             formModel.SponsorEmail = formModel.Email;
             formModel.SponsorPhone = formModel.Phone;
-            formModel.SponsorUrl = formModel.Url;
         }
     }
 
@@ -258,7 +249,6 @@
         formModel.SponsorLastName = string.Empty;
         formModel.SponsorEmail = string.Empty;
         formModel.SponsorPhone = string.Empty;
-        formModel.SponsorUrl = string.Empty;
     }
 
     private async Task UpdateRecordAsync(EventArgs e)
