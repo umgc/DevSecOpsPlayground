@@ -186,7 +186,6 @@ namespace Blazor_Server.Data
                 this.Sponsor.Phone = value;
                 this.IsDirty = true;
             }
-
         }
     }
 }
