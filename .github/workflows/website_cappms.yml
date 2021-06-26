@@ -24,12 +24,12 @@ jobs:
 
     - name: Build with dotnet
       run: |
-        run: cd ./Blazor_Server
+        cd ./Blazor_Server
         dotnet build --configuration Release
 
     - name: dotnet publish
       run: |
-        run: cd ./Blazor_Server
+        cd ./Blazor_Server
         dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
     - name: Upload artifact for deployment job
