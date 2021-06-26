@@ -8,16 +8,13 @@ using System.Threading.Tasks;
 
 namespace Blazor_Server.Data
 {
-    public class ProjectManagerService
+    public class ProjectManagerService : IIdeaManager
     {
         public event EventHandler ProjectIdeasChanged;
 
         private readonly string localProjectDb = Path.Combine(BaseDirInfo.FullName, "projects.json");
 
-        public static DirectoryInfo BaseDirInfo = new(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "StoredData"));
-
-        // Limit upload per file to 2Mb.
-        public long MaxFileSize { get; } = 1024 * 1024 * 2;
+        public static DirectoryInfo BaseDirInfo { get; } = new (Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "StoredData"));
 
         public ProjectManagerService()
         {
@@ -30,7 +27,7 @@ namespace Blazor_Server.Data
 
             if (projectsDbFile.Exists)
             {
-                var ideas = JsonConvert.DeserializeObject<Dictionary<string, IdeaFormModel>>(File.ReadAllText(projectsDbFile.FullName));
+                var ideas = JsonConvert.DeserializeObject<Dictionary<string, ProjectInformation>>(File.ReadAllText(projectsDbFile.FullName));
             }
 
             ProjectFileManager = new LocalProjectFilesManager();
@@ -38,7 +35,7 @@ namespace Blazor_Server.Data
             ProjectIdeasChanged += ProjectManagerService_ProjectIdeasChanged;
         }
 
-        public ConcurrentDictionary<string, IdeaFormModel> ProjectIdeas { get; } = new ();
+        public ConcurrentDictionary<string, ProjectInformation> ProjectIdeas { get; } = new ();
 
         public IProjectFileManager ProjectFileManager { get; private set; }
 
@@ -50,7 +47,7 @@ namespace Blazor_Server.Data
             }
         }
 
-        public async Task<bool> AddAsync(IdeaFormModel idea)
+        public async Task<bool> AddAsync(ProjectInformation idea)
         {
             foreach(var file in idea.Attachements)
             {
@@ -66,7 +63,7 @@ namespace Blazor_Server.Data
             return true;
         }
 
-        public async Task<bool> RemoveAsync(IdeaFormModel idea, IPrincipal user)
+        public async Task<bool> RemoveAsync(ProjectInformation idea, IPrincipal user)
         {
             if (this.ProjectIdeas.TryGetValue(idea.ProjectTitle, out idea))
             {
@@ -85,7 +82,7 @@ namespace Blazor_Server.Data
 
                 if (didDelete)
                 {
-                    didDelete = this.ProjectIdeas.Remove(idea.ProjectTitle, out IdeaFormModel _);
+                    didDelete = this.ProjectIdeas.Remove(idea.ProjectTitle, out ProjectInformation _);
                     this.ProjectIdeasChanged?.Invoke(this.ProjectIdeas, EventArgs.Empty);
                 }
                 else
@@ -131,6 +128,21 @@ namespace Blazor_Server.Data
                    });
                }
            });
+        }
+
+        public Task<bool> UpdateAsync(ProjectInformation idea)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> DeleteAsync(ProjectInformation idea)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<string> ExportAsync(ProjectInformation idea)
+        {
+            throw new NotImplementedException();
         }
     }
 }
