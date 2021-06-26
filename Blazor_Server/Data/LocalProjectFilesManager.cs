@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.IO;
 using System.Security.Principal;
@@ -8,7 +7,6 @@ using System.Threading.Tasks;
 
 namespace Blazor_Server.Data
 {
-    [Authorize]
     public class LocalProjectFilesManager : IProjectFileManager
     {
         public static string Delimiter { get; } = "----";
