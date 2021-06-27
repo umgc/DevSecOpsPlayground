@@ -50,3 +50,18 @@ a,
     right: 0.75rem;
     top: 0.5rem;
 }
+
+tr th {
+    background-color : black;
+    color: yellow;
+}
+
+tr {
+    padding: 2px;
+    text-align:center;
+}
+
+tr td .odd {
+    background-color:teal;
+    color:white;
+}
