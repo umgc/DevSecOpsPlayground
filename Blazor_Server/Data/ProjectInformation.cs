@@ -96,17 +96,20 @@ namespace Blazor_Server.Data
         [StringLength(50, ErrorMessage = "Title is either too short or too long. We have confidence you can figure out which.", MinimumLength = 5)]
         [DisplayName("Project Title")]
         [Browsable(true)]
+        [ColumnHeader]
         public string ProjectTitle { get; set; } = string.Empty;
 
         [Export(true)]
         [Required]
         [DisplayName("Project Description")]
         [Browsable(true)]
+        [ColumnHeader]
         public string ProjectDescription { get; set; } = string.Empty;
 
         [Export(true)]
         [DisplayName("Project Website")]
         [Browsable(true)]
+        [ColumnHeader]
         public string Url { get; set; } = string.Empty;
 
         [Export(true)]
@@ -118,6 +121,7 @@ namespace Blazor_Server.Data
         [Browsable(true)]
         public bool IsSponsor { get; set; } = true;
 
+        [ColumnHeader]
         [Export(true)]
         [Required]
         [StringLength(255, ErrorMessage = "First Name is too long")]
@@ -136,6 +140,7 @@ namespace Blazor_Server.Data
             }
         }
 
+        [ColumnHeader]
         [Export(true)]
         [Required]
         [StringLength(255, ErrorMessage = "Last Name is too long")]
@@ -154,6 +159,7 @@ namespace Blazor_Server.Data
             }
         }
 
+        [ColumnHeader]
         [Export(true)]
         [EmailAddress]
         [DisplayName("Sponsor Email")]
@@ -171,6 +177,7 @@ namespace Blazor_Server.Data
             }
         }
 
+        [ColumnHeader]
         [Export(true)]
         [Phone]
         [DisplayName("Sponsor Phone")]

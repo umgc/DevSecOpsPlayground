@@ -28,6 +28,10 @@ namespace Blazor_Server.Data
             if (projectsDbFile.Exists)
             {
                 var ideas = JsonConvert.DeserializeObject<Dictionary<string, ProjectInformation>>(File.ReadAllText(projectsDbFile.FullName));
+                foreach (var idea in ideas)
+                {
+                    _ = ProjectIdeas.TryAdd(idea.Key, idea.Value);
+                }
             }
 
             ProjectFileManager = new LocalProjectFilesManager();

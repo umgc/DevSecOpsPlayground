@@ -1,0 +1,114 @@
+﻿@using Blazor_Server.Data
+@using System.ComponentModel
+@using System.Reflection
+@inject ProjectManagerService ProjectManager
+
+<h3>Project List</h3>
+
+@if(this.columns is null)
+{
+    <pre>Loading ...</pre>
+}
+else
+{
+    <div>
+        <table class="table rounded">
+            <thead>
+                @((MarkupString)GetHeader())
+            </thead>
+            <tbody>
+                @((MarkupString)GetBody())
+            </tbody>
+        </table>
+    </div>
+}
+
+
+@code {
+
+    private List<string> columns;
+
+    protected override void OnInitialized()
+    {
+        columns = GetColumnNames();
+    }
+
+    private string GetHeader()
+    {
+        string html = string.Empty;
+
+        html += "<tr>";
+
+        foreach (var columnName in columns)
+        {
+            html += $"<th>{columnName}</th>";
+        }
+
+        html += "</tr>";
+
+        return html;
+    }
+
+    private string GetBody()
+    {
+        string html = string.Empty;
+
+        foreach (var idea in ProjectManager.ProjectIdeas)
+        {
+            int i = 0;
+            html += "<tr>";
+
+            foreach (var columnName in columns)
+            {
+                var prop = idea.Value.GetType().GetRuntimeProperties().FirstOrDefault(p => p.GetCustomAttribute(typeof(DisplayNameAttribute)) != null && p.GetCustomAttribute<DisplayNameAttribute>().DisplayName == columnName);
+
+                if (prop is null)
+                {
+                    continue;
+                }
+                else
+                {
+                    var isOddClass = i % 2 != 0 ? "odd" : string.Empty;
+
+                    var value = prop.GetValue(idea.Value);
+
+                    if (Uri.TryCreate(value as string, UriKind.Absolute, out Uri result))
+                    {
+                        html += $"<td class=\"{isOddClass}\"><a href=\"{value}\" target=\"_blank\">{value}</a></td>";
+                    }
+                    else
+                    {
+                        html += $"<td class=\"{isOddClass}\">{value}</td>";
+                    }
+                }
+            }
+
+            html += "</tr>";
+            i++;
+        }
+
+        return html;
+    }
+
+    private List<string> GetColumnNames()
+    {
+        List<string> columns = new List<string>();
+
+        foreach (var prop in typeof(ProjectInformation).GetTypeInfo().GetRuntimeProperties())
+        {
+            var attribute = prop.GetCustomAttribute<ColumnHeaderAttribute>();
+            if (attribute is null)
+            {
+                continue;
+            }
+
+            if (attribute.ColumnHeader)
+            {
+                string displayName = prop.GetCustomAttribute<DisplayNameAttribute>()?.DisplayName ?? prop.Name;
+                columns.Add(displayName);
+            }
+        }
+
+        return columns;
+    }
+}

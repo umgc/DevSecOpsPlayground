@@ -1,0 +1,14 @@
+﻿@page "/projectlist"
+
+<AuthorizeView>
+    <Authorized>
+        <ProjectListTable />
+    </Authorized>
+    <NotAuthorized>
+        <h3>You must be authorized to access this page.</h3>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+
+}
