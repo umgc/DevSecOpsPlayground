@@ -1,8 +1,12 @@
-﻿@page "/projectlist"
+﻿@using Blazor_Server.Data
+@inject ProjectManagerService ProjectManager
+
+@page "/projectlist"
+
 
 <AuthorizeView>
     <Authorized>
-        <ProjectListTable />
+        <Table Data="new List<ProjectInformation>(ProjectManager.ProjectIdeas.Values)" />
     </Authorized>
     <NotAuthorized>
         <h3>You must be authorized to access this page.</h3>
