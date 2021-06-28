@@ -1,0 +1,105 @@
+{
+  "id": "/subscriptions/4ff19a58-3526-41da-8f0b-543be9dee8df/resourceGroups/SWEN670/providers/Microsoft.Resources/deployments/Microsoft.Web-WebApp-Portal-5a8843ea-9e3e",
+  "name": "Microsoft.Web-WebApp-Portal-5a8843ea-9e3e",
+  "type": "Microsoft.Resources/deployments",
+  "tags": {
+    "primaryResourceId": "/subscriptions/4ff19a58-3526-41da-8f0b-543be9dee8df/resourcegroups/SWEN670/providers/Microsoft.Web/sites/SWEN670-Hello-Flutter",
+    "marketplaceItemId": "Microsoft.WebSite",
+    "provisioningHash": "customize-post-provisioning-steps-webapp-deployment"
+  },
+  "properties": {
+    "templateHash": "3970433651293952792",
+    "parameters": {
+      "subscriptionId": {
+        "type": "String",
+        "value": "4ff19a58-3526-41da-8f0b-543be9dee8df"
+      },
+      "name": {
+        "type": "String",
+        "value": "SWEN670-Hello-Flutter"
+      },
+      "location": {
+        "type": "String",
+        "value": "Central US"
+      },
+      "hostingPlanName": {
+        "type": "String",
+        "value": "ASP-SWEN670-aaf8"
+      },
+      "serverFarmResourceGroup": {
+        "type": "String",
+        "value": "SWEN670"
+      },
+      "alwaysOn": {
+        "type": "Bool",
+        "value": false
+      },
+      "sku": {
+        "type": "String",
+        "value": "Free"
+      },
+      "skuCode": {
+        "type": "String",
+        "value": "F1"
+      },
+      "workerSize": {
+        "type": "String",
+        "value": "0"
+      },
+      "workerSizeId": {
+        "type": "String",
+        "value": "0"
+      },
+      "numberOfWorkers": {
+        "type": "String",
+        "value": "1"
+      },
+      "linuxFxVersion": {
+        "type": "String",
+        "value": "NODE|14-lts"
+      }
+    },
+    "mode": "Incremental",
+    "debugSetting": {
+      "detailLevel": "None"
+    },
+    "provisioningState": "Running",
+    "timestamp": "2021-06-05T23:14:53.701448Z",
+    "duration": "PT1.0068527S",
+    "correlationId": "15d2d169-f415-4dd7-864e-18321366da58",
+    "providers": [
+      {
+        "namespace": "Microsoft.Web",
+        "resourceTypes": [
+          {
+            "resourceType": "sites",
+            "locations": [
+              "centralus"
+            ]
+          },
+          {
+            "resourceType": "serverfarms",
+            "locations": [
+              "centralus"
+            ]
+          }
+        ]
+      }
+    ],
+    "dependencies": [
+      {
+        "dependsOn": [
+          {
+            "id": "/subscriptions/4ff19a58-3526-41da-8f0b-543be9dee8df/resourceGroups/SWEN670/providers/Microsoft.Web/serverfarms/ASP-SWEN670-aaf8",
+            "resourceType": "Microsoft.Web/serverfarms",
+            "resourceName": "ASP-SWEN670-aaf8"
+          }
+        ],
+        "id": "/subscriptions/4ff19a58-3526-41da-8f0b-543be9dee8df/resourceGroups/SWEN670/providers/Microsoft.Web/sites/SWEN670-Hello-Flutter",
+        "resourceType": "Microsoft.Web/sites",
+        "resourceName": "SWEN670-Hello-Flutter"
+      }
+    ],
+    "validationLevel": "Template"
+  }
+}
