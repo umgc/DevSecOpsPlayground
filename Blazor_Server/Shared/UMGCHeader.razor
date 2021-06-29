@@ -17,8 +17,17 @@
                         <span class="oi oi-list-rich" aria-hidden="true"></span> FAQ
                     </NavLink>
                 </li>
+                <AuthorizeView>
+                    <Authorized>
+                        <li class="nav-item">
+                            <NavLink class="nav-link" href="projectlist">
+                                <span class="oi oi-list" aria-hidden="true"></span> Project List
+                            </NavLink>
+                        </li>
+                    </Authorized>
+                </AuthorizeView>
             </ul>
-            <div class="push">
+            <div class="nav-item">
                 <LoginDisplay />
             </div>
         </nav>
