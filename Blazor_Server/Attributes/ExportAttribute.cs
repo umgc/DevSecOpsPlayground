@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Blazor_Server.Data
+namespace Blazor_Server.Attributes
 {
     public class ExportAttribute : Attribute
     {

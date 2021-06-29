@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Security.Principal;
 using System.IO;
 using Newtonsoft.Json;
+using Blazor_Server.Model;
 
 namespace Blazor_Server.Data.Tests
 {

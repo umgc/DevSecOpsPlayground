@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Blazor_Server.Data
+namespace Blazor_Server.Model
 {
     public class Comment
     {

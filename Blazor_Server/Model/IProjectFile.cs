@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components.Forms;
 
-namespace Blazor_Server.Data
+namespace Blazor_Server.Model
 {
     public interface IProjectFile
     {

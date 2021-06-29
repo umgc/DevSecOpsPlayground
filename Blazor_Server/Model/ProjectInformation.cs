@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System;
+using Blazor_Server.Attributes;
 
-namespace Blazor_Server.Data
+namespace Blazor_Server.Model
 {
     public class ProjectInformation
     {
