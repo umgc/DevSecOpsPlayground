@@ -1,0 +1,31 @@
+﻿@using CaPPMS.Data
+@inject ProjectManagerService ProjectManager
+
+<div class="rounded text-black-50">
+    <div class="d-flex">
+        <div class="col rounded">
+            <img src="/images/idea.PNG"  alt="Idea" />
+        </div>
+        <div class="col rounded  justify-content-md-center p-2 m-2 shadow">
+            <div class="rounded p-3" style="background-color:darkred; color:yellow;">
+                Software Development Project Proposal
+            </div>
+            <div class="overflow-auto h-100" >
+                @if (Idea.IsUploading)
+                {
+                    // TODO: [rwilson127] We need a nice waiting ring while doing something we are waiting on.
+                }
+                else
+                {
+                    <Idea ShowComments="false" ShowFileAttachments="false" ShowFormButton="Idea.FormButtons.Submit" />
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@code {
+
+    
+}
