@@ -1,0 +1,19 @@
+﻿@using CaPPMS.Data
+@using CaPPMS.Model
+@inject ProjectManagerService ProjectManager
+
+@page "/projectlist"
+
+
+<AuthorizeView>
+    <Authorized>
+        <Table DataSource="new List<ProjectInformation>(ProjectManager.ProjectIdeas.Values)" CssClass="table border" />
+    </Authorized>
+    <NotAuthorized>
+        <h3>You must be authorized to access this page.</h3>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+
+}

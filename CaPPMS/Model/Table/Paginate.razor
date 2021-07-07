@@ -1,0 +1,50 @@
+﻿
+@if (IsDisabled(true))
+{
+    <button type="button" class="rounded" disabled><span class="fas fa-arrow-left"></span></button>
+}
+else
+{
+    <button type="button" class="rounded" @onclick="PageLeft"><span class="fas fa-arrow-left"></span></button>
+}
+&nbsp; @this.Parent.CurrentPage/@GetNumberOfPages() &nbsp;
+@if (IsDisabled(false))
+{
+    <button type="button" class="rounded" disabled><span class="fas fa-arrow-right"></span></button>
+}
+else
+{
+    <button type="button" class="rounded" @onclick="PageRight"><span class="fas fa-arrow-right"></span></button>
+}
+
+
+@code {
+    [Parameter]
+    public Table Parent { get; set; }
+
+    private bool IsDisabled(bool isLeftArrow)
+    {
+        if (isLeftArrow)
+        {
+            return this.Parent.CurrentPage <= 1;
+        }
+
+        return this.Parent.CurrentPage >= GetNumberOfPages();
+    }
+
+    private int GetNumberOfPages()
+    {
+        var initialNumberOfPages = this.Parent.Count / this.Parent.RecordsPerPage;
+        return initialNumberOfPages % 2 == 0 ? (int)initialNumberOfPages : (int)Math.Round((double)initialNumberOfPages, MidpointRounding.ToNegativeInfinity) + 1;
+    }
+
+    private void PageRight(MouseEventArgs e)
+    {
+        this.Parent.SetPageNumber(this.Parent.CurrentPage + 1);
+    }
+
+    private void PageLeft(MouseEventArgs e)
+    {
+        this.Parent.SetPageNumber(this.Parent.CurrentPage - 1);
+    }
+}

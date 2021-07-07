@@ -1,0 +1,72 @@
+﻿@using CaPPMS.Model.Table
+
+@inherits CaPPMS.Model.Table.Table
+
+<h3>Project List</h3>
+
+@if(this.HeaderRow.Count == 0)
+{
+    <pre>Loading ...</pre>
+}
+else
+{
+<div>
+    <div>
+        <label>
+            <input id="filter" class="input-group-text p-2 mb-lg-3" type="text" placeholder="Filter the data here" @bind="Filter" @bind:event="oninput" />
+        </label>
+        <table class="@string.Join(" ", TableCssClasses)">
+            @((MarkupString)HeaderHtml)
+            @((MarkupString)BodyHtml)
+            <tfoot>
+                <tr>
+                    <td colspan="@this.ColumnCount">
+                        <Paginate Parent="@this" />
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+}
+
+@code{
+
+    private string HtmlTable => this.ToString();
+
+    private TaskScheduler ui = TaskScheduler.FromCurrentSynchronizationContext();
+
+    [Parameter]
+    public string CssClass
+    {
+        get
+        {
+            return string.Join(" ", this.CssClass);
+        }
+        set
+        {
+            this.TableCssClasses.Clear();
+            this.TableCssClasses.AddRange(value.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries));
+        }
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        this.DataSourceChanged += (o, e) =>
+        {
+            this.StateHasChanged();
+        };
+
+        this.FilterChanged += (o, e) =>
+        {
+            this.StateHasChanged();
+        };
+    }
+
+    private void PageRight(MouseEventArgs e)
+    {
+        this.SetPageNumber(this.CurrentPage + 1);
+    }
+}
