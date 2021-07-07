@@ -28,13 +28,13 @@ jobs:
       # Restores Nuget packages
       - name: Restore Nuget
         run: |
-          cd ./Blazor_Server
+          cd ./CaPPMS
           dotnet restore
 
       # Runs a set of commands using the runners shell
       - name: Build Project
         run: |
-          cd ./Blazor_Server
+          cd ./CaPPMS
           dotnet build
     
   test:
@@ -45,6 +45,6 @@ jobs:
       
       - name: Run Tests
         run: |
-          cd ./Blazor_Server
+          cd ./CaPPMS
           dotnet test
         
