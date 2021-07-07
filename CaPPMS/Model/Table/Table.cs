@@ -101,12 +101,6 @@ namespace CaPPMS.Model.Table
             }
         }
 
-        public Row FooterRow => GetFooterRow();
-
-        public List<string> FooterCssClasses { get; } = new List<string>();
-
-        public string FooterHtml => $"<tfoot class=\"{string.Join(" ", FooterCssClasses)}\">{this.FooterRow}</tfoot>";
-
         public List<string> TableCssClasses { get; } = new List<string>();
 
         public int Count => this.DataSource.Count();
@@ -180,6 +174,7 @@ namespace CaPPMS.Model.Table
         public void SetPageNumber(int page)
         {
             CurrentPage = page;
+            this.StateHasChanged();
         }
 
         public Row GetHeaderRow()
@@ -213,7 +208,6 @@ namespace CaPPMS.Model.Table
 
             html += this.HeaderHtml;
             html += this.BodyHtml;
-            html += this.FooterHtml;
 
             html += "</table>";
 
@@ -250,8 +244,8 @@ namespace CaPPMS.Model.Table
 
         private IEnumerable<Row> GetRows()
         {
-            int skipNumber = CurrentPage > 1 ? CurrentPage * rowsPerPage : 0;
-            var dataList = this.dataSource.Skip(skipNumber).Take(this.rowsPerPage).ToArray();
+            int skipNumber = CurrentPage > 1 ? (CurrentPage * rowsPerPage) - rowsPerPage : 0;
+            var dataList = this.dataSource.Skip(skipNumber - 1).Take(this.rowsPerPage).ToArray();
 
             for (int r = 0; r < dataList.Length; r++)
             {
@@ -276,31 +270,6 @@ namespace CaPPMS.Model.Table
                     yield return row;
                 }
             }
-        }
-
-        private Row GetFooterRow()
-        {
-            // We will build out the pagination values.
-            // The cell <td></td> will be wrapped around it so not needed here.
-            // Keep it simple and make it easy.
-            // <- pagenumber -> Number per page
-
-            var initialNumberOfPages = this.Count / this.rowsPerPage;
-            var numberOfPages = initialNumberOfPages % 2 == 0 ? (int)initialNumberOfPages : (int)Math.Round((double)initialNumberOfPages, MidpointRounding.ToNegativeInfinity) + 1;
-            var leftArrowDisabled = CurrentPage > 1 ? string.Empty : "disabled";
-            var rightArrowDisabled = CurrentPage < numberOfPages ? string.Empty : "disabled";
-
-            var htmlFooter = $"<button class=\"rounded\" type=\"button\" {leftArrowDisabled}><span class=\"fas fa-arrow-left\"></span></button>";
-            htmlFooter += $"&nbsp;{CurrentPage} / {numberOfPages}&nbsp;";
-            htmlFooter += $"<button class=\"rounded\" type=\"button\" @onclick=\"PageRight\" {rightArrowDisabled}><span class=\"fas fa-arrow-right\"></span></button>";
-
-            // Add html to cell and set to span across all columns
-            var cell = new Cell(-2, 0, htmlFooter);
-            cell.ColSpan = this.ColumnCount;
-            cell.Value = htmlFooter;
-            var row = new Row(-2);
-            row.Add(cell);
-            return row;
         }
     }
 }

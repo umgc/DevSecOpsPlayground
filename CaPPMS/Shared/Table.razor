@@ -1,4 +1,5 @@
-﻿@using System.Threading;
+﻿@using CaPPMS.Model.Table
+
 @inherits CaPPMS.Model.Table.Table
 
 <h3>Project List</h3>
@@ -14,9 +15,18 @@ else
         <label>
             <input id="filter" class="input-group-text p-2 mb-lg-3" type="text" placeholder="Filter the data here" @bind="Filter" @bind:event="oninput" />
         </label>
+        <table class="@string.Join(" ", TableCssClasses)">
+            @((MarkupString)HeaderHtml)
+            @((MarkupString)BodyHtml)
+            <tfoot>
+                <tr>
+                    <td colspan="@this.ColumnCount">
+                        <Paginate Parent="@this" />
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
     </div>
-
-    @((MarkupString)HtmlTable)
 </div>
 }
 
