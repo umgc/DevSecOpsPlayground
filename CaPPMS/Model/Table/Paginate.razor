@@ -35,7 +35,7 @@ else
     private int GetNumberOfPages()
     {
         var initialNumberOfPages = this.Parent.Count / this.Parent.RecordsPerPage;
-        return initialNumberOfPages % 2 == 0 ? (int)initialNumberOfPages : (int)Math.Round((double)initialNumberOfPages, MidpointRounding.ToNegativeInfinity) + 1;
+        return initialNumberOfPages % 2 == 0 ? (int)initialNumberOfPages + 1 : (int)Math.Round((double)initialNumberOfPages, MidpointRounding.ToNegativeInfinity) + 1;
     }
 
     private void PageRight(MouseEventArgs e)
