@@ -43,6 +43,8 @@ namespace CaPPMS.Model.Table
 
         public bool IsReadOnly => false;
 
+        public object DataBoundItem { get; set; }
+
         public Cell this[int index]
         {
             get

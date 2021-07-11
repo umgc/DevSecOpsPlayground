@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System;
 using CaPPMS.Attributes;
+using Newtonsoft.Json;
+using System.Reflection;
 
 namespace CaPPMS.Model
 {
@@ -12,6 +14,27 @@ namespace CaPPMS.Model
         [Browsable(false)]
         public Guid ProjectID { get; set; } = Guid.NewGuid();
 
+        [Export(true)]
+        [Required]
+        [StringLength(50, ErrorMessage = "Title is either too short or too long. We have confidence you can figure out which.", MinimumLength = 5)]
+        [DisplayName("Project Title")]
+        [Browsable(true)]
+        [ColumnHeader]
+        public string ProjectTitle { get; set; } = string.Empty;
+
+        [Export(true)]
+        [Required]
+        [DisplayName("Project Description")]
+        [Browsable(true)]
+        [ColumnHeader]
+        public string ProjectDescription { get; set; } = string.Empty;
+
+        [Export(true)]
+        [DisplayName("Project Website")]
+        [Browsable(true)]
+        [ColumnHeader]
+        public string Url { get; set; } = string.Empty;
+
         [Export]
         [Browsable(false)]
         private Contact Sponsor { get; set; } = new();
@@ -20,9 +43,9 @@ namespace CaPPMS.Model
         [Browsable(false)]
         private Contact Submitter { get; set; } = new();
 
-        [Export]
         [Browsable(false)]
-        public bool IsDirty { get; set; }
+        [JsonIgnore]
+        public bool IsDirty { get; set; } = false;
 
         [Export(true)]
         [Required]
@@ -92,37 +115,14 @@ namespace CaPPMS.Model
             }
         }
 
-        [Export(true)]
-        [Required]
-        [StringLength(50, ErrorMessage = "Title is either too short or too long. We have confidence you can figure out which.", MinimumLength = 5)]
-        [DisplayName("Project Title")]
+        // We will export attachments manually.
         [Browsable(true)]
-        [ColumnHeader]
-        public string ProjectTitle { get; set; } = string.Empty;
+        public IList<ProjectFile> Attachments { get; private set; } = new List<ProjectFile>();
 
-        [Export(true)]
-        [Required]
-        [DisplayName("Project Description")]
-        [Browsable(true)]
-        [ColumnHeader]
-        public string ProjectDescription { get; set; } = string.Empty;
-
-        [Export(true)]
-        [DisplayName("Project Website")]
-        [Browsable(true)]
-        [ColumnHeader]
-        public string Url { get; set; } = string.Empty;
-
-        [Export(true)]
-        [Browsable(true)]
-        public IReadOnlyList<IProjectFile> Attachements { get; set; } = new List<IProjectFile>();
-
-        [Export(true)]
         [DisplayName("Are you the sponsor")]
         [Browsable(true)]
         public bool IsSponsor { get; set; } = true;
 
-        // [ColumnHeader]
         [Export(true)]
         [Required]
         [StringLength(255, ErrorMessage = "First Name is too long")]
@@ -141,7 +141,6 @@ namespace CaPPMS.Model
             }
         }
 
-        // [ColumnHeader]
         [Export(true)]
         [Required]
         [StringLength(255, ErrorMessage = "Last Name is too long")]
@@ -160,7 +159,6 @@ namespace CaPPMS.Model
             }
         }
 
-        // [ColumnHeader]
         [Export(true)]
         [EmailAddress]
         [DisplayName("Sponsor Email")]
@@ -178,7 +176,6 @@ namespace CaPPMS.Model
             }
         }
 
-        // [ColumnHeader]
         [Export(true)]
         [Phone]
         [DisplayName("Sponsor Phone")]
@@ -193,6 +190,46 @@ namespace CaPPMS.Model
             {
                 this.Sponsor.Phone = value;
                 this.IsDirty = true;
+            }
+        }
+
+        private string status = "New";
+
+        [ColumnHeader]
+        [Browsable(true)]
+        public string Status
+        {
+            get
+            {
+                return this.status;
+            }
+            set
+            {
+                this.status = value;
+                this.IsDirty = true;
+            }
+        }
+
+        public void SetAttachments(IList<IProjectFile> files)
+        {
+            this.Attachments.Clear();
+
+            foreach(var file in files)
+            {
+                this.Attachments.Add(file as ProjectFile);
+            }
+        }
+
+        public IEnumerable<Tuple<string, object>> GetExportableInformation()
+        {
+            foreach(var prop in this.GetType().GetProperties())
+            {
+                if (prop.GetCustomAttribute<ExportAttribute>() != null)
+                {
+                    string name = prop.GetCustomAttribute<DisplayNameAttribute>()?.DisplayName ?? prop.Name;
+
+                    yield return Tuple.Create(name, prop.GetValue(this));
+                }
             }
         }
     }
