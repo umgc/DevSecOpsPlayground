@@ -13,7 +13,7 @@ namespace CaPPMS.Data
 {
     public class ProjectManagerService : IIdeaManager
     {
-        public event EventHandler ProjectIdeasChanged;
+        public static event EventHandler ProjectIdeasChanged;
 
         private readonly string localProjectDb = Path.Combine(BaseDirInfo.FullName, "projects.json");
 
@@ -70,7 +70,7 @@ namespace CaPPMS.Data
                 return false;
             }
 
-            ProjectIdeasChanged?.Invoke(ProjectIdeas, EventArgs.Empty);
+            ProjectIdeasChanged?.Invoke(ProjectIdeas.Values, EventArgs.Empty);
             return true;
         }
 
@@ -90,10 +90,16 @@ namespace CaPPMS.Data
                     }
                 }
 
+                // Delete any exported files
+                foreach(var file in BaseDirInfo.GetFiles($"{idea.ProjectID}*", SearchOption.AllDirectories))
+                {
+                    file.Delete();
+                }
+
                 if (string.IsNullOrEmpty(error))
                 {
                     _ = this.ProjectIdeas.Remove(idea.ProjectID, out ProjectInformation _);
-                    this.ProjectIdeasChanged?.Invoke(this.ProjectIdeas, EventArgs.Empty);
+                    ProjectIdeasChanged?.Invoke(this.ProjectIdeas.Values, EventArgs.Empty);
                 }
             }
 
@@ -139,7 +145,7 @@ namespace CaPPMS.Data
             bool completed;
             if (completed = ProjectIdeas.TryUpdate(idea.ProjectID, idea, ProjectIdeas[idea.ProjectID]))
             {
-                ProjectIdeasChanged?.Invoke(ProjectIdeas, EventArgs.Empty);
+                ProjectIdeasChanged?.Invoke(ProjectIdeas.Values, EventArgs.Empty);
             }
 
             return Task.FromResult(completed);

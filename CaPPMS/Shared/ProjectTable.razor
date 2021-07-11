@@ -1,4 +1,5 @@
-﻿@using CaPPMS.Model
+﻿@using CaPPMS.Data
+@using CaPPMS.Model
 @using CaPPMS.Model.Table
 @namespace CaPPMS.Shared
 @inherits CaPPMS.Model.Table.Table
@@ -96,6 +97,13 @@ else
         {
             this.SetPageNumber(1);
             this.StateHasChanged();
+        };
+
+        ProjectManagerService.ProjectIdeasChanged += (o, e) =>
+        {
+            var ideas = o as ICollection<ProjectInformation>;
+
+            this.DataSource = ideas;
         };
     }
 
