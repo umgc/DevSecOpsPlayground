@@ -1,17 +1,14 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using CaPPMS.Data;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
-using System.Security.Principal;
+using CaPPMS.Data;
 
-namespace CaPPMS.Data.Tests
+namespace CaPPMSTests.Data.Table
 {
     [TestClass()]
-    public class LocalProjectFilesManagerTests
+    public class TableTests
     {
         private string filePath = string.Empty;
 

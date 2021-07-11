@@ -7,8 +7,9 @@ using System.Security.Principal;
 using System.IO;
 using Newtonsoft.Json;
 using CaPPMS.Model;
+using CaPPMS.Data;
 
-namespace CaPPMS.Data.Tests
+namespace CaPPMSTests.Data.Table
 {
     [TestClass()]
     public class ProjectManagerServiceTests
