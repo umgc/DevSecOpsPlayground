@@ -50,16 +50,9 @@ namespace CaPPMS.Pages
             return fileLocation;
         }
 
-        private async Task<byte[]> GetData(string fileLocation)
+        private async Task<Stream> GetData(string fileLocation)
         {
-            using(var ms = new MemoryStream())
-            {
-                using (var stream = await projectManager.ProjectFileManager.ReadAsync(fileLocation))
-                {
-                    await stream.CopyToAsync(ms);
-                    return ms.ToArray();
-                }
-            }
+            return await projectManager.FileManager.ReadAsync(fileLocation);
         }
     }
 }
