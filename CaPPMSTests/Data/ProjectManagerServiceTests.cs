@@ -13,6 +13,17 @@ namespace CaPPMS.Data.Tests
     [TestClass()]
     public class ProjectManagerServiceTests
     {
+        [TestInitialize]
+        public void Initialize()
+        {
+            var projectFilePath = this.GetProjectFilePath();
+
+            if (File.Exists(projectFilePath))
+            {
+                File.Delete(projectFilePath);
+            }
+        }
+
         [TestMethod()]
         public void Add()
         {
@@ -32,7 +43,7 @@ namespace CaPPMS.Data.Tests
 
             IPrincipal principal = new GenericPrincipal(new GenericIdentity("test@greatTest.com"), new string[] { "owner" });
 
-            Assert.IsTrue(Task.Run(async () => await projectManagerService.RemoveAsync(idea, principal)).Result);
+            Assert.IsTrue(string.IsNullOrEmpty(Task.Run(async () => await projectManagerService.RemoveAsync(idea, principal)).Result));
             Assert.AreEqual(0, projectManagerService.GetIdeaTitles().Count());
         }
 
