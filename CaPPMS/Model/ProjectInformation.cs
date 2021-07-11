@@ -1,10 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Newtonsoft.Json;
+using System;
+using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System;
-using CaPPMS.Attributes;
-using Newtonsoft.Json;
 using System.Reflection;
+using CaPPMS.Attributes;
 
 namespace CaPPMS.Model
 {
@@ -18,7 +18,7 @@ namespace CaPPMS.Model
 
         [Export(true)]
         [Required]
-        [StringLength(50, ErrorMessage = "Title is either too short or too long. We have confidence you can figure out which.", MinimumLength = 5)]
+        [StringLength(25, ErrorMessage = "Title is either too short or too long. We have confidence you can figure out which.", MinimumLength = 5)]
         [DisplayName("Project Title")]
         [Browsable(true)]
         [ColumnHeader]
@@ -81,10 +81,6 @@ namespace CaPPMS.Model
         [Export]
         [Browsable(false)]
         private Contact Submitter { get; set; } = new();
-
-        [Browsable(false)]
-        [JsonIgnore]
-        public bool IsDirty { get; set; } = false;
 
         [Export(true)]
         [Required]
@@ -248,6 +244,14 @@ namespace CaPPMS.Model
                 this.IsDirty = true;
             }
         }
+
+        [Export(false)]
+        [DisplayName("Comments:")]
+        public Comments Comments { get; } = new Comments();
+
+        [Browsable(false)]
+        [JsonIgnore]
+        public bool IsDirty { get; set; } = false;
 
         public void SetAttachments(IList<IProjectFile> files)
         {
