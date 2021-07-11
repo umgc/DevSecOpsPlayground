@@ -220,6 +220,10 @@
     {
         base.OnInitialized();
 
+        if (this.ShowFormButton == FormButtons.Approver)
+        {
+            this.idea.IsDirty = false;
+        }
     }
 
     private async Task HandleValidSubmit()

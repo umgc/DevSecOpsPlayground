@@ -90,13 +90,18 @@ else
 
         this.DataSourceChanged += (o, e) =>
         {
-            this.StateHasChanged();
+            if (idea != null && !this.DataSource.Contains(idea))
+            {
+                idea = null;
+            }
+
+            this.ShouldProcessStateChange();
         };
 
         this.FilterChanged += (o, e) =>
         {
             this.SetPageNumber(1);
-            this.StateHasChanged();
+            this.ShouldProcessStateChange();
         };
 
         ProjectManagerService.ProjectIdeasChanged += (o, e) =>
@@ -110,7 +115,7 @@ else
     public void CloseIdea(Idea idea)
     {
         this.idea = null;
-        this.StateHasChanged();
+        ShouldProcessStateChange();
     }
 
     private void PageRight(MouseEventArgs e)
@@ -121,5 +126,13 @@ else
     private void ShowView(ProjectInformation idea)
     {
         this.idea = idea;
+    }
+
+    private void ShouldProcessStateChange()
+    {
+        this.InvokeAsync(() =>
+        {
+            this.StateHasChanged();
+        });
     }
 }
