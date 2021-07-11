@@ -9,10 +9,12 @@ using System.Reflection;
 namespace CaPPMS.Model
 {
     public class ProjectInformation
-    {
+    {        
         [Export]
         [Browsable(false)]
         public Guid ProjectID { get; set; } = Guid.NewGuid();
+
+        private string projectTitle = string.Empty;
 
         [Export(true)]
         [Required]
@@ -20,20 +22,57 @@ namespace CaPPMS.Model
         [DisplayName("Project Title")]
         [Browsable(true)]
         [ColumnHeader]
-        public string ProjectTitle { get; set; } = string.Empty;
+        public string ProjectTitle
+        {
+            get
+            {
+                return this.projectTitle;
+            }
+            set
+            {
+                this.projectTitle = value;
+                this.IsDirty = true;
+            }
+        }
+
+        private string projectDescription = string.Empty;
 
         [Export(true)]
         [Required]
         [DisplayName("Project Description")]
         [Browsable(true)]
         [ColumnHeader]
-        public string ProjectDescription { get; set; } = string.Empty;
+        public string ProjectDescription
+        {
+            get
+            {
+                return this.projectDescription;
+            }
+            set
+            {
+                this.projectDescription = value;
+                this.IsDirty = true;
+            }
+        }
+
+        private string url = string.Empty;
 
         [Export(true)]
         [DisplayName("Project Website")]
         [Browsable(true)]
         [ColumnHeader]
-        public string Url { get; set; } = string.Empty;
+        public string Url
+        {
+            get
+            {
+                return this.url;
+            }
+            set
+            {
+                this.url = value;
+                this.IsDirty = true;
+            }
+        }
 
         [Export]
         [Browsable(false)]
@@ -218,6 +257,8 @@ namespace CaPPMS.Model
             {
                 this.Attachments.Add(file as ProjectFile);
             }
+
+            this.IsDirty = true;
         }
 
         public IEnumerable<Tuple<string, object>> GetExportableInformation()
