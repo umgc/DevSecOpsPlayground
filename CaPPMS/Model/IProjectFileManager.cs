@@ -6,23 +6,23 @@ namespace CaPPMS.Model
 {
     public interface IProjectFileManager
     {
-        static string Delimiter { get; }
-
+        DirectoryInfo FileDirInfo { get; }
+        string DownloadPath { get; }
         /// <summary>
         /// Saves in coming stream.
         /// </summary>
         /// <param name="stream">Stream to save.</param>
         /// <param name="fileName">File Extention of attachment.</param>
         /// <returns>File name the file was stored under.</returns>
-        Task<string> SaveAsync(Stream stream, string fileName);
+        Task<string> SaveAsync(Stream stream, string fileId, string fileName);
 
         /// <summary>
         /// Deletes specified file from storage.
         /// </summary>
         /// <param name="fileLocation">Location of the stored file.</param>
         /// <param name="principal">User making the request.</param>
-        /// <returns></returns>
-        Task<bool> DeleteAsync(string fileLocation, IPrincipal principal);
+        /// <returns>Error</returns>
+        Task<string> DeleteAsync(string fileLocation, IPrincipal principal);
 
         /// <summary>
         /// Reads the file stream.

@@ -2,6 +2,6 @@
 {
     public interface IIdea
     {
-        void CloseIdea(Idea idea);
+        public void CloseIdea(Idea idea);
     }
 }

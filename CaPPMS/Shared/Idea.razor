@@ -1,11 +1,13 @@
-﻿@using CaPPMS.Data
+﻿@using Microsoft.AspNetCore.Http
+@using CaPPMS.Data
 @using CaPPMS.Model
 
 @inject ProjectManagerService ProjectManager
 @inject NavigationManager NavigationManager
+@inject IHttpContextAccessor Context
 
 <div class="p-5">
-    <EditForm Model="@formModel" OnValidSubmit="@HandleValidSubmit">
+    <EditForm Model="@idea" OnValidSubmit="@HandleValidSubmit">
         <DataAnnotationsValidator />
         <ValidationSummary />
         <table class="table w-50 p-5">
@@ -13,7 +15,7 @@
                 <td class="d-xl-table-cell">
                     <label>
                         First Name:
-                        <InputText id="firstName" @bind-Value="formModel.FirstName" />
+                        <InputText id="firstName" @bind-Value="idea.FirstName" />
                     </label>
                 </td>
             </tr>
@@ -21,7 +23,7 @@
                 <td class="d-xl-table-cell">
                     <label>
                         Last Name:
-                        <InputText id="lastName" @bind-Value="formModel.LastName" />
+                        <InputText id="lastName" @bind-Value="idea.LastName" />
                     </label>
                 </td>
             </tr>
@@ -29,7 +31,7 @@
                 <td class="d-xl-table-cell">
                     <label>
                         Email:
-                        <InputText id="email" @bind-Value="formModel.Email" />
+                        <InputText id="email" @bind-Value="idea.Email" />
                     </label>
                 </td>
             </tr>
@@ -37,7 +39,7 @@
                 <td class="d-xl-table-cell">
                     <label>
                         Phone:
-                        <InputText id="phone" @bind-Value="formModel.Phone" />
+                        <InputText id="phone" @bind-Value="idea.Phone" />
                     </label>
                 </td>
             </tr>
@@ -45,7 +47,7 @@
                 <td class="d-xl-table-cell">
                     <label>
                         Project Title:
-                        <InputText id="projectTitle" @bind-Value="formModel.ProjectTitle" />
+                        <InputText id="projectTitle" @bind-Value="idea.ProjectTitle" />
                     </label>
                 </td>
             </tr>
@@ -53,37 +55,53 @@
                 <td class="d-xl-table-cell">
                     <label>
                         Project Description:
-                        <InputTextArea id="projectDescription" @bind-Value="formModel.ProjectDescription" />
+                        <InputTextArea id="projectDescription" @bind-Value="idea.ProjectDescription" />
                     </label>
                 </td>
             </tr>
             <tr class="row w-25">
                 <td class="d-xl-table-cell">
-                    <label>
-                        Attachement:
-                        <InputFile id="attachment" OnChange="LoadFiles" multiple />
-                    </label>
+                    @if (this.ShowFileAttachments)
+                    {
+                        <span class="card-header" style="width:300px">Attachments:</span>
+                        @foreach (var file in this.idea.Attachments)
+                        {
+                            <div class="card">
+                                <span class="card-body" style="width:300px"><a href="/download/@file.Location" download="@file.Name" target="_top">@file.Name</a></span><br />
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <label>
+                            Attachement(s):
+                            <InputFile id="attachment" OnChange="LoadFiles" multiple />
+                        </label>
+                    }
                 </td>
             </tr>
             <tr class="row w-25">
                 <td class="d-xl-table-cell">
                     <label>
                         Website:
-                        <InputText id="url" @bind-Value="formModel.Url" />
+                        <InputText id="url" @bind-Value="idea.Url" />
                     </label>
                 </td>
             </tr>
-            <tr class="row w-25">
-                <td class="d-xl-table-cell">
-                    <label>
-                        Self Sponsored:
-                        <InputCheckbox id="isSponsor" @bind-Value="formModel.IsSponsor" @onclick="SponsorCheckBox_Changed" />
-                    </label>
-                </td>
-            </tr>
+            @if (this.ShowFormButton == FormButtons.Submit)
+            {
+                <tr class="row w-25">
+                    <td class="d-xl-table-cell">
+                        <label>
+                            Self Sponsored:
+                            <InputCheckbox id="isSponsor" @bind-Value="idea.IsSponsor" @onclick="SponsorCheckBox_Changed" />
+                        </label>
+                    </td>
+                </tr>
+            }
         </table>
 
-        @if (!formModel.IsSponsor)
+        @if (!idea.IsSponsor)
         {
             <h4>Sponsor Information...</h4>
             <table class="table w-50">
@@ -91,7 +109,7 @@
                     <td class="d-xl-table-cell">
                         <label>
                             Sponsor First Name:
-                            <InputText id="firstName" @bind-Value="formModel.SponsorFirstName" />
+                            <InputText id="firstName" @bind-Value="idea.SponsorFirstName" />
                         </label>
                     </td>
                 </tr>
@@ -99,7 +117,7 @@
                     <td class="d-xl-table-cell">
                         <label>
                             Sponsor Last Name:
-                            <InputText id="lastName" @bind-Value="formModel.SponsorLastName" />
+                            <InputText id="lastName" @bind-Value="idea.SponsorLastName" />
                         </label>
                     </td>
                 </tr>
@@ -107,7 +125,7 @@
                     <td class="d-xl-table-cell">
                         <label>
                             Sponsor Email:
-                            <InputText id="email" @bind-Value="formModel.SponsorEmail" />
+                            <InputText id="email" @bind-Value="idea.SponsorEmail" />
                         </label>
                     </td>
                 </tr>
@@ -115,24 +133,12 @@
                     <td class="d-xl-table-cell">
                         <label>
                             Sponsor Phone:
-                            <InputText id="phone" @bind-Value="formModel.SponsorPhone" />
+                            <InputText id="phone" @bind-Value="idea.SponsorPhone" />
                         </label>
                     </td>
                 </tr>
             </table>
         }
-
-        @if (this.ShowFileAttachments)
-                {
-                    <div>
-                        <ul class="list-group">
-                            @foreach (var file in this.formModel.Attachements)
-                            {
-                                <li class="list-group-item-info"><a @onclick="@(e => DownloadFile(file))">@file.Name</a></li>
-                            }
-                        </ul>
-                    </div>
-                }
 
         @if (this.ShowFormButton == FormButtons.Submit)
         {
@@ -140,19 +146,34 @@
         }
         else if (this.ShowFormButton == FormButtons.Approver)
         {
-            if (this.formModel.IsDirty)
-            { <button type="button" @onclick="UpdateRecordAsync" class="btn btn-primary">Update</button> } <button type="button" class="btn btn-danger">Close</button>
+            <CascadingValue Name="User" Value="this.Context.HttpContext.User">
+                <CommentsComponent ProjectGuid="idea.ProjectID" />
+            </CascadingValue>
+
+            if (this.idea.IsDirty)
+            {
+                <button type="button" @onclick="UpdateRecordAsync" class="btn btn-primary">Update</button><span>&nbsp;</span>
+            }
+
+            <button type="button" class="btn btn-secondary" @onclick="ExportIdea">Export</button><span>&nbsp;</span>
+
+            <button type="button" class="btn btn-info" @onclick="CloseForm">Close</button><span>&nbsp;</span>
+
+            if (this.idea.Status.Equals("New"))
+            {
+                <button type="button" class="btn btn-success" @onclick="ApproveIdea">Approve</button><span>&nbsp;</span>
+            }
+
+            <button type="button" class="btn btn-danger" @onclick="DeleteIdea">Delete</button><span>&nbsp;</span>
         }
 
     </EditForm>
 </div>
 
-
-@code {
-
+@code{
     public enum FormButtons
     {
-        Submit = 0,
+        Submit,
         Approver
     }
 
@@ -177,39 +198,58 @@
     public IIdea Parent { get; set; } = null;
 
     [Parameter]
-    public IIdeaManager Manager { get; set; } = null;
+    public ProjectInformation ProjectIdea
+    {
+        get
+        {
+            return idea;
+        }
+        set
+        {
+            idea = value;
+        }
+    }
 
-    private ProjectInformation formModel = new ProjectInformation();
+    private ProjectInformation idea = new ProjectInformation();
+
+    private string DownloadFileName => $"{idea.ProjectTitle}-Export.pdf";
+
+    private string Error { get; set; }
 
     private List<IProjectFile> loadedFiles = new();
 
-    private long maxFileSize => ProjectFile.MaxFileSize;
-
-    private int maxAllowedFiles = 4;
-
     private static bool isUploading = false;
 
-    private bool isDirty => formModel.IsDirty;
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        if (this.ShowFormButton == FormButtons.Approver)
+        {
+            this.idea.IsDirty = false;
+        }
+    }
 
     private async Task HandleValidSubmit()
     {
-        formModel.Attachements = loadedFiles;
-        var uploaded = await ProjectManager.AddAsync(formModel);
+        idea.SetAttachments(loadedFiles);
+
+        var uploaded = await ProjectManager.AddAsync(idea);
 
         if (uploaded)
         {
+            idea.IsDirty = false;
             loadedFiles.Clear();
+            idea = new ProjectInformation();
         }
-
-        formModel = new ProjectInformation();
     }
 
     private void LoadFiles(InputFileChangeEventArgs inputFile)
     {
         this.loadedFiles.Clear();
-        foreach (var file in inputFile.GetMultipleFiles().Take(maxAllowedFiles))
+        foreach (var file in inputFile.GetMultipleFiles().Take(ProjectManager.MaxNumberOfFiles))
         {
-            if (file.Size > maxFileSize)
+            if (file.Size > ProjectManager.MaxMBSizePerFile)
             {
                 continue;
             }
@@ -222,9 +262,9 @@
 
     private void SponsorCheckBox_Changed(EventArgs e)
     {
-        this.formModel.IsSponsor = !this.formModel.IsSponsor;
+        this.idea.IsSponsor = !this.idea.IsSponsor;
 
-        if (!this.formModel.IsSponsor)
+        if (!this.idea.IsSponsor)
         {
             ResetSponsor();
         }
@@ -236,31 +276,60 @@
     /// <param name="e"></param>
     private void SponsorCheck(EventArgs e)
     {
-        if (formModel.IsSponsor)
+        if (idea.IsSponsor)
         {
-            formModel.SponsorFirstName = formModel.FirstName;
-            formModel.SponsorLastName = formModel.LastName;
-            formModel.SponsorEmail = formModel.Email;
-            formModel.SponsorPhone = formModel.Phone;
+            idea.SponsorFirstName = idea.FirstName;
+            idea.SponsorLastName = idea.LastName;
+            idea.SponsorEmail = idea.Email;
+            idea.SponsorPhone = idea.Phone;
         }
     }
 
     private void ResetSponsor()
     {
-        formModel.SponsorFirstName = string.Empty;
-        formModel.SponsorLastName = string.Empty;
-        formModel.SponsorEmail = string.Empty;
-        formModel.SponsorPhone = string.Empty;
+        idea.SponsorFirstName = string.Empty;
+        idea.SponsorLastName = string.Empty;
+        idea.SponsorEmail = string.Empty;
+        idea.SponsorPhone = string.Empty;
     }
 
     private async Task UpdateRecordAsync(EventArgs e)
     {
-        if (Manager is null || !formModel.IsDirty)
+        if (!idea.IsDirty)
         {
             return;
         }
 
-        formModel.IsDirty = await Manager.UpdateAsync(formModel);
+        idea.IsDirty = !await ProjectManager.UpdateAsync(idea);
+    }
+
+    private async Task ApproveIdea(MouseEventArgs e)
+    {
+        this.idea.Status = "Approved";
+        await UpdateRecordAsync(e);
+    }
+
+    private async Task ExportIdea(MouseEventArgs e)
+    {
+        var location = await this.ProjectManager.ExportAsync(idea);
+
+        NavigationManager.NavigateTo($"{ProjectManager.FileManager.DownloadPath}{location}", true);
+
+        this.CloseForm(EventArgs.Empty);
+    }
+
+    private async Task DeleteIdea(MouseEventArgs e)
+    {
+        string error = await this.ProjectManager.DeleteAsync(idea, Context.HttpContext.User);
+
+        if (string.IsNullOrEmpty(error))
+        {
+            this.CloseForm(EventArgs.Empty);
+        }
+        else
+        {
+            this.Error = error;
+        }
     }
 
     private void CloseForm(EventArgs e)
@@ -275,6 +344,6 @@
 
     private void DownloadFile(IProjectFile file)
     {
-        NavigationManager.NavigateTo($"/download/{file.Location}");
+        NavigationManager.NavigateTo($"/download/{file.Location}", true);
     }
 }

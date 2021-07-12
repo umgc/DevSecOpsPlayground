@@ -12,8 +12,14 @@ a,
 
 .btn-primary {
     color: #fff;
-    background-color: #1b6ec2;
-    border-color: #1861ac;
+    background-color: #da1a32;
+    border-color: #a30606;
+}
+
+.btn-secondary {
+    color: #000;
+    background-color: #fdbf38;
+    border-color: #008484;
 }
 
 .content {
@@ -61,7 +67,7 @@ tr {
     text-align:center;
 }
 
-tr td .odd {
+.odd {
     background-color:teal;
     color:white;
 }
@@ -75,4 +81,52 @@ navLink-active {
 .umgcHeader {
     background-color : darkred;
     color : white;
+}
+
+.umgcFooter {
+    background-color: darkred;
+    color: white;
+}
+
+.submitidea {
+    background-color: white;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 5px;
+    padding: 3px;
+    border-radius: 5px;
+    border: 2px solid darkred;
+    overflow: auto;
+}
+
+.idea {
+    position: absolute;
+    top: 10%;
+    left: 40%;
+    background-color: white;
+    height: 70%;
+    margin: auto;
+    padding: 3px;
+    border-radius: 5px;
+    border: 2px solid darkred;
+    overflow: auto;
+    z-index: 100;
+}
+
+.idea input {
+    width : 300px;
+    padding: 2px;
+    margin: auto;
+}
+
+.idea textarea {
+    width: 300px;
+    padding: 2px;
+    margin: auto;
+}
+
+.idea ul li {
+    width : 300px;
+    padding: 2px;
+    margin: auto;
 }

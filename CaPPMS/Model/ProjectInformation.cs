@@ -1,16 +1,78 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Newtonsoft.Json;
+using System;
+using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System;
+using System.Reflection;
 using CaPPMS.Attributes;
 
 namespace CaPPMS.Model
 {
     public class ProjectInformation
-    {
+    {        
         [Export]
         [Browsable(false)]
         public Guid ProjectID { get; set; } = Guid.NewGuid();
+
+        private string projectTitle = string.Empty;
+
+        [Export(true)]
+        [Required]
+        [StringLength(25, ErrorMessage = "Title is either too short or too long. We have confidence you can figure out which.", MinimumLength = 5)]
+        [DisplayName("Project Title")]
+        [Browsable(true)]
+        [ColumnHeader]
+        public string ProjectTitle
+        {
+            get
+            {
+                return this.projectTitle;
+            }
+            set
+            {
+                this.projectTitle = value;
+                this.IsDirty = true;
+            }
+        }
+
+        private string projectDescription = string.Empty;
+
+        [Export(true)]
+        [Required]
+        [DisplayName("Project Description")]
+        [Browsable(true)]
+        [ColumnHeader]
+        public string ProjectDescription
+        {
+            get
+            {
+                return this.projectDescription;
+            }
+            set
+            {
+                this.projectDescription = value;
+                this.IsDirty = true;
+            }
+        }
+
+        private string url = string.Empty;
+
+        [Export(true)]
+        [DisplayName("Project Website")]
+        [Browsable(true)]
+        [ColumnHeader]
+        public string Url
+        {
+            get
+            {
+                return this.url;
+            }
+            set
+            {
+                this.url = value;
+                this.IsDirty = true;
+            }
+        }
 
         [Export]
         [Browsable(false)]
@@ -19,10 +81,6 @@ namespace CaPPMS.Model
         [Export]
         [Browsable(false)]
         private Contact Submitter { get; set; } = new();
-
-        [Export]
-        [Browsable(false)]
-        public bool IsDirty { get; set; }
 
         [Export(true)]
         [Required]
@@ -92,37 +150,14 @@ namespace CaPPMS.Model
             }
         }
 
-        [Export(true)]
-        [Required]
-        [StringLength(50, ErrorMessage = "Title is either too short or too long. We have confidence you can figure out which.", MinimumLength = 5)]
-        [DisplayName("Project Title")]
+        // We will export attachments manually.
         [Browsable(true)]
-        [ColumnHeader]
-        public string ProjectTitle { get; set; } = string.Empty;
+        public IList<ProjectFile> Attachments { get; private set; } = new List<ProjectFile>();
 
-        [Export(true)]
-        [Required]
-        [DisplayName("Project Description")]
-        [Browsable(true)]
-        [ColumnHeader]
-        public string ProjectDescription { get; set; } = string.Empty;
-
-        [Export(true)]
-        [DisplayName("Project Website")]
-        [Browsable(true)]
-        [ColumnHeader]
-        public string Url { get; set; } = string.Empty;
-
-        [Export(true)]
-        [Browsable(true)]
-        public IReadOnlyList<IProjectFile> Attachements { get; set; } = new List<IProjectFile>();
-
-        [Export(true)]
         [DisplayName("Are you the sponsor")]
         [Browsable(true)]
         public bool IsSponsor { get; set; } = true;
 
-        // [ColumnHeader]
         [Export(true)]
         [Required]
         [StringLength(255, ErrorMessage = "First Name is too long")]
@@ -141,7 +176,6 @@ namespace CaPPMS.Model
             }
         }
 
-        // [ColumnHeader]
         [Export(true)]
         [Required]
         [StringLength(255, ErrorMessage = "Last Name is too long")]
@@ -160,7 +194,6 @@ namespace CaPPMS.Model
             }
         }
 
-        // [ColumnHeader]
         [Export(true)]
         [EmailAddress]
         [DisplayName("Sponsor Email")]
@@ -178,7 +211,6 @@ namespace CaPPMS.Model
             }
         }
 
-        // [ColumnHeader]
         [Export(true)]
         [Phone]
         [DisplayName("Sponsor Phone")]
@@ -193,6 +225,56 @@ namespace CaPPMS.Model
             {
                 this.Sponsor.Phone = value;
                 this.IsDirty = true;
+            }
+        }
+
+        private string status = "New";
+
+        [ColumnHeader]
+        [Browsable(true)]
+        public string Status
+        {
+            get
+            {
+                return this.status;
+            }
+            set
+            {
+                this.status = value;
+                this.IsDirty = true;
+            }
+        }
+
+        [Export(false)]
+        [DisplayName("Comments:")]
+        public Comments Comments { get; } = new Comments();
+
+        [Browsable(false)]
+        [JsonIgnore]
+        public bool IsDirty { get; set; } = false;
+
+        public void SetAttachments(IList<IProjectFile> files)
+        {
+            this.Attachments.Clear();
+
+            foreach(var file in files)
+            {
+                this.Attachments.Add(file as ProjectFile);
+            }
+
+            this.IsDirty = true;
+        }
+
+        public IEnumerable<Tuple<string, object>> GetExportableInformation()
+        {
+            foreach(var prop in this.GetType().GetProperties())
+            {
+                if (prop.GetCustomAttribute<ExportAttribute>() != null)
+                {
+                    string name = prop.GetCustomAttribute<DisplayNameAttribute>()?.DisplayName ?? prop.Name;
+
+                    yield return Tuple.Create(name, prop.GetValue(this));
+                }
             }
         }
     }

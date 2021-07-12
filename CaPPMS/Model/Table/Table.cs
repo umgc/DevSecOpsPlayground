@@ -9,6 +9,12 @@ using System.Reflection;
 
 namespace CaPPMS.Model.Table
 {
+    /// <summary>
+    /// This table uses reflection to dynamically build rows and cells. Two attributes are used to do this.
+    /// 1. The ColumnHeaderAttribute is used to generate the column headers which are used to generate the rows and their cells.
+    ///     To add a column, simply decrorate with [ColumnHeader]
+    /// 2. The rows will look preference DisplayNameAttribute over the Property Name. DisplayNameAttribute is not required for the table to build.
+    /// </summary>
     public class Table : ComponentBase, IList<Row>
     {
         public event EventHandler DataSourceChanged;
@@ -84,24 +90,7 @@ namespace CaPPMS.Model.Table
 
         public Row HeaderRow => GetHeaderRow();
 
-        public string HeaderHtml => $"<thead class=\"{string.Join(" ", HeaderCssClasses)}\">{this.HeaderRow}</thead>";
-
-        public List<string> HeaderCssClasses { get; set; } = new List<string>();
-
         public List<Row> Rows => this.GetRows().ToList();
-
-        public List<string> BodyCssClasses { get; } = new List<string>();
-
-        public string BodyHtml
-        {
-            get
-            {
-                string rows = string.Join($"\t\t\t{Environment.NewLine}", this.GetRows());
-                return $"<tbody class=\"{string.Join(" ", BodyCssClasses)}\">{rows}</tbody>";
-            }
-        }
-
-        public List<string> TableCssClasses { get; } = new List<string>();
 
         public int Count => this.DataSource.Count();
 
@@ -190,28 +179,45 @@ namespace CaPPMS.Model.Table
             return row;
         }
 
+        public IEnumerable<Row> GetRows()
+        {
+            var dataList = this.dataSource.ToList();
+
+            List<Row> rows = new List<Row>();
+            for (int r = 0; r < dataList.Count; r++)
+            {
+                Row row = new Row(r);
+                for (int c = 0; c < this.HeaderRow.Count; c++)
+                {
+                    var prop = dataList[r].GetType().GetRuntimeProperties()
+                                .FirstOrDefault(p => (p.GetCustomAttribute(typeof(DisplayNameAttribute)) != null &&
+                                p.GetCustomAttribute<DisplayNameAttribute>().DisplayName == this.HeaderRow[c].Value as string) ||
+                                p.Name == this.HeaderRow[c].Value as string);
+
+                    if (prop is null)
+                    {
+                        row.Add(new Cell(r, c, string.Empty));
+                    }
+                    else
+                    {
+                        row.Add(new Cell(r, c, prop.GetValue(dataList[r])));
+                    }
+                }
+
+                if (row.ContainsFilter(filter))
+                {
+                    row.DataBoundItem = dataList[r];
+                    rows.Add(row);
+                }
+            }
+
+            int skipNumber = CurrentPage > 1 ? (CurrentPage * rowsPerPage) - rowsPerPage : 0;
+            return rows.Skip(skipNumber - 1).Take(this.rowsPerPage).ToArray();
+        }
+
         public void SetDataSource(IEnumerable<object> dataSource)
         {
             this.DataSource = dataSource;
-        }
-
-        public override string ToString()
-        {
-            string html = "<table";
-
-            if (this.TableCssClasses.Count > 0)
-            {
-                html += $" class={string.Join(" ", this.TableCssClasses)}";
-            }
-
-            html += ">";
-
-            html += this.HeaderHtml;
-            html += this.BodyHtml;
-
-            html += "</table>";
-
-            return html;
         }
 
         private List<string> GetColumnNames()
@@ -240,36 +246,6 @@ namespace CaPPMS.Model.Table
             }
 
             return columns;
-        }
-
-        private IEnumerable<Row> GetRows()
-        {
-            int skipNumber = CurrentPage > 1 ? (CurrentPage * rowsPerPage) - rowsPerPage : 0;
-            var dataList = this.dataSource.Skip(skipNumber - 1).Take(this.rowsPerPage).ToArray();
-
-            for (int r = 0; r < dataList.Length; r++)
-            {
-                Row row = new Row(r);
-                for (int c = 0; c < this.HeaderRow.Count; c++)
-                {
-                    var prop = dataList[r].GetType().GetRuntimeProperties().FirstOrDefault(p => p.GetCustomAttribute(typeof(DisplayNameAttribute)) != null &&
-                                                                                        p.GetCustomAttribute<DisplayNameAttribute>().DisplayName == this.HeaderRow[c].Value as string);
-
-                    if (prop is null)
-                    {
-                        break;
-                    }
-                    else
-                    {
-                        row.Add(new Cell(r, c, prop.GetValue(dataList[r])));
-                    }
-                }
-
-                if (row.ContainsFilter(filter))
-                {
-                    yield return row;
-                }
-            }
         }
     }
 }

@@ -34,17 +34,20 @@ else
 
     private int GetNumberOfPages()
     {
-        var initialNumberOfPages = this.Parent.Count / this.Parent.RecordsPerPage;
-        return initialNumberOfPages % 2 == 0 ? (int)initialNumberOfPages : (int)Math.Round((double)initialNumberOfPages, MidpointRounding.ToNegativeInfinity) + 1;
+        int totalRows = string.IsNullOrEmpty(this.Parent.Filter) ? this.Parent.Count : this.Parent.GetRows().Count();
+        var initialNumberOfPages = totalRows / this.Parent.RecordsPerPage;
+        return initialNumberOfPages % 2 == 0 ? (int)initialNumberOfPages + 1 : (int)Math.Round((double)initialNumberOfPages, MidpointRounding.ToNegativeInfinity) + 1;
     }
 
     private void PageRight(MouseEventArgs e)
     {
         this.Parent.SetPageNumber(this.Parent.CurrentPage + 1);
+        this.StateHasChanged();
     }
 
     private void PageLeft(MouseEventArgs e)
     {
         this.Parent.SetPageNumber(this.Parent.CurrentPage - 1);
+        this.StateHasChanged();
     }
 }
