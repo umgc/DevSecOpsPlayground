@@ -146,6 +146,10 @@
         }
         else if (this.ShowFormButton == FormButtons.Approver)
         {
+            <CascadingValue Name="User" Value="this.Context.HttpContext.User">
+                <CommentsComponent ProjectGuid="idea.ProjectID" />
+            </CascadingValue>
+
             if (this.idea.IsDirty)
             {
                 <button type="button" @onclick="UpdateRecordAsync" class="btn btn-primary">Update</button><span>&nbsp;</span>

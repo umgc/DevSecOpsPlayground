@@ -1,15 +1,39 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace CaPPMS.Model
 {
-    public class Comments : IEnumerable<Comment>
+    [JsonDictionary("CommentEnumeration")]
+    public class Comments : IDictionary<Guid, Comment>
     {
-        private ConcurrentDictionary<Guid, Comment> comments = new ConcurrentDictionary<Guid, Comment>();
+        private ConcurrentDictionary<Guid, Comment> comments { get; set; } = new ConcurrentDictionary<Guid, Comment>();
+
+        public Comments() { }
 
         public int Count => comments.Count;
+
+        public ICollection<Guid> Keys => this.comments.Keys;
+
+        public ICollection<Comment> Values => this.comments.Values;
+
+        public bool IsReadOnly => false;
+
+        public Comment this[Guid key]
+        {
+            get
+            {
+                return this[key];
+            }
+            set
+            {
+                this.comments.AddOrUpdate(key, value, (k, v) => v = value);
+            }
+        }
+
 
         public void Add(Comment item)
         {
@@ -21,32 +45,62 @@ namespace CaPPMS.Model
             comments.AddOrUpdate(item.CommentId, item, (k, v) => v = item);
         }
 
-        public void Clear()
+        public void Add(Guid key, Comment value)
         {
-            comments.Clear();
+            _ = this.comments.TryAdd(key, value);
         }
 
-        public bool Contains(Comment item)
+        public bool ContainsKey(Guid key)
         {
-            return comments.ContainsKey(item.CommentId);
+            return this.comments.ContainsKey(key);
         }
 
-        public IEnumerator<Comment> GetEnumerator()
+        public bool Remove(Guid key)
         {
-            foreach(var item in comments.Values)
+            return this.comments.TryRemove(key, out Comment _);
+        }
+
+        public bool TryGetValue(Guid key, [MaybeNullWhen(false)] out Comment value)
+        {
+            return this.comments.TryGetValue(key, out value);
+        }
+
+        public void Add(KeyValuePair<Guid, Comment> item)
+        {
+            this.comments.AddOrUpdate(item.Key, item.Value, (k, v) => v = item.Value);
+        }
+
+        public bool Contains(KeyValuePair<Guid, Comment> item)
+        {
+            return this.comments.ContainsKey(item.Key);
+        }
+
+        public void CopyTo(KeyValuePair<Guid, Comment>[] array, int arrayIndex)
+        {
+            for(int i = arrayIndex; i < array.Length; i++)
             {
-                yield return item;
+                this.Add(array[i]);
             }
         }
 
-        public bool Remove(Comment item)
+        public bool Remove(KeyValuePair<Guid, Comment> item)
         {
-            return comments.TryRemove(item.CommentId, out Comment _);
+            return this.Remove(item.Key);
         }
 
-        IEnumerator IEnumerable.GetEnumerator()
+        IEnumerator<KeyValuePair<Guid, Comment>> IEnumerable<KeyValuePair<Guid, Comment>>.GetEnumerator()
         {
-            return GetEnumerator();
+            return this.comments.GetEnumerator();
+        }
+
+        public void Clear()
+        {
+            this.comments.Clear();
+        }
+
+        public IEnumerator GetEnumerator()
+        {
+            return this.comments.GetEnumerator();
         }
     }
 }

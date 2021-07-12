@@ -6,12 +6,13 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Security.Principal;
 using System.Threading.Tasks;
 
 namespace CaPPMS.Data
 {
-    public class ProjectManagerService : IIdeaManager
+    public class ProjectManagerService : IIdeaManager, ICommentManager
     {
         public static event EventHandler ProjectIdeasChanged;
 
@@ -264,6 +265,31 @@ namespace CaPPMS.Data
             }
 
             return string.Empty;
+        }
+
+        public void AddComment(Comment comment)
+        {
+            if(ProjectIdeas.TryGetValue(comment.ProjectID, out ProjectInformation project))
+            {
+                project.Comments.Add(comment);
+                ProjectIdeasChanged?.Invoke(ProjectIdeas.Values, EventArgs.Empty);
+            }
+        }
+
+        public IEnumerable<Comment> GetComments(Guid projectID)
+        {
+            if(ProjectIdeas.TryGetValue(projectID, out ProjectInformation project))
+            {
+                List<Comment> comments = new List<Comment>();
+                foreach(Comment comment in project.Comments.Values)
+                {
+                    comments.Add(comment);
+                }
+
+                return comments.OrderByDescending(c => c.UpdateDateTime);
+            }
+
+            return new List<Comment>();
         }
     }
 }
