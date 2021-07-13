@@ -4,7 +4,7 @@
 name: Build and deploy ASP.Net Core app to Azure Web App - cappms
 
 on:
-  push:
+  pull_request:
     branches:
       - website
   workflow_dispatch:
@@ -16,46 +16,36 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Set up .NET Core
-      uses: actions/setup-dotnet@v1
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1
+
+    - name: Log in to registry
+      uses: docker/login-action@v1
       with:
-        dotnet-version: '5.0.x'
-        include-prerelease: true
+        registry: https://umgcswen670acr.azurecr.io/
+        username: ${{ secrets.AzureAppService_ContainerUsername_6485ee65858e43beb573f5232eb994b8 }}
+        password: ${{ secrets.AzureAppService_ContainerPassword_d6bc980048234a28b31747bb7878bc77 }}
 
-    - name: Build with dotnet
-      run: |
-        cd ./CaPPMS
-        dotnet build --configuration Release
-
-    - name: dotnet publish
-      run: |
-        cd ./CaPPMS
-        dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
-
-    - name: Upload artifact for deployment job
-      uses: actions/upload-artifact@v2
+    - name: Build and push container image to registry
+      uses: docker/build-push-action@v2
       with:
-        name: .net-app
-        path: ${{env.DOTNET_ROOT}}/myapp
+        push: true
+        tags: umgcswen670acr.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_6485ee65858e43beb573f5232eb994b8 }}/cappms-image:${{ github.sha }}
+        file: ./CaPPMS/Dockerfile
 
   deploy:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     needs: build
     environment:
       name: 'production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
     steps:
-    - name: Download artifact from build job
-      uses: actions/download-artifact@v2
-      with:
-        name: .net-app
-
     - name: Deploy to Azure Web App
       id: deploy-to-webapp
       uses: azure/webapps-deploy@v2
       with:
-        app-name: 'cappms'
+        app-name: 'UMGC-Cappms'
         slot-name: 'production'
-        publish-profile: ${{ secrets.AzureAppService_PublishProfile_8cc628de8ef94251bdb0af7b6968cf6a }}
-        package: .
+        publish-profile: ${{ secrets.AzureAppService_PublishProfile_1688327947a14ae38f2e6ad1c5deb14e }}
+        images: 'umgcswen670acr.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_6485ee65858e43beb573f5232eb994b8 }}/cappms-image:${{ github.sha }}'
