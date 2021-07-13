@@ -1,17 +1,17 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and Deploy CaPPMS Container
+name: Build and deploy container app to Azure Web App - UMGC-Cappms
 
 on:
-  pull_request:
+  push:
     branches:
       - website
   workflow_dispatch:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: 'ubuntu-latest'
 
     steps:
     - uses: actions/checkout@v2
@@ -31,7 +31,7 @@ jobs:
       with:
         push: true
         tags: umgcswen670acr.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_6485ee65858e43beb573f5232eb994b8 }}/cappms-image:${{ github.sha }}
-        file: ./CaPPMS/Dockerfile
+        file: ./Dockerfile
 
   deploy:
     runs-on: ubuntu-latest
@@ -41,7 +41,7 @@ jobs:
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
     steps:
-    - name: Deploy to CaPPMS Container
+    - name: Deploy to Azure Web App
       id: deploy-to-webapp
       uses: azure/webapps-deploy@v2
       with:
