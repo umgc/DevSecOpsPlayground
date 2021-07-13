@@ -1,0 +1,58 @@
+﻿
+    <div class="modal-dialog" style="z-index:100">
+        <h1><span class="fas fa-exclamation"></span> @Title</h1>
+        <p>@Message</p>
+        <button type="button" class="btn btn-primary">OK</button> <button type="button" class="btn btn-danger">Cancel</button>
+    </div>
+
+@code {
+
+    public enum MessageLevel
+    {
+        Warning,
+        Ok,
+        Error
+    }
+
+    [Parameter]
+    public string Title { get; set; }
+
+    [Parameter]
+    public string Message { get; set; }
+
+    [Parameter]
+    public MessageLevel MessageLevelIcon { get; set; }
+
+    public bool isShowing = true;
+
+    public string icon = string.Empty;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        string icon = "fas ";
+
+        switch (MessageLevelIcon)
+        {
+            case MessageLevel.Ok:
+                icon += "";
+                break;
+            case MessageLevel.Warning:
+                icon += "";
+                break;
+            case MessageLevel.Error:
+                icon += "";
+                break;
+        }
+
+        this.icon = icon;
+    }
+
+    public void Show()
+    {
+        isShowing = true;
+    }
+
+
+}

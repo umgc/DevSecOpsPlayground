@@ -1,0 +1,132 @@
+@import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
+html,
+body {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    height: 100%
+}
+
+a,
+.btn-link {
+    color: #0366d6;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #da1a32;
+    border-color: #a30606;
+}
+
+.btn-secondary {
+    color: #000;
+    background-color: #fdbf38;
+    border-color: #008484;
+}
+
+.content {
+    padding-top: 1.1rem;
+}
+
+.valid.modified:not([type=checkbox]) {
+    outline: 1px solid #26b050;
+}
+
+.invalid {
+    outline: 1px solid red;
+}
+
+.validation-message {
+    color: red;
+}
+
+#blazor-error-ui {
+    background: lightyellow;
+    bottom: 0;
+    box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.2);
+    display: none;
+    left: 0;
+    padding: 0.6rem 1.25rem 0.7rem 1.25rem;
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+}
+
+#blazor-error-ui .dismiss {
+    cursor: pointer;
+    position: absolute;
+    right: 0.75rem;
+    top: 0.5rem;
+}
+
+tr th {
+    background-color : black;
+    color: yellow;
+}
+
+tr {
+    padding: 2px;
+    text-align:center;
+}
+
+.odd {
+    background-color:teal;
+    color:white;
+}
+
+navLink-active {
+    background-color: white;
+    color: red;
+    font-weight: bold;
+}
+
+.umgcHeader {
+    background-color : darkred;
+    color : white;
+}
+
+.umgcFooter {
+    background-color: darkred;
+    color: white;
+}
+
+.submitidea {
+    background-color: white;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 5px;
+    padding: 3px;
+    border-radius: 5px;
+    border: 2px solid darkred;
+    overflow: auto;
+}
+
+.idea {
+    position: absolute;
+    top: 10%;
+    left: 40%;
+    background-color: white;
+    height: 70%;
+    margin: auto;
+    padding: 3px;
+    border-radius: 5px;
+    border: 2px solid darkred;
+    overflow: auto;
+    z-index: 100;
+}
+
+.idea input {
+    width : 300px;
+    padding: 2px;
+    margin: auto;
+}
+
+.idea textarea {
+    width: 300px;
+    padding: 2px;
+    margin: auto;
+}
+
+.idea ul li {
+    width : 300px;
+    padding: 2px;
+    margin: auto;
+}

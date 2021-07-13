@@ -1,0 +1,138 @@
+﻿@using CaPPMS.Data
+@using CaPPMS.Model
+@using CaPPMS.Model.Table
+@namespace CaPPMS.Shared
+@inherits CaPPMS.Model.Table.Table
+@implements IIdea
+
+<h3>Project List</h3>
+
+@if(this.HeaderRow.Count == 0)
+{
+    <pre>Loading ...</pre>
+}
+else
+{
+<div>
+    <div>
+        <label>
+            <input id="filter" class="input-group-text p-2 mb-lg-3" type="text" placeholder="Filter the data here" @bind="Filter" @bind:event="oninput" />
+        </label>
+        <table class="@string.Join(" ", TableCssClasses)">
+            <thead class="thead-light">
+                   <tr>
+                       @foreach(var headerCell in this.HeaderRow)
+                        {
+                            <th>
+                                @headerCell.Value
+                            </th>
+                        }
+                       <th>
+                           <span class="fas fa-microscope"></span>
+                       </th>
+                   </tr>
+            </thead>
+            <tbody>
+                @foreach(var row in this.GetRows())
+                {
+                    <tr>
+                        @foreach(var cell in row)
+                        {
+                            @((MarkupString)cell.ToString())
+                        }
+                        <td>
+                            <button class="btn btn-primary" type="button" @onclick="((e) => ShowView(row.DataBoundItem as ProjectInformation))">VIEW</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="@this.ColumnCount + 1">
+                        <Paginate Parent="@this" />
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+    @if (idea != null)
+    {
+        <div class="idea">
+            <Idea ShowComments="true" ShowFileAttachments="true" ShowFormButton="Idea.FormButtons.Approver" ProjectIdea="idea" Parent="this" />
+        </div>
+    }
+</div>
+}
+
+@code{
+
+    [Parameter]
+    public string CssClass
+    {
+        get
+        {
+            return string.Join(" ", this.CssClass);
+        }
+        set
+        {
+            this.TableCssClasses.Clear();
+            this.TableCssClasses.AddRange(value.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries));
+        }
+    }
+
+    private List<string> TableCssClasses = new List<string>();
+
+    private ProjectInformation idea { get; set; }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        this.DataSourceChanged += (o, e) =>
+        {
+            if (idea != null && !this.DataSource.Contains(idea))
+            {
+                idea = null;
+            }
+
+            this.ShouldProcessStateChange();
+        };
+
+        this.FilterChanged += (o, e) =>
+        {
+            this.SetPageNumber(1);
+            this.ShouldProcessStateChange();
+        };
+
+        ProjectManagerService.ProjectIdeasChanged += (o, e) =>
+        {
+            var ideas = o as ICollection<ProjectInformation>;
+
+            this.DataSource = ideas;
+        };
+    }
+
+    public void CloseIdea(Idea idea)
+    {
+        this.idea = null;
+        ShouldProcessStateChange();
+    }
+
+    private void PageRight(MouseEventArgs e)
+    {
+        this.SetPageNumber(this.CurrentPage + 1);
+    }
+
+    private void ShowView(ProjectInformation idea)
+    {
+        this.idea = idea;
+    }
+
+    private void ShouldProcessStateChange()
+    {
+        this.InvokeAsync(() =>
+        {
+            this.StateHasChanged();
+        });
+    }
+}
