@@ -37,7 +37,7 @@ jobs:
         context: ./CaPPMS/
         push: true
         tags: umgcswen670acr.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_6485ee65858e43beb573f5232eb994b8 }}/cappms-image:${{ github.sha }}
-        file: .Dockerfile
+        file: Dockerfile
 
   deploy:
     runs-on: ubuntu-latest
