@@ -1,7 +1,7 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy ASP.Net Core app to Azure Web App - cappms
+name: Build and Deploy CaPPMS Container
 
 on:
   pull_request:
@@ -41,7 +41,7 @@ jobs:
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
     steps:
-    - name: Deploy to Azure Web App
+    - name: Deploy to CaPPMS Container
       id: deploy-to-webapp
       uses: azure/webapps-deploy@v2
       with:
