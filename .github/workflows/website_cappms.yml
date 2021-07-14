@@ -36,7 +36,7 @@ jobs:
       with:
         context: ./CaPPMS/
         push: true
-        tags: umgcswen670acr.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_1cd53a13d461444a8c2dbe2dd68fa2c6 }}/cappms-image:${{ github.sha }}
+        tags: umgcswen670acr.azurecr.io/cappms-image:${{ github.sha }}
 
   deploy:
     runs-on: ubuntu-latest
