@@ -7,7 +7,11 @@
             "type": "process",
             "args": [
                 "build",
+<<<<<<< HEAD
                 "${workspaceFolder}/Blazor_Server/Blazor_Server.csproj",
+=======
+                "${workspaceFolder}/CaPPMS/CaPPMS.csproj",
+>>>>>>> c2b744658d5eb0aa18a05ee19eab9e9b71503ff2
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -19,7 +23,11 @@
             "type": "process",
             "args": [
                 "publish",
+<<<<<<< HEAD
                 "${workspaceFolder}/Blazor_Server/Blazor_Server.csproj",
+=======
+                "${workspaceFolder}/CaPPMS/CaPPMS.csproj",
+>>>>>>> c2b744658d5eb0aa18a05ee19eab9e9b71503ff2
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -32,7 +40,11 @@
             "args": [
                 "watch",
                 "run",
+<<<<<<< HEAD
                 "${workspaceFolder}/Blazor_Server/Blazor_Server.csproj",
+=======
+                "${workspaceFolder}/CaPPMS/CaPPMS.csproj",
+>>>>>>> c2b744658d5eb0aa18a05ee19eab9e9b71503ff2
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
