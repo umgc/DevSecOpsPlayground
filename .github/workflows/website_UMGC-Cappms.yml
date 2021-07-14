@@ -23,14 +23,14 @@ jobs:
       uses: docker/login-action@v1
       with:
         registry: https://umgcswen670acr.azurecr.io/
-        username: ${{ secrets.AzureAppService_ContainerUsername_6485ee65858e43beb573f5232eb994b8 }}
-        password: ${{ secrets.AzureAppService_ContainerPassword_d6bc980048234a28b31747bb7878bc77 }}
+        username: ${{ secrets.AzureAppService_ContainerUsername_1cd53a13d461444a8c2dbe2dd68fa2c6 }}
+        password: ${{ secrets.AzureAppService_ContainerPassword_b53239a726fa4c119c1d00c79f4030fe }}
 
     - name: Build and push container image to registry
       uses: docker/build-push-action@v2
       with:
         push: true
-        tags: umgcswen670acr.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_6485ee65858e43beb573f5232eb994b8 }}/cappms-image:${{ github.sha }}
+        tags: umgcswen670acr.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_1cd53a13d461444a8c2dbe2dd68fa2c6 }}/umgcswen670acr/cappms-image:${{ github.sha }}
         file: ./Dockerfile
 
   deploy:
@@ -47,5 +47,5 @@ jobs:
       with:
         app-name: 'UMGC-Cappms'
         slot-name: 'production'
-        publish-profile: ${{ secrets.AzureAppService_PublishProfile_1688327947a14ae38f2e6ad1c5deb14e }}
-        images: 'umgcswen670acr.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_6485ee65858e43beb573f5232eb994b8 }}/cappms-image:${{ github.sha }}'
+        publish-profile: ${{ secrets.AzureAppService_PublishProfile_e1fa7273a6924b35ac3b5be23603707a }}
+        images: 'umgcswen670acr.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_1cd53a13d461444a8c2dbe2dd68fa2c6 }}/umgcswen670acr/cappms-image:${{ github.sha }}'
