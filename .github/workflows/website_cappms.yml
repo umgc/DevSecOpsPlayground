@@ -4,19 +4,24 @@
 name: Build and Deploy CaPPMS Container
 
 on:
+  push:
+    branches: [ main ]
   pull_request:
-    branches:
-      - website
+    branches: [ main ]
+    
   workflow_dispatch:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v2
 
-    - name: Set up Docker Buildx
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v1
+      
+    - name: Set up Docker Build
       uses: docker/setup-buildx-action@v1
 
     - name: Log in to registry
@@ -26,12 +31,12 @@ jobs:
         username: ${{ secrets.AzureAppService_ContainerUsername_1cd53a13d461444a8c2dbe2dd68fa2c6 }}
         password: ${{ secrets.AzureAppService_ContainerPassword_b53239a726fa4c119c1d00c79f4030fe }}
 
-    - name: Build and push container image to registry
+    - name: Build & Push to ACR
       uses: docker/build-push-action@v2
       with:
+        context: ./CaPPMS/
         push: true
-        tags: umgcswen670acr.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_1cd53a13d461444a8c2dbe2dd68fa2c6 }}/umgcswen670acr/cappms-image:${{ github.sha }}
-        file: ./CaPPMS/Dockerfile
+        tags: umgcswen670acr.azurecr.io/cappms-image:${{ github.sha }}
 
   deploy:
     runs-on: ubuntu-latest
@@ -48,4 +53,4 @@ jobs:
         app-name: 'UMGC-Cappms'
         slot-name: 'production'
         publish-profile: ${{ secrets.AzureAppService_PublishProfile_e1fa7273a6924b35ac3b5be23603707a }}
-        images: 'umgcswen670acr.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_1cd53a13d461444a8c2dbe2dd68fa2c6 }}/umgcswen670acr/cappms-image:${{ github.sha }}'
+        images: 'umgcswen670acr.azurecr.io/cappms-image:${{ github.sha }}'
