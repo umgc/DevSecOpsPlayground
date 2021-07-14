@@ -36,7 +36,7 @@ jobs:
       with:
         context: ./CaPPMS/
         push: true
-        tags: umgcswen670acr.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_1cd53a13d461444a8c2dbe2dd68fa2c6 }}/umgcswen670acr/cappms-image:${{ github.sha }}
+        tags: umgcswen670acr.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_1cd53a13d461444a8c2dbe2dd68fa2c6 }}/cappms-image:${{ github.sha }}
 
   deploy:
     runs-on: ubuntu-latest
@@ -53,4 +53,4 @@ jobs:
         app-name: 'UMGC-Cappms'
         slot-name: 'production'
         publish-profile: ${{ secrets.AzureAppService_PublishProfile_e1fa7273a6924b35ac3b5be23603707a }}
-        images: 'umgcswen670acr.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_1cd53a13d461444a8c2dbe2dd68fa2c6 }}/umgcswen670acr/cappms-image:${{ github.sha }}'
+        images: 'umgcswen670acr.azurecr.io/cappms-image:${{ github.sha }}'
