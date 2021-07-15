@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Identity.Web;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Identity.Web.UI;
+using CaPPMS.Data;
 
 namespace CaPPMS
 {
@@ -43,7 +44,13 @@ namespace CaPPMS
                 options.Filters.Add(new AuthorizeFilter(policy));
             }).AddMicrosoftIdentityUI();
 
+            services.AddHttpContextAccessor();
+
             services.AddRazorPages();
+            services.AddServerSideBlazor()
+                .AddMicrosoftIdentityConsentHandler();
+
+            services.AddSingleton<ProjectManagerService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -55,7 +62,7 @@ namespace CaPPMS
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseExceptionHandler("/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
@@ -70,10 +77,9 @@ namespace CaPPMS
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
-                endpoints.MapRazorPages();
+                endpoints.MapControllers();
+                endpoints.MapBlazorHub();
+                endpoints.MapFallbackToPage("/_Host");
             });
         }
     }
