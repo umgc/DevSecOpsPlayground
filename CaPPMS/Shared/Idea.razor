@@ -317,7 +317,7 @@
 
     private async Task DeleteIdea(MouseEventArgs e)
     {
-        string error = await this.ProjectManager.DeleteAsync(idea, Context.HttpContext.User);
+        string error = await this.ProjectManager.DeleteAsync(idea, null);
 
         if (string.IsNullOrEmpty(error))
         {

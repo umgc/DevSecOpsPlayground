@@ -56,7 +56,7 @@ namespace CaPPMS.Data
             if (!filePath.StartsWith(this.FileDirInfo.FullName))
             {
                 // Maybe log this in
-                return Task.FromResult($"Path not within the specified storage location. User:{principal.Identity.Name}. Attempted path:{filePath}");
+                return Task.FromResult($"Path not within the specified storage location. User:{principal?.Identity?.Name}. Attempted path:{filePath}");
             }
 
             return Task.FromResult(Delete(filePath, false));
