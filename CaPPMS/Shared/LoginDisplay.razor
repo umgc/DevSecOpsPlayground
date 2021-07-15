@@ -1,6 +1,4 @@
-﻿@inject NavigationManager NavigationManager
-
-<AuthorizeView>
+﻿<AuthorizeView>
     <Authorized>
         <span class="color:red">&nbsp;
             <span class="fas fa-lock-open"></span> @context.User.Identity.Name!
@@ -13,16 +11,3 @@
         </span>
     </NotAuthorized>
 </AuthorizeView>
-
-@code{
-
-    private void OnLogIn(MouseEventArgs e)
-    {
-        NavigationManager.NavigateTo("MicrosoftIdentity/Account/SignIn");
-    }
-
-    private void OnLogOut(MouseEventArgs e)
-    {
-        NavigationManager.NavigateTo("MicrosoftIdentity/Account/SignOut");
-    }
-}
