@@ -4,7 +4,6 @@
 
 @inject ProjectManagerService ProjectManager
 @inject NavigationManager NavigationManager
-@inject IHttpContextAccessor Context
 
 <div class="p-5">
     <EditForm Model="@idea" OnValidSubmit="@HandleValidSubmit">
@@ -146,9 +145,7 @@
         }
         else if (this.ShowFormButton == FormButtons.Approver)
         {
-            <CascadingValue Name="User" Value="this.Context.HttpContext.User">
                 <CommentsComponent ProjectGuid="idea.ProjectID" />
-            </CascadingValue>
 
             if (this.idea.IsDirty)
             {
@@ -320,7 +317,7 @@
 
     private async Task DeleteIdea(MouseEventArgs e)
     {
-        string error = await this.ProjectManager.DeleteAsync(idea, Context.HttpContext.User);
+        string error = await this.ProjectManager.DeleteAsync(idea, null);
 
         if (string.IsNullOrEmpty(error))
         {
