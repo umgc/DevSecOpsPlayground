@@ -44,7 +44,6 @@ namespace CaPPMS
                 options.Filters.Add(new AuthorizeFilter(policy));
             }).AddMicrosoftIdentityUI();
 
-            services.AddHttpContextAccessor();
             services.AddRazorPages();
             services.AddServerSideBlazor()
                 .AddMicrosoftIdentityConsentHandler();
