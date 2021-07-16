@@ -48,6 +48,7 @@ namespace CaPPMS
                 .AddMicrosoftIdentityConsentHandler();
             services.AddSingleton<GitHubService>();
             services.AddSingleton<ProjectManagerService>();
+            services.AddSingleton<FaqService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
