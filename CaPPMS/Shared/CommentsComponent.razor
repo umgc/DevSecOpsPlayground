@@ -49,6 +49,7 @@ else
     [Parameter]
     public Guid ProjectGuid { get; set; }
 
+    [CascadingParameter(Name = "User")]
     protected IPrincipal User { get; set; }
 
     private Comment NewComment { get; set; }
