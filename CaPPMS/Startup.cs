@@ -34,6 +34,8 @@ namespace CaPPMS
 
             services.AddControllersWithViews().AddMicrosoftIdentityUI();
 
+            services.AddHttpContextAccessor();
+
             services.AddRazorPages();
             services.AddServerSideBlazor()
                 .AddMicrosoftIdentityConsentHandler();

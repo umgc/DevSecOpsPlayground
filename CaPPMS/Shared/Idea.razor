@@ -2,6 +2,7 @@
 
 @inject ProjectManagerService ProjectManager
 @inject NavigationManager NavigationManager
+@inject IHttpContextAccessor HttpContext
 
 <div class="p-5" style="display:@tableState">
     <EditForm Model="@idea" OnValidSubmit="@HandleValidSubmit">
