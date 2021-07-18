@@ -57,8 +57,10 @@ else
     </div>
     @if (idea != null)
     {
-        <div class="idea">
-            <Idea ShowComments="true" ShowFileAttachments="true" ShowFormButton="Idea.FormButtons.Approver" ProjectIdea="idea" Parent="this" />
+        <div class="popOver">
+            <CascadingAuthenticationState>
+                <Idea ShowComments="true" ShowFileAttachments="true" ShowFormButton="Idea.FormButtons.Approver" ProjectIdea="idea" Parent="this" />
+            </CascadingAuthenticationState>
         </div>
     }
 </div>

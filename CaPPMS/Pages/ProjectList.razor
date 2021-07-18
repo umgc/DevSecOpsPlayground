@@ -1,12 +1,17 @@
 ﻿@using CaPPMS.Data
 @using CaPPMS.Model
+@using System.Security.Claims
+@inject IHttpClientFactory HttpClientFactory
+@inject Microsoft.Identity.Web.ITokenAcquisition TokenAcquisitionService
 @inject ProjectManagerService ProjectManager
 
 @page "/projectlist"
 
 <AuthorizeView>
     <Authorized>
-        <ProjectTable DataSource="new List<ProjectInformation>(ProjectManager.ProjectIdeas.Values.OrderBy(i => i.Status).ToList())" CssClass="table border p-2" />
+        <CascadingAuthenticationState>
+            <ProjectTable DataSource="new List<ProjectInformation>(ProjectManager.ProjectIdeas.Values.OrderBy(i => i.Status).ToList())" CssClass="table border p-2" />
+        </CascadingAuthenticationState>
     </Authorized>
     <NotAuthorized>
         <h3>You must be authorized to access this page.</h3>
@@ -14,5 +19,4 @@
 </AuthorizeView>
 
 @code {
-
 }
