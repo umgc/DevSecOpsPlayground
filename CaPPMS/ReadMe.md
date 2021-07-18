@@ -13,7 +13,8 @@ The website can be accessed on https://umgc-cappms.azurewebsites.net.
 Project idea website
 
 Submitting an idea
-The initial page that the user sees contains a form. Here the user can fill out their name, email, project title and description, and upload attachments. 
+The initial page that the user sees contains a form. Here the user can fill out their name, email, project title and description, and upload attachments.
+
 ![image](https://user-images.githubusercontent.com/4316475/126079709-011d9ee0-bd83-4fdd-88bb-0f412ad77145.png)
  
 
