@@ -1,0 +1,86 @@
+@using System.Diagnostics
+@page "/users"
+
+<h1>Users</h1>
+<AuthorizeView>
+    <Authorized>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Email</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+        @foreach(var user in this.GetUsers())
+        {
+            <tr>
+                <td>
+                    @(user.getName())
+                </td>
+                <td>
+                     @(user.getEmail())
+                </td>
+                <td>
+                    <button class="btn btn-danger" type="button" @onclick="() => deleteUser(user)">Delete</button>
+                </td>
+            </tr>
+        }
+            </tbody>
+        </table>
+        <div class="card">
+            <div class="card-header">
+                Invite new user
+            </div>
+            <div class="card-body">
+                <form>
+                    <div class="form-group">
+                        <label for="email">Email address</label>
+                        <input type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email" @bind="@email" @oninput="@((e) => { email=(string)e.Value;})" />
+                    </div>
+                    <button type="submit" class="btn btn-primary"  @onclick="@(() => addUser())">Submit</button>
+                </form>
+            </div>
+        </div>
+    </Authorized>
+    <NotAuthorized>
+        <h3>You must be authorized to access this page.</h3>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+    private string email { get; set; }
+
+    private List<FakeUser> fakeUsers = new List<FakeUser>();
+
+    protected void deleteUser(FakeUser user)
+    {
+        this.fakeUsers.Remove(user);
+    }
+
+    // Runs when the page is accessed.
+    protected override void OnInitialized()
+    {
+        // Call to constructor of super
+        base.OnInitialized();
+
+        //Add some fake users
+        this.fakeUsers.Add(new FakeUser("John","Smith","john@gmail.com"));
+        this.fakeUsers.Add(new FakeUser("Bob","Jones","bob@gmail.com"));
+        this.fakeUsers.Add(new FakeUser("Jane","Doe","jane@gmail.com"));
+
+        // TODO: retrieve real users.
+    }
+
+    protected List<FakeUser> GetUsers(){
+        return this.fakeUsers;
+    }
+
+    protected void addUser()
+    {
+        Debug.WriteLine("User with email address "+this.email+" has been invited!");
+        // TODO: Invite user
+        // Maybe confirmation modal? See https://github.com/Blazored/Modal
+    }
+}
