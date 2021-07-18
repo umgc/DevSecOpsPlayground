@@ -1,4 +1,5 @@
-﻿@page "/users"
+@using System.Diagnostics
+@page "/users"
 
 <h1>Users</h1>
 <AuthorizeView>
@@ -12,19 +13,20 @@
                 </tr>
             </thead>
             <tbody>
-         @foreach(var user in this.GetUsers())
-{                    <tr>
-                        <td>
-                            @(user.getName())
-                        </td>
-                        <td>
-                             @(user.getEmail())
-                        </td>
-                        <td>
-                            <button class="btn btn-danger" type="button" @onclick="() => deleteUser(user)">Delete</button>
-                        </td>
-                    </tr>
-                }
+        @foreach(var user in this.GetUsers())
+        {
+            <tr>
+                <td>
+                    @(user.getName())
+                </td>
+                <td>
+                     @(user.getEmail())
+                </td>
+                <td>
+                    <button class="btn btn-danger" type="button" @onclick="() => deleteUser(user)">Delete</button>
+                </td>
+            </tr>
+        }
             </tbody>
         </table>
         <div class="card">
@@ -48,18 +50,19 @@
 </AuthorizeView>
 
 @code {
-     private string email {get;set;}
+    private string email { get; set; }
 
     private List<FakeUser> fakeUsers = new List<FakeUser>();
 
-    protected void deleteUser(FakeUser user){
+    protected void deleteUser(FakeUser user)
+    {
         this.fakeUsers.Remove(user);
     }
 
-    //Runs when the page is accessed.
+    // Runs when the page is accessed.
     protected override void OnInitialized()
     {
-        //Call to constructor of super
+        // Call to constructor of super
         base.OnInitialized();
 
         //Add some fake users
@@ -67,16 +70,17 @@
         this.fakeUsers.Add(new FakeUser("Bob","Jones","bob@gmail.com"));
         this.fakeUsers.Add(new FakeUser("Jane","Doe","jane@gmail.com"));
 
-        //TODO: retrieve real users.
+        // TODO: retrieve real users.
     }
 
     protected List<FakeUser> GetUsers(){
         return this.fakeUsers;
     }
 
-    protected void addUser(){
-        Console.WriteLine("User with email address "+this.email+" has been invited!");
-        //TODO: Invite user
-        //Maybe confirmation modal? See https://github.com/Blazored/Modal
+    protected void addUser()
+    {
+        Debug.WriteLine("User with email address "+this.email+" has been invited!");
+        // TODO: Invite user
+        // Maybe confirmation modal? See https://github.com/Blazored/Modal
     }
 }
