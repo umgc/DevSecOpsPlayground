@@ -1,12 +1,10 @@
 ﻿@using Microsoft.AspNetCore.Http
-@using CaPPMS.Data
-@using CaPPMS.Model
 
 @inject ProjectManagerService ProjectManager
 @inject NavigationManager NavigationManager
 @inject IHttpContextAccessor HttpContext
 
-<div class="p-5">
+<div class="p-5" style="display:@tableState">
     <EditForm Model="@idea" OnValidSubmit="@HandleValidSubmit">
         <DataAnnotationsValidator />
         <ValidationSummary />
@@ -146,10 +144,9 @@
         }
         else if (this.ShowFormButton == FormButtons.Approver)
         {
-            <CascadingValue Name="User" Value="@HttpContext.HttpContext.User">
+            <CascadingAuthenticationState>
                 <CommentsComponent ProjectGuid="idea.ProjectID" />
-            </CascadingValue>
-                
+            </CascadingAuthenticationState>
 
             if (this.idea.IsDirty)
             {
@@ -169,6 +166,15 @@
         }
 
     </EditForm>
+</div>
+
+<div style="visibility:@waitBar">
+    Uploading ...
+    <div>
+        <Wander Center="true" />
+    </div>    
+
+    Thank you for the project idea!
 </div>
 
 @code{
@@ -211,6 +217,9 @@
         }
     }
 
+    [CascadingParameter]
+    private Task<AuthenticationState> authenticationState { get; set; }
+
     private ProjectInformation idea = new ProjectInformation();
 
     private string DownloadFileName => $"{idea.ProjectTitle}-Export.pdf";
@@ -220,6 +229,10 @@
     private List<IProjectFile> loadedFiles = new();
 
     private static bool isUploading = false;
+
+    private string tableState = "block";
+
+    private string waitBar => tableState.Equals("none") ? "visible" : "hidden";
 
     protected override void OnInitialized()
     {
@@ -235,14 +248,23 @@
     {
         idea.SetAttachments(loadedFiles);
 
-        var uploaded = await ProjectManager.AddAsync(idea);
+        this.tableState = "none";
 
-        if (uploaded)
+        await Task.Run( async () =>
         {
-            idea.IsDirty = false;
-            loadedFiles.Clear();
-            idea = new ProjectInformation();
-        }
+            var uploaded = await ProjectManager.AddAsync(idea);
+
+            if (uploaded)
+            {
+                idea.IsDirty = false;
+                loadedFiles.Clear();
+                idea = new ProjectInformation();
+            }
+
+            await Task.Delay(2000);
+        });
+
+        this.tableState = "block";
     }
 
     private void LoadFiles(InputFileChangeEventArgs inputFile)
@@ -321,7 +343,8 @@
 
     private async Task DeleteIdea(MouseEventArgs e)
     {
-        string error = await this.ProjectManager.DeleteAsync(idea, HttpContext.HttpContext.User);
+        var authState = await authenticationState;
+        string error = await this.ProjectManager.DeleteAsync(idea, authState.User);
 
         if (string.IsNullOrEmpty(error))
         {
