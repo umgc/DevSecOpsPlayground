@@ -16,8 +16,10 @@
   <ItemGroup>
     <PackageReference Include="BlazorPro.Spinkit" Version="1.2.0" />
     <PackageReference Include="iTextSharp.LGPLv2.Core" Version="1.7.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.AzureAD.UI" Version="5.0.8" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.8" NoWarn="NU1605" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="5.0.8" NoWarn="NU1605" />
+    <PackageReference Include="Microsoft.Identity.Client" Version="4.34.0" />
     <PackageReference Include="Microsoft.Identity.Web" Version="1.14.1" />
     <PackageReference Include="Microsoft.Identity.Web.MicrosoftGraph" Version="1.14.1" />
     <PackageReference Include="Microsoft.Identity.Web.UI" Version="1.14.1" />
