@@ -1,8 +1,5 @@
-﻿@using Microsoft.AspNetCore.Http
-
-@inject ProjectManagerService ProjectManager
+﻿@inject ProjectManagerService ProjectManager
 @inject NavigationManager NavigationManager
-@inject IHttpContextAccessor HttpContext
 
 <div class="p-5" style="display:@tableState">
     <EditForm Model="@idea" OnValidSubmit="@HandleValidSubmit">
@@ -344,6 +341,7 @@
     private async Task DeleteIdea(MouseEventArgs e)
     {
         var authState = await authenticationState;
+        
         string error = await this.ProjectManager.DeleteAsync(idea, authState.User);
 
         if (string.IsNullOrEmpty(error))
