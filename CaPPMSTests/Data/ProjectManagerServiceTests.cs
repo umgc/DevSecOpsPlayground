@@ -14,6 +14,8 @@ namespace CaPPMSTests.Data.Table
     [TestClass()]
     public class ProjectManagerServiceTests
     {
+        private const string deleteRole = "Global Administrator";
+
         [TestInitialize]
         public void Initialize()
         {
@@ -42,9 +44,13 @@ namespace CaPPMSTests.Data.Table
             Task.Run(async () => await projectManagerService.AddAsync(idea)).Wait();
             Assert.AreEqual(1, projectManagerService.GetIdeaTitles().Count());
 
-            IPrincipal principal = new GenericPrincipal(new GenericIdentity("test@greatTest.com"), new string[] { "owner" });
+            IPrincipal principal = new GenericPrincipal(new GenericIdentity("test@greatTest.com"), new string[] { deleteRole });
 
             Assert.IsTrue(string.IsNullOrEmpty(Task.Run(async () => await projectManagerService.RemoveAsync(idea, principal)).Result));
+
+            // Need a delay for Async testing
+            Task.Delay(TimeSpan.FromSeconds(1)).Wait();
+
             Assert.AreEqual(0, projectManagerService.GetIdeaTitles().Count());
         }
 
