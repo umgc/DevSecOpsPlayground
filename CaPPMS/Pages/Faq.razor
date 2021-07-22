@@ -1,6 +1,30 @@
-﻿@page "/faq"
+﻿@using CaPPMS.Data
+@using CaPPMS.Model
+@inject FaqManagerService faqManager
+
+
+@page "/faq"
 
 <h3>FAQ</h3>
+
+@foreach (var faq in faqManager.GetFaqs)
+            {
+                <div>
+                    <div>
+                        @faq.Topic
+                    </div>
+                    <div>
+                        @faq.Question
+                    </div>
+                    <div>
+                        @faq.Author
+                    </div>
+                    <div>
+                        @faq.Reply
+                    </div>
+                </div>
+            }
+
 
 @code {
 
