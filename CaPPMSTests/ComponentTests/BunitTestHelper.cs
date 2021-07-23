@@ -13,7 +13,7 @@ namespace CaPPMSTests.ComponentTests
             TestContext = new Bunit.TestContext();
 
             // Register services
-            TestContext.Services.AddSingleton(new ProjectManagerService());
+            TestContext.Services.AddSingleton(new ProjectManagerService("Component.tests.json"));
             TestContext.Services.AddOptions();
             TestContext.JSInterop.Mode = JSRuntimeMode.Loose;
         }

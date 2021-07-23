@@ -84,7 +84,7 @@ namespace CaPPMS.Model
 
         [Export(true)]
         [Required]
-        [StringLength(50, ErrorMessage = "First Name is too long")]
+        [StringLength(50, ErrorMessage = "First name is too long.")]
         [DisplayName("First Name")]
         [Browsable(true)]
         public string FirstName
@@ -102,7 +102,7 @@ namespace CaPPMS.Model
 
         [Export(true)]
         [Required]
-        [StringLength(50, ErrorMessage = "Last Name is too long")]
+        [StringLength(50, ErrorMessage = "Last name is too long.")]
         [DisplayName("Last Name")]
         [Browsable(true)]
         public string LastName
@@ -164,7 +164,7 @@ namespace CaPPMS.Model
 
         [Export(true)]
         [Required]
-        [StringLength(255, ErrorMessage = "First Name is too long")]
+        [StringLength(255, ErrorMessage = "Sponsor first name is too long.")]
         [DisplayName("Sponsor First Name")]
         [Browsable(true)]
         public string SponsorFirstName
@@ -182,7 +182,7 @@ namespace CaPPMS.Model
 
         [Export(true)]
         [Required]
-        [StringLength(255, ErrorMessage = "Last Name is too long")]
+        [StringLength(255, ErrorMessage = "Sponsor last name is too long.")]
         [DisplayName("Sponsor Last Name")]
         [Browsable(true)]
         public string SponsorLastName

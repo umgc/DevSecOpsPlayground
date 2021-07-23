@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 using CaPPMS.Model;
 using CaPPMS.Data;
 
-namespace CaPPMSTests.Data.Table
+namespace CaPPMSTests.Data
 {
     [TestClass()]
     public class ProjectManagerServiceTests
@@ -19,26 +19,24 @@ namespace CaPPMSTests.Data.Table
         [TestInitialize]
         public void Initialize()
         {
-            var projectFilePath = this.GetProjectFilePath();
-
-            if (File.Exists(projectFilePath))
-            {
-                File.Delete(projectFilePath);
-            }
+            Cleanup();
         }
 
         [TestMethod()]
         public void Add()
         {
-            ProjectManagerService projectManagerService = new ProjectManagerService();
-            Assert.IsTrue(Task.Run(async () => await projectManagerService.AddAsync(CreateIdea())).Result);
+            ProjectManagerService projectManagerService = new ProjectManagerService("add.json");
+            var idea = CreateIdea();
+            Assert.IsTrue(Task.Run(async () => await projectManagerService.AddAsync(idea)).Result);
             Assert.AreEqual(1, projectManagerService.GetIdeaTitles().Count());
+
+            Assert.IsTrue(idea.ProjectID != Guid.Empty);
         }
 
         [TestMethod()]
         public void Remove()
         {
-            ProjectManagerService projectManagerService = new ProjectManagerService();
+            ProjectManagerService projectManagerService = new ProjectManagerService("remove.json");
             var idea = CreateIdea();
 
             Task.Run(async () => await projectManagerService.AddAsync(idea)).Wait();
@@ -57,13 +55,13 @@ namespace CaPPMSTests.Data.Table
         [TestMethod]
         public void FileDidSave()
         {
-            ProjectManagerService projectManagerService = new ProjectManagerService();
+            ProjectManagerService projectManagerService = new ProjectManagerService("savefile.json");
             Task.Run(async () => await projectManagerService.AddAsync(CreateIdea())).Wait();
 
             // Wait on second to over come flaky test syndrome.
             Task.Delay(TimeSpan.FromSeconds(10)).Wait();
 
-            var filePath = GetProjectFilePath();
+            var filePath = Path.Combine(ProjectManagerService.BaseDirInfo.FullName, "savefile.json");
 
             Assert.IsTrue(File.Exists(filePath));
 
@@ -73,22 +71,35 @@ namespace CaPPMSTests.Data.Table
             Assert.AreEqual(1, projectData.Count);
         }
 
-        [TestCleanup]
-        public void Cleanup()
+        [TestMethod]
+        public void DidUpdateProjectManager()
         {
-            // Delete projects file.
-            string filePath = GetProjectFilePath();
-            if (File.Exists(filePath))
-            {
-                File.Delete(filePath);
-            }
+            string newProjectTitle = $"New Test Project Title-{Guid.NewGuid()}";
+            ProjectManagerService projectManagerService = new ProjectManagerService("update.json");
+            var idea = CreateIdea();
+            Assert.IsTrue(Task.Run(async () => await projectManagerService.AddAsync(idea)).Result);
+            Assert.AreEqual(1, projectManagerService.GetIdeaTitles().Count());
 
-            // Now delete any temp files.
-            filePath = filePath + ".temp";
-            if (File.Exists(filePath))
-            {
-                File.Delete(filePath);
-            }
+            idea.ProjectTitle = newProjectTitle;
+
+            Assert.IsTrue(Task.Run(async () => await projectManagerService.UpdateAsync(idea)).Result);
+
+            Assert.AreEqual(newProjectTitle, projectManagerService.GetIdeaTitles().ToList()[0]);
+        }
+
+        [TestMethod]
+        public void DoesExportMatch()
+        {
+            ProjectManagerService projectManagerService = new ProjectManagerService("add.json");
+            var idea = CreateIdea();
+            Assert.IsTrue(Task.Run(async () => await projectManagerService.AddAsync(idea)).Result);
+            Assert.AreEqual(1, projectManagerService.GetIdeaTitles().Count());
+
+            //var path = Task.Run(async () => await projectManagerService.ExportAsync(idea)).Result;
+
+            //Assert.IsTrue(File.Exists(path));
+
+            //Assert.AreEqual("", "");
         }
 
         private ProjectInformation CreateIdea()
@@ -98,7 +109,7 @@ namespace CaPPMSTests.Data.Table
                 FirstName = "InitialTestFirstName",
                 LastName = "InitialTestLastName",
                 IsSponsor = false,
-                ProjectTitle = $"InitialTestProjectTitle-{DateTime.Now}",
+                ProjectTitle = $"InitialTestProjectTitle-2021-07-21",
                 ProjectDescription = "InitialTestDescription",
                 Email = "Initial@test.com",
                 Phone = "555-555-8378",
@@ -112,9 +123,14 @@ namespace CaPPMSTests.Data.Table
             return idea;
         }
 
-        private string GetProjectFilePath()
+        [TestCleanup]
+        public void Cleanup()
         {
-            return Path.Combine(ProjectManagerService.BaseDirInfo.FullName, "projects.json");
+            // Delete projects file.
+            foreach (var file in ProjectManagerService.BaseDirInfo.GetFiles())
+            {
+                file.Delete();
+            }
         }
     }
 }

@@ -27,6 +27,8 @@ namespace CaPPMS.Attributes
         {
             var idea = validationContext.ObjectInstance as ProjectInformation;
 
+            badFiles.Clear();
+
             foreach(var file in idea.Attachments)
             {
                 if(file.Size > this.maxFileSize * 1024 * 1024)
