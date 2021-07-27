@@ -2,13 +2,11 @@
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CaPPMSTests.WebDriver
 {
+    // TODO: [rwilson127] I suspect selenium can't be jumpstarted due to some issues related to actually hosting the internal site.
+    // Selenium seems a bit more geared as a post build test. Not sure the best way to implement this as the current point in time.
     [TestClass]
     public class SubmitIdeaTests
     {
