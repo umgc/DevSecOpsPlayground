@@ -70,7 +70,7 @@
                     {
                         <label>
                             Attachment(s):
-                            <InputFile id="attachment" OnChange="LoadFiles" multiple accept=".doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,.ppt,.pptx,.pdf"  />
+                            <InputFile id="attachment" OnChange="LoadFiles" multiple accept=".doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,.ppt,.pptx,.pdf" />
                         </label>
                     }
                 </td>
@@ -80,6 +80,14 @@
                     <label>
                         Website:
                         <InputText id="url" @bind-Value="idea.Url" />
+                    </label>
+                </td>
+            </tr>
+            <tr class="row w-25">
+                <td class="d-xl-table-cell">
+                    <label>
+                        GitHub:
+                        <InputText id="gitHubUrl" @bind-Value="idea.Github" />
                     </label>
                 </td>
             </tr>
