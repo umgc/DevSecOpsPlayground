@@ -273,7 +273,9 @@ namespace CaPPMS.Model
         {
             foreach(var prop in this.GetType().GetProperties())
             {
-                if (prop.GetCustomAttribute<ExportAttribute>() != null)
+                var canExport = prop.GetCustomAttribute<ExportAttribute>()?.CanExport ?? false;
+
+                if (canExport)
                 {
                     string name = prop.GetCustomAttribute<DisplayNameAttribute>()?.DisplayName ?? prop.Name;
 
