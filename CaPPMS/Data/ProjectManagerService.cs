@@ -220,29 +220,32 @@ namespace CaPPMS.Data
                     pdf.Add(itemTitle);
                 }
 
-                var filesTitle = new Paragraph(Environment.NewLine, headLineFont);
-                filesTitle.SpacingBefore = 12f;
-                filesTitle.SpacingAfter = 9f;
-                filesTitle.KeepTogether = true;
-                var attachedFilesTitle = new Chunk("Attached Files:", headLineFont);
-                attachedFilesTitle.SetUnderline(2f, -2f);
-                filesTitle.Add(attachedFilesTitle);
-                filesTitle.Add(new Chunk(Environment.NewLine, bodyFont));
-
-                foreach (var attachedFile in idea.Attachments)
+                if (idea.Attachments.Count > 0)
                 {
-                    string host = port == 443 ? hostName : $"{hostName}:{port}";
+                    var filesPara = new Paragraph(Environment.NewLine, headLineFont);
+                    filesPara.SpacingBefore = 12f;
+                    filesPara.SpacingAfter = 9f;
+                    filesPara.KeepTogether = true;
+                    var attachedFilesTitle = new Chunk("Attached Files:", headLineFont);
+                    attachedFilesTitle.SetUnderline(2f, -2f);
+                    filesPara.Add(attachedFilesTitle);
+                    filesPara.Add(new Chunk(Environment.NewLine, bodyFont));
 
-                    if (Uri.TryCreate($"https://{host}/download/{attachedFile.Location}", UriKind.Absolute, out Uri uri))
+                    foreach (var attachedFile in idea.Attachments)
                     {
-                        var ideaLink = new Anchor(attachedFile.Name, FontFactory.GetFont("Roboto", 12f, BaseColor.Red));
-                        ideaLink.Reference = uri.AbsoluteUri;
-                        filesTitle.Add(ideaLink);
-                        filesTitle.Add(new Phrase(Environment.NewLine));
-                    }
-                }
+                        string host = port == 443 ? hostName : $"{hostName}:{port}";
 
-                pdf.Add(filesTitle);
+                        if (Uri.TryCreate($"https://{host}/download/{attachedFile.Location}", UriKind.Absolute, out Uri uri))
+                        {
+                            var ideaLink = new Anchor(attachedFile.Name, FontFactory.GetFont("Roboto", 12f, BaseColor.Red));
+                            ideaLink.Reference = uri.AbsoluteUri;
+                            filesPara.Add(ideaLink);
+                            filesPara.Add(new Phrase(Environment.NewLine));
+                        }
+                    }
+
+                    pdf.Add(filesPara);
+                }
 
                 pdf.Close();
 
