@@ -29,6 +29,8 @@ jobs:
     - name: Build with dotnet
       run: |
         cd ./CaPPMS
+        dotnet nuget add source https://api.nuget.org/v3/index.json -n nuget.org
+        dotnet restore
         dotnet build --configuration Release
 
     - name: dotnet publish
