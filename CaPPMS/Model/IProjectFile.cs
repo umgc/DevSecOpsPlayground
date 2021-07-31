@@ -18,5 +18,7 @@ namespace CaPPMS.Model
         /// Bring the file name forward for easy enumeration.
         /// </summary>
         string Name => BrowserFile.Name;
+
+        long Size { get; set; }
     }
 }
