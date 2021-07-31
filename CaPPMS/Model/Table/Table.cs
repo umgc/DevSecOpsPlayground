@@ -200,7 +200,7 @@ namespace CaPPMS.Model.Table
                     }
                     else
                     {
-                        row.Add(new Cell(r, c, prop.GetValue(dataList[r])));
+                        row.Add(new Cell(r, c, prop.GetValue(dataList[r]), CellType.Data, prop.GetCustomAttributes()));
                     }
                 }
 

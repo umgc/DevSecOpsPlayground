@@ -9,7 +9,7 @@ using CaPPMS.Attributes;
 namespace CaPPMS.Model
 {
     public class ProjectInformation
-    {        
+    {
         [Export]
         [Browsable(false)]
         public Guid ProjectID { get; set; } = Guid.NewGuid();
@@ -70,6 +70,26 @@ namespace CaPPMS.Model
             set
             {
                 this.url = value;
+                this.IsDirty = true;
+            }
+        }
+
+        private string gitUrl = string.Empty;
+
+        [Export(true)]
+        [DisplayName("GitHub")]
+        [Browsable(true)]
+        [ColumnHeader]
+        [SpanIcon("fab fa-github", true)]
+        public string Github
+        {
+            get
+            {
+                return this.gitUrl;
+            }
+            set
+            {
+                this.gitUrl = value;
                 this.IsDirty = true;
             }
         }
