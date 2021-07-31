@@ -106,7 +106,14 @@ namespace CaPPMS.Model.Table
             // TODO: [rwilson127 - 4 July 21]We can probably expand this to include any url within the who string not just if the string is a url.
             if (!handledValue && Uri.TryCreate(cellData, UriKind.Absolute, out Uri uri))
             {
-                html += $"<a href=\"{uri}\">{uri}</a>";
+                if (uri.AbsoluteUri.Length > 20)
+                {
+                    html += $"<a href=\"{uri}\">{uri.AbsoluteUri.Substring(0, 17)}...</a>";
+                }
+                else
+                {
+                    html += $"<a href=\"{uri}\">{uri}</a>";
+                }
             }
             else if(!handledValue)
             {
