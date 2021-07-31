@@ -16,16 +16,20 @@ namespace CaPPMS.Data
     {
         public static event EventHandler ProjectIdeasChanged;
 
-        private readonly string localProjectDb = Path.Combine(BaseDirInfo.FullName, "projects.json");
+        private readonly string localProjectDb;
 
         public static DirectoryInfo BaseDirInfo { get; } = new (Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "StoredData"));
 
-        public ProjectManagerService()
+        public ProjectManagerService() : this("projects.json") { }
+
+        public ProjectManagerService(string localProjectFileDBName)
         {
             if (!BaseDirInfo.Exists)
             {
                 BaseDirInfo.Create();
             }
+
+            localProjectDb = Path.Combine(BaseDirInfo.FullName, localProjectFileDBName);
 
             var projectsDbFile = new FileInfo(localProjectDb);
 
@@ -107,40 +111,6 @@ namespace CaPPMS.Data
             return error;
         }
 
-        private void ProjectManagerService_ProjectIdeasChanged(object sender, EventArgs e)
-        {
-            var tempFile = new FileInfo(Path.Combine(localProjectDb + ".temp"));
-
-            // Let's build a gate to control flow. It might be a bit extra but it should be fun.
-            Task.Run(async () =>
-           {
-               while (File.Exists(tempFile.FullName))
-               {
-                    // Use a prime number to reduce the chance of a race condition.
-                    await Task.Delay(7);
-               }
-           }).ContinueWith((context) =>
-           {
-               // Update the file backed db.
-               lock (ProjectIdeas)
-               {
-                   // The task to move some time happens before the os knows that it exists =0
-                   Task.Run(async () =>
-                   {
-                       File.WriteAllText(tempFile.FullName, JsonConvert.SerializeObject(ProjectIdeas, Formatting.Indented));
-
-                       while (!File.Exists(tempFile.FullName))
-                       {
-                           await Task.Delay(100);
-                       }
-                   }).ContinueWith((context) =>
-                   {
-                       tempFile.MoveTo(localProjectDb, true);
-                   });
-               }
-           });
-        }
-
         public Task<bool> UpdateAsync(ProjectInformation idea)
         {
             bool completed;
@@ -220,29 +190,32 @@ namespace CaPPMS.Data
                     pdf.Add(itemTitle);
                 }
 
-                var filesTitle = new Paragraph(Environment.NewLine, headLineFont);
-                filesTitle.SpacingBefore = 12f;
-                filesTitle.SpacingAfter = 9f;
-                filesTitle.KeepTogether = true;
-                var attachedFilesTitle = new Chunk("Attached Files:", headLineFont);
-                attachedFilesTitle.SetUnderline(2f, -2f);
-                filesTitle.Add(attachedFilesTitle);
-                filesTitle.Add(new Chunk(Environment.NewLine, bodyFont));
-
-                foreach (var attachedFile in idea.Attachments)
+                if (idea.Attachments.Count > 0)
                 {
-                    string host = port == 443 ? hostName : $"{hostName}:{port}";
+                    var filesPara = new Paragraph(Environment.NewLine, headLineFont);
+                    filesPara.SpacingBefore = 12f;
+                    filesPara.SpacingAfter = 9f;
+                    filesPara.KeepTogether = true;
+                    var attachedFilesTitle = new Chunk("Attached Files:", headLineFont);
+                    attachedFilesTitle.SetUnderline(2f, -2f);
+                    filesPara.Add(attachedFilesTitle);
+                    filesPara.Add(new Chunk(Environment.NewLine, bodyFont));
 
-                    if (Uri.TryCreate($"https://{host}/download/{attachedFile.Location}", UriKind.Absolute, out Uri uri))
+                    foreach (var attachedFile in idea.Attachments)
                     {
-                        var ideaLink = new Anchor(attachedFile.Name, FontFactory.GetFont("Roboto", 12f, BaseColor.Red));
-                        ideaLink.Reference = uri.AbsoluteUri;
-                        filesTitle.Add(ideaLink);
-                        filesTitle.Add(new Phrase(Environment.NewLine));
-                    }
-                }
+                        string host = port == 443 ? hostName : $"{hostName}:{port}";
 
-                pdf.Add(filesTitle);
+                        if (Uri.TryCreate($"https://{host}/download/{attachedFile.Location}", UriKind.Absolute, out Uri uri))
+                        {
+                            var ideaLink = new Anchor(attachedFile.Name, FontFactory.GetFont("Roboto", 12f, BaseColor.Red));
+                            ideaLink.Reference = uri.AbsoluteUri;
+                            filesPara.Add(ideaLink);
+                            filesPara.Add(new Phrase(Environment.NewLine));
+                        }
+                    }
+
+                    pdf.Add(filesPara);
+                }
 
                 pdf.Close();
 
@@ -290,6 +263,39 @@ namespace CaPPMS.Data
             }
 
             return new List<Comment>();
+        }
+
+        private void ProjectManagerService_ProjectIdeasChanged(object sender, EventArgs e)
+        {
+            var tempFile = new FileInfo(Path.Combine(localProjectDb + ".temp"));
+
+            // Let's build a gate to control flow. It might be a bit extra but it should be fun.
+            Task.Run(async () =>
+            {
+                while (File.Exists(tempFile.FullName))
+                {
+                    // Use a prime number to reduce the chance of a race condition.
+                    await Task.Delay(7);
+                }
+            }).ContinueWith((context) =>
+            {
+                // Update the file backed db.
+                lock (ProjectIdeas)
+                {
+                    // The task to move some time happens before the os knows that it exists =0
+                    Task.Run(async () =>
+                    {
+                        File.WriteAllText(tempFile.FullName, JsonConvert.SerializeObject(ProjectIdeas, Formatting.Indented));
+
+                        while (!File.Exists(tempFile.FullName))
+                        {
+                            await Task.Delay(17);
+                        }
+
+                        tempFile.MoveTo(localProjectDb, true);
+                    });
+                }
+            });
         }
     }
 }

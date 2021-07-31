@@ -1,86 +1,202 @@
 @using System.Diagnostics
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.Graph
+@using Microsoft.Identity.Web
+@using Microsoft.AspNetCore.Http
+@attribute [Authorize]
+@attribute [AuthorizeForScopes(ScopeKeySection = "Graph:Scopes")]
+@inject Microsoft.Graph.GraphServiceClient GraphClient
+@inject ITokenAcquisition TokenAcquisition
+@inject IHttpContextAccessor HttpContext
+@inject MicrosoftIdentityConsentAndConditionalAccessHandler consentHandler
+@inject NavigationManager NavigationManager
+
 @page "/users"
 
 <h1>Users</h1>
 <AuthorizeView>
     <Authorized>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th scope="col">Name</th>
-                    <th scope="col">Email</th>
-                    <th scope="col"></th>
-                </tr>
-            </thead>
-            <tbody>
-        @foreach(var user in this.GetUsers())
+        @if (hasAccess)
         {
-            <tr>
-                <td>
-                    @(user.getName())
-                </td>
-                <td>
-                     @(user.getEmail())
-                </td>
-                <td>
-                    <button class="btn btn-danger" type="button" @onclick="() => deleteUser(user)">Delete</button>
-                </td>
-            </tr>
-        }
-            </tbody>
-        </table>
-        <div class="card">
-            <div class="card-header">
-                Invite new user
-            </div>
-            <div class="card-body">
-                <form>
-                    <div class="form-group">
-                        <label for="email">Email address</label>
-                        <input type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email" @bind="@email" @oninput="@((e) => { email=(string)e.Value;})" />
+            @if (this.users?.Count > 0)
+            {
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Email</th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var user in this.users)
+                        {
+                        <tr>
+                            <td>
+                                @(user.DisplayName)
+                            </td>
+                            <td>
+                                @(user.Mail)
+                            </td>
+                            @if (UserDelete)
+                            {
+                                <td>
+                                    <button class="btn btn-secondary" type="button" @onclick="() => DeleteUser(user)">Delete</button>
+                                </td>
+                            }
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            @if (UserInvite)
+            {
+                <div class="card">
+                    <div class="card-header">
+                        Invite new user
                     </div>
-                    <button type="submit" class="btn btn-primary"  @onclick="@(() => addUser())">Submit</button>
-                </form>
-            </div>
-        </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <EditForm Model="newUser" OnValidSubmit="InviteUser" Context="userAddContext">
+                                <DataAnnotationsValidator />
+                                <ValidationSummary />
+                                <label for="email">
+                                    <span class="fas fa-empire"></span>Email address
+                                    <InputText @bind-Value="newUser.Mail" />
+                                </label>
+                                <button type="submit" class="btn btn-primary">Invite</button>
+                            </EditForm>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <h3>You must not be authorized to access this page.</h3>
+        }
     </Authorized>
     <NotAuthorized>
-        <h3>You must be authorized to access this page.</h3>
+        <h3 id="notAuthorized">You must not be authorized to access this page.</h3>
     </NotAuthorized>
 </AuthorizeView>
 
 @code {
-    private string email { get; set; }
 
-    private List<FakeUser> fakeUsers = new List<FakeUser>();
+    private const string canInvite = "1142214c-0150-4043-8b20-de8e45d9b452";
+    private const string canDelete = "072b7ca7-3933-4be6-ab9e-0455e9b14330";
 
-    protected void deleteUser(FakeUser user)
-    {
-        this.fakeUsers.Remove(user);
-    }
+    [CascadingParameter]
+    private Task<AuthenticationState> authenticationState { get; set; }
+
+    private User newUser { get; set; } = new User();
+
+    private List<User> users;
+
+    private bool UserInvite { get; set; }
+    private bool UserDelete { get; set; }
+
+    private bool hasAccess { get; set; } = false;
 
     // Runs when the page is accessed.
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        // Call to constructor of super
+        // Call to constructor of base
         base.OnInitialized();
 
-        //Add some fake users
-        this.fakeUsers.Add(new FakeUser("John","Smith","john@gmail.com"));
-        this.fakeUsers.Add(new FakeUser("Bob","Jones","bob@gmail.com"));
-        this.fakeUsers.Add(new FakeUser("Jane","Doe","jane@gmail.com"));
+        try
+        {
+            var directoryRoles = await this.GraphClient.DirectoryRoles.Request().GetAsync();
 
-        // TODO: retrieve real users.
+            var userMembers = (await this.GraphClient.DirectoryRoles[canInvite].Members.Request().GetAsync()).Cast<User>().ToList();
+            var adminMembers = (await this.GraphClient.DirectoryRoles[canDelete].Members.Request().GetAsync()).Cast<User>().ToList();
+
+            UserInvite = userMembers?.Any(m => m.UserPrincipalName
+                                    .Split(new char[] { '#' }, StringSplitOptions.RemoveEmptyEntries)
+                                    .First()
+                                    .Replace('_', '@')
+                                    .Equals(consentHandler.User.Identity.Name, StringComparison.OrdinalIgnoreCase)) ?? false;
+
+            UserDelete = adminMembers?.Any(m => m.UserPrincipalName
+                                .Split(new char[] { '#' }, StringSplitOptions.RemoveEmptyEntries)
+                                .First()
+                                .Replace('_', '@')
+                                .Equals(consentHandler.User.Identity.Name, StringComparison.OrdinalIgnoreCase)) ?? false;
+
+            if (UserDelete)
+            {
+                UserInvite = true;
+            }
+        }
+        catch
+        {
+            // No access but we will silently fail
+        }
+
+        try
+        {
+            this.users = await this.GetUsers();
+            hasAccess = true;
+        }
+        catch
+        {
+            // No access but we will silently fail
+        }
     }
 
-    protected List<FakeUser> GetUsers(){
-        return this.fakeUsers;
-    }
-
-    protected void addUser()
+    private async Task<List<User>> GetUsers()
     {
-        Debug.WriteLine("User with email address "+this.email+" has been invited!");
+        var users = await this.GraphClient.Users.Request().GetAsync();
+
+        return users.Cast<User>().ToList();
+    }
+
+    private async Task InviteUser()
+    {
         // TODO: Invite user
         // Maybe confirmation modal? See https://github.com/Blazored/Modal
+        if (UserInvite)
+        {
+            var invitation = new Invitation
+            {
+                InvitedUserEmailAddress = this.newUser.Mail,
+                InviteRedirectUrl = "https://umgc-cappms.azurewebsites.net",
+                SendInvitationMessage = true
+            };
+
+            var sentInvitation = await this.GraphClient.Invitations.Request().AddAsync(invitation);
+
+            Debug.WriteLine($"Sent invitation:{sentInvitation.Status}");
+        }
+
+        newUser = new User();
+
+        await this.RefreshPage();
+    }
+
+    private async Task DeleteUser(User user)
+    {
+        if (user.Mail.Equals(consentHandler.User.Identity.Name, StringComparison.OrdinalIgnoreCase))
+        {
+            Debug.WriteLine($"Silly user tried to delete themselves. User:{user.Mail}");
+            return;
+        }
+
+        if (UserDelete)
+        {
+            Debug.WriteLine($"User {user.UserPrincipalName} has been deleted!");
+            await this.GraphClient.Users[user.Id].Request().DeleteAsync();
+        }
+
+        await this.RefreshPage();
+    }
+
+    private async Task RefreshPage()
+    {
+        await this.InvokeAsync( async () =>
+        {
+            await Task.Delay(2000);
+            this.StateHasChanged();
+        });
     }
 }

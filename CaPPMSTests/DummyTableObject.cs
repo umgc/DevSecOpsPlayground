@@ -1,7 +1,7 @@
 ﻿using CaPPMS.Attributes;
 using System.ComponentModel;
 
-namespace CaPPMSTests.Model.Table
+namespace CaPPMSTests
 {
     public class DummyTableObject
     {
@@ -12,6 +12,7 @@ namespace CaPPMSTests.Model.Table
         [DisplayName("Column 2")]
         public string Column2 { get; } = "Row 1 Cell 2";
 
+        [Export]
         public string Column3 { get; } = "Column3";
     }
 }

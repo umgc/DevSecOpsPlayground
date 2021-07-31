@@ -1,8 +1,5 @@
-﻿@using Microsoft.AspNetCore.Http
-
-@inject ProjectManagerService ProjectManager
+﻿@inject ProjectManagerService ProjectManager
 @inject NavigationManager NavigationManager
-@inject IHttpContextAccessor HttpContext
 
 <div class="p-5" style="display:@tableState">
     <EditForm Model="@idea" OnValidSubmit="@HandleValidSubmit">
@@ -72,8 +69,8 @@
                     else
                     {
                         <label>
-                            Attachement(s):
-                            <InputFile id="attachment" OnChange="LoadFiles" multiple />
+                            Attachment(s):
+                            <InputFile id="attachment" OnChange="LoadFiles" multiple accept=".doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,.ppt,.pptx,.pdf" />
                         </label>
                     }
                 </td>
@@ -83,6 +80,14 @@
                     <label>
                         Website:
                         <InputText id="url" @bind-Value="idea.Url" />
+                    </label>
+                </td>
+            </tr>
+            <tr class="row w-25">
+                <td class="d-xl-table-cell">
+                    <label>
+                        GitHub:
+                        <InputText id="gitHubUrl" @bind-Value="idea.Github" />
                     </label>
                 </td>
             </tr>
@@ -140,7 +145,7 @@
 
         @if (this.ShowFormButton == FormButtons.Submit)
         {
-            <button type="submit" @onclick="SponsorCheck" class="btn btn-primary">Submit</button> <button type="reset" class="btn btn-danger">Reset</button>
+            <button id="btnSubmit" type="submit" @onclick="SponsorCheck" class="btn btn-primary">Submit</button> <button type="reset" class="btn btn-danger">Reset</button>
         }
         else if (this.ShowFormButton == FormButtons.Approver)
         {
@@ -246,8 +251,6 @@
 
     private async Task HandleValidSubmit()
     {
-        idea.SetAttachments(loadedFiles);
-
         this.tableState = "none";
 
         await Task.Run( async () =>
@@ -281,6 +284,8 @@
 
             this.loadedFiles.Add(projectFile);
         }
+
+        idea.SetAttachments(loadedFiles);
     }
 
     private void SponsorCheckBox_Changed(EventArgs e)
@@ -344,6 +349,7 @@
     private async Task DeleteIdea(MouseEventArgs e)
     {
         var authState = await authenticationState;
+
         string error = await this.ProjectManager.DeleteAsync(idea, authState.User);
 
         if (string.IsNullOrEmpty(error))
