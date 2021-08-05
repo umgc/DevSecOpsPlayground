@@ -20,94 +20,89 @@
 
 <h3>FAQ</h3>
 
+
 @foreach (var faq in faqManager.GetFaqs)
 {
-    <div>
-        <h5>FAQ</h5>
-        <dl id="@faq.Guid">
-            <dt>Topic</dt>
-            <dd>@faq.Topic</dd>
-            <dt>Question</dt>
-            <dd>@faq.Question</dd>
-            <dt>Author</dt>
-            <dd>@faq.Author</dd>
-            <dt>Reply</dt>
-            <dd>@faq.Reply</dd>
-        </dl>
 
-    </div>
+    <tr id="Faq.key">
+        <td>@faq.Topic</td>
+        <td>@faq.Question</td>
+        <td>@faq.Author</td>
+        <td>@faq.Reply</td>
+    </tr>
 }
-@foreach (var faq in faqManager.GetFaqs)
-{
-    <form action="@faqManager.Add(faq)">
-        <fieldset>
-            <legend>@faq.Guid:</legend>
-            <label for="Topic"> Topic:</label>
-            <input type="@faq.Topic" id="@faq.Topic" name="Topic"><br><br>
-            <label for="Question"> Question:</label>
-            <input type="text" id="@faq.Question" name="Question"><br><br>
-            <label for="Author">Author:</label>
-            <input type="text" id="@faq.Author" name="Author"><br><br>
-            <label for="Reply">Reply:</label>
-            <input type="text" id="@faq.Reply" name="Reply"><br><br>
 
-            <input type="button" value="Submit">
-        </fieldset>
-    </form>
-}
-    @foreach (var faq in faqManager.GetFaqs)
+
+<div class="m-2 p-2 rounded">
+    @if (NewFaq != null)
     {
+        <EditForm OnValidSubmit="@HandleValidSubmit" Model="NewFaq">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <div class="card" id="@NewFaq.Guid">
+                <span class="fas fa-comment"></span> Add Topic:
 
-        <tr id="Faq.key">
-            <td>@faq.Topic</td>
-            <td>@faq.Question</td>
-            <td>@faq.Author</td>
-            <td>@faq.Reply</td>
-        </tr>
-    }
+                <InputText @bind="Topic" /><br />
+                <span class="fas fa-comment"></span> Add Question:
 
-    @*@foreach (var faq in faqManager.GetFaqs)
-        {
-            <div class="m-2 p-2 rounded">
+                <InputTextArea @bind="Question" /><br />
+                <span class="fas fa-comment"></span> Add Author:
 
-                <EditForm OnValidSubmit="@HandleValidSubmit" Model="NewFaq">
-                    <DataAnnotationsValidator />
-                    <ValidationSummary />
-                    <div class="card" id="@faq.Guid" />
-                    <span class="fas fa-comment" id="@faq.Topic"></span> Add Topic:
+                <InputText @bind="Author" /><br />
+                <span class="fas fa-comment"></span> Add Reply:
 
-                    <span class="fas fa-comment" id="@faq.Question"></span> Add Question:
-
-                    <span class="fas fa-comment" id="@faq.Author"></span> Add Author:
-                    <span class="fas fa-comment" id="@faq.Reply"></span> Add Reply:
-                    <InputTextArea @bind-Values="Faqs" /><br />
-                    <InputTextArea @bind-Values="faq.Reply" /><br />
-                    <button type="submit" class="btn btn-primary">Add Faq</button>
-        </div>
-            </div>*@
-    @*</EditForm>*@
+                <InputTextArea @bind="Reply"  /><br />
+                <button type="submit" class="btn btn-primary">Add Faq</button>
+            </div>
+        </EditForm>
+     }
+</div>
 
 
 
 
 @code {
 
-    
 
+    private FaqInformation NewFaq { get; set; } = new();
 
+    private string Question { get; set; } = string.Empty;
 
+    private string Author { get; set; } = string.Empty;
 
+    private string Reply { get; set; } = string.Empty;
 
-protected override void OnInitialized()
-{
-    base.OnInitialized();
-        @*faqManager.Add(Faq.Equals(KeyValuePair<Guid,FaqInformation>);*@
-        @*FaqInfo.TryAdd(faqInformation.Guid, faqInformation)*@
-faqManager.Add(new FaqInformation { });
-        @*faqManager.Add(new FaqInformation { Reply = " my reply", Author = "author", Question = " fake question", Topic = " fake topic" });*@
-        @*faqManager.Add(new FaqInformation { Reply = " my reply1", Author = "author1", Question = " fake questio1n", Topic = " fake topic1" });
-            faqManager.Add(new FaqInformation { Reply = " my reply2", Author = "author2", Question = " fake question2", Topic = " fake topic2" });*@
+    private string Topic { get; set; } = string.Empty;
 
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
 
+        FaqManagerService.FaqsChanged += (o, e) =>
+        {
+            ShouldUpdateState();
+        };
     }
+
+
+    private void ShouldUpdateState()
+    {
+        InvokeAsync(() =>
+        {
+            this.StateHasChanged();
+        });
+    }
+
+    private FaqInformation GenerateNewFaq()
+    {
+        return new FaqInformation();
+    }
+
+
+    private void HandleValidSubmit()
+    {
+        faqManager.Add(NewFaq);
+        NewFaq = new FaqInformation();
+    }
+
 }

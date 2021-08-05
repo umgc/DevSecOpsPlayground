@@ -6,9 +6,6 @@ namespace CaPPMS.Model
 {
     public class FaqInformation
     {
-        //internal static IEnumerable<FaqInformation> Values;
-
-        //public FaqInformation() { }
 
         public Guid Guid { get; } = Guid.NewGuid();
 
