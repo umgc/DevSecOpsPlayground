@@ -40,18 +40,19 @@
             <DataAnnotationsValidator />
             <ValidationSummary />
             <div class="card" id="@NewFaq.Guid">
-                <span class="fas fa-comment"></span> Add Topic:
 
+                <span class="fas"></span> Add Topic:
                 <InputText @bind-Value="NewFaq.Topic" /><br />
-                <span class="fas fa-comment"></span> Add Question:
 
+                <span class="fas"></span> Add Question:
                 <InputText @bind-Value="NewFaq.Question" /><br />
-                <span class="fas fa-comment"></span> Add Author:
 
+                <span class="fas"></span>Add Author:
                 <InputText @bind-Value="NewFaq.Author" /><br />
-                <span class="fas fa-comment"></span> Add Reply:
 
+                <span class="fas"></span> Add Reply:
                 <InputTextArea @bind-Value="NewFaq.Reply" /><br />
+
                 <button type="submit" class="btn btn-primary">Add Faq</button>
             </div>
         </EditForm>
