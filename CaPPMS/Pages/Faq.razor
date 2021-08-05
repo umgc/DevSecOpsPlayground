@@ -42,16 +42,16 @@
             <div class="card" id="@NewFaq.Guid">
                 <span class="fas fa-comment"></span> Add Topic:
 
-                <InputText @bind="Topic" /><br />
+                <InputText @bind-Value="NewFaq.Topic" /><br />
                 <span class="fas fa-comment"></span> Add Question:
 
-                <InputTextArea @bind="Question" /><br />
+                <InputText @bind-Value="NewFaq.Question" /><br />
                 <span class="fas fa-comment"></span> Add Author:
 
-                <InputText @bind="Author" /><br />
+                <InputText @bind-Value="NewFaq.Author" /><br />
                 <span class="fas fa-comment"></span> Add Reply:
 
-                <InputTextArea @bind="Reply"  /><br />
+                <InputTextArea @bind-Value="NewFaq.Reply" /><br />
                 <button type="submit" class="btn btn-primary">Add Faq</button>
             </div>
         </EditForm>
@@ -73,7 +73,6 @@
     private string Reply { get; set; } = string.Empty;
 
     private string Topic { get; set; } = string.Empty;
-
     protected override void OnInitialized()
     {
         base.OnInitialized();
