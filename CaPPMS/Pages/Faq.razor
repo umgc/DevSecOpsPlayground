@@ -21,16 +21,6 @@
 <h3>FAQ</h3>
 
 
-@foreach (var faq in faqManager.GetFaqs)
-{
-
-    <tr id="Faq.key">
-        <td>@faq.Topic</td>
-        <td>@faq.Question</td>
-        <td>@faq.Author</td>
-        <td>@faq.Reply</td>
-    </tr>
-}
 
 
 <div class="m-2 p-2 rounded">
@@ -41,25 +31,104 @@
             <ValidationSummary />
             <div class="card" id="@NewFaq.Guid">
 
-                <span class="fas"></span> Add Topic:
-                <InputText @bind-Value="NewFaq.Topic" /><br />
+                <span class="fas" style="color:black;font-weight:bold"> Add Topic: </span>
+                <InputText @bind-Value=" NewFaq.Topic" /><br />
 
-                <span class="fas"></span> Add Question:
-                <InputText @bind-Value="NewFaq.Question" /><br />
+                <span class="fas" style="color:black;font-weight:bold"> Add Question: </span>
+                <InputText @bind-Value=" NewFaq.Question" /><br />
 
-                <span class="fas"></span>Add Author:
-                <InputText @bind-Value="NewFaq.Author" /><br />
+                <span class="fas" style="color:black;font-weight:bold"> Add Author: </span>
+                <InputText @bind-Value=" NewFaq.Author" /><br />
 
-                <span class="fas"></span> Add Reply:
-                <InputTextArea @bind-Value="NewFaq.Reply" /><br />
+                @*<span class="fas" style="color:black;font-weight:bold"> Add Reply: </span>
+                <InputTextArea @bind-Value=" NewFaq.Reply" /><br />*@
 
-                <button type="submit" class="btn btn-primary">Add Faq</button>
+                <button type="submit" class="btn-primary">Add Faq</button>
             </div>
         </EditForm>
-     }
+    }
 </div>
 
 
+<div class="m-2 p-2 rounded">
+    @foreach (var faq in faqManager.GetFaqs)
+    {
+
+        <table border="1">
+            <caption> Newly Added FAQ </caption>
+            <tr class="faqinputs">
+                <td class="fas" style="color:black;font-weight:bold">
+                    Topic:
+
+                </td>
+                @faq.Topic
+            </tr>
+
+            <tr class="faqinputs">
+                <td class="fas" style="color:black;font-weight:bold">
+                    Question:
+
+                </td>
+                @faq.Question
+            </tr>
+
+            <tr class="faqinputs">
+                <td class="fas" style="color:black;font-weight:bold">
+                    Author:
+
+                </td>
+                @faq.Author
+            </tr>
+
+            <tr class="faqinputs">
+                <td class="fas" style="color:black;font-weight:bold">
+                    Reply:
+
+                </td>
+                @faq.Reply
+            </tr>
+        </table>
+    }
+</div>
+<div>
+    @foreach (var faq in faqManager.GetFaqs)
+    {
+        <EditForm Model="NewFaq" OnValidSubmit="@HandleValidSubmit">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <div class="card" id="@faq.Guid">
+
+                <span class="fas" style="color:black;font-weight:bold"> Topic: @faq.Topic </span>
+                @*<InputText @bind-Value=" NewFaq.Topic" /><br />*@
+
+            <span class="fas" style="color:black;font-weight:bold"> Question: @faq.Question </span>
+                @*<InputText @bind-Value=" NewFaq.Question" /><br />*@
+
+            <span class="fas" style="color:black;font-weight:bold"> Author: @faq.Author: </span>
+                @*<InputText @bind-Value=" NewFaq.Author" /><br />*@
+
+            <span class="fas" style="color:black;font-weight:bold"> Reply: @faq.Reply </span>
+                <InputTextArea @bind-Value=" NewFaq.Reply" /><br />
+
+                <button type="submit" class=" btn btn-primary">Submit Reply</button>
+            </div>
+        </EditForm>
+    }
+</div>
+
+<style>
+    .table td, .table th {
+        padding: .75rem;
+        vertical-align: top;
+        border-top: 1px solid #dee2e6;
+    }
+
+    .td {
+        padding: .75rem;
+        vertical-align: top;
+        border-top: 1px solid #dee2e6;
+    }
+</style>
 
 
 @code {
