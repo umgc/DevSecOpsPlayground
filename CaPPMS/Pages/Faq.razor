@@ -17,11 +17,29 @@
 
 
 @page "/faq"
+<head>
+    <style>
+        table, th, td {
+            border: 1px solid black;
+        }
+        .intro {
+            color:black;
+            font-weight:bold;
+        }
+    </style>
 
-<h3>FAQ</h3>
+   
+</head>
+<h3>FAQs</h3>
 
 
+ <div class="intro">
+        The purpose of this page is for users to ask questions regarding the application as well as review previously asked questions.
 
+        Currently the form only allows users to input a question and not a reply to other users questions because we do not want just anyone to be able to respond to the questions.
+
+        The questions need to be reviewed by the administrator and then answered in order to maintain accuracy and professionalism. 
+ </div>
 
 <div class="m-2 p-2 rounded">
     @if (NewFaq != null)
@@ -51,11 +69,15 @@
 
 
 <div class="m-2 p-2 rounded">
-    @foreach (var faq in faqManager.GetFaqs)
+    @*@foreach (var faq in faqManager.GetFaqs)
     {
 
         <table border="1">
-            <caption> Newly Added FAQ </caption>
+            
+            <tr>
+            <th> Newly Added FAQ </th>
+            </tr>
+                
             <tr class="faqinputs">
                 <td class="fas" style="color:black;font-weight:bold">
                     Topic:
@@ -73,7 +95,7 @@
             </tr>
 
             <tr class="faqinputs">
-                <td class="fas" style="color:black;font-weight:bold">
+                <td>
                     Author:
 
                 </td>
@@ -87,8 +109,8 @@
                 </td>
                 @faq.Reply
             </tr>
-        </table>
-    }
+        </table>*@
+    @* }*@
 </div>
 <div>
     @foreach (var faq in faqManager.GetFaqs)
@@ -98,19 +120,23 @@
             <ValidationSummary />
             <div class="card" id="@faq.Guid">
 
-                <span class="fas" style="color:black;font-weight:bold"> Topic: @faq.Topic </span>
+                <span class="fas" style="color:black;font-weight:bold"> Topic:  </span>
                 @*<InputText @bind-Value=" NewFaq.Topic" /><br />*@
+                    <span class="fas" style="color:black"/>
+                    <span> @faq.Topic </span><br />
 
-            <span class="fas" style="color:black;font-weight:bold"> Question: @faq.Question </span>
-                @*<InputText @bind-Value=" NewFaq.Question" /><br />*@
+                    <span class="fas" style="color:black;font-weight:bold"> Question:</span>
+                    <span> @faq.Question </span><br />
+                    @*<InputText @bind-Value=" NewFaq.Question" /><br />*@
 
-            <span class="fas" style="color:black;font-weight:bold"> Author: @faq.Author: </span>
-                @*<InputText @bind-Value=" NewFaq.Author" /><br />*@
+                    <span class="fas" style="color:black;font-weight:bold"> Author:  </span>
+                    @*<InputText @bind-Value=" NewFaq.Author" /><br />*@
+                    <span> @faq.Author </span><br />
 
-            <span class="fas" style="color:black;font-weight:bold"> Reply: @faq.Reply </span>
-                <InputTextArea @bind-Value=" NewFaq.Reply" /><br />
+                    @*<span class="fas" style="color:black;font-weight:bold"> Reply: @faq.Reply </span>
+            <InputTextArea @bind-Value=" NewFaq.Reply" /><br />
 
-                <button type="submit" class=" btn btn-primary">Submit Reply</button>
+            <button type="submit" class=" btn ">Submit Reply</button>*@
             </div>
         </EditForm>
     }
