@@ -1,5 +1,4 @@
 ﻿@using CaPPMS.Data
-@using CaPPMS.Model
 
 @inject FaqManagerService faqManager
 
@@ -49,8 +48,6 @@
 
  <div class="m-2 p-2 rounded">
 
-    @if (NewFaq != null)
-    {
         <EditForm OnValidSubmit="@HandleValidSubmit" Model="NewFaq">
           
             <div class="card" id="@NewFaq.Guid">
@@ -72,11 +69,11 @@
             </div>
 
         </EditForm>
-    }
 
 </div>
 
 <div class="m-2">
+
     @foreach (var faq in faqManager.GetFaqs)
 
     {
@@ -96,6 +93,7 @@
                    
                     <span> @faq.Author </span><br />
             </div>
+
         </EditForm>
     }
 
