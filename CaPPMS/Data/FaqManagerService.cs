@@ -100,7 +100,7 @@ namespace CaPPMS.Data
             });
         }
 
-        public Task<bool> UpdateAsync(FaqInformation faqInformation)
+        public Task<bool> Update(FaqInformation faqInformation)
         {
             bool completed;
 
