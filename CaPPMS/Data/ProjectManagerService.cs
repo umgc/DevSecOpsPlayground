@@ -126,7 +126,7 @@ namespace CaPPMS.Data
         {
             return await RemoveAsync(idea, user);
         }
-
+        
         public async Task<string> ExportAsync(ProjectInformation idea)
         {
             int port = 443;
@@ -275,7 +275,7 @@ namespace CaPPMS.Data
                 while (File.Exists(tempFile.FullName))
                 {
                     // Use a prime number to reduce the chance of a race condition.
-                    await Task.Delay(7);
+                    await Task.Delay(10);
                 }
             }).ContinueWith((context) =>
             {
