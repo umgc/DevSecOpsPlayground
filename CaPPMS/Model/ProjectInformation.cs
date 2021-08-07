@@ -9,7 +9,7 @@ using CaPPMS.Attributes;
 namespace CaPPMS.Model
 {
     public class ProjectInformation
-    {        
+    {
         [Export]
         [Browsable(false)]
         public Guid ProjectID { get; set; } = Guid.NewGuid();
@@ -74,6 +74,26 @@ namespace CaPPMS.Model
             }
         }
 
+        private string gitUrl = string.Empty;
+
+        [Export(true)]
+        [DisplayName("GitHub")]
+        [Browsable(true)]
+        [ColumnHeader]
+        [SpanIcon("fab fa-github", true)]
+        public string Github
+        {
+            get
+            {
+                return this.gitUrl;
+            }
+            set
+            {
+                this.gitUrl = value;
+                this.IsDirty = true;
+            }
+        }
+
         [Export]
         [Browsable(false)]
         private Contact Sponsor { get; set; } = new();
@@ -84,7 +104,7 @@ namespace CaPPMS.Model
 
         [Export(true)]
         [Required]
-        [StringLength(50, ErrorMessage = "First Name is too long")]
+        [StringLength(50, ErrorMessage = "First name is too long.")]
         [DisplayName("First Name")]
         [Browsable(true)]
         public string FirstName
@@ -102,7 +122,7 @@ namespace CaPPMS.Model
 
         [Export(true)]
         [Required]
-        [StringLength(50, ErrorMessage = "Last Name is too long")]
+        [StringLength(50, ErrorMessage = "Last name is too long.")]
         [DisplayName("Last Name")]
         [Browsable(true)]
         public string LastName
@@ -152,6 +172,10 @@ namespace CaPPMS.Model
 
         // We will export attachments manually.
         [Browsable(true)]
+        // Matches the config.
+        [AttachmentsNumFilesValidator(10)]
+        // Matches the config value. Value is in Mb
+        [AttachmentsFileSizeValidator(10)]
         public IList<ProjectFile> Attachments { get; private set; } = new List<ProjectFile>();
 
         [DisplayName("Are you the sponsor")]
@@ -160,7 +184,7 @@ namespace CaPPMS.Model
 
         [Export(true)]
         [Required]
-        [StringLength(255, ErrorMessage = "First Name is too long")]
+        [StringLength(255, ErrorMessage = "Sponsor first name is too long.")]
         [DisplayName("Sponsor First Name")]
         [Browsable(true)]
         public string SponsorFirstName
@@ -178,7 +202,7 @@ namespace CaPPMS.Model
 
         [Export(true)]
         [Required]
-        [StringLength(255, ErrorMessage = "Last Name is too long")]
+        [StringLength(255, ErrorMessage = "Sponsor last name is too long.")]
         [DisplayName("Sponsor Last Name")]
         [Browsable(true)]
         public string SponsorLastName
@@ -269,7 +293,9 @@ namespace CaPPMS.Model
         {
             foreach(var prop in this.GetType().GetProperties())
             {
-                if (prop.GetCustomAttribute<ExportAttribute>() != null)
+                var canExport = prop.GetCustomAttribute<ExportAttribute>()?.CanExport ?? false;
+
+                if (canExport)
                 {
                     string name = prop.GetCustomAttribute<DisplayNameAttribute>()?.DisplayName ?? prop.Name;
 

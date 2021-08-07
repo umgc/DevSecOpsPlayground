@@ -1,5 +1,9 @@
-﻿using System;
+﻿using CaPPMS.Attributes;
+using System;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
+using System.Reflection;
 
 namespace CaPPMS.Model.Table
 {
@@ -26,6 +30,12 @@ namespace CaPPMS.Model.Table
             this.CellType = cellType;
         }
 
+        public Cell(int rowId, int columnId, object value, CellType cellType, IEnumerable<Attribute> attributes)
+            : this(rowId, columnId, value, cellType)
+        {
+            this.Attributes = attributes;
+        }
+
         public CellType CellType { get; private set; } = CellType.Data;
 
         public object Value { get; set; }
@@ -43,6 +53,8 @@ namespace CaPPMS.Model.Table
         public Color PrimaryRowFontColor { get; set; } = Color.Black;
 
         public int ColSpan { get; set; } = 1;
+
+        public IEnumerable<Attribute> Attributes { get; private set; }
 
         public override string ToString()
         {
@@ -67,14 +79,47 @@ namespace CaPPMS.Model.Table
 
             string cellData = Value.ToString();
 
-            // TODO: [rwilson127 - 4 July 21]We can probably expand this to include any url within the who string not just if the string is a url.
-            if (Uri.TryCreate(cellData, UriKind.Absolute, out Uri uri))
+            html += ">";
+
+            SpanIconAttribute spanIcon = Attributes.FirstOrDefault(a => a.GetType() == typeof(SpanIconAttribute)) as SpanIconAttribute;
+            bool handledValue = false;
+
+            if (spanIcon != null && !string.IsNullOrEmpty(spanIcon.IconClass) & !string.IsNullOrEmpty(cellData))
             {
-                cellData = $"<a href=\"{uri}\">{uri}</a>";
+                string spanData = string.Empty;
+                if (spanIcon.UseAsHyperLink)
+                {
+                    spanData += $"<a class=\"btn btn-secondary\" href=\"{cellData}\">";
+                    handledValue = true;
+                }
+
+                spanData += $"<span class=\"{spanIcon.IconClass}\"></span>";
+
+                if (spanIcon.UseAsHyperLink)
+                {
+                    spanData += $"{cellData.Split(new char[] {'/'}, StringSplitOptions.RemoveEmptyEntries).Last()}</a>";
+                }
+
+                html += spanData;
             }
 
-            html += ">";
-            html += cellData;
+            // TODO: [rwilson127 - 4 July 21]We can probably expand this to include any url within the who string not just if the string is a url.
+            if (!handledValue && Uri.TryCreate(cellData, UriKind.Absolute, out Uri uri))
+            {
+                if (uri.AbsoluteUri.Length > 20)
+                {
+                    html += $"<a href=\"{uri}\">{uri.AbsoluteUri.Substring(0, 17)}...</a>";
+                }
+                else
+                {
+                    html += $"<a href=\"{uri}\">{uri}</a>";
+                }
+            }
+            else if(!handledValue)
+            {
+                html += cellData;
+            }
+
             html += CellType == CellType.Data ? "</td>" : "</th>";
 
             return html;
