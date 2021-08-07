@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
 namespace CaPPMS.Model
 {
     public class FaqInformation
     {
-
         public Guid Guid { get; } = Guid.NewGuid();
 
         public string Question { get; set; } = string.Empty;

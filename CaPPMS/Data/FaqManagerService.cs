@@ -1,13 +1,9 @@
 ﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
-using System.Security.Principal;
 using System.Threading.Tasks;
 using CaPPMS.Model;
 using Newtonsoft.Json;
-using Octokit;
-using iTextSharp.text;
-using iTextSharp.text.pdf;
 using System;
 
 namespace CaPPMS.Data
@@ -15,8 +11,11 @@ namespace CaPPMS.Data
     public class FaqManagerService
     {
         public static event EventHandler FaqsChanged;
+
         private readonly string localFaqDb = Path.Combine(BaseDirInfo.FullName, "faqs.json");
+
         public static DirectoryInfo BaseDirInfo { get; } = new(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "StoredData"));
+
         public FaqManagerService()
         {
             if (!BaseDirInfo.Exists)
@@ -24,32 +23,29 @@ namespace CaPPMS.Data
                 BaseDirInfo.Create();
             }
             var faqDbFile = new FileInfo(localFaqDb);
+
             if (faqDbFile.Exists)
             {
                 var faqs = JsonConvert.DeserializeObject<Dictionary<Guid, FaqInformation>>(File.ReadAllText(faqDbFile.FullName));
+
                 foreach (var faq in faqs)
+
                 {
                     _ = FaqInfo.TryAdd(faq.Key, faq.Value);
+
                 }
+
                 FaqsChanged += FaqManagerService_FaqsChanged;
             }
         }
         public ConcurrentDictionary<Guid, FaqInformation> FaqInfo { get; } = new();
-        public async Task<bool> AddAsync(FaqInformation faqInformation)
-        {
-            if (FaqInfo.TryAdd(faqInformation.Guid, faqInformation))
-            {
-                FaqsChanged?.Invoke(FaqInfo, EventArgs.Empty);
-                return await Task.FromResult(true);
-            }
 
-            return false;
-        }
         public bool Add(FaqInformation faqInformation)
         {
             if (FaqInfo.TryAdd(faqInformation.Guid, faqInformation))
             {
                 FaqsChanged?.Invoke(FaqInfo, EventArgs.Empty);
+
                 return true;
             }
 
@@ -63,26 +59,9 @@ namespace CaPPMS.Data
                 return false;
             }
             FaqsChanged?.Invoke(FaqInfo, EventArgs.Empty);
+
             return true;
         }
-        //public async Task<string> RemoveAsync(FaqInformation faqInformation)
-        //{
-
-        //    string error = string.Empty;
-        //    var faqs = JsonConvert.DeserializeObject<Dictionary<Guid, FaqInformation>>(File.ReadAllText(faqDbFile.FullName));
-
-        //        if (FaqInfo.TryGetValue(faq.Key, out FaqInformation faq))
-        //    {
-        //        foreach (var faq in faqs)
-        //        {
-        //            string fileError = await Task.FromResult(DeleteAsync)
-        //          }
-        //            if (!string.IsNullOrEmpty(fileError) && !fileError.StartsWith("File does not exist."))
-        //            {
-        //                error += fileError + "<br/>";
-        //            }
-
-        //        }
 
         public ICollection<FaqInformation> GetFaqs => FaqInfo.Values;
 
@@ -92,13 +71,15 @@ namespace CaPPMS.Data
 
             // Let's build a gate to control flow. It might be a bit extra but it should be fun.
             _ = Task.Run(async () =>
+
             {
                 while (File.Exists(tempFile.FullName))
                 {
                     // Use a prime number to reduce the chance of a race condition.
                     await Task.Delay(7);
                 }
-            }).ContinueWith((context) =>
+            }
+            ).ContinueWith((context) =>
             {
                 // Update the file backed db.
                 lock (FaqInfo)
@@ -122,6 +103,7 @@ namespace CaPPMS.Data
         public Task<bool> UpdateAsync(FaqInformation faqInformation)
         {
             bool completed;
+
             if (completed = FaqInfo.TryUpdate(faqInformation.Guid, faqInformation, FaqInfo[faqInformation.Guid]))
             {
                 FaqsChanged?.Invoke(FaqInfo.Values, EventArgs.Empty);
@@ -130,21 +112,15 @@ namespace CaPPMS.Data
             return Task.FromResult(completed);
         }
 
-        //public async Task<string> DeleteAsync(FaqInformation faqInformation, IPrincipal user)
-        //{
-        //return await Remove(FaqInfo, faqInformation);
-
         public IEnumerable<FaqInformation> GetFaqInfos()
         {
-
             List<FaqInformation> FaqInformations = new List<FaqInformation>();
+
             foreach (FaqInformation faq in FaqInfo.Values)
+
             {
                 FaqInformations.Add(faq);
             }
-
-
-
 
             return new List<FaqInformation>();
         }

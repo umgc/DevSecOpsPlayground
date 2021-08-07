@@ -1,39 +1,45 @@
-﻿@using System.Collections.Concurrent;
-@using CaPPMS.Data
+﻿@using CaPPMS.Data
 @using CaPPMS.Model
-
-@using System.Collections.Generic;
-@using System.IO;
-@using System.Security.Principal;
-@using System.Threading.Tasks;
-
-@using Newtonsoft.Json;
-@using Octokit;
-@using iTextSharp.text;
-@using iTextSharp.text.pdf;
-@using System;
 
 @inject FaqManagerService faqManager
 
-
 @page "/faq"
+
 <head>
+
     <style>
-        table, th, td {
+
+        table, th, td
+        {
             border: 1px solid black;
         }
-        .intro {
+        .intro
+        {
             color:black;
             font-weight:bold;
         }
-    </style>
+        span
+        {
+            padding-block:auto;
+        }
+        .m-2
+        {
+            padding-top:inherit;
+            padding:initial;
+        }
+        .NewFaq
+        {
+            border-block-start-width:medium;
+        }
 
-   
+    </style>
+    
 </head>
+
 <h3>FAQs</h3>
 
-
  <div class="intro">
+
         The purpose of this page is for users to ask questions regarding the application as well as review previously asked questions.
 
         Currently the form only allows users to input a question and not a reply to other users questions because we do not want just anyone to be able to respond to the questions.
@@ -41,124 +47,62 @@
         The questions need to be reviewed by the administrator and then answered in order to maintain accuracy and professionalism. 
  </div>
 
-<div class="m-2 p-2 rounded">
+ <div class="m-2 p-2 rounded">
+
     @if (NewFaq != null)
     {
         <EditForm OnValidSubmit="@HandleValidSubmit" Model="NewFaq">
-            <DataAnnotationsValidator />
-            <ValidationSummary />
+          
             <div class="card" id="@NewFaq.Guid">
 
                 <span class="fas" style="color:black;font-weight:bold"> Add Topic: </span>
+
                 <InputText @bind-Value=" NewFaq.Topic" /><br />
 
                 <span class="fas" style="color:black;font-weight:bold"> Add Question: </span>
+
                 <InputText @bind-Value=" NewFaq.Question" /><br />
 
                 <span class="fas" style="color:black;font-weight:bold"> Add Author: </span>
+
                 <InputText @bind-Value=" NewFaq.Author" /><br />
 
-                @*<span class="fas" style="color:black;font-weight:bold"> Add Reply: </span>
-                <InputTextArea @bind-Value=" NewFaq.Reply" /><br />*@
-
                 <button type="submit" class="btn-primary">Add Faq</button>
+
             </div>
+
         </EditForm>
     }
+
 </div>
 
-
-<div class="m-2 p-2 rounded">
-    @*@foreach (var faq in faqManager.GetFaqs)
-    {
-
-        <table border="1">
-            
-            <tr>
-            <th> Newly Added FAQ </th>
-            </tr>
-                
-            <tr class="faqinputs">
-                <td class="fas" style="color:black;font-weight:bold">
-                    Topic:
-
-                </td>
-                @faq.Topic
-            </tr>
-
-            <tr class="faqinputs">
-                <td class="fas" style="color:black;font-weight:bold">
-                    Question:
-
-                </td>
-                @faq.Question
-            </tr>
-
-            <tr class="faqinputs">
-                <td>
-                    Author:
-
-                </td>
-                @faq.Author
-            </tr>
-
-            <tr class="faqinputs">
-                <td class="fas" style="color:black;font-weight:bold">
-                    Reply:
-
-                </td>
-                @faq.Reply
-            </tr>
-        </table>*@
-    @* }*@
-</div>
-<div>
+<div class="m-2">
     @foreach (var faq in faqManager.GetFaqs)
+
     {
         <EditForm Model="NewFaq" OnValidSubmit="@HandleValidSubmit">
-            <DataAnnotationsValidator />
-            <ValidationSummary />
+            
             <div class="card" id="@faq.Guid">
 
                 <span class="fas" style="color:black;font-weight:bold"> Topic:  </span>
-                @*<InputText @bind-Value=" NewFaq.Topic" /><br />*@
-                    <span class="fas" style="color:black"/>
+
                     <span> @faq.Topic </span><br />
 
                     <span class="fas" style="color:black;font-weight:bold"> Question:</span>
+
                     <span> @faq.Question </span><br />
-                    @*<InputText @bind-Value=" NewFaq.Question" /><br />*@
-
+                    
                     <span class="fas" style="color:black;font-weight:bold"> Author:  </span>
-                    @*<InputText @bind-Value=" NewFaq.Author" /><br />*@
+                   
                     <span> @faq.Author </span><br />
-
-                    @*<span class="fas" style="color:black;font-weight:bold"> Reply: @faq.Reply </span>
-            <InputTextArea @bind-Value=" NewFaq.Reply" /><br />
-
-            <button type="submit" class=" btn ">Submit Reply</button>*@
             </div>
         </EditForm>
     }
+
 </div>
-
-<style>
-    .table td, .table th {
-        padding: .75rem;
-        vertical-align: top;
-        border-top: 1px solid #dee2e6;
-    }
-
-    .td {
-        padding: .75rem;
-        vertical-align: top;
-        border-top: 1px solid #dee2e6;
-    }
-</style>
 
 
 @code {
-
 
     private FaqInformation NewFaq { get; set; } = new();
 
@@ -169,6 +113,7 @@
     private string Reply { get; set; } = string.Empty;
 
     private string Topic { get; set; } = string.Empty;
+
     protected override void OnInitialized()
     {
         base.OnInitialized();
@@ -178,7 +123,6 @@
             ShouldUpdateState();
         };
     }
-
 
     private void ShouldUpdateState()
     {
@@ -193,11 +137,11 @@
         return new FaqInformation();
     }
 
-
     private void HandleValidSubmit()
     {
+
         faqManager.Add(NewFaq);
+
         NewFaq = new FaqInformation();
     }
-
 }
