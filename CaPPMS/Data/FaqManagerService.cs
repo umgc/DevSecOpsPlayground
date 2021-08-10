@@ -22,6 +22,7 @@ namespace CaPPMS.Data
             {
                 BaseDirInfo.Create();
             }
+
             var faqDbFile = new FileInfo(localFaqDb);
 
             if (faqDbFile.Exists)
@@ -34,11 +35,14 @@ namespace CaPPMS.Data
                     _ = FaqInfo.TryAdd(faq.Key, faq.Value);
 
                 }
-
-                FaqsChanged += FaqManagerService_FaqsChanged;
             }
+
+            FaqsChanged += FaqManagerService_FaqsChanged;
         }
+
         public ConcurrentDictionary<Guid, FaqInformation> FaqInfo { get; } = new();
+        
+        public ICollection<FaqInformation> GetFaqs => FaqInfo.Values;
 
         public bool Add(FaqInformation faqInformation)
         {
@@ -58,12 +62,23 @@ namespace CaPPMS.Data
             {
                 return false;
             }
+
             FaqsChanged?.Invoke(FaqInfo, EventArgs.Empty);
 
             return true;
         }
 
-        public ICollection<FaqInformation> GetFaqs => FaqInfo.Values;
+        public Task<bool> Update(FaqInformation faqInformation)
+        {
+            bool completed;
+
+            if (completed = FaqInfo.TryUpdate(faqInformation.Guid, faqInformation, FaqInfo[faqInformation.Guid]))
+            {
+                FaqsChanged?.Invoke(FaqInfo.Values, EventArgs.Empty);
+            }
+
+            return Task.FromResult(completed);
+        }
 
         private void FaqManagerService_FaqsChanged(object sender, EventArgs e)
         {
@@ -98,31 +113,6 @@ namespace CaPPMS.Data
                     });
                 }
             });
-        }
-
-        public Task<bool> Update(FaqInformation faqInformation)
-        {
-            bool completed;
-
-            if (completed = FaqInfo.TryUpdate(faqInformation.Guid, faqInformation, FaqInfo[faqInformation.Guid]))
-            {
-                FaqsChanged?.Invoke(FaqInfo.Values, EventArgs.Empty);
-            }
-
-            return Task.FromResult(completed);
-        }
-
-        public IEnumerable<FaqInformation> GetFaqInfos()
-        {
-            List<FaqInformation> FaqInformations = new List<FaqInformation>();
-
-            foreach (FaqInformation faq in FaqInfo.Values)
-
-            {
-                FaqInformations.Add(faq);
-            }
-
-            return new List<FaqInformation>();
         }
     }
 }
