@@ -99,7 +99,7 @@ navLink-active {
     overflow: auto;
 }
 
-.idea {
+.popOver {
     position: absolute;
     top: 10%;
     left: 40%;

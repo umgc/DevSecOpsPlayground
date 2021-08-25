@@ -20,30 +20,36 @@ else
         </label>
         <table class="@string.Join(" ", TableCssClasses)">
             <thead class="thead-light">
-                   <tr>
-                       @foreach(var headerCell in this.HeaderRow)
-                        {
-                            <th>
-                                @headerCell.Value
-                            </th>
-                        }
-                       <th>
-                           <span class="fas fa-microscope"></span>
-                       </th>
-                   </tr>
+                <tr>
+                    @foreach (var headerCell in this.HeaderRow)
+                    {
+                        <th>
+                            @headerCell.Value
+                        </th>
+                    }
+                    @if (isAuthenticated)
+                    {
+                        <th>
+                            <span class="fas fa-microscope"></span>
+                        </th>
+                    }
+                </tr>
             </thead>
             <tbody>
                 @foreach(var row in this.GetRows())
                 {
-                    <tr>
-                        @foreach(var cell in row)
-                        {
-                            @((MarkupString)cell.ToString())
-                        }
+                <tr>
+                    @foreach (var cell in row)
+                    {
+                        @((MarkupString)cell.ToString())
+                    }
+                    @if (isAuthenticated)
+                    {
                         <td>
                             <button class="btn btn-primary" type="button" @onclick="((e) => ShowView(row.DataBoundItem as ProjectInformation))">VIEW</button>
                         </td>
-                    </tr>
+                    }
+                </tr>
                 }
             </tbody>
             <tfoot>
@@ -57,14 +63,19 @@ else
     </div>
     @if (idea != null)
     {
-        <div class="idea">
-            <Idea ShowComments="true" ShowFileAttachments="true" ShowFormButton="Idea.FormButtons.Approver" ProjectIdea="idea" Parent="this" />
+        <div class="popOver">
+            <CascadingAuthenticationState>
+                <Idea ShowComments="true" ShowFileAttachments="true" ShowFormButton="Idea.FormButtons.Approver" ProjectIdea="idea" Parent="this" />
+            </CascadingAuthenticationState>
         </div>
     }
 </div>
 }
 
 @code{
+
+    [CascadingParameter]
+    private Task<AuthenticationState> authenticationState { get; set; }
 
     [Parameter]
     public string CssClass
@@ -84,9 +95,14 @@ else
 
     private ProjectInformation idea { get; set; }
 
-    protected override void OnInitialized()
+    private bool isAuthenticated;
+
+    protected override async Task OnInitializedAsync()
     {
-        base.OnInitialized();
+
+        var authState = await authenticationState;
+
+        this.isAuthenticated = authState.User?.Identity.IsAuthenticated ?? false;
 
         this.DataSourceChanged += (o, e) =>
         {
@@ -110,6 +126,8 @@ else
 
             this.DataSource = ideas;
         };
+
+        await base.OnInitializedAsync();
     }
 
     public void CloseIdea(Idea idea)

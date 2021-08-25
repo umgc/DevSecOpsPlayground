@@ -7,6 +7,8 @@ namespace CaPPMS.Model
 {
     public class ProjectFile : IProjectFile
     {
+        private long size;
+
         public Guid File_ID { get; set; } = Guid.NewGuid();
 
         public string Location { get; set; } = string.Empty;
@@ -21,6 +23,23 @@ namespace CaPPMS.Model
                 }
 
                 return Location.Split(ProjectFileManager.Delimiter, StringSplitOptions.RemoveEmptyEntries).Last();
+            }
+        }
+
+        public long Size
+        {
+            get
+            {
+                if (BrowserFile != null)
+                {
+                    size = BrowserFile.Size;
+                }
+
+                return size;
+            }
+            set
+            {
+                size = value;
             }
         }
         

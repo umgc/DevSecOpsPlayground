@@ -1,11 +1,7 @@
-﻿@using Microsoft.AspNetCore.Http
-@using CaPPMS.Data
-@using CaPPMS.Model
-
-@inject ProjectManagerService ProjectManager
+﻿@inject ProjectManagerService ProjectManager
 @inject NavigationManager NavigationManager
 
-<div class="p-5">
+<div class="p-5" style="display:@tableState">
     <EditForm Model="@idea" OnValidSubmit="@HandleValidSubmit">
         <DataAnnotationsValidator />
         <ValidationSummary />
@@ -73,8 +69,8 @@
                     else
                     {
                         <label>
-                            Attachement(s):
-                            <InputFile id="attachment" OnChange="LoadFiles" multiple />
+                            Attachment(s):
+                            <InputFile id="attachment" OnChange="LoadFiles" multiple accept=".doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,.ppt,.pptx,.pdf" />
                         </label>
                     }
                 </td>
@@ -84,6 +80,14 @@
                     <label>
                         Website:
                         <InputText id="url" @bind-Value="idea.Url" />
+                    </label>
+                </td>
+            </tr>
+            <tr class="row w-25">
+                <td class="d-xl-table-cell">
+                    <label>
+                        GitHub:
+                        <InputText id="gitHubUrl" @bind-Value="idea.Github" />
                     </label>
                 </td>
             </tr>
@@ -141,11 +145,13 @@
 
         @if (this.ShowFormButton == FormButtons.Submit)
         {
-            <button type="submit" @onclick="SponsorCheck" class="btn btn-primary">Submit</button> <button type="reset" class="btn btn-danger">Reset</button>
+            <button id="btnSubmit" type="submit" @onclick="SponsorCheck" class="btn btn-primary">Submit</button> <button type="reset" class="btn btn-danger">Reset</button>
         }
         else if (this.ShowFormButton == FormButtons.Approver)
         {
+            <CascadingAuthenticationState>
                 <CommentsComponent ProjectGuid="idea.ProjectID" />
+            </CascadingAuthenticationState>
 
             if (this.idea.IsDirty)
             {
@@ -165,6 +171,15 @@
         }
 
     </EditForm>
+</div>
+
+<div style="visibility:@waitBar">
+    Uploading ...
+    <div>
+        <Wander Center="true" />
+    </div>    
+
+    Thank you for the project idea!
 </div>
 
 @code{
@@ -207,6 +222,9 @@
         }
     }
 
+    [CascadingParameter]
+    private Task<AuthenticationState> authenticationState { get; set; }
+
     private ProjectInformation idea = new ProjectInformation();
 
     private string DownloadFileName => $"{idea.ProjectTitle}-Export.pdf";
@@ -216,6 +234,10 @@
     private List<IProjectFile> loadedFiles = new();
 
     private static bool isUploading = false;
+
+    private string tableState = "block";
+
+    private string waitBar => tableState.Equals("none") ? "visible" : "hidden";
 
     protected override void OnInitialized()
     {
@@ -229,16 +251,23 @@
 
     private async Task HandleValidSubmit()
     {
-        idea.SetAttachments(loadedFiles);
+        this.tableState = "none";
 
-        var uploaded = await ProjectManager.AddAsync(idea);
-
-        if (uploaded)
+        await Task.Run( async () =>
         {
-            idea.IsDirty = false;
-            loadedFiles.Clear();
-            idea = new ProjectInformation();
-        }
+            var uploaded = await ProjectManager.AddAsync(idea);
+
+            if (uploaded)
+            {
+                idea.IsDirty = false;
+                loadedFiles.Clear();
+                idea = new ProjectInformation();
+            }
+
+            await Task.Delay(2000);
+        });
+
+        this.tableState = "block";
     }
 
     private void LoadFiles(InputFileChangeEventArgs inputFile)
@@ -255,6 +284,8 @@
 
             this.loadedFiles.Add(projectFile);
         }
+
+        idea.SetAttachments(loadedFiles);
     }
 
     private void SponsorCheckBox_Changed(EventArgs e)
@@ -317,7 +348,8 @@
 
     private async Task DeleteIdea(MouseEventArgs e)
     {
-        string error = await this.ProjectManager.DeleteAsync(idea, null);
+        var authState = await authenticationState;
+        string error = await this.ProjectManager.DeleteAsync(idea, authState.User);
 
         if (string.IsNullOrEmpty(error))
         {

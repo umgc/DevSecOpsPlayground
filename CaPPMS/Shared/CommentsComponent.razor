@@ -1,7 +1,8 @@
-﻿@using CaPPMS.Model
+@using CaPPMS.Model
 @using CaPPMS.Data
-@using System.ComponentModel.DataAnnotations;
-@using System.Security.Principal;
+@using System.ComponentModel.DataAnnotations
+@using System.Security.Claims
+@using System.Diagnostics
 
 @inject ProjectManagerService ProjectManager
 
@@ -49,7 +50,8 @@ else
     [Parameter]
     public Guid ProjectGuid { get; set; }
 
-    protected IPrincipal User { get; set; }
+    [CascadingParameter]
+    private Task<AuthenticationState> authenticationStateTask { get; set; }
 
     private Comment NewComment { get; set; }
 
@@ -103,9 +105,10 @@ else
         return new Comment(ProjectGuid);
     }
 
-    private void HandleValidSubmit()
+    private async Task HandleValidSubmit()
     {
-        NewComment.UserEmail = User?.Identity?.Name ?? string.Empty;
+        var authState = await authenticationStateTask;
+        NewComment.UserEmail = authState.User?.Identity?.Name ?? string.Empty;
         NewComment.UpdateDateTime = DateTime.Now;
         CommentManager.AddComment(NewComment);
         NewComment = new Comment(ProjectGuid);
