@@ -349,7 +349,6 @@
     private async Task DeleteIdea(MouseEventArgs e)
     {
         var authState = await authenticationState;
-
         string error = await this.ProjectManager.DeleteAsync(idea, authState.User);
 
         if (string.IsNullOrEmpty(error))
