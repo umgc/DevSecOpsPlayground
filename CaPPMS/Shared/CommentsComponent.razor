@@ -1,0 +1,116 @@
+@using CaPPMS.Model
+@using CaPPMS.Data
+@using System.ComponentModel.DataAnnotations
+@using System.Security.Claims
+@using System.Diagnostics
+
+@inject ProjectManagerService ProjectManager
+
+<h3>Comments:</h3>
+
+@if(Comments != null && Comments.Count() > 0)
+{
+    foreach(var comment in Comments)
+    {
+        <div class="card m-2 p-2">
+            <div class="card-title p-2">
+                Author:@comment.UserEmail
+            </div>
+            <div class="card-body">
+                @comment.Comments
+            </div>
+        </div>
+    }
+}
+else
+{
+    <p>
+        <span class="p-2 fas fa-search"></span><span>No Comments Found</span>
+    </p>
+}
+
+<div class="m-2 p-2 rounded">
+    <EditForm OnValidSubmit="@HandleValidSubmit" Model="NewComment">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <div class="card">
+            <div class="card-title">
+                <span class="fas fa-comment"></span> Add Comment:
+            </div>
+            <div class="card-body" style="width:300px">
+                <InputTextArea @bind-Value="newUserComment" /><br />
+                <button type="submit" class="btn btn-primary">Add Comment</button>
+            </div>
+        </div>
+    </EditForm>
+</div>
+
+
+@code {
+    [Parameter]
+    public Guid ProjectGuid { get; set; }
+
+    [CascadingParameter]
+    private Task<AuthenticationState> authenticationStateTask { get; set; }
+
+    private Comment NewComment { get; set; }
+
+    private ICommentManager CommentManager => ProjectManager;
+
+    private IEnumerable<Comment> Comments;
+
+    [StringLength(1000, MinimumLength = 10, ErrorMessage = "Minimum length is 10 and maximum is 1000 characters.")]
+    private string newUserComment
+    {
+        get
+        {
+            return NewComment.Comments;
+        }
+        set
+        {
+            NewComment.Comments = value;
+        }
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        if (ProjectGuid == Guid.Empty)
+        {
+            throw new ArgumentNullException("Project GUID must be passed into component.");
+        }
+
+        NewComment = GenerateNewComment();
+
+        ProjectManagerService.ProjectIdeasChanged += (o, e) =>
+        {
+            ShouldUpdateState();
+        };
+
+        Comments = CommentManager.GetComments(ProjectGuid);
+    }
+
+    private void ShouldUpdateState()
+    {
+        InvokeAsync(() =>
+        {
+            Comments = CommentManager.GetComments(ProjectGuid);
+            this.StateHasChanged();
+        });
+    }
+
+    private Comment GenerateNewComment()
+    {
+        return new Comment(ProjectGuid);
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        var authState = await authenticationStateTask;
+        NewComment.UserEmail = authState.User?.Identity?.Name ?? string.Empty;
+        NewComment.UpdateDateTime = DateTime.Now;
+        CommentManager.AddComment(NewComment);
+        NewComment = new Comment(ProjectGuid);
+    }
+}

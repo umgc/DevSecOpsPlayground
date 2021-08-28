@@ -1,0 +1,378 @@
+﻿@inject ProjectManagerService ProjectManager
+@inject NavigationManager NavigationManager
+
+<div class="p-5" style="display:@tableState">
+    <EditForm Model="@idea" OnValidSubmit="@HandleValidSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <table class="table w-50 p-5">
+            <tr class="row w-25">
+                <td class="d-xl-table-cell">
+                    <label>
+                        First Name:
+                        <InputText id="firstName" @bind-Value="idea.FirstName" />
+                    </label>
+                </td>
+            </tr>
+            <tr class="row w-25">
+                <td class="d-xl-table-cell">
+                    <label>
+                        Last Name:
+                        <InputText id="lastName" @bind-Value="idea.LastName" />
+                    </label>
+                </td>
+            </tr>
+            <tr class="row w-25">
+                <td class="d-xl-table-cell">
+                    <label>
+                        Email:
+                        <InputText id="email" @bind-Value="idea.Email" />
+                    </label>
+                </td>
+            </tr>
+            <tr class="row w-25">
+                <td class="d-xl-table-cell">
+                    <label>
+                        Phone:
+                        <InputText id="phone" @bind-Value="idea.Phone" />
+                    </label>
+                </td>
+            </tr>
+            <tr class="row w-25">
+                <td class="d-xl-table-cell">
+                    <label>
+                        Project Title:
+                        <InputText id="projectTitle" @bind-Value="idea.ProjectTitle" />
+                    </label>
+                </td>
+            </tr>
+            <tr class="row w-25">
+                <td class="d-xl-table-cell">
+                    <label>
+                        Project Description:
+                        <InputTextArea id="projectDescription" @bind-Value="idea.ProjectDescription" />
+                    </label>
+                </td>
+            </tr>
+            <tr class="row w-25">
+                <td class="d-xl-table-cell">
+                    @if (this.ShowFileAttachments)
+                    {
+                        <span class="card-header" style="width:300px">Attachments:</span>
+                        @foreach (var file in this.idea.Attachments)
+                        {
+                            <div class="card">
+                                <span class="card-body" style="width:300px"><a href="/download/@file.Location" download="@file.Name" target="_top">@file.Name</a></span><br />
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <label>
+                            Attachment(s):
+                            <InputFile id="attachment" OnChange="LoadFiles" multiple accept=".doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,.ppt,.pptx,.pdf" />
+                        </label>
+                    }
+                </td>
+            </tr>
+            <tr class="row w-25">
+                <td class="d-xl-table-cell">
+                    <label>
+                        Website:
+                        <InputText id="url" @bind-Value="idea.Url" />
+                    </label>
+                </td>
+            </tr>
+            <tr class="row w-25">
+                <td class="d-xl-table-cell">
+                    <label>
+                        GitHub:
+                        <InputText id="gitHubUrl" @bind-Value="idea.Github" />
+                    </label>
+                </td>
+            </tr>
+            @if (this.ShowFormButton == FormButtons.Submit)
+            {
+                <tr class="row w-25">
+                    <td class="d-xl-table-cell">
+                        <label>
+                            Self Sponsored:
+                            <InputCheckbox id="isSponsor" @bind-Value="idea.IsSponsor" @onclick="SponsorCheckBox_Changed" />
+                        </label>
+                    </td>
+                </tr>
+            }
+        </table>
+
+        @if (!idea.IsSponsor)
+        {
+            <h4>Sponsor Information...</h4>
+            <table class="table w-50">
+                <tr class="row w-25">
+                    <td class="d-xl-table-cell">
+                        <label>
+                            Sponsor First Name:
+                            <InputText id="firstName" @bind-Value="idea.SponsorFirstName" />
+                        </label>
+                    </td>
+                </tr>
+                <tr class="row w-25">
+                    <td class="d-xl-table-cell">
+                        <label>
+                            Sponsor Last Name:
+                            <InputText id="lastName" @bind-Value="idea.SponsorLastName" />
+                        </label>
+                    </td>
+                </tr>
+                <tr class="row w-25">
+                    <td class="d-xl-table-cell">
+                        <label>
+                            Sponsor Email:
+                            <InputText id="email" @bind-Value="idea.SponsorEmail" />
+                        </label>
+                    </td>
+                </tr>
+                <tr class="row w-25">
+                    <td class="d-xl-table-cell">
+                        <label>
+                            Sponsor Phone:
+                            <InputText id="phone" @bind-Value="idea.SponsorPhone" />
+                        </label>
+                    </td>
+                </tr>
+            </table>
+        }
+
+        @if (this.ShowFormButton == FormButtons.Submit)
+        {
+            <button id="btnSubmit" type="submit" @onclick="SponsorCheck" class="btn btn-primary">Submit</button> <button type="reset" class="btn btn-danger">Reset</button>
+        }
+        else if (this.ShowFormButton == FormButtons.Approver)
+        {
+            <CascadingAuthenticationState>
+                <CommentsComponent ProjectGuid="idea.ProjectID" />
+            </CascadingAuthenticationState>
+
+            if (this.idea.IsDirty)
+            {
+                <button type="button" @onclick="UpdateRecordAsync" class="btn btn-primary">Update</button><span>&nbsp;</span>
+            }
+
+            <button type="button" class="btn btn-secondary" @onclick="ExportIdea">Export</button><span>&nbsp;</span>
+
+            <button type="button" class="btn btn-info" @onclick="CloseForm">Close</button><span>&nbsp;</span>
+
+            if (this.idea.Status.Equals("New"))
+            {
+                <button type="button" class="btn btn-success" @onclick="ApproveIdea">Approve</button><span>&nbsp;</span>
+            }
+
+            <button type="button" class="btn btn-danger" @onclick="DeleteIdea">Delete</button><span>&nbsp;</span>
+        }
+
+    </EditForm>
+</div>
+
+<div style="visibility:@waitBar">
+    Uploading ...
+    <div>
+        <Wander Center="true" />
+    </div>    
+
+    Thank you for the project idea!
+</div>
+
+@code{
+    public enum FormButtons
+    {
+        Submit,
+        Approver
+    }
+
+    public static bool IsUploading
+    {
+        get
+        {
+            return isUploading;
+        }
+    }
+
+    [Parameter]
+    public bool ShowFileAttachments { get; set; } = false;
+
+    [Parameter]
+    public bool ShowComments { get; set; } = false;
+
+    [Parameter]
+    public FormButtons ShowFormButton { get; set; } = FormButtons.Submit;
+
+    [Parameter]
+    public IIdea Parent { get; set; } = null;
+
+    [Parameter]
+    public ProjectInformation ProjectIdea
+    {
+        get
+        {
+            return idea;
+        }
+        set
+        {
+            idea = value;
+        }
+    }
+
+    [CascadingParameter]
+    private Task<AuthenticationState> authenticationState { get; set; }
+
+    private ProjectInformation idea = new ProjectInformation();
+
+    private string DownloadFileName => $"{idea.ProjectTitle}-Export.pdf";
+
+    private string Error { get; set; }
+
+    private List<IProjectFile> loadedFiles = new();
+
+    private static bool isUploading = false;
+
+    private string tableState = "block";
+
+    private string waitBar => tableState.Equals("none") ? "visible" : "hidden";
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        if (this.ShowFormButton == FormButtons.Approver)
+        {
+            this.idea.IsDirty = false;
+        }
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        this.tableState = "none";
+
+        await Task.Run( async () =>
+        {
+            var uploaded = await ProjectManager.AddAsync(idea);
+
+            if (uploaded)
+            {
+                idea.IsDirty = false;
+                loadedFiles.Clear();
+                idea = new ProjectInformation();
+            }
+
+            await Task.Delay(2000);
+        });
+
+        this.tableState = "block";
+    }
+
+    private void LoadFiles(InputFileChangeEventArgs inputFile)
+    {
+        this.loadedFiles.Clear();
+        foreach (var file in inputFile.GetMultipleFiles().Take(ProjectManager.MaxNumberOfFiles))
+        {
+            if (file.Size > ProjectManager.MaxMBSizePerFile)
+            {
+                continue;
+            }
+
+            var projectFile = new ProjectFile { BrowserFile = file };
+
+            this.loadedFiles.Add(projectFile);
+        }
+
+        idea.SetAttachments(loadedFiles);
+    }
+
+    private void SponsorCheckBox_Changed(EventArgs e)
+    {
+        this.idea.IsSponsor = !this.idea.IsSponsor;
+
+        if (!this.idea.IsSponsor)
+        {
+            ResetSponsor();
+        }
+    }
+
+    /// <summary>
+    /// Sponsor is required so if the project is self sponsored, fill in own information on submit.
+    /// </summary>
+    /// <param name="e"></param>
+    private void SponsorCheck(EventArgs e)
+    {
+        if (idea.IsSponsor)
+        {
+            idea.SponsorFirstName = idea.FirstName;
+            idea.SponsorLastName = idea.LastName;
+            idea.SponsorEmail = idea.Email;
+            idea.SponsorPhone = idea.Phone;
+        }
+    }
+
+    private void ResetSponsor()
+    {
+        idea.SponsorFirstName = string.Empty;
+        idea.SponsorLastName = string.Empty;
+        idea.SponsorEmail = string.Empty;
+        idea.SponsorPhone = string.Empty;
+    }
+
+    private async Task UpdateRecordAsync(EventArgs e)
+    {
+        if (!idea.IsDirty)
+        {
+            return;
+        }
+
+        idea.IsDirty = !await ProjectManager.UpdateAsync(idea);
+    }
+
+    private async Task ApproveIdea(MouseEventArgs e)
+    {
+        this.idea.Status = "Approved";
+        await UpdateRecordAsync(e);
+    }
+
+    private async Task ExportIdea(MouseEventArgs e)
+    {
+        var location = await this.ProjectManager.ExportAsync(idea);
+
+        NavigationManager.NavigateTo($"{ProjectManager.FileManager.DownloadPath}{location}", true);
+
+        this.CloseForm(EventArgs.Empty);
+    }
+
+    private async Task DeleteIdea(MouseEventArgs e)
+    {
+        var authState = await authenticationState;
+        string error = await this.ProjectManager.DeleteAsync(idea, authState.User);
+
+        if (string.IsNullOrEmpty(error))
+        {
+            this.CloseForm(EventArgs.Empty);
+        }
+        else
+        {
+            this.Error = error;
+        }
+    }
+
+    private void CloseForm(EventArgs e)
+    {
+        if (Parent is null)
+        {
+            return;
+        }
+
+        Parent.CloseIdea(this);
+    }
+
+    private void DownloadFile(IProjectFile file)
+    {
+        NavigationManager.NavigateTo($"/download/{file.Location}", true);
+    }
+}

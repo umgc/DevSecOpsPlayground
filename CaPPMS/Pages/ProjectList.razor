@@ -1,0 +1,12 @@
+﻿@using CaPPMS.Data
+@using CaPPMS.Model
+@inject ProjectManagerService ProjectManager
+
+@page "/projectlist"
+
+    <CascadingAuthenticationState>
+        <ProjectTable DataSource="new List<ProjectInformation>(ProjectManager.ProjectIdeas.Values.OrderBy(i => i.Status).ToList())" CssClass="table border p-2" />
+    </CascadingAuthenticationState>
+
+@code {
+}

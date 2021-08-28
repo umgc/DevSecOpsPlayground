@@ -1,0 +1,115 @@
+﻿@using CaPPMS.Data
+
+@inject FaqManagerService faqManager
+
+@page "/faq"
+
+
+<h3>FAQs</h3>
+
+ <div class="intro">
+
+        The purpose of this page is for users to ask questions regarding the application as well as review previously asked questions.
+
+        Currently the form only allows users to input a question and not a reply to other users questions because we do not want just anyone to be able to respond to the questions.
+
+        The questions need to be reviewed by the administrator and then answered in order to maintain accuracy and professionalism. 
+ </div>
+
+ <div class="m-2 p-2 rounded">
+
+        <EditForm OnValidSubmit="@HandleValidSubmit" Model="NewFaq">
+          
+            <div class="card" id="@NewFaq.Guid">
+
+                <span class="fas" style="color:black;font-weight:bold"> Add Topic: </span>
+
+                <InputText @bind-Value=" NewFaq.Topic" /><br />
+
+                <span class="fas" style="color:black;font-weight:bold"> Add Question: </span>
+
+                <InputText @bind-Value=" NewFaq.Question" /><br />
+
+                <span class="fas" style="color:black;font-weight:bold"> Add Author: </span>
+
+                <InputText @bind-Value=" NewFaq.Author" /><br />
+
+                <button type="submit" class="btn-primary">Add Faq</button>
+
+            </div>
+
+        </EditForm>
+
+</div>
+
+<div class="m-2">
+
+    @foreach (var faq in faqManager.GetFaqs)
+
+    {
+        <EditForm Model="NewFaq" OnValidSubmit="@HandleValidSubmit">
+            
+            <div class="card" id="@faq.Guid">
+
+                <span class="fas" style="color:black;font-weight:bold"> Topic:  </span>
+
+                    <span> @faq.Topic </span><br />
+
+                    <span class="fas" style="color:black;font-weight:bold"> Question:</span>
+
+                    <span> @faq.Question </span><br />
+                    
+                    <span class="fas" style="color:black;font-weight:bold"> Author:  </span>
+                   
+                    <span> @faq.Author </span><br />
+            </div>
+
+        </EditForm>
+    }
+
+</div>
+
+
+@code {
+
+    private FaqInformation NewFaq { get; set; } = new();
+
+    private string Question { get; set; } = string.Empty;
+
+    private string Author { get; set; } = string.Empty;
+
+    private string Reply { get; set; } = string.Empty;
+
+    private string Topic { get; set; } = string.Empty;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        FaqManagerService.FaqsChanged += (o, e) =>
+        {
+            ShouldUpdateState();
+        };
+    }
+
+    private void ShouldUpdateState()
+    {
+        InvokeAsync(() =>
+        {
+            this.StateHasChanged();
+        });
+    }
+
+    private FaqInformation GenerateNewFaq()
+    {
+        return new FaqInformation();
+    }
+
+    private void HandleValidSubmit()
+    {
+
+        faqManager.Add(NewFaq);
+
+        NewFaq = new FaqInformation();
+    }
+}

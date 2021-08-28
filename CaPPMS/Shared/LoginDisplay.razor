@@ -1,0 +1,13 @@
+﻿<AuthorizeView>
+    <Authorized>
+        <span class="color:red">&nbsp;
+            <span class="fas fa-lock-open"></span> @context.User.Identity.Name!
+            <a class="btn" href="MicrosoftIdentity/Account/SignOut">Log out</a>
+        </span>
+    </Authorized>
+    <NotAuthorized>
+        <span>&nbsp;
+            <span class="fas fa-user-lock"></span> <a class="btn" href="MicrosoftIdentity/Account/SignIn">Log in</a>
+        </span>
+    </NotAuthorized>
+</AuthorizeView>
