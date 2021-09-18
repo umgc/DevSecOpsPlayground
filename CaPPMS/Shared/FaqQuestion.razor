@@ -1,0 +1,43 @@
+﻿@using CaPPMS.Model
+@namespace CaPPMS.Shared
+
+<div class="panel panel-default border @CollapseQuestion">
+    <div class="panel-body">
+        <div class="container-fluid">
+            <div class="row">
+                <div>
+                    <button @onclick="e => this.IsCollapsedReply = !this.IsCollapsedReply">
+                        @(this.IsCollapsedReply ? "+" : "-")
+                    </button>
+                </div>
+                <div class="font-italic" style="text-align:left">&nbsp;@faqInfo.Question</div>
+            </div>
+            <FaqReply
+                CollapseReply="@(this.IsCollapsedReply ? "collapse" : "")"
+                FaqInformation="@faqInfo">
+
+            </FaqReply>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string CollapseQuestion { get; set; } = "collapse";
+    private bool IsCollapsedReply = true;
+
+    private FaqInformation faqInfo = new FaqInformation();
+
+    [Parameter]
+    public FaqInformation FaqInformation
+    {
+        get
+        {
+            return faqInfo;
+        }
+        set
+        {
+            faqInfo = value;
+        }
+    }
+}
