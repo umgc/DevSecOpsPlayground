@@ -30,10 +30,14 @@ namespace CaPPMS.Data
                 var faqs = JsonConvert.DeserializeObject<Dictionary<Guid, FaqInformation>>(File.ReadAllText(faqDbFile.FullName));
 
                 foreach (var faq in faqs)
-
                 {
                     _ = FaqInfo.TryAdd(faq.Key, faq.Value);
-
+                    // Somehow the Key is not being set to the value in the object. This can be further explored
+                    // but this is a quick fix that allows for deletion.
+                    if (faq.Value.Guid != faq.Key)
+                    {
+                        faq.Value.Guid = faq.Key;
+                    }
                 }
             }
 
@@ -58,7 +62,7 @@ namespace CaPPMS.Data
 
         public bool Remove(FaqInformation faqInformation)
         {
-            if (!FaqInfo.TryRemove(faqInformation.Guid, out FaqInformation faq))
+            if (!FaqInfo.TryRemove(faqInformation.Guid, out faqInformation))
             {
                 return false;
             }
@@ -85,22 +89,20 @@ namespace CaPPMS.Data
             var tempFile = new FileInfo(Path.Combine(localFaqDb + ".temp"));
 
             // Let's build a gate to control flow. It might be a bit extra but it should be fun.
-            _ = Task.Run(async () =>
-
+            Task.Run(async () =>
             {
                 while (File.Exists(tempFile.FullName))
                 {
                     // Use a prime number to reduce the chance of a race condition.
                     await Task.Delay(7);
                 }
-            }
-            ).ContinueWith((context) =>
+            }).ContinueWith((context) =>
             {
                 // Update the file backed db.
                 lock (FaqInfo)
                 {
                     // The task to move some time happens before the os knows that it exists =0
-                    _ = Task.Run(async () =>
+                    Task.Run(async () =>
                     {
                         File.WriteAllText(tempFile.FullName, JsonConvert.SerializeObject(FaqInfo, Formatting.Indented));
 
@@ -108,7 +110,6 @@ namespace CaPPMS.Data
                         {
                             await Task.Delay(10);
                         }
-
                         tempFile.MoveTo(localFaqDb, true);
                     });
                 }

@@ -4,7 +4,7 @@ namespace CaPPMS.Model
 {
     public class FaqInformation
     {
-        public Guid Guid { get; } = Guid.NewGuid();
+        public Guid Guid { get; set; } = Guid.NewGuid();
 
         public string Question { get; set; } = string.Empty;
 
