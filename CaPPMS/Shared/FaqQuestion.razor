@@ -1,18 +1,26 @@
 ﻿@using CaPPMS.Model
 @namespace CaPPMS.Shared
 
-<div class="@Collapse">
-    <span class="fas">@faqInfo.Question</span>
-    <span class="fas">@faqInfo.Reply</span>
+<div class="panel panel-default border @Collapse">
+    <div class="panel-body">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="font-italic">@faqInfo.Question</div>
+            </div>
+            <div class="row">
+                <div>@faqInfo.Reply</div>
+            </div>
+        </div>
+    </div>
 </div>
 
 @code {
     [Parameter]
     public string Collapse { get; set; } = "collapse"; // hide by default
-    private bool Collapsed = true;
 
     private FaqInformation faqInfo = new FaqInformation();
 
+    [Parameter]
     public FaqInformation FaqInformation
     {
         get

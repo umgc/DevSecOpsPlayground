@@ -4,11 +4,17 @@
 <div>
     @foreach (FaqInformation entry in this.faqTopicCollapseMap.Keys)
     {
-        <span class="fas">@entry.Topic</span>
-        <button @onclick="e => this.faqTopicCollapseMap[entry] = !this.faqTopicCollapseMap[entry]">
-            @(this.faqTopicCollapseMap[entry] ? "+" : "-");
-        </button>
-        <FaqQuestion Collapse="@(this.faqTopicCollapseMap[entry] ? "collapse" : "")">
+        <div class="row">
+            <div class="col-sm-4">
+                <button @onclick="e => this.faqTopicCollapseMap[entry] = !this.faqTopicCollapseMap[entry]">
+                    @(this.faqTopicCollapseMap[entry] ? "+" : "-")
+                </button>
+            </div>
+            <div class="col-sm-2 font-weight-bold">@entry.Topic</div>
+        </div>
+        <FaqQuestion 
+            Collapse="@(this.faqTopicCollapseMap[entry] ? "collapse" : "")"
+            FaqInformation="@entry">
 
         </FaqQuestion>
     }
@@ -31,7 +37,7 @@
                 this.faqTopicCollapseMap.Clear();
                 foreach (FaqInformation faqInfo in value)
                 {
-                    this.faqTopicCollapseMap.Add(faqInfo, false);
+                    this.faqTopicCollapseMap.Add(faqInfo, true);
                 }
             }
         }
