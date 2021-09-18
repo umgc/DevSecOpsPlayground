@@ -1,0 +1,39 @@
+﻿@using CaPPMS.Model
+@namespace CaPPMS.Shared
+
+<div>
+    @foreach (FaqInformation entry in this.faqTopicCollapseMap.Keys)
+    {
+        <span class="fas">@entry.Topic</span>
+        <button @onclick="e => this.faqTopicCollapseMap[entry] = !this.faqTopicCollapseMap[entry]">
+            @(this.faqTopicCollapseMap[entry] ? "+" : "-");
+        </button>
+        <FaqQuestion Collapse="@(this.faqTopicCollapseMap[entry] ? "collapse" : "")">
+
+        </FaqQuestion>
+    }
+</div>
+
+@code{
+    private Dictionary<FaqInformation, bool> faqTopicCollapseMap = new Dictionary<FaqInformation, bool>();
+
+    [Parameter]
+    public IEnumerable<FaqInformation> FaqKeys
+    {
+        get
+        {
+            return this.faqTopicCollapseMap.Keys;
+        }
+        set
+        {
+            if (value is IEnumerable<FaqInformation>)
+            {
+                this.faqTopicCollapseMap.Clear();
+                foreach (FaqInformation faqInfo in value)
+                {
+                    this.faqTopicCollapseMap.Add(faqInfo, false);
+                }
+            }
+        }
+    }
+}

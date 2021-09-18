@@ -1,0 +1,27 @@
+﻿@using CaPPMS.Model
+@namespace CaPPMS.Shared
+
+<div class="@Collapse">
+    <span class="fas">@faqInfo.Question</span>
+    <span class="fas">@faqInfo.Reply</span>
+</div>
+
+@code {
+    [Parameter]
+    public string Collapse { get; set; } = "collapse"; // hide by default
+    private bool Collapsed = true;
+
+    private FaqInformation faqInfo = new FaqInformation();
+
+    public FaqInformation FaqInformation
+    {
+        get
+        {
+            return faqInfo;
+        }
+        set
+        {
+            faqInfo = value;
+        }
+    }
+}
