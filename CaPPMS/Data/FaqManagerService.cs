@@ -89,7 +89,7 @@ namespace CaPPMS.Data
             var tempFile = new FileInfo(Path.Combine(localFaqDb + ".temp"));
 
             // Let's build a gate to control flow. It might be a bit extra but it should be fun.
-            Task.Run(async () =>
+            _ = Task.Run(async () =>
             {
                 while (File.Exists(tempFile.FullName))
                 {
@@ -102,7 +102,7 @@ namespace CaPPMS.Data
                 lock (FaqInfo)
                 {
                     // The task to move some time happens before the os knows that it exists =0
-                    Task.Run(async () =>
+                    _ =Task.Run(async () =>
                     {
                         File.WriteAllText(tempFile.FullName, JsonConvert.SerializeObject(FaqInfo, Formatting.Indented));
 
