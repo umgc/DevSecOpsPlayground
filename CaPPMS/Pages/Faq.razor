@@ -42,35 +42,39 @@
 
 </div>
 
-<div class="m-2">
+ <div class="m-2">
+     
+     @foreach (var faq in faqManager.GetFaqs)
 
-    @foreach (var faq in faqManager.GetFaqs)
+     {
+         <EditForm Model="NewFaq" OnValidSubmit="@HandleValidSubmit">
 
-    {
-        <EditForm Model="NewFaq" OnValidSubmit="@HandleValidSubmit">
-            
-            <div class="card" id="@faq.Guid">
+             <div class="card" id="@faq.Guid">
 
-                <span class="fas" style="color:black;font-weight:bold"> Topic:  </span>
+                 <span class="fas" style="color:black;font-weight:bold"> Topic:  </span>
 
-                    <span> @faq.Topic </span><br />
+                 <span> @faq.Topic </span><br />
 
-                    <span class="fas" style="color:black;font-weight:bold"> Question:</span>
+                 <span class="fas" style="color:black;font-weight:bold"> Question:</span>
 
-                    <span> @faq.Question </span><br />
-                    
-                    <span class="fas" style="color:black;font-weight:bold"> Author:  </span>
-                   
-                    <span> @faq.Author </span><br />
-            </div>
+                 <span> @faq.Question </span><br />
 
-        </EditForm>
-    }
+                 <span class="fas" style="color:black;font-weight:bold"> Author:  </span>
 
-</div>
+                 <span> @faq.Author </span><br />
+             </div>
+
+         </EditForm>
+     }
+
+ </div>
 
 
 @code {
+
+    [Parameter]
+    public string Collapse { get; set; } = "collapse"; // hide by default
+    private bool Collapsed = true;
 
     private FaqInformation NewFaq { get; set; } = new();
 
