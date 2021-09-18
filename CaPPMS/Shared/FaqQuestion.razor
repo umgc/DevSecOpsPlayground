@@ -5,12 +5,12 @@
     <div class="panel-body">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-sm-1">
+                <div>
                     <button @onclick="e => this.IsCollapsedReply = !this.IsCollapsedReply">
                         @(this.IsCollapsedReply ? "+" : "-")
                     </button>
                 </div>
-                <div class="col-sm-11 font-italic fa-align-left">@faqInfo.Question</div>
+                <div class="font-italic" style="text-align:left">&nbsp;@faqInfo.Question</div>
             </div>
             <FaqReply
                 CollapseReply="@(this.IsCollapsedReply ? "collapse" : "")"

@@ -5,12 +5,12 @@
     @foreach (FaqInformation entry in this.faqTopicCollapseMap.Keys)
     {
         <div class="row">
-            <div class="col-sm-1">
+            <div>
                 <button @onclick="e => this.faqTopicCollapseMap[entry] = !this.faqTopicCollapseMap[entry]">
                     @(this.faqTopicCollapseMap[entry] ? "+" : "-")
                 </button>
             </div>
-            <div class="col-sm-11 font-weight-bold fa-align-left">@entry.Topic</div>
+            <div class="font-weight-bold" style="text-align:left">&nbsp;@entry.Topic</div>
         </div>
         <FaqQuestion 
             CollapseQuestion="@(this.faqTopicCollapseMap[entry] ? "collapse" : "")"
