@@ -42,16 +42,16 @@
 
 </div>
 
-<div class="m-2">
+ <div class="m-2">
+     
+     @foreach (var faq in faqManager.GetFaqs)
 
-    @foreach (var faq in faqManager.GetFaqs)
+     {
+         <EditForm Model="NewFaq" OnValidSubmit="@HandleValidSubmit">
 
-    {
-        <EditForm Model="NewFaq" OnValidSubmit="@HandleValidSubmit">
-            
-            <div class="card" id="@faq.Guid">
+             <div class="card" id="@faq.Guid">
 
-                <span class="fas" style="color:black;font-weight:bold"> Topic:  </span>
+                 <span class="fas" style="color:black;font-weight:bold"> Topic:  </span>
 
                 <span> @faq.Topic </span><br />
 
@@ -72,14 +72,13 @@
                  </span>
              </div>
 
-        </EditForm>
-    }
+         </EditForm>
+     }
 
-</div>
+ </div>
 
 
 @code {
-
     private FaqInformation NewFaq { get; set; } = new();
 
     private string Question { get; set; } = string.Empty;
