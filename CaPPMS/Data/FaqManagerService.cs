@@ -32,12 +32,6 @@ namespace CaPPMS.Data
                 foreach (var faq in faqs)
                 {
                     _ = FaqInfo.TryAdd(faq.Key, faq.Value);
-                    // Somehow the Key is not being set to the value in the object. This can be further explored
-                    // but this is a quick fix that allows for deletion.
-                    if (faq.Value.Guid != faq.Key)
-                    {
-                        faq.Value.Guid = faq.Key;
-                    }
                 }
             }
 
