@@ -1,0 +1,94 @@
+﻿@using CaPPMS.Model
+@inject FaqManagerService FaqManager
+@namespace CaPPMS.Shared
+
+<div>
+    @foreach (FaqInformation unansweredFaq in FaqManager.FaqInfo.Values)
+    {
+        @if (unansweredFaq.Reply.Length == 0)
+        {
+            <div class="row">
+                <div>
+                    <button @onclick="e => this.SelectedFaq = unansweredFaq">
+                        @unansweredFaq.Question
+                    </button>
+                </div>
+            </div>
+        }
+
+    }
+</div>
+
+@if (SelectedFaq != null)
+{
+    <EditForm Model="SelectedFaq">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <div class="p-5">
+            <table class="table w-50 p-5">
+                <tr class="row w-25">
+                    <td class="d-xl-table-cell">
+                        <label>
+                            Topic:
+                            <InputText id="topic" @bind-Value="this.SelectedFaq.Topic" />
+                        </label>
+                    </td>
+                </tr>
+                <tr class="row w-25">
+                    <td class="d-xl-table-cell">
+                        <label>
+                            Question:
+                            <InputText id="question" @bind-Value="this.SelectedFaq.Question" />
+                        </label>
+                    </td>
+                </tr>
+                <tr class="row w-25">
+                    <td class="d-xl-table-cell">
+                        <label>
+                            Reply:
+                            <InputText id="reply" @bind-Value="this.SelectedFaq.Reply" />
+                        </label>
+                    </td>
+                </tr>
+            </table>
+            <button @onclick="e => this.CancelUpdate()">
+                Cancel
+            </button>
+            <button @onclick="e => this.DeleteRecord()">
+                Delete
+            </button>
+            <button @onclick="e => this.UpdateRecord()">
+                Submit
+            </button>
+        </div>
+    </EditForm>
+}
+
+@code {
+    private FaqInformation SelectedFaq { get; set; } = null;
+
+    private void CancelUpdate()
+    {
+        this.SelectedFaq = null;
+    }
+    private void DeleteRecord()
+    {
+        if (this.SelectedFaq == null)
+        {
+            Console.Error.WriteLine("Couldn't Delete Faq");
+            return;
+        }
+        FaqManager.Remove(SelectedFaq);
+        SelectedFaq = null;
+    }
+    private void UpdateRecord()
+    {
+        if (this.SelectedFaq == null)
+        {
+            Console.Error.WriteLine("Couldn't Update Faq");
+            return;
+        }
+        FaqManager.Update(SelectedFaq);
+        SelectedFaq = null;
+    }
+}
