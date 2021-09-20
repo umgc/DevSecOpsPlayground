@@ -2,20 +2,20 @@
 @namespace CaPPMS.Shared
 
 <div>
-    @foreach (string topic in this.faqTopicCollapeMap.Keys)
+    @foreach (string topic in this.faqTopicCollapseMap.Keys)
     {
         <div class="row">
             <div>
-                <button @onclick="e => this.faqTopicCollapeMap[topic].isCollapsed = !this.faqTopicCollapeMap[topic].isCollapsed">
-                    @(this.faqTopicCollapeMap[topic].isCollapsed ? "+" : "-")
+                <button @onclick="e => this.faqTopicCollapseMap[topic].isCollapsed = !this.faqTopicCollapseMap[topic].isCollapsed">
+                    @(this.faqTopicCollapseMap[topic].isCollapsed ? "+" : "-")
                 </button>
             </div>
             <div class="font-weight-bold" style="text-align:left">&nbsp;@topic</div>
         </div>
-        foreach (FaqInformation faqInfo in this.faqTopicCollapeMap[topic].faqsWithTopic)
+        foreach (FaqInformation faqInfo in this.faqTopicCollapseMap[topic].faqsWithTopic)
         {
             <FaqQuestion 
-                CollapseQuestion="@(this.faqTopicCollapeMap[topic].isCollapsed ? "collapse" : "")"
+                CollapseQuestion="@(this.faqTopicCollapseMap[topic].isCollapsed ? "collapse" : "")"
                 FaqInformation="@faqInfo">
             </FaqQuestion>
         }
@@ -32,7 +32,7 @@
         public bool isCollapsed = true;
     }
 
-    private Dictionary<string, FaqTopicCollaper> faqTopicCollapeMap = new Dictionary<string, FaqTopicCollaper>();
+    private Dictionary<string, FaqTopicCollaper> faqTopicCollapseMap = new Dictionary<string, FaqTopicCollaper>();
 
     [Parameter]
     public IEnumerable<FaqInformation> FaqKeys
@@ -41,14 +41,14 @@
         {
             if (value is IEnumerable<FaqInformation>)
             {
-                this.faqTopicCollapeMap.Clear();
+                this.faqTopicCollapseMap.Clear();
                 foreach (FaqInformation faqInfo in value)
                 {
-                    if (!this.faqTopicCollapeMap.ContainsKey(faqInfo.Topic))
+                    if (!this.faqTopicCollapseMap.ContainsKey(faqInfo.Topic))
                     {
-                        this.faqTopicCollapeMap.Add(faqInfo.Topic, new FaqTopicCollaper());
+                        this.faqTopicCollapseMap.Add(faqInfo.Topic, new FaqTopicCollaper());
                     }
-                    this.faqTopicCollapeMap[faqInfo.Topic].faqsWithTopic.Add(faqInfo);
+                    this.faqTopicCollapseMap[faqInfo.Topic].faqsWithTopic.Add(faqInfo);
                 }
             }
         }
