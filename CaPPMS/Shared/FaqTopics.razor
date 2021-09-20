@@ -123,5 +123,6 @@
         }
         FaqManager.Update(this.SelectedFaq);
         this.SelectedFaq = null;
+        this.FaqKeys = new List<FaqInformation>(FaqManager.GetFaqs);
     }
 }
