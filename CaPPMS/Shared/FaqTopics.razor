@@ -20,9 +20,11 @@
             </FaqQuestion>
             @if (!this.faqTopicCollapseMap[topic].isCollapsed)
             {
-                <button @onclick="e => this.SelectedFaq = faqInfo">
-                    Modify
-                </button>
+                @if (CanDisplay) { 
+                    <button @onclick="e => this.OpenModify(faqInfo)">
+                        Modify
+                    </button>
+                }
             }
         }
     }
@@ -35,6 +37,7 @@
             <DataAnnotationsValidator />
             <ValidationSummary />
             <div class="p-5">
+                <h2>Modify FAQ</h2>
                 <table class="table w-50 p-5">
                     <tr class="row w-25">
                         <td class="d-xl-table-cell">
@@ -61,7 +64,7 @@
                         </td>
                     </tr>
                 </table>
-                <button @onclick="e => this.SelectedFaq = null">
+                <button @onclick="e => this.CancelModify()">
                     Cancel
                 </button>
                 <button @onclick="e => this.UpdateRecord()">
@@ -84,8 +87,11 @@
     private Dictionary<string, FaqTopicCollaper> faqTopicCollapseMap = new Dictionary<string, FaqTopicCollaper>();
 
     public bool showPopup = false;
-    private FaqInformation SelectedFaq = null;
+    public FaqInformation SelectedFaq { get; set; } = null;
 
+    [Parameter] public EventCallback<bool> IsSelectedChanged { get; set; }
+    [Parameter] public bool IsSelected { get; set; }
+    [Parameter] public bool CanDisplay { get; set; }
     [Parameter]
     public IEnumerable<FaqInformation> FaqKeys
     {
@@ -114,6 +120,14 @@
         }
 
         FaqManager.Add(this.SelectedFaq);
+        this.IsSelected = false;
+        IsSelectedChanged.InvokeAsync(IsSelected);
+    }
+    private void CancelModify()
+    {
+        this.SelectedFaq = null;
+        this.IsSelected = false;
+        IsSelectedChanged.InvokeAsync(IsSelected);
     }
     private void UpdateRecord()
     {
@@ -124,5 +138,13 @@
         FaqManager.Update(this.SelectedFaq);
         this.SelectedFaq = null;
         this.FaqKeys = new List<FaqInformation>(FaqManager.GetFaqs);
+        this.IsSelected = false;
+        IsSelectedChanged.InvokeAsync(IsSelected);
+    }
+    private void OpenModify(FaqInformation faqInfo)
+    {
+        this.SelectedFaq = faqInfo;
+        this.IsSelected = true;
+        IsSelectedChanged.InvokeAsync(IsSelected);
     }
 }

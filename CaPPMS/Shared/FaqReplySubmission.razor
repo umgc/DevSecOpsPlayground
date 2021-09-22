@@ -9,9 +9,14 @@
         {
             <div class="row">
                 <div>
-                    <button @onclick="e => this.SelectedFaq = unansweredFaq">
+                    @if (CanDisplay)
+                    {
+                        <button @onclick="e => this.AnswerQuestion(unansweredFaq)">
+                            @unansweredFaq.Question
+                        </button>
+                    } else {
                         @unansweredFaq.Question
-                    </button>
+                    }
                 </div>
             </div>
         }
@@ -26,6 +31,7 @@
             <DataAnnotationsValidator />
             <ValidationSummary />
             <div class="p-5">
+                <h2>Reply to Question</h2>
                 <table class="table w-50 p-5">
                     <tr class="row w-25">
                         <td class="d-xl-table-cell">
@@ -67,11 +73,18 @@
 }
 
 @code {
-    private FaqInformation SelectedFaq { get; set; } = null;
+    [Parameter] public EventCallback<bool> IsSelectedChanged { get; set; }
+    [Parameter] public bool IsSelected { get; set; }
+    [Parameter] public bool CanDisplay { get; set; }
+
+    public FaqInformation SelectedFaq { get; set; } = null;
 
     private void CancelUpdate()
     {
         this.SelectedFaq = null;
+
+        this.IsSelected = false;
+        IsSelectedChanged.InvokeAsync(IsSelected);
     }
     private void DeleteRecord()
     {
@@ -82,6 +95,9 @@
         }
         FaqManager.Remove(SelectedFaq);
         SelectedFaq = null;
+
+        this.IsSelected = false;
+        IsSelectedChanged.InvokeAsync(IsSelected);
     }
     private void UpdateRecord()
     {
@@ -92,5 +108,14 @@
         }
         FaqManager.Update(SelectedFaq);
         SelectedFaq = null;
+
+        this.IsSelected = false;
+        IsSelectedChanged.InvokeAsync(IsSelected);
+    }
+    private void AnswerQuestion(FaqInformation unansweredFaq)
+    {
+        this.SelectedFaq = unansweredFaq;
+        this.IsSelected = true;
+        IsSelectedChanged.InvokeAsync(IsSelected);
     }
 }

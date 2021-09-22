@@ -101,7 +101,7 @@ navLink-active {
 
 .popOver {
     position: fixed;
-    top: 10%;
+    top: 15%;
     left: 20%;
     right:20%;
     background-color: white;
