@@ -57,12 +57,18 @@
 
                  <span class="fas" style="color:black;font-weight:bold"> Question:</span>
 
-                 <span> @faq.Question </span><br />
+                    <span> @faq.Question </span><br />
+                    
+                    <span class="fas" style="color:black;font-weight:bold"> Author:  </span>
+                   
+                    <span> @faq.Author </span><br />
 
-                 <span class="fas" style="color:black;font-weight:bold"> Author:  </span>
-
-                 <span> @faq.Author </span><br />
-             </div>
+                    <span> <button class="btn btn-primary" 
+                                   type="button"
+                                   @onclick="((e) => faqManager.Remove(faq as FaqInformation))">
+                                DELETE
+                            </button></span>
+            </div>
 
          </EditForm>
      }

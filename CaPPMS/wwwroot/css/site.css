@@ -100,9 +100,10 @@ navLink-active {
 }
 
 .popOver {
-    position: absolute;
+    position: fixed;
     top: 10%;
-    left: 40%;
+    left: 20%;
+    right:20%;
     background-color: white;
     height: 70%;
     margin: auto;
@@ -129,4 +130,17 @@ navLink-active {
     width : 300px;
     padding: 2px;
     margin: auto;
+}
+
+.sidebar {
+    height: 100%;
+    width: 150px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    margin-top:100px;
+}
+
+.body-text {
+    margin-right: 150px;
 }

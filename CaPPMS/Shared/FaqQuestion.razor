@@ -22,8 +22,7 @@
 </div>
 
 @code {
-    [Parameter]
-    public string CollapseQuestion { get; set; } = "collapse";
+    [Parameter] public string CollapseQuestion { get; set; } = "collapse";
     private bool IsCollapsedReply = true;
 
     private FaqInformation faqInfo = new FaqInformation();

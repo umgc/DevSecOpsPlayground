@@ -6,15 +6,14 @@
 
 <h3>FAQ List</h3>
 
-<div class="row">
-    <div class="col-9">
-        <FaqTopics FaqKeys="new List<FaqInformation>(FaqManager.GetFaqs)" />
-    </div>
-    <div class="col-3">
-        <FaqQuestionSubmission></FaqQuestionSubmission>
-        <FaqReplySubmission></FaqReplySubmission>
-    </div>
+<div class="sidebar" style="width:25%">
+    <FaqQuestionSubmission></FaqQuestionSubmission>
+    <FaqReplySubmission></FaqReplySubmission>
 </div>
+<div class="body-text">
+    <FaqTopics FaqKeys="new List<FaqInformation>(FaqManager.GetFaqs)" />
+</div>
+
 @code {
 
 }
