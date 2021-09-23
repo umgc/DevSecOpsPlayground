@@ -15,15 +15,11 @@
         </div>
         @foreach(FaqInformation faqInfo in this.faqTopicCollapseMap[topic].faqsWithTopic)
         {
-            <FaqQuestion CollapseQuestion="@(this.faqTopicCollapseMap[topic].isCollapsed ? "collapse" : "")"
-                         FaqInformation="@faqInfo">
+            <FaqQuestion 
+                CollapseQuestion="@(this.faqTopicCollapseMap[topic].isCollapsed ? "collapse" : "")"
+                FaqInformation="@faqInfo"
+                OnSelectedQuestion="OpenModify">
             </FaqQuestion>
-            @if (!this.faqTopicCollapseMap[topic].isCollapsed)
-            {
-                <button @onclick="e => this.OpenModify(faqInfo)">
-                    Modify
-                </button>
-            }
         }
     }
 </div>
