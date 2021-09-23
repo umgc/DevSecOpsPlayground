@@ -9,14 +9,9 @@
         {
             <div class="row">
                 <div>
-                    @if (CanDisplay)
-                    {
-                        <button @onclick="e => this.AnswerQuestion(unansweredFaq)">
-                            @unansweredFaq.Question
-                        </button>
-                    } else {
+                    <button @onclick="e => this.AnswerQuestion(unansweredFaq)">
                         @unansweredFaq.Question
-                    }
+                    </button>
                 </div>
             </div>
         }
@@ -24,98 +19,17 @@
     }
 </div>
 
-@if (SelectedFaq != null)
-{
-    <div class="popOver">
-        <EditForm Model="SelectedFaq">
-            <DataAnnotationsValidator />
-            <ValidationSummary />
-            <div class="p-5">
-                <h2>Reply to Question</h2>
-                <table class="table w-50 p-5">
-                    <tr class="row w-25">
-                        <td class="d-xl-table-cell">
-                            <label>
-                                Topic:
-                                <InputText id="topic" @bind-Value="this.SelectedFaq.Topic" />
-                            </label>
-                        </td>
-                    </tr>
-                    <tr class="row w-25">
-                        <td class="d-xl-table-cell">
-                            <label>
-                                Question:
-                                <InputText id="question" @bind-Value="this.SelectedFaq.Question" />
-                            </label>
-                        </td>
-                    </tr>
-                    <tr class="row w-25">
-                        <td class="d-xl-table-cell">
-                            <label>
-                                Reply:
-                                <InputText id="reply" @bind-Value="this.SelectedFaq.Reply" />
-                            </label>
-                        </td>
-                    </tr>
-                </table>
-                <button @onclick="e => this.CancelUpdate()">
-                    Cancel
-                </button>
-                <button @onclick="e => this.DeleteRecord()">
-                    Delete
-                </button>
-                <button @onclick="e => this.UpdateRecord()">
-                    Submit
-                </button>
-            </div>
-        </EditForm>
-    </div>
-}
-
 @code {
-    [Parameter] public EventCallback<bool> IsSelectedChanged { get; set; }
-    [Parameter] public bool IsSelected { get; set; }
-    [Parameter] public bool CanDisplay { get; set; }
+    [Parameter] public EventCallback<string> TitleChanged { get; set; }
+    [Parameter] public string Title { get; set; }
+    [Parameter] public EventCallback<FaqInformation> SelectedFaqChanged { get; set; }
+    [Parameter] public FaqInformation SelectedFaq { get; set; } = null;
 
-    public FaqInformation SelectedFaq { get; set; } = null;
-
-    private void CancelUpdate()
-    {
-        this.SelectedFaq = null;
-
-        this.IsSelected = false;
-        IsSelectedChanged.InvokeAsync(IsSelected);
-    }
-    private void DeleteRecord()
-    {
-        if (this.SelectedFaq == null)
-        {
-            Console.Error.WriteLine("Couldn't Delete Faq");
-            return;
-        }
-        FaqManager.Remove(SelectedFaq);
-        SelectedFaq = null;
-
-        this.IsSelected = false;
-        IsSelectedChanged.InvokeAsync(IsSelected);
-    }
-    private void UpdateRecord()
-    {
-        if (this.SelectedFaq == null)
-        {
-            Console.Error.WriteLine("Couldn't Update Faq");
-            return;
-        }
-        FaqManager.Update(SelectedFaq);
-        SelectedFaq = null;
-
-        this.IsSelected = false;
-        IsSelectedChanged.InvokeAsync(IsSelected);
-    }
     private void AnswerQuestion(FaqInformation unansweredFaq)
     {
-        this.SelectedFaq = unansweredFaq;
-        this.IsSelected = true;
-        IsSelectedChanged.InvokeAsync(IsSelected);
+        SelectedFaq = unansweredFaq;
+        SelectedFaqChanged.InvokeAsync(SelectedFaq);
+        Title = "Reply to Question";
+        TitleChanged.InvokeAsync(Title);
     }
 }

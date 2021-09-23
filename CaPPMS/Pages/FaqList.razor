@@ -5,28 +5,32 @@
 @page "/faqList"
 
 <h3>FAQ List</h3>
-@if (_selectedModify) { 
-    <h2>Modifying</h2>
-}
-@if (_selectedReply)
-{
-    <h2>Replying</h2>
-} 
 <div class="sidebar" style="width:25%">
     <FaqQuestionSubmission></FaqQuestionSubmission>
     <FaqReplySubmission
-        @bind-IsSelected="_selectedReply"
-        CanDisplay="!_selectedModify"
+        @bind-SelectedFaq="_selectedFaq"
+        @bind-Title="_popOverTitle"
     />
 </div>
 <div class="body-text">
     <FaqTopics 
         FaqKeys="new List<FaqInformation>(FaqManager.GetFaqs)" 
-        @bind-IsSelected="_selectedModify"
-        CanDisplay="!_selectedReply"/>
+        @bind-SelectedFaq="_selectedFaq"
+        @bind-Title="_popOverTitle"
+    />
 </div>
 
+@if (_selectedFaq != null)
+{
+    <div class="popOver">
+        <FaqModify 
+            Title="_popOverTitle"
+            @bind-SelectedFaq="_selectedFaq" 
+        />
+    </div>
+} 
+
 @code {
-    private bool _selectedModify;
-    private bool _selectedReply;
+    private FaqInformation _selectedFaq;
+    private string _popOverTitle;
 }
