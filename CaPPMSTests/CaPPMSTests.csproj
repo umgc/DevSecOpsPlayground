@@ -1,15 +1,14 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
+﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
   <PropertyGroup>
     <TargetFramework>.NETCoreApp,Version=v5.0</TargetFramework>
-
     <IsPackable>false</IsPackable>
+    <FileUpgradeFlags>40</FileUpgradeFlags>
+    <UpgradeBackupLocation>C:\Users\Matt\Documents\GitHub\DevSecOpsPlayground\CaPPMS\Backup\</UpgradeBackupLocation>
+    <OldToolsVersion>2.0</OldToolsVersion>
   </PropertyGroup>
-
   <ItemGroup>
     <None Remove="appsettings-test.json" />
   </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="bunit" Version="1.1.5" />
     <PackageReference Include="bunit.core" Version="1.1.5" />
@@ -25,9 +24,7 @@
     <PackageReference Include="Selenium.Support" Version="3.141.0" />
     <PackageReference Include="Selenium.WebDriver" Version="3.141.0" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\CaPPMS\CaPPMS.csproj" />
   </ItemGroup>
-
 </Project>
