@@ -1,0 +1,128 @@
+﻿@using CaPPMS.Model
+@inject FaqManagerService FaqManager
+@namespace CaPPMS.Shared
+
+<div>
+    @foreach (string topic in this.faqTopicCollapseMap.Keys)
+    {
+        <div class="row">
+            <div>
+                <button @onclick="e => this.faqTopicCollapseMap[topic].isCollapsed = !this.faqTopicCollapseMap[topic].isCollapsed">
+                    @(this.faqTopicCollapseMap[topic].isCollapsed ? "+" : "-")
+                </button>
+            </div>
+            <div class="font-weight-bold" style="text-align:left">&nbsp;@topic</div>
+        </div>
+        foreach (FaqInformation faqInfo in this.faqTopicCollapseMap[topic].faqsWithTopic)
+        {
+            <FaqQuestion CollapseQuestion="@(this.faqTopicCollapseMap[topic].isCollapsed ? "collapse" : "")"
+                         FaqInformation="@faqInfo">
+            </FaqQuestion>
+            if (!this.faqTopicCollapseMap[topic].isCollapsed)
+            {
+                <button @onclick="e => this.SelectedFaq = faqInfo">
+                    Modify
+                </button>
+            }
+        }
+    }
+</div>
+
+@if (this.SelectedFaq != null)
+{
+    <div class="popOver">
+        <EditForm Model="@this.SelectedFaq" OnValidSubmit="@HandleValidSubmit">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <div class="p-5">
+                <table class="table w-50 p-5">
+                    <tr class="row w-25">
+                        <td class="d-xl-table-cell">
+                            <label>
+                                Topic:
+                                <InputText id="topic" @bind-Value="this.SelectedFaq.Topic" />
+                            </label>
+                        </td>
+                    </tr>
+                    <tr class="row w-25">
+                        <td class="d-xl-table-cell">
+                            <label>
+                                Question:
+                                <InputText id="question" @bind-Value="this.SelectedFaq.Question" />
+                            </label>
+                        </td>
+                    </tr>
+                    <tr class="row w-25">
+                        <td class="d-xl-table-cell">
+                            <label>
+                                Reply:
+                                <InputText id="reply" @bind-Value="this.SelectedFaq.Reply" />
+                            </label>
+                        </td>
+                    </tr>
+                </table>
+                <button @onclick="e => this.SelectedFaq = null">
+                    Cancel
+                </button>
+                <button @onclick="e => this.UpdateRecord()">
+                    Update
+                </button>
+            </div>
+        </EditForm>
+    </div>
+}
+
+@code{
+
+    public class FaqTopicCollaper
+    {
+        public string Topic { get; set; } = string.Empty;
+        public List<FaqInformation> faqsWithTopic = new List<FaqInformation>();
+        public bool isCollapsed = true;
+    }
+
+    private Dictionary<string, FaqTopicCollaper> faqTopicCollapseMap = new Dictionary<string, FaqTopicCollaper>();
+
+    public bool showPopup = false;
+    private FaqInformation SelectedFaq = null;
+
+    [Parameter]
+    public IEnumerable<FaqInformation> FaqKeys
+    {
+        set
+        {
+            if (value is IEnumerable<FaqInformation>)
+            {
+                this.faqTopicCollapseMap.Clear();
+                foreach (FaqInformation faqInfo in value)
+                {
+                    if (!this.faqTopicCollapseMap.ContainsKey(faqInfo.Topic))
+                    {
+                        this.faqTopicCollapseMap.Add(faqInfo.Topic, new FaqTopicCollaper());
+                    }
+                    this.faqTopicCollapseMap[faqInfo.Topic].faqsWithTopic.Add(faqInfo);
+                }
+            }
+        }
+    }
+
+    private void HandleValidSubmit()
+    {
+        if (this.SelectedFaq == null)
+        {
+            return;
+        }
+
+        FaqManager.Add(this.SelectedFaq);
+    }
+    private void UpdateRecord()
+    {
+        if (this.SelectedFaq == null)
+        {
+            return;
+        }
+        FaqManager.Update(this.SelectedFaq);
+        this.SelectedFaq = null;
+        this.FaqKeys = new List<FaqInformation>(FaqManager.GetFaqs);
+    }
+}
