@@ -19,10 +19,13 @@
             {
                 if (faqInfo.Reply.Length > 0)
                 {
-                    <FaqQuestion CollapseQuestion="@(this.faqTopicCollapseMap[topic].isCollapsed ? "collapse" : "")"
-                                 FaqInformation="@faqInfo"
-                                 OnSelectedQuestion="OpenModify">
-                    </FaqQuestion>
+                    <CascadingAuthenticationState>
+                        <FaqQuestion CollapseQuestion="@(this.faqTopicCollapseMap[topic].isCollapsed ? "collapse" : "")"
+                                     FaqInformation="@faqInfo"
+                                     OnSelectedQuestion="OpenModify"
+                                     IsAuthenticated="isAuthenticated">
+                        </FaqQuestion>
+                    </CascadingAuthenticationState>
                 }
 
             }
@@ -44,7 +47,7 @@
 
     public bool showPopup = false;
 
-
+    [CascadingParameter] private Task<AuthenticationState> AuthenticationState { get; set; }
     [Parameter] public EventCallback<string> TitleChanged { get; set; }
     [Parameter] public string Title { get; set; }
     [Parameter] public EventCallback<FaqInformation> SelectedFaqChanged { get; set; }
@@ -80,7 +83,13 @@
         }
         return false;
     }
-
+    private bool isAuthenticated;
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationState;
+        this.isAuthenticated = authState.User?.Identity.IsAuthenticated ?? false;
+        await base.OnInitializedAsync();
+    }
     private void OpenModify(FaqInformation faqInfo)
     {
         SelectedFaq = faqInfo;

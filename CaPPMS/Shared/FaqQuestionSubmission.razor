@@ -1,26 +1,37 @@
 ﻿@inject FaqManagerService FaqManager
 
-<EditForm OnValidSubmit="@HandleValidSubmit" Model="NewFaq">
+@if (!isAuthenticated)
+{
+    <EditForm OnValidSubmit="@HandleValidSubmit" Model="NewFaq">
 
-    <div class="card" id="@NewFaq.Guid">
+        <div class="card" id="@NewFaq.Guid">
 
-        <span class="fas" style="color:black;font-weight:bold"> Add Topic: </span>
-        <InputText @bind-Value=" NewFaq.Topic" /><br />
+            <span class="fas" style="color:black;font-weight:bold"> Add Topic: </span>
+            <InputText @bind-Value=" NewFaq.Topic" /><br />
 
-        <span class="fas" style="color:black;font-weight:bold"> Add Question: </span>
-        <InputText @bind-Value=" NewFaq.Question" /><br />
+            <span class="fas" style="color:black;font-weight:bold"> Add Question: </span>
+            <InputText @bind-Value=" NewFaq.Question" /><br />
 
-        <span class="fas" style="color:black;font-weight:bold"> Add Author: </span>
-        <InputText @bind-Value=" NewFaq.Author" /><br />
+            <span class="fas" style="color:black;font-weight:bold"> Add Author: </span>
+            <InputText @bind-Value=" NewFaq.Author" /><br />
 
-        <button type="submit" class="btn-primary">Add Faq</button>
-    </div>
+            <button type="submit" class="btn-primary">Add Faq</button>
+        </div>
 
-</EditForm>
+    </EditForm>
+}
+
 
 @code {
+    [CascadingParameter] private Task<AuthenticationState> AuthenticationState { get; set; }
     private FaqInformation NewFaq { get; set; } = new();
-
+    private bool isAuthenticated;
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationState;
+        this.isAuthenticated = authState.User?.Identity.IsAuthenticated ?? false;
+        await base.OnInitializedAsync();
+    }
     private void HandleValidSubmit()
     {
         FaqManager.Add(NewFaq);

@@ -2,28 +2,40 @@
 @inject FaqManagerService FaqManager
 @namespace CaPPMS.Shared
 
-<div>
-    @foreach (FaqInformation unansweredFaq in FaqManager.FaqInfo.Values)
-    {
-        @if (unansweredFaq.Reply.Length == 0)
+@if (this.isAuthenticated)
+{
+    <div>
+        @foreach (FaqInformation unansweredFaq in FaqManager.FaqInfo.Values)
         {
-            <div class="row">
-                <div>
-                    <button @onclick="e => this.AnswerQuestion(unansweredFaq)">
-                        @unansweredFaq.Question
-                    </button>
+            @if (unansweredFaq.Reply.Length == 0)
+            {
+                <div class="row">
+                    <div>
+                        <button @onclick="e => this.AnswerQuestion(unansweredFaq)">
+                            @unansweredFaq.Question
+                        </button>
+                    </div>
                 </div>
-            </div>
-        }
+            }
 
-    }
-</div>
+        }
+    </div>
+}
 
 @code {
+    [CascadingParameter] private Task<AuthenticationState> AuthenticationState { get; set; }
     [Parameter] public EventCallback<string> TitleChanged { get; set; }
     [Parameter] public string Title { get; set; }
     [Parameter] public EventCallback<FaqInformation> SelectedFaqChanged { get; set; }
     [Parameter] public FaqInformation SelectedFaq { get; set; } = null;
+
+    private bool isAuthenticated;
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationState;
+        this.isAuthenticated = authState.User?.Identity.IsAuthenticated ?? false;
+        await base.OnInitializedAsync();
+    }
 
     private void AnswerQuestion(FaqInformation unansweredFaq)
     {

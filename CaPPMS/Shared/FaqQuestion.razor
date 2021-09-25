@@ -9,9 +9,12 @@
                     <button @onclick="e => this.IsCollapsedReply = !this.IsCollapsedReply">
                         @(this.IsCollapsedReply ? "+" : "-")
                     </button>
-                    <button @onclick="e => SelectFaq()">
-                        Modify
-                    </button>
+                    @if (IsAuthenticated)
+                    {
+                        <button @onclick="e => SelectFaq()">
+                            Modify
+                        </button>
+                    }
                 </div>
                 <div class="font-italic" style="text-align:left">&nbsp;@FaqInformation.Question</div>
             </div>
@@ -25,9 +28,9 @@
 </div>
 
 @code {
+    [Parameter] public bool IsAuthenticated { get; set; }
     [Parameter] public FaqInformation FaqInformation { get; set; }
     [Parameter] public EventCallback<FaqInformation> OnSelectedQuestion { get; set; }
-
     [Parameter] public string CollapseQuestion { get; set; } = "collapse";
     private bool IsCollapsedReply = true;
 
