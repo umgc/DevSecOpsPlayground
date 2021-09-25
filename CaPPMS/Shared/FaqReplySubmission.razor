@@ -4,6 +4,9 @@
 
 @if (this.isAuthenticated)
 {
+    <h4>
+        Unanswered Questions
+    </h4>
     <div>
         @foreach (FaqInformation unansweredFaq in FaqManager.FaqInfo.Values)
         {
