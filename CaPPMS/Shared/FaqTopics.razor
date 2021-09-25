@@ -5,22 +5,29 @@
 <div>
     @foreach (string topic in this.faqTopicCollapseMap.Keys)
     {
-        <div class="row">
-            <div>
-                <button @onclick="e => this.faqTopicCollapseMap[topic].isCollapsed = !this.faqTopicCollapseMap[topic].isCollapsed">
-                    @(this.faqTopicCollapseMap[topic].isCollapsed ? "+" : "-")
-                </button>
-            </div>
-            <div class="font-weight-bold" style="text-align:left">&nbsp;@topic</div>
-        </div>
-        @foreach(FaqInformation faqInfo in this.faqTopicCollapseMap[topic].faqsWithTopic)
+        if (IsTopicWithAnsweredQuestions(topic))
         {
-            <FaqQuestion 
-                CollapseQuestion="@(this.faqTopicCollapseMap[topic].isCollapsed ? "collapse" : "")"
-                FaqInformation="@faqInfo"
-                OnSelectedQuestion="OpenModify">
-            </FaqQuestion>
+            <div class="row">
+                <div>
+                    <button @onclick="e => this.faqTopicCollapseMap[topic].isCollapsed = !this.faqTopicCollapseMap[topic].isCollapsed">
+                        @(this.faqTopicCollapseMap[topic].isCollapsed ? "+" : "-")
+                    </button>
+                </div>
+                <div class="font-weight-bold" style="text-align:left">&nbsp;@topic</div>
+            </div>
+            @foreach (FaqInformation faqInfo in this.faqTopicCollapseMap[topic].faqsWithTopic)
+            {
+                if (faqInfo.Reply.Length > 0)
+                {
+                    <FaqQuestion CollapseQuestion="@(this.faqTopicCollapseMap[topic].isCollapsed ? "collapse" : "")"
+                                 FaqInformation="@faqInfo"
+                                 OnSelectedQuestion="OpenModify">
+                    </FaqQuestion>
+                }
+
+            }
         }
+
     }
 </div>
 
@@ -61,6 +68,17 @@
                 }
             }
         }
+    }
+
+    private bool IsTopicWithAnsweredQuestions(string topic) {
+        foreach (FaqInformation faqInformation in this.faqTopicCollapseMap[topic].faqsWithTopic)
+        {
+            if (faqInformation.Reply.Length > 0)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void OpenModify(FaqInformation faqInfo)
