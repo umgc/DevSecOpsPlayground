@@ -35,12 +35,12 @@
             <button @onclick="e => this.CancelModify()">
                 Cancel
             </button>
-            <button @onclick="e => this.DeleteRecord()">
-                Delete
-            </button>
-            <button @onclick="e => this.UpdateRecord()">
-                Update
-            </button>
+            <ConfirmationDialogBox Command="Delete"
+                                   Prompt="Are you sure you want to delete?"
+                                   ConfirmedChanged="DeleteRecord" />
+            <ConfirmationDialogBox Command="Update"
+                                   Prompt="Confirm changes?"
+                                   ConfirmedChanged="UpdateRecord" />
         </div>
     </EditForm>
 </div>
@@ -55,23 +55,36 @@
         this.SelectedFaq = null;
         SelectedFaqChanged.InvokeAsync(SelectedFaq);
     }
-    private void DeleteRecord()
+    private void DeleteRecord(bool confirmed)
     {
+        if (!confirmed)
+        {
+            Console.Error.WriteLine("Cancelled Delete");
+            return;
+        }
         if (this.SelectedFaq == null)
         {
             Console.Error.WriteLine("Couldn't Delete Faq");
             return;
         }
+
+        Console.Error.WriteLine("Confirmed Delete");
         FaqManager.Remove(SelectedFaq);
         SelectedFaq = null;
         SelectedFaqChanged.InvokeAsync(SelectedFaq);
     }
-    private void UpdateRecord()
+    private void UpdateRecord(bool confirmed)
     {
+        if (!confirmed)
+        {
+            Console.Error.WriteLine("Cancelled Update");
+            return;
+        }
         if (this.SelectedFaq == null)
         {
             return;
         }
+        Console.Error.WriteLine("Confirmed Update");
         FaqManager.Update(this.SelectedFaq);
         this.SelectedFaq = null;
         SelectedFaqChanged.InvokeAsync(SelectedFaq);

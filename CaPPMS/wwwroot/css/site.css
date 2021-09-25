@@ -145,3 +145,21 @@ navLink-active {
 .body-text {
     margin-right: 30%;
 }
+
+.pop-confirmation {
+    position: fixed;
+    height: auto;
+    width: 500px;
+    top: 30%;
+    left: 50%;
+    margin-left: -200px;
+    background-color: white;
+    border-radius: 5px;
+    border: 2px solid darkred;
+    padding: 3px;
+    z-index: 101;
+}
+.center {
+    text-align: center;
+    padding:10px 0;
+}

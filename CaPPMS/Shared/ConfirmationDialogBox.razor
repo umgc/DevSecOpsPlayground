@@ -1,0 +1,37 @@
+﻿<button type="button" @onclick="ShowPop">@Command</button>
+
+@if (Show)
+{
+    <div class="pop-confirmation">
+        <div class="center">
+            <h4>@Prompt</h4>
+            <br />
+            <br />
+            <div class="row">
+                <div class="col-6">
+                    <button type="button" class="btn-warning" @onclick="() => Confirmation(false)">Cancel</button>
+                </div>
+                <div class="col-6">
+                    <button type="button" class="btn-primary" @onclick="() => Confirmation(true)">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+} 
+
+@code {
+    public bool Show { get; set; }
+    [Parameter] public string Command { get; set; } = "Action";
+    [Parameter] public string Prompt { get; set; } = "Are you sure?";
+    [Parameter] public EventCallback<bool> ConfirmedChanged { get; set; }
+
+    public async Task Confirmation(bool value)
+    {
+        Show = false;
+        await ConfirmedChanged.InvokeAsync(value);
+    }
+    public void ShowPop()
+    {
+        Show = true;
+    }
+}
