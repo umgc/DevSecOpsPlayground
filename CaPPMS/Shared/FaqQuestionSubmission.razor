@@ -2,6 +2,9 @@
 
 @if (!isAuthenticated)
 {
+    <h4>
+        Can't find your question? Ask it here!
+    </h4>
     <EditForm OnValidSubmit="@HandleValidSubmit" Model="NewFaq">
 
         <div class="card" id="@NewFaq.Guid">
