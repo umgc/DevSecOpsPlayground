@@ -2,6 +2,11 @@
 @inject FaqManagerService FaqManager
 @namespace CaPPMS.Shared
 
+@if (this.isAuthenticated)
+{
+    <h4>
+        Unanswered Questions
+    </h4>
 <div>
     @foreach (FaqInformation unansweredFaq in FaqManager.FaqInfo.Values)
     {
@@ -18,12 +23,22 @@
 
     }
 </div>
+}
 
 @code {
+    [CascadingParameter] private Task<AuthenticationState> AuthenticationState { get; set; }
     [Parameter] public EventCallback<string> TitleChanged { get; set; }
     [Parameter] public string Title { get; set; }
     [Parameter] public EventCallback<FaqInformation> SelectedFaqChanged { get; set; }
     [Parameter] public FaqInformation SelectedFaq { get; set; } = null;
+
+    private bool isAuthenticated;
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationState;
+        this.isAuthenticated = authState.User?.Identity.IsAuthenticated ?? false;
+        await base.OnInitializedAsync();
+    }
 
     private void AnswerQuestion(FaqInformation unansweredFaq)
     {

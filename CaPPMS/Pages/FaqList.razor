@@ -7,17 +7,15 @@
 <h3>FAQ List</h3>
 <div class="sidebar" style="width:25%">
     <FaqQuestionSubmission></FaqQuestionSubmission>
-    <FaqReplySubmission
-        @bind-SelectedFaq="_selectedFaq"
-        @bind-Title="_popOverTitle"
-    />
+    <CascadingAuthenticationState>
+        <FaqReplySubmission @bind-SelectedFaq="_selectedFaq"
+                            @bind-Title="_popOverTitle" />
+    </CascadingAuthenticationState>
 </div>
 <div class="body-text">
-    <FaqTopics 
-        FaqKeys="new List<FaqInformation>(FaqManager.GetFaqs)" 
-        @bind-SelectedFaq="_selectedFaq"
-        @bind-Title="_popOverTitle"
-    />
+        <FaqTopics FaqKeys="new List<FaqInformation>(FaqManager.GetFaqs)"
+                   @bind-SelectedFaq="_selectedFaq"
+                   @bind-Title="_popOverTitle" />
 </div>
 
 @if (_selectedFaq != null)
