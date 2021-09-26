@@ -1,7 +1,7 @@
 ﻿@inject FaqManagerService FaqManager
 
 <div>
-    <EditForm Model="@this.SelectedFaq" OnValidSubmit="@CancelModify">
+    <EditForm Model="@this.SelectedFaq">
         <DataAnnotationsValidator />
         <ValidationSummary />
         <div class="p-5">
@@ -11,7 +11,7 @@
                     <td class="d-xl-table-cell">
                         <label>
                             Topic:
-                            <InputText id="topic" @bind-Value="this.SelectedFaq.Topic" />
+                            <InputText id="topic" @bind-Value="_faqPlaceholder.Topic" />
                         </label>
                     </td>
                 </tr>
@@ -19,7 +19,7 @@
                     <td class="d-xl-table-cell">
                         <label>
                             Question:
-                            <InputText id="question" @bind-Value="this.SelectedFaq.Question" />
+                            <InputText id="question" @bind-Value="_faqPlaceholder.Question" />
                         </label>
                     </td>
                 </tr>
@@ -27,7 +27,7 @@
                     <td class="d-xl-table-cell">
                         <label>
                             Reply:
-                            <InputText id="reply" @bind-Value="this.SelectedFaq.Reply" />
+                            <InputText id="reply" @bind-Value="_faqPlaceholder.Reply" />
                         </label>
                     </td>
                 </tr>
@@ -47,9 +47,31 @@
 
 @code {
     [Parameter] public EventCallback<FaqInformation> SelectedFaqChanged { get; set; }
-    [Parameter] public FaqInformation SelectedFaq { get; set; } = null;
+    [Parameter] public FaqInformation SelectedFaq
+    {
+        get { return _selectedFaq; }
+        set
+        {
+            _selectedFaq = value;
+            SetupPlaceholder();
+        }
+    }
     [Parameter] public string Title { get; set; } = null;
 
+    private FaqInformation _selectedFaq;
+    private FaqInformation _faqPlaceholder;
+
+    public void SetupPlaceholder()
+    {
+        if (SelectedFaq == null)
+        {
+            return;
+        }
+        _faqPlaceholder = new FaqInformation();
+        _faqPlaceholder.Topic = SelectedFaq.Topic;
+        _faqPlaceholder.Question = SelectedFaq.Question;
+        _faqPlaceholder.Reply = SelectedFaq.Reply;
+    }
     private void CancelModify()
     {
         this.SelectedFaq = null;
@@ -58,7 +80,7 @@
     private void DeleteRecord(bool confirmed)
     {
         if (!confirmed)
-    {
+        {
             Console.Error.WriteLine("Cancelled Delete");
             return;
         }
@@ -76,7 +98,7 @@
     private void UpdateRecord(bool confirmed)
     {
         if (!confirmed)
-    {
+        {
             Console.Error.WriteLine("Cancelled Update");
             return;
         }
@@ -84,6 +106,11 @@
         {
             return;
         }
+
+        SelectedFaq.Topic = _faqPlaceholder.Topic;
+        SelectedFaq.Question = _faqPlaceholder.Question;
+        SelectedFaq.Reply = _faqPlaceholder.Reply;
+
         Console.Error.WriteLine("Confirmed Update");
         FaqManager.Update(this.SelectedFaq);
         this.SelectedFaq = null;
