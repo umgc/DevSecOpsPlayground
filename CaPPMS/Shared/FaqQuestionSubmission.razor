@@ -5,7 +5,7 @@
     <h4>
         Can't find your question? Ask it here!
     </h4>
-    <EditForm OnValidSubmit="@HandleValidSubmit" Model="NewFaq">
+    <EditForm Model="NewFaq">
 
         <div class="card" id="@NewFaq.Guid">
 
@@ -18,7 +18,10 @@
             <span class="fas" style="color:black;font-weight:bold"> Add Author: </span>
             <InputText @bind-Value=" NewFaq.Author" /><br />
 
-            <button type="submit" class="btn-primary">Add Faq</button>
+            <AcknowledgeDialogBox Command="Submit Question"
+                                  Type="submit"
+                                  Prompt="Your question has been submitted!"
+                                  ConfirmedChanged="HandleValidSubmit" />
         </div>
 
     </EditForm>
