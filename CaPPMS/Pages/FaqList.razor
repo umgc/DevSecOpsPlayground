@@ -5,10 +5,32 @@
 @page "/faqList"
 
 <h3>FAQ List</h3>
+<div class="sidebar" style="width:25%">
+    <FaqQuestionSubmission></FaqQuestionSubmission>
+    <FaqReplySubmission
+        @bind-SelectedFaq="_selectedFaq"
+        @bind-Title="_popOverTitle"
+    />
+</div>
+<div class="body-text">
+    <FaqTopics 
+        FaqKeys="new List<FaqInformation>(FaqManager.GetFaqs)" 
+        @bind-SelectedFaq="_selectedFaq"
+        @bind-Title="_popOverTitle"
+    />
+</div>
 
-
-<FaqTopics FaqKeys="new List<FaqInformation>(FaqManager.GetFaqs)" />
+@if (_selectedFaq != null)
+{
+    <div class="popOver">
+        <FaqModify 
+            Title=@_popOverTitle
+            @bind-SelectedFaq="_selectedFaq" 
+        />
+    </div>
+} 
 
 @code {
-
+    private FaqInformation _selectedFaq;
+    private string _popOverTitle;
 }

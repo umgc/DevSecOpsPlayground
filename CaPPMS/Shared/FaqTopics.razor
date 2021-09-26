@@ -5,72 +5,31 @@
 <div>
     @foreach (string topic in this.faqTopicCollapseMap.Keys)
     {
-        <div class="row">
-            <div>
-                <button @onclick="e => this.faqTopicCollapseMap[topic].isCollapsed = !this.faqTopicCollapseMap[topic].isCollapsed">
-                    @(this.faqTopicCollapseMap[topic].isCollapsed ? "+" : "-")
-                </button>
-            </div>
-            <div class="font-weight-bold" style="text-align:left">&nbsp;@topic</div>
-        </div>
-        foreach (FaqInformation faqInfo in this.faqTopicCollapseMap[topic].faqsWithTopic)
+        if (IsTopicWithAnsweredQuestions(topic))
         {
-            <FaqQuestion CollapseQuestion="@(this.faqTopicCollapseMap[topic].isCollapsed ? "collapse" : "")"
-                         FaqInformation="@faqInfo">
-            </FaqQuestion>
-            if (!this.faqTopicCollapseMap[topic].isCollapsed)
+            <div class="row">
+                <div>
+                    <button @onclick="e => this.faqTopicCollapseMap[topic].isCollapsed = !this.faqTopicCollapseMap[topic].isCollapsed">
+                        @(this.faqTopicCollapseMap[topic].isCollapsed ? "+" : "-")
+                    </button>
+                </div>
+                <div class="font-weight-bold" style="text-align:left">&nbsp;@topic</div>
+            </div>
+            @foreach (FaqInformation faqInfo in this.faqTopicCollapseMap[topic].faqsWithTopic)
             {
-                <button @onclick="e => this.SelectedFaq = faqInfo">
-                    Modify
-                </button>
+                if (faqInfo.Reply.Length > 0)
+                {
+                    <FaqQuestion CollapseQuestion="@(this.faqTopicCollapseMap[topic].isCollapsed ? "collapse" : "")"
+                                 FaqInformation="@faqInfo"
+                                 OnSelectedQuestion="OpenModify">
+                    </FaqQuestion>
+                }
+
             }
         }
+
     }
 </div>
-
-@if (this.SelectedFaq != null)
-{
-    <div class="popOver">
-        <EditForm Model="@this.SelectedFaq" OnValidSubmit="@HandleValidSubmit">
-            <DataAnnotationsValidator />
-            <ValidationSummary />
-            <div class="p-5">
-                <table class="table w-50 p-5">
-                    <tr class="row w-25">
-                        <td class="d-xl-table-cell">
-                            <label>
-                                Topic:
-                                <InputText id="topic" @bind-Value="this.SelectedFaq.Topic" />
-                            </label>
-                        </td>
-                    </tr>
-                    <tr class="row w-25">
-                        <td class="d-xl-table-cell">
-                            <label>
-                                Question:
-                                <InputText id="question" @bind-Value="this.SelectedFaq.Question" />
-                            </label>
-                        </td>
-                    </tr>
-                    <tr class="row w-25">
-                        <td class="d-xl-table-cell">
-                            <label>
-                                Reply:
-                                <InputText id="reply" @bind-Value="this.SelectedFaq.Reply" />
-                            </label>
-                        </td>
-                    </tr>
-                </table>
-                <button @onclick="e => this.SelectedFaq = null">
-                    Cancel
-                </button>
-                <button @onclick="e => this.UpdateRecord()">
-                    Update
-                </button>
-            </div>
-        </EditForm>
-    </div>
-}
 
 @code{
 
@@ -84,7 +43,12 @@
     private Dictionary<string, FaqTopicCollaper> faqTopicCollapseMap = new Dictionary<string, FaqTopicCollaper>();
 
     public bool showPopup = false;
-    private FaqInformation SelectedFaq = null;
+
+
+    [Parameter] public EventCallback<string> TitleChanged { get; set; }
+    [Parameter] public string Title { get; set; }
+    [Parameter] public EventCallback<FaqInformation> SelectedFaqChanged { get; set; }
+    [Parameter] public FaqInformation SelectedFaq { get; set; } = null;
 
     [Parameter]
     public IEnumerable<FaqInformation> FaqKeys
@@ -106,23 +70,22 @@
         }
     }
 
-    private void HandleValidSubmit()
-    {
-        if (this.SelectedFaq == null)
+    private bool IsTopicWithAnsweredQuestions(string topic) {
+        foreach (FaqInformation faqInformation in this.faqTopicCollapseMap[topic].faqsWithTopic)
         {
-            return;
+            if (faqInformation.Reply.Length > 0)
+            {
+                return true;
+            }
         }
-
-        FaqManager.Add(this.SelectedFaq);
+        return false;
     }
-    private void UpdateRecord()
+
+    private void OpenModify(FaqInformation faqInfo)
     {
-        if (this.SelectedFaq == null)
-        {
-            return;
-        }
-        FaqManager.Update(this.SelectedFaq);
-        this.SelectedFaq = null;
-        this.FaqKeys = new List<FaqInformation>(FaqManager.GetFaqs);
+        SelectedFaq = faqInfo;
+        SelectedFaqChanged.InvokeAsync(SelectedFaq);
+        Title = "Edit FAQ";
+        TitleChanged.InvokeAsync(Title);
     }
 }

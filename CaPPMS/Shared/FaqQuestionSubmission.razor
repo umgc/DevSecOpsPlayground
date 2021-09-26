@@ -1,0 +1,30 @@
+﻿@inject FaqManagerService FaqManager
+
+<EditForm OnValidSubmit="@HandleValidSubmit" Model="NewFaq">
+
+    <div class="card" id="@NewFaq.Guid">
+
+        <span class="fas" style="color:black;font-weight:bold"> Add Topic: </span>
+        <InputText @bind-Value=" NewFaq.Topic" /><br />
+
+        <span class="fas" style="color:black;font-weight:bold"> Add Question: </span>
+        <InputText @bind-Value=" NewFaq.Question" /><br />
+
+        <span class="fas" style="color:black;font-weight:bold"> Add Author: </span>
+        <InputText @bind-Value=" NewFaq.Author" /><br />
+
+        <button type="submit" class="btn-primary">Add Faq</button>
+    </div>
+
+</EditForm>
+
+@code {
+    private FaqInformation NewFaq { get; set; } = new();
+
+    private void HandleValidSubmit()
+    {
+        FaqManager.Add(NewFaq);
+
+        NewFaq = new FaqInformation();
+    }
+}

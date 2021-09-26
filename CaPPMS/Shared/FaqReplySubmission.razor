@@ -1,0 +1,35 @@
+﻿@using CaPPMS.Model
+@inject FaqManagerService FaqManager
+@namespace CaPPMS.Shared
+
+<div>
+    @foreach (FaqInformation unansweredFaq in FaqManager.FaqInfo.Values)
+    {
+        @if (unansweredFaq.Reply.Length == 0)
+        {
+            <div class="row">
+                <div>
+                    <button @onclick="e => this.AnswerQuestion(unansweredFaq)">
+                        @unansweredFaq.Question
+                    </button>
+                </div>
+            </div>
+        }
+
+    }
+</div>
+
+@code {
+    [Parameter] public EventCallback<string> TitleChanged { get; set; }
+    [Parameter] public string Title { get; set; }
+    [Parameter] public EventCallback<FaqInformation> SelectedFaqChanged { get; set; }
+    [Parameter] public FaqInformation SelectedFaq { get; set; } = null;
+
+    private void AnswerQuestion(FaqInformation unansweredFaq)
+    {
+        SelectedFaq = unansweredFaq;
+        SelectedFaqChanged.InvokeAsync(SelectedFaq);
+        Title = "Reply to Question";
+        TitleChanged.InvokeAsync(Title);
+    }
+}
