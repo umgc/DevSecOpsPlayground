@@ -17,7 +17,7 @@
             </div>
             @foreach (FaqInformation faqInfo in this.faqTopicCollapseMap[topic].faqsWithTopic)
             {
-                if (faqInfo.Reply.Length > 0)
+                if (faqInfo.Reply.Length > 0 && MatchesFilter(faqInfo))
                 {
                     <CascadingAuthenticationState>
                         <FaqQuestion CollapseQuestion="@(this.faqTopicCollapseMap[topic].isCollapsed ? "collapse" : "")"
