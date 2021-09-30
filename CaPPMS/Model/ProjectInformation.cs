@@ -60,7 +60,6 @@ namespace CaPPMS.Model
         [Export(true)]
         [DisplayName("Project Website")]
         [Browsable(true)]
-        [ColumnHeader]
         public string Url
         {
             get
@@ -79,7 +78,6 @@ namespace CaPPMS.Model
         [Export(true)]
         [DisplayName("GitHub")]
         [Browsable(true)]
-        [ColumnHeader]
         [SpanIcon("fab fa-github", true)]
         public string Github
         {

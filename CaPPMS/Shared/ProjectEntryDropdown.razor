@@ -1,0 +1,128 @@
+﻿@using CaPPMS.Model
+@namespace CaPPMS.Shared
+
+<style>
+    table {
+        width: 100%;
+    }
+    tr {
+        margin-top:0;
+        padding: 0px;
+        text-align: center;
+    }
+    td {
+        text-align:left;
+        margin-top:0;
+        padding-top:0;
+    }
+</style>
+
+<div class="panel panel-default border @CollapseEntry">
+    <table>
+        <tr>
+            <td>
+                <h6><b>Submitter Information</b></h6>
+                <table>
+                    <tr>
+                        <td style="padding-top:0px;"><b>First Name: </b>@ProjectInformation.FirstName</td>
+                        <td style="padding-top:0px;"><b>Email:</b></td>
+                        <td style="padding-top:0px;"><b>Phone:</b></td>
+                    </tr>
+                    <tr>
+                        <td style="padding-top:0px;"><b>Last Name : </b>@ProjectInformation.LastName</td>
+                        <td style="padding-top:0px;">@ProjectInformation.Email</td>
+                        <td style="padding-top:0px;">@ProjectInformation.Phone</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <h6><b>Sponsor Information</b></h6>
+                <table>
+                    <tr>
+                        <td style="padding-top:0px;"><b>First Name: </b>@ProjectInformation.SponsorFirstName</td>
+                        <td style="padding-top:0px;"><b>Email:</b></td>
+                        <td style="padding-top:0px;"><b>Phone:</b></td>
+                    </tr>
+                    <tr>
+                        <td style="padding-top:0px;"><b>Last Name : </b>@ProjectInformation.SponsorLastName</td>
+                        <td style="padding-top:0px;">@ProjectInformation.SponsorEmail</td>
+                        <td style="padding-top:0px;">@ProjectInformation.SponsorPhone</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <h6><b>Project Information</b></h6>
+                <table>
+                    <tr>
+                        <td style="padding-top:0px;"><b>Project Title:</b></td>
+                        <td style="padding-top:0px;">@ProjectInformation.ProjectTitle</td>
+                        <td style="padding-top:0px;"><b>Project Description:</b></td>
+                    </tr>
+                    <tr>
+                        <td style="padding-top:0px;"><b>Project Website:</b></td>
+                        <td style="padding-top:0px;">@ProjectInformation.Url</td>
+                        <td style="padding-top:0px;" rowspan="2">@ProjectInformation.ProjectDescription</td>
+                    </tr>
+                    <tr>
+                        <td style="padding-top:0px;"><b>GitHub:</b></td>
+                        <td style="padding-top:0px;">@ProjectInformation.Github</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="col">
+                    <table>
+                        @foreach (ProjectFile file in attachmentSelection.Keys)
+                        {
+                        <tr>
+                            <td><input type="checkbox" @bind-value="attachmentSelection[file]" /></td>
+                            @if (attachmentSelection[file])
+                            {
+                                <td><b>@file.Name</b></td>
+                            }
+                            else
+                            {
+                                <td>@file.Name</td>
+                            }
+
+                        </tr>
+                        }
+                    </table>
+                </div>
+                <div class="col">
+
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
+
+    @code {
+        [Parameter] public bool IsAuthenticated { get; set; }
+        [Parameter] public ProjectInformation ProjectInformation {
+            get
+            {
+                return projectInformation;
+            }
+            set
+            {
+                projectInformation = value;
+                attachmentSelection.Clear();
+                foreach (ProjectFile file in projectInformation.Attachments)
+                {
+                    attachmentSelection.Add(file, false);
+                }
+
+            }
+        }
+        [Parameter] public string CollapseEntry { get; set; } = "collapse";
+        private bool IsCollapseEntry = true;
+        private ProjectInformation projectInformation;
+        private Dictionary<ProjectFile, bool> attachmentSelection = new Dictionary<ProjectFile, bool>();
+    }
