@@ -76,53 +76,53 @@
         </tr>
         <tr>
             <td>
-                <div class="col">
-                    <table>
-                        @foreach (ProjectFile file in attachmentSelection.Keys)
-                        {
+                <table>
+                    <h6><b>Attachments:</b></h6>
+                    @foreach (ProjectFile file in attachmentSelection.Keys)
+                    {
                         <tr>
-                            <td><input type="checkbox" @bind-value="attachmentSelection[file]" /></td>
-                            @if (attachmentSelection[file])
-                            {
-                                <td><b>@file.Name</b></td>
-                            }
-                            else
-                            {
-                                <td>@file.Name</td>
-                            }
-
+                            <td>
+                                <a href="/download/@file.Location"
+                                   download="@file.Name"
+                                   target="_top">
+                                    @file.Name
+                                </a>
+                            </td>
                         </tr>
-                        }
-                    </table>
-                </div>
-                <div class="col">
-
-                </div>
+                    }
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <CascadingAuthenticationState>
+                    <CommentsComponent ProjectGuid="ProjectInformation.ProjectID" />
+                </CascadingAuthenticationState>
             </td>
         </tr>
     </table>
 </div>
 
-    @code {
-        [Parameter] public bool IsAuthenticated { get; set; }
-        [Parameter] public ProjectInformation ProjectInformation {
-            get
-            {
-                return projectInformation;
-            }
-            set
-            {
-                projectInformation = value;
-                attachmentSelection.Clear();
-                foreach (ProjectFile file in projectInformation.Attachments)
-                {
-                    attachmentSelection.Add(file, false);
-                }
-
-            }
+@code {
+    [Parameter] public bool IsAuthenticated { get; set; }
+    [Parameter] public ProjectInformation ProjectInformation {
+        get
+        {
+            return projectInformation;
         }
-        [Parameter] public string CollapseEntry { get; set; } = "collapse";
-        private bool IsCollapseEntry = true;
-        private ProjectInformation projectInformation;
-        private Dictionary<ProjectFile, bool> attachmentSelection = new Dictionary<ProjectFile, bool>();
+        set
+        {
+            projectInformation = value;
+            attachmentSelection.Clear();
+            foreach (ProjectFile file in projectInformation.Attachments)
+            {
+                attachmentSelection.Add(file, false);
+            }
+
+        }
     }
+    [Parameter] public string CollapseEntry { get; set; } = "collapse";
+    private bool IsCollapseEntry = true;
+    private ProjectInformation projectInformation;
+    private Dictionary<ProjectFile, bool> attachmentSelection = new Dictionary<ProjectFile, bool>();
+}
