@@ -6,133 +6,39 @@
     The documents and products created by students from each semester can be found here.
 </p>
 <hr />
-<h3>Summer 2021</h3>
-<p>
-    The Summer 2021 semster consisted of a DevSecOps (DSO) team and 3 development teams:
-    Team Amazing, Team Bravo, and Team Charlie.
-    <br />
-    <br />
-    <b> The teams documents are listed below: </b>
-    <ul>
-        <li> Project Plan </li>
-        <li> Software Requirements Specification (SRS) </li>
-        <li> Technical Design Document (TDD) </li>
-        <li> Deployment and Operations Guide (Runbook) </li>
-        <li> Programmer Guide </li>
-        <li> User Guide </li>
-        <li> Test Report </li>
-    </ul>
-    <b> The teams links are listed below: </b>
-    <ul>
-        <li> Final Presentation </li>
-        <li> GitHub Repo </li>
-    </ul>
-</p>
 
+@inject ProjectManagerService ProjectManager
+@foreach (ProjectInformation idea in ProjectManager.ProjectIdeas.Values)
+{
+    @if (idea.Status == "Completed")
+    {
+        <h3>@idea.SemesterTerm @idea.SemesterYear </h3>
+        <b> The teams documents are listed below: </b>
+        <ul>
+            <li> Project Plan: @idea.ProjectPlan </li>
+            <li> Software Requirements Specification (SRS): @idea.SRS </li>
+            <li> Technical Design Document (TDD): @idea.TDD </li>
+            <li> Deployment and Operations Guide (Runbook): @idea.Runbook </li>
+            <li> Programmer Guide: @idea.ProgrammersGuide </li>
+            <li> User Guide: @idea.UsersGuide </li>
+            <li> Test Report: @idea.TestReport </li>
+        </ul>
+        <b> The teams links are listed below: </b>
+        <ul>
+            @foreach (string vLink in idea.VideoLinks)
+            {
+                <li> Video Link: @vLink </li>
+            }
+            <li> GitHub Repo: @idea.Github </li>
+        </ul>
 
-<hr />
-<h3>Spring 2021</h3>
-<p>
-    The Spring 2021 semster consisted of a DevSecOps (DSO) team and 2 development teams:
-    DialogFlow Team and Mobile Team.
-    <br />
-    <br />
-    <b> The teams documents are listed below: </b>
-    <ul>
-        <li> Project Plan </li>
-        <li> Software Requirements Specification (SRS) </li>
-        <li> Technical Design Document (TDD) </li>
-        <li> Deployment and Operations Guide (Runbook) </li>
-        <li> Programmer Guide </li>
-        <li> User Guide </li>
-        <li> Test Report </li>
-    </ul>
-    <b> The teams links are listed below: </b>
-    <ul>
-        <li> Final Presentation </li>
-        <li> GitHub Repo </li>
-    </ul>
-</p>
+    }
 
-
-<hr />
-<h3>Fall 2020</h3>
-<p>
-    The Fall 2020 semster consisted of a DevSecOps (DSO) team and 3 development teams:
-    City Chatbot, Project Track, and Virtual Letter of Life Team.
-    <br />
-    <br />
-    <b> The teams documents are listed below: </b>
-    <ul>
-        <li> Project Plan </li>
-        <li> Software Requirements Specification (SRS) </li>
-        <li> Technical Design Document (TDD) </li>
-        <li> Deployment and Operations Guide (Runbook) </li>
-        <li> Programmer Guide </li>
-        <li> User Guide </li>
-        <li> Test Report </li>
-    </ul>
-    <b> The teams links are listed below: </b>
-    <ul>
-        <li> Final Presentation </li>
-        <li> GitHub Repo </li>
-    </ul>
-</p>
-
-
-<hr />
-<h3>Summer 2020</h3>
-<p>
-    The Summer 2020 semster consisted of a DevSecOps (DSO) team and 3 development teams:
-    City Chatbot, EdUnited, and EMSPlus Team.
-    <br />
-    <br />
-    <b> The teams documents are listed below: </b>
-    <ul>
-        <li> Project Plan </li>
-        <li> Software Requirements Specification (SRS) </li>
-        <li> Technical Design Document (TDD) </li>
-        <li> Deployment and Operations Guide (Runbook) </li>
-        <li> Programmer Guide </li>
-        <li> User Guide </li>
-        <li> Test Report </li>
-    </ul>
-    <b> The teams links are listed below: </b>
-    <ul>
-        <li> Final Presentation </li>
-        <li> GitHub Repo </li>
-    </ul>
-</p>
-
-
-<hr />
-<h3>Spring 2020</h3>
-<p>
-    The Spring 2020 semster consisted of a DevSecOps (DSO) team and 4 development teams:
-    NASA Team 1 - Verifier, NASA Team 2 - HUD, UMGC City Team 1 - Webapp, and UMGC City Team 2 - Chatbox.
-    <br />
-    <br />
-    <b> The teams documents are listed below: </b>
-    <ul>
-        <li> Project Plan </li>
-        <li> Software Requirements Specification (SRS) </li>
-        <li> Technical Design Document (TDD) </li>
-        <li> Deployment and Operations Guide (Runbook) </li>
-        <li> Programmer Guide </li>
-        <li> User Guide </li>
-        <li> Test Report </li>
-    </ul>
-    <b> The teams links are listed below: </b>
-    <ul>
-        <li> Final Presentation </li>
-        <li> GitHub Repo </li>
-    </ul>
-</p>
+}
 
 
 <br />
 <br />
-
 
 
 @code {
