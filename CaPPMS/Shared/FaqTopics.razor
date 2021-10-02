@@ -5,7 +5,7 @@
 <div>
     @foreach (string topic in this.faqTopicCollapseMap.Keys)
     {
-        if (IsTopicWithAnsweredQuestions(topic))
+        if (IsTopicWithAnsweredQuestions(topic) && IsTopicContainsFilter(topic))
         {
             <div class="row">
                 <div>
@@ -17,7 +17,7 @@
             </div>
             @foreach (FaqInformation faqInfo in this.faqTopicCollapseMap[topic].faqsWithTopic)
             {
-                if (faqInfo.Reply.Length > 0)
+                if (faqInfo.Reply.Length > 0 && MatchesFilter(faqInfo))
                 {
                     <CascadingAuthenticationState>
                         <FaqQuestion CollapseQuestion="@(this.faqTopicCollapseMap[topic].isCollapsed ? "collapse" : "")"
@@ -52,6 +52,7 @@
     [Parameter] public string Title { get; set; }
     [Parameter] public EventCallback<FaqInformation> SelectedFaqChanged { get; set; }
     [Parameter] public FaqInformation SelectedFaq { get; set; } = null;
+    [Parameter] public string Filter { get; set; }
 
     [Parameter]
     public IEnumerable<FaqInformation> FaqKeys
@@ -82,6 +83,25 @@
             }
         }
         return false;
+    }
+    private bool IsTopicContainsFilter(string topic)
+    {
+        foreach (FaqInformation faqInformation in this.faqTopicCollapseMap[topic].faqsWithTopic)
+        {
+            if (MatchesFilter(faqInformation))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    private bool MatchesFilter(FaqInformation faqInformation)
+    {
+        return
+            Filter.Length == 0 ||
+            (faqInformation.Topic.ToLower().Contains(Filter.ToLower())
+            || faqInformation.Question.ToLower().Contains(Filter.ToLower())
+            || faqInformation.Reply.ToLower().Contains(Filter.ToLower()));
     }
     private bool isAuthenticated;
     protected override async Task OnInitializedAsync()
