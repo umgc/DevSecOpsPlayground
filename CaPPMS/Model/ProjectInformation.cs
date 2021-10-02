@@ -287,6 +287,16 @@ namespace CaPPMS.Model
             this.IsDirty = true;
         }
 
+        public void AddAttachments(IList<IProjectFile> files)
+        {
+            foreach (var file in files)
+            {
+                this.Attachments.Add(file as ProjectFile);
+            }
+
+            this.IsDirty = true;
+        }
+
         public IEnumerable<Tuple<string, object>> GetExportableInformation()
         {
             foreach(var prop in this.GetType().GetProperties())
