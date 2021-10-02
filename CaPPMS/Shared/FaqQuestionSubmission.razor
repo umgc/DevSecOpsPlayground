@@ -1,0 +1,47 @@
+﻿@inject FaqManagerService FaqManager
+
+@if (!isAuthenticated)
+{
+    <h4>
+        Can't find your question? Ask it here!
+    </h4>
+    <EditForm Model="NewFaq">
+
+    <div class="card" id="@NewFaq.Guid">
+
+        <span class="fas" style="color:black;font-weight:bold"> Add Topic: </span>
+        <InputText @bind-Value=" NewFaq.Topic" /><br />
+
+        <span class="fas" style="color:black;font-weight:bold"> Add Question: </span>
+        <InputText @bind-Value=" NewFaq.Question" /><br />
+
+        <span class="fas" style="color:black;font-weight:bold"> Add Author: </span>
+        <InputText @bind-Value=" NewFaq.Author" /><br />
+
+            <AcknowledgeDialogBox Command="Submit Question"
+                                  Type="submit"
+                                  Prompt="Your question has been submitted!"
+                                  ConfirmedChanged="HandleValidSubmit" />
+    </div>
+
+</EditForm>
+}
+
+
+@code {
+    [CascadingParameter] private Task<AuthenticationState> AuthenticationState { get; set; }
+    private FaqInformation NewFaq { get; set; } = new();
+    private bool isAuthenticated;
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationState;
+        this.isAuthenticated = authState.User?.Identity.IsAuthenticated ?? false;
+        await base.OnInitializedAsync();
+    }
+    private void HandleValidSubmit()
+    {
+        FaqManager.Add(NewFaq);
+
+        NewFaq = new FaqInformation();
+    }
+}

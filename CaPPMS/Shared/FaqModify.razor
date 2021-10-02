@@ -1,0 +1,119 @@
+﻿@inject FaqManagerService FaqManager
+
+<div>
+    <EditForm Model="@this.SelectedFaq">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <div class="p-5">
+            <h2>@this.Title</h2>
+            <table class="table w-50 p-5">
+                <tr class="row w-25">
+                    <td class="d-xl-table-cell">
+                        <label>
+                            Topic:
+                            <InputText id="topic" @bind-Value="_faqPlaceholder.Topic" />
+                        </label>
+                    </td>
+                </tr>
+                <tr class="row w-25">
+                    <td class="d-xl-table-cell">
+                        <label>
+                            Question:
+                            <InputText id="question" @bind-Value="_faqPlaceholder.Question" />
+                        </label>
+                    </td>
+                </tr>
+                <tr class="row w-25">
+                    <td class="d-xl-table-cell">
+                        <label>
+                            Reply:
+                            <InputText id="reply" @bind-Value="_faqPlaceholder.Reply" />
+                        </label>
+                    </td>
+                </tr>
+            </table>
+            <button @onclick="e => this.CancelModify()">
+                Cancel
+            </button>
+            <ConfirmationDialogBox Command="Delete"
+                                   Prompt="Are you sure you want to delete?"
+                                   ConfirmedChanged="DeleteRecord" />
+            <ConfirmationDialogBox Command="Update"
+                                   Prompt="Confirm changes?"
+                                   ConfirmedChanged="UpdateRecord" />
+        </div>
+    </EditForm>
+</div>
+
+@code {
+    [Parameter] public EventCallback<FaqInformation> SelectedFaqChanged { get; set; }
+    [Parameter] public FaqInformation SelectedFaq
+    {
+        get { return _selectedFaq; }
+        set
+        {
+            _selectedFaq = value;
+            SetupPlaceholder();
+        }
+    }
+    [Parameter] public string Title { get; set; } = null;
+
+    private FaqInformation _selectedFaq;
+    private FaqInformation _faqPlaceholder;
+
+    public void SetupPlaceholder()
+    {
+        if (SelectedFaq == null)
+        {
+            return;
+        }
+        _faqPlaceholder = new FaqInformation();
+        _faqPlaceholder.Topic = SelectedFaq.Topic;
+        _faqPlaceholder.Question = SelectedFaq.Question;
+        _faqPlaceholder.Reply = SelectedFaq.Reply;
+    }
+    private void CancelModify()
+    {
+        this.SelectedFaq = null;
+        SelectedFaqChanged.InvokeAsync(SelectedFaq);
+    }
+    private void DeleteRecord(bool confirmed)
+    {
+        if (!confirmed)
+        {
+            Console.Error.WriteLine("Cancelled Delete");
+            return;
+        }
+        if (this.SelectedFaq == null)
+        {
+            Console.Error.WriteLine("Couldn't Delete Faq");
+            return;
+        }
+
+        Console.Error.WriteLine("Confirmed Delete");
+        FaqManager.Remove(SelectedFaq);
+        SelectedFaq = null;
+        SelectedFaqChanged.InvokeAsync(SelectedFaq);
+    }
+    private void UpdateRecord(bool confirmed)
+    {
+        if (!confirmed)
+        {
+            Console.Error.WriteLine("Cancelled Update");
+            return;
+        }
+        if (this.SelectedFaq == null)
+        {
+            return;
+        }
+
+        SelectedFaq.Topic = _faqPlaceholder.Topic;
+        SelectedFaq.Question = _faqPlaceholder.Question;
+        SelectedFaq.Reply = _faqPlaceholder.Reply;
+
+        Console.Error.WriteLine("Confirmed Update");
+        FaqManager.Update(this.SelectedFaq);
+        this.SelectedFaq = null;
+        SelectedFaqChanged.InvokeAsync(SelectedFaq);
+    }
+}

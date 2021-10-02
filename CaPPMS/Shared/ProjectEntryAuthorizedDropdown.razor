@@ -1,0 +1,209 @@
+﻿@using CaPPMS.Model
+@namespace CaPPMS.Shared
+@inject ProjectManagerService ProjectManager
+
+<style>
+    table {
+        width: 100%;
+    }
+
+    tr {
+        margin-top: 0;
+        padding: 0px;
+        text-align: center;
+    }
+
+    td {
+        text-align: left;
+        margin-top: 0;
+        padding-top: 0;
+    }
+</style>
+
+<div class="panel panel-default border @CollapseEntry">
+    <EditForm Model="@ProjectInformation" OnValidSubmit="@HandleValidSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <table>
+            <tr>
+                <td>
+                    <h6><b>Submitter Information</b></h6>
+                    <table>
+                        <tr>
+                            <td style="padding-top:0px;">First Name:</td>
+                            <td style="padding-top:0px;">Last Name:</td>
+                            <td style="padding-top:0px;">Email:</td>
+                            <td style="padding-top:0px;">Phone:</td>
+                        </tr>
+                        <tr>
+                            <td style="padding-top:0px;"><InputText @bind-Value="ProjectInformation.FirstName" /></td>
+                            <td style="padding-top:0px;"><InputText @bind-Value="ProjectInformation.LastName" /></td>
+                            <td style="padding-top:0px;"><InputText @bind-Value="ProjectInformation.Email" /></td>
+                            <td style="padding-top:0px;"><InputText @bind-Value="ProjectInformation.Phone" /></td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h6><b>Sponsor Information</b></h6>
+                    <table>
+                        <tr>
+                            <td style="padding-top:0px;">First Name:</td>
+                            <td style="padding-top:0px;">Last Name:</td>
+                            <td style="padding-top:0px;">Email:</td>
+                            <td style="padding-top:0px;">Phone:</td>
+                        </tr>
+                        <tr>
+                            <td style="padding-top:0px;"><InputText @bind-Value="ProjectInformation.SponsorFirstName" /></td>
+                            <td style="padding-top:0px;"><InputText @bind-Value="ProjectInformation.SponsorLastName" /></td>
+                            <td style="padding-top:0px;"><InputText @bind-Value="ProjectInformation.SponsorEmail" /></td>
+                            <td style="padding-top:0px;"><InputText @bind-Value="ProjectInformation.SponsorPhone" /></td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h6><b>Project Information</b></h6>
+                    <table>
+                        <tr>
+                            <td style="padding-top:0px;">Project Title:</td>
+                            <td style="padding-top:0px;">Project Website:</td>
+                            <td style="padding-top:0px;">GitHub:</td>
+                            <td style="padding-top:0px;">Project Description:</td>
+                        </tr>
+                        <tr>
+                            <td style="padding-top:0px;"><InputText @bind-Value="ProjectInformation.ProjectTitle" /></td>
+                            <td style="padding-top:0px;"><InputText @bind-Value="ProjectInformation.Url" /></td>
+                            <td style="padding-top:0px;"><InputText @bind-Value="ProjectInformation.Github" /></td>
+                            <td style="padding-top:0px;"><InputText @bind-Value="ProjectInformation.ProjectDescription" /></td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h6><b>Attachments:</b></h6>
+                    <div class="col-9">
+                        <table>
+                            @foreach (ProjectFile file in attachmentSelection.Keys)
+                            {
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" @bind-value="attachmentSelection[file]" />
+                                    </td>
+                                    <td>
+                                        @if (attachmentSelection[file])
+                                        {
+                                            <a href="/download/@file.Location"
+                                               download="@file.Name"
+                                               target="_top">
+                                                <b>@file.Name </b>
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            <a href="/download/@file.Location"
+                                               download="@file.Name"
+                                               target="_top">
+                                                @file.Name
+                                            </a>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </table>
+                    </div>
+                    <div class="col-3">
+                        <label>
+                            Attachment(s):
+                            <InputFile id="attachment" OnChange="LoadFiles" multiple accept=".doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,.ppt,.pptx,.pdf,.txt" />
+                        </label>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <CascadingAuthenticationState>
+                        <CommentsComponent ProjectGuid="ProjectInformation.ProjectID" />
+                    </CascadingAuthenticationState>
+                </td>
+            </tr>
+        </table>
+        <button type="submit" class="btn-primary">
+            Update
+        </button>
+    </EditForm>
+</div>
+
+@code {
+    [Parameter]
+    public ProjectInformation ProjectInformation
+    {
+        get
+        {
+            return projectInformation;
+        }
+        set
+        {
+            projectInformation = value;
+            attachmentSelection.Clear();
+            foreach (ProjectFile file in projectInformation.Attachments)
+            {
+                attachmentSelection.Add(file, false);
+            }
+
+        }
+    }
+    [Parameter] public string CollapseEntry { get; set; } = "collapse";
+    private ProjectInformation projectInformation;
+
+    private Dictionary<ProjectFile, bool> attachmentSelection = new Dictionary<ProjectFile, bool>();
+    private List<IProjectFile> loadedFiles = new();
+
+    private async Task HandleValidSubmit()
+    {
+        await Task.Run(async () =>
+        {
+            var uploaded = await ProjectManager.UpdateAsync(projectInformation);
+
+            if (uploaded)
+            {
+                projectInformation.IsDirty = false;
+                loadedFiles.Clear();
+                projectInformation = new ProjectInformation();
+            }
+
+            await Task.Delay(2000);
+        });
+    }
+
+    private void DeleteSelectedAttachments()
+    {
+        foreach (ProjectFile file in attachmentSelection.Keys)
+        {
+            if (attachmentSelection[file])
+            {
+                projectInformation.Attachments.Remove(file);
+            }
+        }
+    }
+    private void LoadFiles(InputFileChangeEventArgs inputFile)
+    {
+        this.loadedFiles.Clear();
+        foreach (var file in inputFile.GetMultipleFiles().Take(ProjectManager.MaxNumberOfFiles))
+        {
+            if (file.Size > ProjectManager.MaxMBSizePerFile)
+            {
+                continue;
+            }
+
+            var projectFile = new ProjectFile { BrowserFile = file };
+
+            this.loadedFiles.Add(projectFile);
+        }
+
+        projectInformation.AddAttachments(loadedFiles);
+    }
+}

@@ -111,15 +111,20 @@ namespace CaPPMS.Data
             return error;
         }
 
-        public Task<bool> UpdateAsync(ProjectInformation idea)
+        public async Task<bool> UpdateAsync(ProjectInformation idea)
         {
+            foreach (var file in idea.Attachments)
+            {
+                file.Location = await FileManager.SaveAsync(file.BrowserFile.OpenReadStream(MaxMBSizePerFile), file.File_ID.ToString(), file.Name);
+            }
+
             bool completed;
             if (completed = ProjectIdeas.TryUpdate(idea.ProjectID, idea, ProjectIdeas[idea.ProjectID]))
             {
                 ProjectIdeasChanged?.Invoke(ProjectIdeas.Values, EventArgs.Empty);
-            }
-
-            return Task.FromResult(completed);
+                return true;
+            } 
+            return false;
         }
 
         public async Task<string> DeleteAsync(ProjectInformation idea, IPrincipal user)

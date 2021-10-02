@@ -21,6 +21,7 @@ else
         <table class="@string.Join(" ", TableCssClasses)">
             <thead class="thead-light">
                 <tr>
+                    <th></th>
                     @foreach (var headerCell in this.HeaderRow)
                     {
                         <th>
@@ -36,20 +37,45 @@ else
                 </tr>
             </thead>
             <tbody>
-                @foreach(var row in this.GetRows())
+                @foreach (var row in this.GetRows())
                 {
-                <tr>
-                    @foreach (var cell in row)
-                    {
-                        @((MarkupString)cell.ToString())
-                    }
-                    @if (isAuthenticated)
-                    {
+                    <tr>
                         <td>
-                            <button class="btn btn-primary" type="button" @onclick="((e) => ShowView(row.DataBoundItem as ProjectInformation))">VIEW</button>
+                            <button @onclick="e => projectListCollapseMap[row.DataBoundItem as ProjectInformation] = !projectListCollapseMap[row.DataBoundItem as ProjectInformation]">
+                                @(projectListCollapseMap[row.DataBoundItem as ProjectInformation] ? "+" : "-")
+                            </button>
                         </td>
+                        @foreach (var cell in row)
+                        {
+                            @((MarkupString)cell.ToString())
+                        }
+                        @if (isAuthenticated)
+                        {
+                            <td>
+                                <button class="btn btn-primary" type="button" @onclick="((e) => ShowView(row.DataBoundItem as ProjectInformation))">VIEW</button>
+                            </td>
+                        }
+                    </tr>
+                    @if (!projectListCollapseMap[row.DataBoundItem as ProjectInformation])
+                    {
+                        <tr>
+                            <td colspan="100">
+                                @if (isAuthenticated)
+                                {
+                                    <ProjectEntryAuthorizedDropdown CollapseEntry="@(projectListCollapseMap[row.DataBoundItem as ProjectInformation] ? "collapse" : "")"
+                                                                    ProjectInformation="row.DataBoundItem as ProjectInformation">
+                                    </ProjectEntryAuthorizedDropdown>
+                                }
+                                else
+                                {
+                                    <ProjectEntryDropdown CollapseEntry="@(projectListCollapseMap[row.DataBoundItem as ProjectInformation] ? "collapse" : "")"
+                                                          ProjectInformation="row.DataBoundItem as ProjectInformation">
+                                    </ProjectEntryDropdown>
+                                }
+
+                            </td>
+                        </tr>
                     }
-                </tr>
                 }
             </tbody>
             <tfoot>
@@ -97,12 +123,15 @@ else
 
     private bool isAuthenticated;
 
+    private Dictionary<ProjectInformation, bool> projectListCollapseMap = new Dictionary<ProjectInformation, bool>();
+
     protected override async Task OnInitializedAsync()
     {
 
         var authState = await authenticationState;
 
         this.isAuthenticated = authState.User?.Identity.IsAuthenticated ?? false;
+        InitializeCollapseMap();
 
         this.DataSourceChanged += (o, e) =>
         {
@@ -112,12 +141,14 @@ else
             }
 
             this.ShouldProcessStateChange();
+            InitializeCollapseMap();
         };
 
         this.FilterChanged += (o, e) =>
         {
             this.SetPageNumber(1);
             this.ShouldProcessStateChange();
+            InitializeCollapseMap();
         };
 
         ProjectManagerService.ProjectIdeasChanged += (o, e) =>
@@ -152,5 +183,14 @@ else
         {
             this.StateHasChanged();
         });
+    }
+
+    private void InitializeCollapseMap()
+    {
+        projectListCollapseMap.Clear();
+        foreach (Row row in this.GetRows())
+        {
+            projectListCollapseMap.Add(row.DataBoundItem as ProjectInformation, true);
+        }
     }
 }

@@ -1,0 +1,100 @@
+﻿@using CaPPMS.Model
+@inject FaqManagerService FaqManager
+@namespace CaPPMS.Shared
+
+<div>
+    @foreach (string topic in this.faqTopicCollapseMap.Keys)
+    {
+        if (IsTopicWithAnsweredQuestions(topic))
+        {
+            <div class="row">
+                <div>
+                    <button @onclick="e => this.faqTopicCollapseMap[topic].isCollapsed = !this.faqTopicCollapseMap[topic].isCollapsed">
+                        @(this.faqTopicCollapseMap[topic].isCollapsed ? "+" : "-")
+                    </button>
+                </div>
+                <div class="font-weight-bold" style="text-align:left">&nbsp;@topic</div>
+            </div>
+            @foreach (FaqInformation faqInfo in this.faqTopicCollapseMap[topic].faqsWithTopic)
+            {
+                if (faqInfo.Reply.Length > 0)
+                {
+                    <CascadingAuthenticationState>
+                        <FaqQuestion CollapseQuestion="@(this.faqTopicCollapseMap[topic].isCollapsed ? "collapse" : "")"
+                                     FaqInformation="@faqInfo"
+                                     OnSelectedQuestion="OpenModify"
+                                     IsAuthenticated="isAuthenticated">
+                        </FaqQuestion>
+                    </CascadingAuthenticationState>
+                }
+
+            }
+        }
+
+    }
+</div>
+
+@code{
+
+    public class FaqTopicCollaper
+    {
+        public string Topic { get; set; } = string.Empty;
+        public List<FaqInformation> faqsWithTopic = new List<FaqInformation>();
+        public bool isCollapsed = true;
+    }
+
+    private Dictionary<string, FaqTopicCollaper> faqTopicCollapseMap = new Dictionary<string, FaqTopicCollaper>();
+
+    public bool showPopup = false;
+
+    [CascadingParameter] private Task<AuthenticationState> AuthenticationState { get; set; }
+    [Parameter] public EventCallback<string> TitleChanged { get; set; }
+    [Parameter] public string Title { get; set; }
+    [Parameter] public EventCallback<FaqInformation> SelectedFaqChanged { get; set; }
+    [Parameter] public FaqInformation SelectedFaq { get; set; } = null;
+
+    [Parameter]
+    public IEnumerable<FaqInformation> FaqKeys
+    {
+        set
+        {
+            if (value is IEnumerable<FaqInformation>)
+            {
+                this.faqTopicCollapseMap.Clear();
+                foreach (FaqInformation faqInfo in value)
+                {
+                    if (!this.faqTopicCollapseMap.ContainsKey(faqInfo.Topic))
+                    {
+                        this.faqTopicCollapseMap.Add(faqInfo.Topic, new FaqTopicCollaper());
+                    }
+                    this.faqTopicCollapseMap[faqInfo.Topic].faqsWithTopic.Add(faqInfo);
+                }
+            }
+        }
+    }
+
+    private bool IsTopicWithAnsweredQuestions(string topic) {
+        foreach (FaqInformation faqInformation in this.faqTopicCollapseMap[topic].faqsWithTopic)
+        {
+            if (faqInformation.Reply.Length > 0)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    private bool isAuthenticated;
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationState;
+        this.isAuthenticated = authState.User?.Identity.IsAuthenticated ?? false;
+        await base.OnInitializedAsync();
+    }
+    private void OpenModify(FaqInformation faqInfo)
+    {
+        SelectedFaq = faqInfo;
+        SelectedFaqChanged.InvokeAsync(SelectedFaq);
+        Title = "Edit FAQ";
+        TitleChanged.InvokeAsync(Title);
+    }
+}

@@ -1,0 +1,114 @@
+﻿@using CaPPMS.Model
+@namespace CaPPMS.Shared
+
+<style>
+    table {
+        width: 100%;
+    }
+    tr {
+        margin-top:0;
+        padding: 0px;
+        text-align: center;
+    }
+    td {
+        text-align:left;
+        margin-top:0;
+        padding-top:0;
+    }
+</style>
+
+<div class="panel panel-default border @CollapseEntry">
+    <EditForm Model="@ProjectInformation">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <table>
+            <tr>
+                <td>
+                    <h6><b>Submitter Information</b></h6>
+                    <table>
+                        <tr>
+                            <td style="padding-top:0px;"><b>First Name: </b>@ProjectInformation.FirstName</td>
+                            <td style="padding-top:0px;"><b>Email:</b></td>
+                            <td style="padding-top:0px;"><b>Phone:</b></td>
+                        </tr>
+                        <tr>
+                            <td style="padding-top:0px;"><b>Last Name : </b>@ProjectInformation.LastName</td>
+                            <td style="padding-top:0px;">@ProjectInformation.Email</td>
+                            <td style="padding-top:0px;">@ProjectInformation.Phone</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h6><b>Sponsor Information</b></h6>
+                    <table>
+                        <tr>
+                            <td style="padding-top:0px;"><b>First Name: </b>@ProjectInformation.SponsorFirstName</td>
+                            <td style="padding-top:0px;"><b>Email:</b></td>
+                            <td style="padding-top:0px;"><b>Phone:</b></td>
+                        </tr>
+                        <tr>
+                            <td style="padding-top:0px;"><b>Last Name : </b>@ProjectInformation.SponsorLastName</td>
+                            <td style="padding-top:0px;">@ProjectInformation.SponsorEmail</td>
+                            <td style="padding-top:0px;">@ProjectInformation.SponsorPhone</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h6><b>Project Information</b></h6>
+                    <table>
+                        <tr>
+                            <td style="padding-top:0px;"><b>Project Title:</b></td>
+                            <td style="padding-top:0px;">@ProjectInformation.ProjectTitle</td>
+                            <td style="padding-top:0px;"><b>Project Description:</b></td>
+                        </tr>
+                        <tr>
+                            <td style="padding-top:0px;"><b>Project Website:</b></td>
+                            <td style="padding-top:0px;"><a href="@ProjectInformation.Url">@ProjectInformation.Url</a></td>
+                            <td style="padding-top:0px;" rowspan="2">@ProjectInformation.ProjectDescription</td>
+                        </tr>
+                        <tr>
+                            <td style="padding-top:0px;"><b>GitHub:</b></td>
+                            <td style="padding-top:0px;"><a href="@ProjectInformation.Github">@ProjectInformation.Github</a></td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h6><b>Attachments:</b></h6>
+                    <table>
+                        @foreach (ProjectFile file in ProjectInformation.Attachments)
+                        {
+                            <tr>
+                                <td>
+                                    <a href="/download/@file.Location"
+                                       download="@file.Name"
+                                       target="_top">
+                                        @file.Name
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <CascadingAuthenticationState>
+                        <CommentsComponent ProjectGuid="ProjectInformation.ProjectID" />
+                    </CascadingAuthenticationState>
+                </td>
+            </tr>
+        </table>
+    </EditForm>
+</div>
+
+@code {
+    [Parameter] public ProjectInformation ProjectInformation { get; set; }
+
+    [Parameter] public string CollapseEntry { get; set; } = "collapse";
+}
