@@ -1,6 +1,7 @@
 ﻿@using CaPPMS.Model
 @namespace CaPPMS.Shared
 @inject ProjectManagerService ProjectManager
+@inject NavigationManager NavigationManager
 
 <style>
     table {
@@ -21,7 +22,7 @@
 </style>
 
 <div class="panel panel-default border @CollapseEntry">
-    <EditForm Model="@ProjectInformation" OnValidSubmit="@HandleValidSubmit">
+    <EditForm Model="@ProjectInformation">
         <DataAnnotationsValidator />
         <ValidationSummary />
         <table>
@@ -121,9 +122,9 @@
                                 Attachment(s):
                                 <InputFile id="attachment" OnChange="LoadFiles" multiple accept=".doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,.ppt,.pptx,.pdf,.txt" />
                             </label>
-                            <button type="button" class="btn-danger" @onclick="() => DeleteSelectedAttachments()">
-                                Delete Selected
-                            </button>
+                            <ConfirmationDialogBox Command="Delete Selected"
+                                                   Prompt="Are you sure you want to delete selected attachment(s)?"
+                                                   ConfirmedChanged="DeleteSelectedAttachments" />
                         </div>
                     </div>
                 </td>
@@ -136,9 +137,13 @@
                 </td>
             </tr>
         </table>
-        <button type="submit" class="btn-primary">
-            Update
-        </button>
+        <ConfirmationDialogBox Command="Update"
+                               Prompt="Confirm changes?"
+                               ConfirmedChanged="UpdateRecord" />
+        <button type="button" class="btn btn-secondary" @onclick="ExportEntry">Export</button>
+        <ConfirmationDialogBox Command="Delete"
+                               Prompt="Are you sure you want to delete this entry?"
+                               ConfirmedChanged="DeleteRecord" />
     </EditForm>
 </div>
 
@@ -167,8 +172,28 @@
 
     private Dictionary<ProjectFile, bool> attachmentSelection = new Dictionary<ProjectFile, bool>();
 
-    private async Task HandleValidSubmit()
+    private async Task DeleteRecord(bool confirmed)
     {
+        if (!confirmed)
+        {
+            return;
+        }
+        var authState = await authenticationState;
+        string error = await ProjectManager.DeleteAsync(projectInformation, authState.User);
+    }
+    private async Task ExportEntry()
+    {
+        var location = await this.ProjectManager.ExportAsync(projectInformation);
+
+        NavigationManager.NavigateTo($"{ProjectManager.FileManager.DownloadPath}{location}", true);
+
+    }
+    private async Task UpdateRecord(bool confirmed)
+    {
+        if (!confirmed)
+        {
+            return;
+        }
         await Task.Run(async () =>
         {
             var uploaded = await ProjectManager.UpdateAsync(projectInformation);
@@ -182,8 +207,12 @@
         });
     }
 
-    private async Task DeleteSelectedAttachments()
+    private async Task DeleteSelectedAttachments(bool confirmed)
     {
+        if (!confirmed)
+        {
+            return;
+        }
         var authState = await authenticationState;
         foreach (ProjectFile file in attachmentSelection.Keys)
         {
