@@ -59,7 +59,7 @@ namespace CaPPMS.Model.Table
 
         public bool ContainsFilter(string filter)
         {
-            return string.IsNullOrEmpty(filter) || (!string.IsNullOrEmpty(filter) && this.Cells.Any(c => c.Value.ToString().ToLower().Contains(filter)));
+            return string.IsNullOrEmpty(filter) || (!string.IsNullOrEmpty(filter) && this.Cells.Any(c => c.Value.ToString().ToLower().Contains(filter.ToLower())));
         }
 
         #region IList Interface
