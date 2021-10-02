@@ -115,7 +115,10 @@ namespace CaPPMS.Data
         {
             foreach (var file in idea.Attachments)
             {
-                file.Location = await FileManager.SaveAsync(file.BrowserFile.OpenReadStream(MaxMBSizePerFile), file.File_ID.ToString(), file.Name);
+                if (file.BrowserFile != null)
+                {
+                    file.Location = await FileManager.SaveAsync(file.BrowserFile.OpenReadStream(MaxMBSizePerFile), file.File_ID.ToString(), file.Name);
+                }
             }
 
             bool completed;
