@@ -1,0 +1,46 @@
+﻿@page "/previousprojects"
+
+<h2>Previous Projects</h2>
+
+<p>
+    The documents and products created by students from each semester can be found here.
+</p>
+<hr />
+
+@inject ProjectManagerService ProjectManager
+@foreach (ProjectInformation idea in ProjectManager.ProjectIdeas.Values)
+{
+    @if (idea.Status == "Completed")
+    {
+        <h3>@idea.SemesterTerm @idea.SemesterYear </h3>
+        <b> The teams documents are listed below: </b>
+        <ul>
+            <li> Project Plan: @idea.ProjectPlan </li>
+            <li> Software Requirements Specification (SRS): @idea.SRS </li>
+            <li> Technical Design Document (TDD): @idea.TDD </li>
+            <li> Deployment and Operations Guide (Runbook): @idea.Runbook </li>
+            <li> Programmer Guide: @idea.ProgrammersGuide </li>
+            <li> User Guide: @idea.UsersGuide </li>
+            <li> Test Report: @idea.TestReport </li>
+        </ul>
+        <b> The teams links are listed below: </b>
+        <ul>
+            @foreach (string vLink in idea.VideoLinks)
+            {
+                <li> Video Link: @vLink </li>
+            }
+            <li> GitHub Repo: @idea.Github </li>
+        </ul>
+
+    }
+
+}
+
+
+<br />
+<br />
+
+
+@code {
+
+}

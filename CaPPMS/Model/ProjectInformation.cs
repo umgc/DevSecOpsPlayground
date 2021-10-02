@@ -55,6 +55,170 @@ namespace CaPPMS.Model
             }
         }
 
+        private string semesterTerm = string.Empty;
+
+        [Export(true)]
+        [DisplayName("Semester Term")]
+        [Browsable(true)]
+        [ColumnHeader]
+        public string SemesterTerm
+        {
+            get
+            {
+                return this.semesterTerm;
+            }
+            set
+            {
+                this.semesterTerm = value;
+                this.IsDirty = true;
+            }
+        }
+
+        private string semesterYear = string.Empty;
+
+        [Export(true)]
+        [DisplayName("Semester Year")]
+        [Browsable(true)]
+        [ColumnHeader]
+        public string SemesterYear
+        {
+            get
+            {
+                return this.semesterYear;
+            }
+            set
+            {
+                this.semesterYear = value;
+                this.IsDirty = true;
+            }
+        }
+
+        private string projectPlan = string.Empty;
+
+        [Export(true)]
+        [DisplayName("Project Plan")]
+        [Browsable(true)]
+        public string ProjectPlan
+        {
+            get
+            {
+                return this.projectPlan;
+            }
+            set
+            {
+                this.projectPlan = value;
+                this.IsDirty = true;
+            }
+        }
+
+        private string srs = string.Empty;
+
+        [Export(true)]
+        [DisplayName("Software Requirements Specification")]
+        [Browsable(true)]
+        public string SRS
+        {
+            get
+            {
+                return this.srs;
+            }
+            set
+            {
+                this.srs = value;
+                this.IsDirty = true;
+            }
+        }
+
+        private string tdd = string.Empty;
+
+        [Export(true)]
+        [DisplayName("Technical Design Document")]
+        [Browsable(true)]
+        public string TDD
+        {
+            get
+            {
+                return this.tdd;
+            }
+            set
+            {
+                this.tdd = value;
+                this.IsDirty = true;
+            }
+        }
+
+        private string runbook = string.Empty;
+
+        [Export(true)]
+        [DisplayName("Deployment and Operations Guide(Runbook)")]
+        [Browsable(true)]
+        public string Runbook
+        {
+            get
+            {
+                return this.runbook;
+            }
+            set
+            {
+                this.runbook = value;
+                this.IsDirty = true;
+            }
+        }
+
+        private string programmersGuide = string.Empty;
+
+        [Export(true)]
+        [DisplayName("Programmers Guide")]
+        [Browsable(true)]
+        public string ProgrammersGuide
+        {
+            get
+            {
+                return this.programmersGuide;
+            }
+            set
+            {
+                this.programmersGuide = value;
+                this.IsDirty = true;
+            }
+        }
+
+        private string usersGuide = string.Empty;
+
+        [Export(true)]
+        [DisplayName("Users Guide")]
+        [Browsable(true)]
+        public string UsersGuide
+        {
+            get
+            {
+                return this.usersGuide;
+            }
+            set
+            {
+                this.usersGuide = value;
+                this.IsDirty = true;
+            }
+        }
+
+        private string testReport = string.Empty;
+
+        [Export(true)]
+        [DisplayName("Test Report")]
+        [Browsable(true)]
+        public string TestReport
+        {
+            get
+            {
+                return this.testReport;
+            }
+            set
+            {
+                this.testReport = value;
+                this.IsDirty = true;
+            }
+        }
+
         private string url = string.Empty;
 
         [Export(true)]
@@ -175,6 +339,10 @@ namespace CaPPMS.Model
         // Matches the config value. Value is in Mb
         [AttachmentsFileSizeValidator(10)]
         public IList<ProjectFile> Attachments { get; private set; } = new List<ProjectFile>();
+
+
+        public IList<string> VideoLinks { get; private set; } = new List<string>();
+
 
         [DisplayName("Are you the sponsor")]
         [Browsable(true)]
