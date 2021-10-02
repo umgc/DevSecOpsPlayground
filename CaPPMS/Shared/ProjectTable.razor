@@ -62,9 +62,12 @@ else
                             <td colspan="100">
                                 @if (isAuthenticated)
                                 {
-                                    <ProjectEntryAuthorizedDropdown CollapseEntry="@(projectListCollapseMap[row.DataBoundItem as ProjectInformation] ? "collapse" : "")"
-                                                                    ProjectInformation="row.DataBoundItem as ProjectInformation">
-                                    </ProjectEntryAuthorizedDropdown>
+                                    <CascadingAuthenticationState>
+                                        <ProjectEntryAuthorizedDropdown 
+                                            CollapseEntry="@(projectListCollapseMap[row.DataBoundItem as ProjectInformation] ? "collapse" : "")"
+                                            ProjectInformation="row.DataBoundItem as ProjectInformation">
+                                        </ProjectEntryAuthorizedDropdown>
+                                    </CascadingAuthenticationState>                                    
                                 }
                                 else
                                 {
