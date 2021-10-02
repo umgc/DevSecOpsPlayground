@@ -60,9 +60,19 @@ else
                     {
                         <tr>
                             <td colspan="100">
-                                <ProjectEntryDropdown CollapseEntry="@(projectListCollapseMap[row.DataBoundItem as ProjectInformation] ? "collapse" : "")"
-                                                      ProjectInformation="row.DataBoundItem as ProjectInformation">
-                                </ProjectEntryDropdown>
+                                @if (isAuthenticated)
+                                {
+                                    <ProjectEntryAuthorizedDropdown CollapseEntry="@(projectListCollapseMap[row.DataBoundItem as ProjectInformation] ? "collapse" : "")"
+                                                                    ProjectInformation="row.DataBoundItem as ProjectInformation">
+                                    </ProjectEntryAuthorizedDropdown>
+                                }
+                                else
+                                {
+                                    <ProjectEntryDropdown CollapseEntry="@(projectListCollapseMap[row.DataBoundItem as ProjectInformation] ? "collapse" : "")"
+                                                          ProjectInformation="row.DataBoundItem as ProjectInformation">
+                                    </ProjectEntryDropdown>
+                                }
+
                             </td>
                         </tr>
                     }
