@@ -130,6 +130,7 @@ namespace CaPPMS.Data
                 if (file.BrowserFile != null)
                 {
                     file.Location = await FileManager.SaveAsync(file.BrowserFile.OpenReadStream(MaxMBSizePerFile), file.File_ID.ToString(), file.Name);
+                    file.BrowserFile = null;
                 }
             }
 

@@ -136,7 +136,6 @@
                 </td>
             </tr>
         </table>
-        <h6>@projectInformation.ProjectID</h6>
         <button type="submit" class="btn-primary">
             Update
         </button>
@@ -167,7 +166,6 @@
     private ProjectInformation projectInformation;
 
     private Dictionary<ProjectFile, bool> attachmentSelection = new Dictionary<ProjectFile, bool>();
-    private List<IProjectFile> loadedFiles = new();
 
     private async Task HandleValidSubmit()
     {
@@ -178,7 +176,6 @@
             if (uploaded)
             {
                 projectInformation.IsDirty = false;
-                loadedFiles.Clear();
             }
 
             await Task.Delay(2000);
@@ -198,7 +195,8 @@
     }
     private void LoadFiles(InputFileChangeEventArgs inputFile)
     {
-        this.loadedFiles.Clear();
+        List<IProjectFile> loadedFiles = new();
+
         foreach (var file in inputFile.GetMultipleFiles().Take(ProjectManager.MaxNumberOfFiles))
         {
             if (file.Size > ProjectManager.MaxMBSizePerFile)
@@ -208,7 +206,7 @@
 
             var projectFile = new ProjectFile { BrowserFile = file };
 
-            this.loadedFiles.Add(projectFile);
+            loadedFiles.Add(projectFile);
         }
 
         projectInformation.AddAttachments(loadedFiles);
