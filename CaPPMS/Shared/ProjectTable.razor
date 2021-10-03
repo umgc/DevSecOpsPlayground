@@ -18,7 +18,7 @@ else
         <label>
             <input id="filter" class="input-group-text p-2 mb-lg-3" type="text" placeholder="Filter the data here" @bind="Filter" @bind:event="oninput" />
         </label>
-        <table class="@string.Join(" ", TableCssClasses)">
+        <table id="projectEntriesTable" class="@string.Join(" ", TableCssClasses)">
             <thead class="thead-light">
                 <tr>
                     <th></th>
@@ -37,7 +37,7 @@ else
                 </tr>
             </thead>
             <tbody>
-                @foreach (var row in this.GetRows())
+                @foreach (var row in this.GetRows().OrderByDescending(o => o.Cells[0]))
                 {
                     <tr>
                         <td>
@@ -198,5 +198,10 @@ else
                 projectListCollapseMap.Add(row.DataBoundItem as ProjectInformation, true);
             }
         }
+    }
+
+    private void SortByColumn(int column)
+    {
+        
     }
 }
