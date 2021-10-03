@@ -130,10 +130,21 @@
                     </CascadingAuthenticationState>
                 </td>
             </tr>
+            <tr>
+                <td>
+                   <button class="btn btn-primary" type="button" @onclick="e => completeClicked = !completeClicked">Complete Project</button>
+                    @if (completeClicked)
+                    {
+                        <CompleteProjectComponent
+                               @bind-CurrentProject="ProjectInformation"/>
+                    }
+                </td>
+            </tr>
         </table>
         <button type="submit" class="btn-primary">
             Update
         </button>
+
     </EditForm>
 </div>
 
@@ -161,6 +172,7 @@
 
     private Dictionary<ProjectFile, bool> attachmentSelection = new Dictionary<ProjectFile, bool>();
     private List<IProjectFile> loadedFiles = new();
+    private bool completeClicked = false;
 
     private async Task HandleValidSubmit()
     {

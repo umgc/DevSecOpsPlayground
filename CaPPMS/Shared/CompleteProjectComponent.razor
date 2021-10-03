@@ -1,0 +1,107 @@
+﻿@using CaPPMS.Model
+@namespace CaPPMS.Shared
+@inject ProjectManagerService ProjectManager
+
+<div>
+    <EditForm Model="@this.CurrentProject" OnValidSubmit="@HandleValidSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <div class="p-5">
+            <h2>@this.Title</h2>
+            <table class="table w-50 p-5">
+                <tr class="row w-25">
+                    <td class="d-xl-table-cell">
+                        <label>
+                            Semester Term:
+                            <select class="form-control" id="SemesterTerm" name="SemesterTerm">
+                                <option>Fall</option>
+                                <option>Spring</option>
+                                <option>Summer</option>
+                            </select>
+                        </label>
+                    </td>
+                </tr>
+                <tr class="row w-25">
+                    <td class="d-xl-table-cell">
+                        <label>
+                            Semester Year:
+                            <select class="form-control" id="SemesterYear" name="SemesterYear">
+                                <option>2022</option>
+                                <option>2021</option>
+                                <option>2020</option>
+                                <option>2019</option>
+                                <option>2018</option>
+                                <option>2017</option>
+                            </select>
+                        </label>
+                    </td>
+                </tr>
+                <tr class="row w-25">
+                    <td class="d-xl-table-cell">
+                        <label>
+                            Project Plan:
+                            <select class="form-control" id="ProjectPlan" name="ProjectPlan">
+                                @foreach (ProjectFile file in attachmentSelection.Keys)
+                                {
+                                    <option>@file.Name</option>
+                                }
+                            </select>
+                        </label>
+                    </td>
+                </tr>
+            </table>
+            <button type="submit" class="btn-primary" @onclick="e => this.Complete()">
+                Complete
+            </button>
+            <button @onclick="e => this.CancelComplete()">
+                Cancel
+            </button>
+        </div>
+    </EditForm>
+</div>
+
+
+
+@code {
+    [Parameter] public EventCallback<FaqInformation> CurrentProjectChanged { get; set; }
+    [Parameter]
+    public ProjectInformation CurrentProject
+    {
+        get { return projectInformation; }
+        set
+        {
+            projectInformation = value;
+        }
+    }
+    [Parameter] public string Title { get; set; } = null;
+
+    private ProjectInformation projectInformation;
+    private Dictionary<ProjectFile, bool> attachmentSelection = new Dictionary<ProjectFile, bool>();
+
+
+    private void CancelComplete()
+    {
+        this.CurrentProject = null;
+    }
+    private void Complete()
+    {
+
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        await Task.Run(async () =>
+        {
+            var uploaded = await ProjectManager.UpdateAsync(projectInformation);
+
+            if (uploaded)
+            {
+                projectInformation.IsDirty = false;
+                projectInformation = new ProjectInformation();
+            }
+
+            await Task.Delay(2000);
+        });
+    }
+
+}
