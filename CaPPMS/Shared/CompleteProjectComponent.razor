@@ -3,7 +3,7 @@
 @inject ProjectManagerService ProjectManager
 
 <div>
-    <EditForm Model="@this.CurrentProject" OnValidSubmit="@HandleValidSubmit">
+    <EditForm Model="@this.ProjectInformation" OnValidSubmit="@HandleValidSubmit">
         <DataAnnotationsValidator />
         <ValidationSummary />
         <div class="p-5">
@@ -63,9 +63,9 @@
 
 
 @code {
-    [Parameter] public EventCallback<FaqInformation> CurrentProjectChanged { get; set; }
+    [Parameter] public EventCallback<ProjectInformation> ProjectInformationChanged { get; set; }
     [Parameter]
-    public ProjectInformation CurrentProject
+    public ProjectInformation ProjectInformation
     {
         get { return projectInformation; }
         set
@@ -81,7 +81,7 @@
 
     private void CancelComplete()
     {
-        this.CurrentProject = null;
+        this.ProjectInformation = null;
     }
     private void Complete()
     {

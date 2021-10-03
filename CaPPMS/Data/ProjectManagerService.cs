@@ -111,11 +111,27 @@ namespace CaPPMS.Data
             return error;
         }
 
+        public async Task<string> RemoveFileAsync(ProjectInformation idea, ProjectFile file, IPrincipal user)
+        {
+            idea.Attachments.Remove(file);
+            if (ProjectIdeas.TryUpdate(idea.ProjectID, idea, ProjectIdeas[idea.ProjectID]))
+            {
+                ProjectIdeasChanged?.Invoke(ProjectIdeas.Values, EventArgs.Empty);
+            } else
+            {
+                return null;
+            }
+            return await this.FileManager.DeleteAsync(file.Location, user);
+        }
         public async Task<bool> UpdateAsync(ProjectInformation idea)
         {
             foreach (var file in idea.Attachments)
             {
-                file.Location = await FileManager.SaveAsync(file.BrowserFile.OpenReadStream(MaxMBSizePerFile), file.File_ID.ToString(), file.Name);
+                if (file.BrowserFile != null)
+                {
+                    file.Location = await FileManager.SaveAsync(file.BrowserFile.OpenReadStream(MaxMBSizePerFile), file.File_ID.ToString(), file.Name);
+                    file.BrowserFile = null;
+                }
             }
 
             bool completed;
