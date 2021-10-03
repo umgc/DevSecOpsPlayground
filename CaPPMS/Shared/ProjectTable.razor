@@ -193,7 +193,10 @@ else
         projectListCollapseMap.Clear();
         foreach (Row row in this.GetRows())
         {
-            projectListCollapseMap.Add(row.DataBoundItem as ProjectInformation, true);
+            if (!projectListCollapseMap.ContainsKey(row.DataBoundItem as ProjectInformation))
+            {
+                projectListCollapseMap.Add(row.DataBoundItem as ProjectInformation, true);
+            }
         }
     }
 }
