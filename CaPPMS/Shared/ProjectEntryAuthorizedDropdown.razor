@@ -85,41 +85,46 @@
             <tr>
                 <td>
                     <h6><b>Attachments:</b></h6>
-                    <div class="col-9">
-                        <table>
-                            @foreach (ProjectFile file in attachmentSelection.Keys)
-                            {
-                                <tr>
-                                    <td>
-                                        <input type="checkbox" @bind-value="attachmentSelection[file]" />
-                                    </td>
-                                    <td>
-                                        @if (attachmentSelection[file])
-                                        {
-                                            <a href="/download/@file.Location"
-                                               download="@file.Name"
-                                               target="_top">
-                                                <b>@file.Name </b>
-                                            </a>
-                                        }
-                                        else
-                                        {
-                                            <a href="/download/@file.Location"
-                                               download="@file.Name"
-                                               target="_top">
-                                                @file.Name
-                                            </a>
-                                        }
-                                    </td>
-                                </tr>
-                            }
-                        </table>
-                    </div>
-                    <div class="col-3">
-                        <label>
-                            Attachment(s):
-                            <InputFile id="attachment" OnChange="LoadFiles" multiple accept=".doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,.ppt,.pptx,.pdf,.txt" />
-                        </label>
+                    <div class="row">
+                        <div class="col-9">
+                            <table>
+                                @foreach (ProjectFile file in attachmentSelection.Keys)
+                                {
+                                    <tr>
+                                        <td>
+                                            <input type="checkbox" @bind-value="attachmentSelection[file]" />
+                                        </td>
+                                        <td>
+                                            @if (attachmentSelection[file])
+                                            {
+                                                <a href="/download/@file.Location"
+                                                   download="@file.Name"
+                                                   target="_top">
+                                                    <b>@file.Name </b>
+                                                </a>
+                                            }
+                                            else
+                                            {
+                                                <a href="/download/@file.Location"
+                                                   download="@file.Name"
+                                                   target="_top">
+                                                    @file.Name
+                                                </a>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </table>
+                        </div>
+                        <div class="col-3">
+                            <label>
+                                Attachment(s):
+                                <InputFile id="attachment" OnChange="LoadFiles" multiple accept=".doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,.ppt,.pptx,.pdf,.txt" />
+                            </label>
+                            <button type="button" class="btn-danger" @onclick="() => DeleteSelectedAttachments()">
+                                Delete Selected
+                            </button>
+                        </div>
                     </div>
                 </td>
             </tr>
@@ -156,11 +161,11 @@
 
         }
     }
+    [CascadingParameter] private Task<AuthenticationState> authenticationState { get; set; }
     [Parameter] public string CollapseEntry { get; set; } = "collapse";
     private ProjectInformation projectInformation;
 
     private Dictionary<ProjectFile, bool> attachmentSelection = new Dictionary<ProjectFile, bool>();
-    private List<IProjectFile> loadedFiles = new();
 
     private async Task HandleValidSubmit()
     {
@@ -171,27 +176,27 @@
             if (uploaded)
             {
                 projectInformation.IsDirty = false;
-                loadedFiles.Clear();
-                projectInformation = new ProjectInformation();
             }
 
             await Task.Delay(2000);
         });
     }
 
-    private void DeleteSelectedAttachments()
+    private async Task DeleteSelectedAttachments()
     {
+        var authState = await authenticationState;
         foreach (ProjectFile file in attachmentSelection.Keys)
         {
             if (attachmentSelection[file])
             {
-                projectInformation.Attachments.Remove(file);
+                await ProjectManager.RemoveFileAsync(projectInformation, file, authState.User);
             }
         }
     }
     private void LoadFiles(InputFileChangeEventArgs inputFile)
     {
-        this.loadedFiles.Clear();
+        List<IProjectFile> loadedFiles = new();
+
         foreach (var file in inputFile.GetMultipleFiles().Take(ProjectManager.MaxNumberOfFiles))
         {
             if (file.Size > ProjectManager.MaxMBSizePerFile)
@@ -201,7 +206,7 @@
 
             var projectFile = new ProjectFile { BrowserFile = file };
 
-            this.loadedFiles.Add(projectFile);
+            loadedFiles.Add(projectFile);
         }
 
         projectInformation.AddAttachments(loadedFiles);
