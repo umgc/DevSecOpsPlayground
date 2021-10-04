@@ -22,12 +22,12 @@ else
             <thead class="thead-light">
                 <tr>
                     <th></th>
-                    @foreach (var headerCell in this.HeaderRow)
+                    @foreach (var header in this.HeaderRow)
                     {
-                        <th>
-                            @headerCell.Value
+                        <th @onclick="e => SortByColumn(header.ColumnId)">
+                            @header.Value
                         </th>
-                    }
+                    } 
                     @if (isAuthenticated)
                     {
                         <th>
@@ -37,7 +37,7 @@ else
                 </tr>
             </thead>
             <tbody>
-                @foreach (var row in this.GetRows().OrderByDescending(o => o.Cells[0]))
+                @foreach (var row in this.sortedRows)
                 {
                     <tr>
                         <td>
@@ -128,6 +128,10 @@ else
 
     private Dictionary<ProjectInformation, bool> projectListCollapseMap = new Dictionary<ProjectInformation, bool>();
 
+    IEnumerable<Row> sortedRows;
+    private int columnIndexSort = 0;
+    private bool isColumnSortAscending = true;
+
     protected override async Task OnInitializedAsync()
     {
 
@@ -135,6 +139,7 @@ else
 
         this.isAuthenticated = authState.User?.Identity.IsAuthenticated ?? false;
         InitializeCollapseMap();
+        this.sortedRows = Rows;
 
         this.DataSourceChanged += (o, e) =>
         {
@@ -159,6 +164,7 @@ else
             var ideas = o as ICollection<ProjectInformation>;
 
             this.DataSource = ideas;
+            this.sortedRows = Rows;
         };
 
         await base.OnInitializedAsync();
@@ -202,6 +208,23 @@ else
 
     private void SortByColumn(int column)
     {
-        
+        Console.Error.WriteLine(column + " clicked");
+        if (columnIndexSort == column)
+        {
+            isColumnSortAscending = !isColumnSortAscending;
+        } else
+        {
+            isColumnSortAscending = true;
+            columnIndexSort = column;
+        }
+
+        if (isColumnSortAscending)
+        {
+            sortedRows = Rows.OrderBy(o => o.Cells[columnIndexSort]);
+        } else
+        {
+            sortedRows = Rows.OrderByDescending(o => o.Cells[columnIndexSort]);
+        }
+
     }
 }
