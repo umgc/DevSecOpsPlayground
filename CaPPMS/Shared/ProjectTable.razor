@@ -16,7 +16,12 @@ else
 <div>
     <div>
         <label>
-            <input id="filter" class="input-group-text p-2 mb-lg-3" type="text" placeholder="Filter the data here" @bind="Filter" @bind:event="oninput" />
+            <input id="filter" 
+                   class="input-group-text p-2 mb-lg-3" 
+                   type="text" 
+                   placeholder="Filter the data here" 
+                   @bind="Filter" 
+                   @bind:event="oninput" />
         </label>
         <table class="@string.Join(" ", TableCssClasses)">
             <thead class="thead-light">
