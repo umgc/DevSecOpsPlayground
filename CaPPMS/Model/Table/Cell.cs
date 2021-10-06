@@ -13,7 +13,7 @@ namespace CaPPMS.Model.Table
         Data
     }
 
-    public class Cell
+    public class Cell : IComparable
     {
         public Cell() { }
 
@@ -55,6 +55,11 @@ namespace CaPPMS.Model.Table
         public int ColSpan { get; set; } = 1;
 
         public IEnumerable<Attribute> Attributes { get; private set; }
+
+        public int CompareTo(object obj)
+        {
+            return this.ToString().CompareTo(obj.ToString());
+        }
 
         public override string ToString()
         {
