@@ -18,10 +18,6 @@
             </div>
             <div class="card-body">
                 @comment.Comments
-                <br />
-                CommentID: @comment.CommentId
-                <br />
-                ProjectID: @comment.ProjectID
             </div>
             <div>
                 <button @onclick="e => DeleteComment(comment)">Delete</button>
