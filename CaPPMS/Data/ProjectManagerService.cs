@@ -276,16 +276,6 @@ namespace CaPPMS.Data
             {
                 project.Comments.Remove(comment.CommentId);
                 ProjectIdeasChanged?.Invoke(ProjectIdeas.Values, EventArgs.Empty);
-            } else
-            {
-                foreach (ProjectInformation projectInformation in ProjectIdeas.Values)
-                {
-                    if (projectInformation.Comments.Keys.Contains(comment.CommentId))
-                    {
-                        projectInformation.Comments.Remove(comment.CommentId);
-                        ProjectIdeasChanged?.Invoke(ProjectIdeas.Values, EventArgs.Empty);
-                    }
-                }
             }
         }
 
