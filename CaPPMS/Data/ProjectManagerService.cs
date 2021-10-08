@@ -270,8 +270,28 @@ namespace CaPPMS.Data
             }
         }
 
+        public void DeleteComment(Comment comment)
+        {
+            if (ProjectIdeas.TryGetValue(comment.ProjectID, out ProjectInformation project))
+            {
+                project.Comments.Remove(comment.CommentId);
+                ProjectIdeasChanged?.Invoke(ProjectIdeas.Values, EventArgs.Empty);
+            } else
+            {
+                foreach (ProjectInformation projectInformation in ProjectIdeas.Values)
+                {
+                    if (projectInformation.Comments.Keys.Contains(comment.CommentId))
+                    {
+                        projectInformation.Comments.Remove(comment.CommentId);
+                        ProjectIdeasChanged?.Invoke(ProjectIdeas.Values, EventArgs.Empty);
+                    }
+                }
+            }
+        }
+
         public IEnumerable<Comment> GetComments(Guid projectID)
         {
+            Console.Error.WriteLine("Loading comments:" + projectID);
             if(ProjectIdeas.TryGetValue(projectID, out ProjectInformation project))
             {
                 List<Comment> comments = new List<Comment>();

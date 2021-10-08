@@ -18,6 +18,13 @@
             </div>
             <div class="card-body">
                 @comment.Comments
+                <br />
+                CommentID: @comment.CommentId
+                <br />
+                ProjectID: @comment.ProjectID
+            </div>
+            <div>
+                <button @onclick="e => DeleteComment(comment)">Delete</button>
             </div>
         </div>
     }
@@ -112,5 +119,9 @@ else
         NewComment.UpdateDateTime = DateTime.Now;
         CommentManager.AddComment(NewComment);
         NewComment = new Comment(ProjectGuid);
+    }
+    private void DeleteComment(Comment comment)
+    {
+        CommentManager.DeleteComment(comment);
     }
 }
