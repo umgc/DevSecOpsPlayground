@@ -136,15 +136,19 @@
                     </CascadingAuthenticationState>
                 </td>
             </tr>
-            <tr>
-                <td>
-                    <button class="btn btn-primary" type="button" @onclick="e => completeClicked = !completeClicked">Complete Project</button>
-                    @if (completeClicked)
-                    {
-                        <CompleteProjectComponent @bind-ProjectInformation="projectInformation"/>
-                    }
-                </td>
-            </tr>
+            @if (!ProjectInformation.Status.Equals("Complete"))
+            {
+                <tr>
+                    <td>
+                        <button class="btn btn-primary" type="button" @onclick="e => completeClicked = !completeClicked">Complete Project</button>
+                        @if (completeClicked)
+                        {
+                            <CompleteProjectComponent @bind-ProjectInformation="projectInformation" />
+                        }
+                    </td>
+                </tr>
+            }
+
         </table>
         <ConfirmationDialogBox Command="Update"
                                Prompt="Confirm changes?"

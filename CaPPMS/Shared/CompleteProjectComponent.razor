@@ -8,48 +8,106 @@
         <ValidationSummary />
         <div class="p-5">
             <h2>@this.Title</h2>
-            <table class="table w-50 p-5">
-                <tr class="row w-25">
-                    <td class="d-xl-table-cell">
-                        <label>
-                            Semester Term:
-                            <select class="form-control" id="SemesterTerm" name="SemesterTerm">
-                                <option>Fall</option>
-                                <option>Spring</option>
-                                <option>Summer</option>
-                            </select>
-                        </label>
-                    </td>
-                </tr>
-                <tr class="row w-25">
-                    <td class="d-xl-table-cell">
-                        <label>
-                            Semester Year:
-                            <select class="form-control" id="SemesterYear" name="SemesterYear">
-                                <option>2022</option>
-                                <option>2021</option>
-                                <option>2020</option>
-                                <option>2019</option>
-                                <option>2018</option>
-                                <option>2017</option>
-                            </select>
-                        </label>
-                    </td>
-                </tr>
-                <tr class="row w-25">
-                    <td class="d-xl-table-cell">
-                        <label>
-                            Project Plan:
-                            <select class="form-control" id="ProjectPlan" name="ProjectPlan">
-                                @foreach (ProjectFile file in attachmentSelection.Keys)
-                                {
-                                    <option>@file.Name</option>
-                                }
-                            </select>
-                        </label>
-                    </td>
-                </tr>
-            </table>
+            <label>
+                Semester Term:
+                <select class="form-control" id="SemesterTerm" name="SemesterTerm" @bind="SemesterTermVal">
+                    <option value="">Select...</option>
+                    <option>Fall</option>
+                    <option>Spring</option>
+                    <option>Summer</option>
+                </select>
+            </label>
+
+            <label>
+                Semester Year:
+                <select class="form-control" id="SemesterYear" name="SemesterYear" @bind="SemesterYearVal">
+                    <option value="">Select...</option>
+                    <option>2022</option>
+                    <option>2021</option>
+                    <option>2020</option>
+                    <option>2019</option>
+                    <option>2018</option>
+                    <option>2017</option>
+                </select>
+            </label>
+            <hr />
+            <label>
+                Project Plan:
+                <select class="form-control" id="ProjectPlan" name="ProjectPlan" @bind="ProjectPlanPath">
+                    <option value="">Select...</option>
+                    @foreach (ProjectFile file in ProjectInformation.Attachments)
+                    {
+                        <option>@file.Name</option>
+                    }
+                </select>
+            </label>
+            <hr />
+            <label>
+                Software Requirements Specification (SRS):
+                <select class="form-control" id="SRS" name="SRS" @bind="SRSPath">
+                    <option value="">Select...</option>
+                    @foreach (ProjectFile file in ProjectInformation.Attachments)
+                    {
+                        <option>@file.Name</option>
+                    }
+                </select>
+            </label>
+            <hr />
+            <label>
+                Technical Design Document (TDD):
+                <select class="form-control" id="TDD" name="TDD" @bind="TDDPath">
+                    <option value="">Select...</option>
+                    @foreach (ProjectFile file in ProjectInformation.Attachments)
+                    {
+                        <option>@file.Name</option>
+                    }
+                </select>
+            </label>
+            <hr />
+            <label>
+                Deployment and Operations Guide (Runbook):
+                <select class="form-control" id="Runbook" name="Runbook" @bind="RunbookPath">
+                    <option value="">Select...</option>
+                    @foreach (ProjectFile file in ProjectInformation.Attachments)
+                    {
+                        <option>@file.Name</option>
+                    }
+                </select>
+            </label>
+            <hr />
+            <label>
+                Programmers Guide:
+                <select class="form-control" id="ProgrammersGuide" name="ProgrammersGuide" @bind="ProgGuidePath">
+                    <option value="">Select...</option>
+                    @foreach (ProjectFile file in ProjectInformation.Attachments)
+                    {
+                        <option>@file.Name</option>
+                    }
+                </select>
+            </label>
+            <hr />
+            <label>
+                User Guide:
+                <select class="form-control" id="UserGuide" name="UserGuide" @bind="UserGuidePath">
+                    <option value="">Select...</option>
+                    @foreach (ProjectFile file in ProjectInformation.Attachments)
+                    {
+                        <option>@file.Name</option>
+                    }
+                </select>
+            </label>
+            <hr />
+            <label>
+                Test Report:
+                <select class="form-control" id="TestReport" name="TestReport" @bind="TestReportPath">
+                    <option value="">Select...</option>
+                    @foreach (ProjectFile file in ProjectInformation.Attachments)
+                    {
+                        <option>@file.Name</option>
+                    }
+                </select>
+            </label>
+            <hr />
             <button type="submit" class="btn-primary" @onclick="e => this.Complete()">
                 Complete
             </button>
@@ -77,15 +135,115 @@
 
     private ProjectInformation projectInformation;
     private Dictionary<ProjectFile, bool> attachmentSelection = new Dictionary<ProjectFile, bool>();
-
+    private String ProjectPlanPath = "";
+    private String SRSPath = "";
+    private String TDDPath = "";
+    private String RunbookPath = "";
+    private String ProgGuidePath = "";
+    private String UserGuidePath = "";
+    private String TestReportPath = "";
+    private String SemesterTermVal = "";
+    private String SemesterYearVal = "";
 
     private void CancelComplete()
     {
-        this.ProjectInformation = null;
+        this.projectInformation = null;
     }
     private void Complete()
     {
+        if(DefaultSelected(this.ProjectPlanPath))
+        {
+            projectInformation.ProjectPlan = "";
+        }
+        else
+        {
+            projectInformation.ProjectPlan = this.ProjectPlanPath;
+        }
 
+        if (DefaultSelected(this.SRSPath))
+        {
+            projectInformation.SRS = "";
+        }
+        else
+        {
+            projectInformation.SRS = this.SRSPath;
+        }
+
+        if (DefaultSelected(this.TDDPath))
+        {
+            projectInformation.TDD = "";
+        }
+        else
+        {
+            projectInformation.TDD = this.TDDPath;
+        }
+
+        if (DefaultSelected(this.RunbookPath))
+        {
+            projectInformation.Runbook = "";
+        }
+        else
+        {
+            projectInformation.Runbook = this.RunbookPath;
+        }
+
+        if (DefaultSelected(this.ProgGuidePath))
+        {
+            projectInformation.Runbook = "";
+        }
+        else
+        {
+            projectInformation.Runbook = this.ProgGuidePath;
+        }
+
+        if (DefaultSelected(this.UserGuidePath))
+        {
+            projectInformation.UsersGuide = "";
+        }
+        else
+        {
+            projectInformation.UsersGuide = this.UserGuidePath;
+        }
+
+        if (DefaultSelected(this.TestReportPath))
+        {
+            projectInformation.TestReport = "";
+        }
+        else
+        {
+            projectInformation.TestReport = this.TestReportPath;
+        }
+
+        if (DefaultSelected(this.SemesterTermVal))
+        {
+            projectInformation.SemesterTerm = "";
+        }
+        else
+        {
+            projectInformation.SemesterTerm = this.SemesterTermVal;
+        }
+
+        if (DefaultSelected(this.SemesterYearVal))
+        {
+            projectInformation.SemesterYear = "";
+        }
+        else
+        {
+            projectInformation.SemesterYear = this.SemesterYearVal;
+        }
+
+        projectInformation.Status = "Complete";
+    }
+    private bool DefaultSelected(string val)
+    {
+        if(val.Equals("Select..."))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     private async Task HandleValidSubmit()
