@@ -23,6 +23,6 @@ namespace CaPPMS.Model
 
         public DateTime UpdateDateTime { get; set; } = default;
 
-        public Guid ProjectID { get; private set; } = Guid.Empty;
+        public Guid ProjectID { get; set; } = Guid.Empty;
     }
 }
