@@ -13,24 +13,27 @@
     @if (idea.Status.Equals("Complete"))
     {
         <h3>@idea.SemesterTerm @idea.SemesterYear </h3>
-        <b> The teams documents are listed below: </b>
+        <b>@idea.ProjectTitle </b>
+        <p> @idea.ProjectDescription </p>
+        <b> Documents: </b>
         <ul>
-            <li> Project Plan: @idea.ProjectPlan </li>
-            <li> Software Requirements Specification (SRS): @idea.SRS </li>
-            <li> Technical Design Document (TDD): @idea.TDD </li>
-            <li> Deployment and Operations Guide (Runbook): @idea.Runbook </li>
-            <li> Programmer Guide: @idea.ProgrammersGuide </li>
-            <li> User Guide: @idea.UsersGuide </li>
-            <li> Test Report: @idea.TestReport </li>
+            <li> <a href="/download/@idea.ProjectPlanLink" download="@idea.ProjectPlan" target="_top">Project Plan</a> </li>
+            <li> <a href="/download/@idea.SRSLink" download="@idea.SRS" target="_top">Software Requirements Specification (SRS)</a> </li>
+            <li> <a href="/download/@idea.TDDLink" download="@idea.TDD" target="_top">Technical Design Document (TDD)</a> </li>
+            <li> <a href="/download/@idea.RunbookLink" download="@idea.Runbook" target="_top">Deployment and Operations Guide (Runbook)</a> </li>
+            <li> <a href="/download/@idea.ProgrammersGuideLink" download="@idea.ProgrammersGuide" target="_top">Programmer Guide</a> </li>
+            <li> <a href="/download/@idea.UsersGuideLink" download="@idea.UsersGuide" target="_top">User Guide</a> </li>
+            <li> <a href="/download/@idea.TestReportLink" download="@idea.TestReport" target="_top">Test Report</a> </li>
         </ul>
-        <b> The teams links are listed below: </b>
+        <b> Links: </b>
         <ul>
             @foreach (string vLink in idea.VideoLinks)
             {
-                <li> Video Link: @vLink </li>
+                <li><a href="@vLink">Video</a> </li>
             }
-            <li> GitHub Repo: @idea.Github </li>
+            <li> <a href="@idea.Github">GitHub</a> </li>
         </ul>
+        <hr />
 
     }
 

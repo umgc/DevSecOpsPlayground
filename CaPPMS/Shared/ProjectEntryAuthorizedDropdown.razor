@@ -136,7 +136,7 @@
                     </CascadingAuthenticationState>
                 </td>
             </tr>
-            @if (!ProjectInformation.Status.Equals("Complete"))
+            @if (ProjectInformation.Status.Equals("Approved"))
             {
                 <tr>
                     <td>
@@ -148,8 +148,22 @@
                     </td>
                 </tr>
             }
+        <tr>
+            @if (ProjectInformation.Status.Equals("Complete"))
+            {
+                <b>Project Completed @ProjectInformation.SemesterTerm @ProjectInformation.SemesterYear </b>
+            }
+            <hr />
+        </tr>
 
         </table>
+        @if (ProjectInformation.Status.Equals("New"))
+        {
+            <button type="button" class="btn btn-success" @onclick="ApproveIdea">Approve</button><span>&nbsp;</span>
+        }
+
+       
+
         <ConfirmationDialogBox Command="Update"
                                Prompt="Confirm changes?"
                                ConfirmedChanged="UpdateRecord" />
@@ -202,6 +216,23 @@
         NavigationManager.NavigateTo($"{ProjectManager.FileManager.DownloadPath}{location}", true);
 
     }
+
+    private async Task ApproveIdea(MouseEventArgs e)
+    {
+        ProjectInformation.Status = "Approved";
+        await UpdateRecordAsync(e);
+    }
+
+    private async Task UpdateRecordAsync(EventArgs e)
+    {
+        if (!ProjectInformation.IsDirty)
+        {
+            return;
+        }
+
+        ProjectInformation.IsDirty = !await ProjectManager.UpdateAsync(ProjectInformation);
+    }
+
     private async Task UpdateRecord(bool confirmed)
     {
         if (!confirmed)

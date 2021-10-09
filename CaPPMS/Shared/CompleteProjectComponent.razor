@@ -11,8 +11,7 @@
             <label>
                 Semester Term:
                 <select class="form-control" id="SemesterTerm" name="SemesterTerm" @bind="SemesterTermVal">
-                    <option value="">Select...</option>
-                    <option>Fall</option>
+                    <option selected="selected">Fall</option>
                     <option>Spring</option>
                     <option>Summer</option>
                 </select>
@@ -21,8 +20,7 @@
             <label>
                 Semester Year:
                 <select class="form-control" id="SemesterYear" name="SemesterYear" @bind="SemesterYearVal">
-                    <option value="">Select...</option>
-                    <option>2022</option>
+                    <option selected="selected">2022</option>
                     <option>2021</option>
                     <option>2020</option>
                     <option>2019</option>
@@ -34,7 +32,10 @@
             <label>
                 Project Plan:
                 <select class="form-control" id="ProjectPlan" name="ProjectPlan" @bind="ProjectPlanPath">
-                    <option value="">Select...</option>
+                    @if(ProjectInformation.Attachments.Count == 0)
+                {
+                    <option selected="selected">Select...</option>
+                } 
                     @foreach (ProjectFile file in ProjectInformation.Attachments)
                     {
                         <option>@file.Name</option>
@@ -45,7 +46,10 @@
             <label>
                 Software Requirements Specification (SRS):
                 <select class="form-control" id="SRS" name="SRS" @bind="SRSPath">
-                    <option value="">Select...</option>
+                    @if (ProjectInformation.Attachments.Count == 0)
+                    {
+                        <option selected="selected">Select...</option>
+                    }
                     @foreach (ProjectFile file in ProjectInformation.Attachments)
                     {
                         <option>@file.Name</option>
@@ -56,7 +60,10 @@
             <label>
                 Technical Design Document (TDD):
                 <select class="form-control" id="TDD" name="TDD" @bind="TDDPath">
-                    <option value="">Select...</option>
+                    @if (ProjectInformation.Attachments.Count == 0)
+                    {
+                        <option selected="selected">Select...</option>
+                    }
                     @foreach (ProjectFile file in ProjectInformation.Attachments)
                     {
                         <option>@file.Name</option>
@@ -67,7 +74,10 @@
             <label>
                 Deployment and Operations Guide (Runbook):
                 <select class="form-control" id="Runbook" name="Runbook" @bind="RunbookPath">
-                    <option value="">Select...</option>
+                    @if (ProjectInformation.Attachments.Count == 0)
+                    {
+                        <option selected="selected">Select...</option>
+                    }
                     @foreach (ProjectFile file in ProjectInformation.Attachments)
                     {
                         <option>@file.Name</option>
@@ -78,7 +88,10 @@
             <label>
                 Programmers Guide:
                 <select class="form-control" id="ProgrammersGuide" name="ProgrammersGuide" @bind="ProgGuidePath">
-                    <option value="">Select...</option>
+                    @if (ProjectInformation.Attachments.Count == 0)
+                    {
+                        <option selected="selected">Select...</option>
+                    }
                     @foreach (ProjectFile file in ProjectInformation.Attachments)
                     {
                         <option>@file.Name</option>
@@ -89,7 +102,10 @@
             <label>
                 User Guide:
                 <select class="form-control" id="UserGuide" name="UserGuide" @bind="UserGuidePath">
-                    <option value="">Select...</option>
+                    @if (ProjectInformation.Attachments.Count == 0)
+                    {
+                        <option selected="selected">Select...</option>
+                    }
                     @foreach (ProjectFile file in ProjectInformation.Attachments)
                     {
                         <option>@file.Name</option>
@@ -100,7 +116,10 @@
             <label>
                 Test Report:
                 <select class="form-control" id="TestReport" name="TestReport" @bind="TestReportPath">
-                    <option value="">Select...</option>
+                    @if (ProjectInformation.Attachments.Count == 0)
+                    {
+                        <option selected="selected">Select...</option>
+                    }
                     @foreach (ProjectFile file in ProjectInformation.Attachments)
                     {
                         <option>@file.Name</option>
@@ -133,6 +152,7 @@
     }
     [Parameter] public string Title { get; set; } = null;
 
+    
     private ProjectInformation projectInformation;
     private Dictionary<ProjectFile, bool> attachmentSelection = new Dictionary<ProjectFile, bool>();
     private String ProjectPlanPath = "";
@@ -154,10 +174,20 @@
         if(DefaultSelected(this.ProjectPlanPath))
         {
             projectInformation.ProjectPlan = "";
+            projectInformation.ProjectPlanLink = "";
         }
         else
         {
             projectInformation.ProjectPlan = this.ProjectPlanPath;
+            projectInformation.ProjectPlanLink = "";
+
+            foreach(var attachment in ProjectInformation.Attachments)
+            {
+                if(attachment.Name.Equals(this.ProjectPlanPath))
+                {
+                    projectInformation.ProjectPlanLink = attachment.Location;
+                }
+            }
         }
 
         if (DefaultSelected(this.SRSPath))
@@ -233,6 +263,8 @@
         }
 
         projectInformation.Status = "Complete";
+
+        
     }
     private bool DefaultSelected(string val)
     {
@@ -255,7 +287,7 @@
             if (uploaded)
             {
                 projectInformation.IsDirty = false;
-                projectInformation = new ProjectInformation();
+                //projectInformation = new ProjectInformation();
             }
 
             await Task.Delay(2000);

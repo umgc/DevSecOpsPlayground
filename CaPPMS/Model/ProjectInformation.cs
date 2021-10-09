@@ -111,6 +111,24 @@ namespace CaPPMS.Model
             }
         }
 
+        private string projectPlanLink = string.Empty;
+
+        [Export(true)]
+        [DisplayName("Project Plan Link")]
+        [Browsable(true)]
+        public string ProjectPlanLink
+        {
+            get
+            {
+                return this.projectPlanLink;
+            }
+            set
+            {
+                this.projectPlanLink = value;
+                this.IsDirty = true;
+            }
+        }
+
         private string srs = string.Empty;
 
         [Export(true)]
@@ -125,6 +143,24 @@ namespace CaPPMS.Model
             set
             {
                 this.srs = value;
+                this.IsDirty = true;
+            }
+        }
+
+        private string srsLink = string.Empty;
+
+        [Export(true)]
+        [DisplayName("Software Requirements Specification Link")]
+        [Browsable(true)]
+        public string SRSLink
+        {
+            get
+            {
+                return this.srsLink;
+            }
+            set
+            {
+                this.srsLink = value;
                 this.IsDirty = true;
             }
         }
@@ -147,6 +183,24 @@ namespace CaPPMS.Model
             }
         }
 
+        private string tddLink = string.Empty;
+
+        [Export(true)]
+        [DisplayName("Technical Design Document Link")]
+        [Browsable(true)]
+        public string TDDLink
+        {
+            get
+            {
+                return this.tddLink;
+            }
+            set
+            {
+                this.tddLink = value;
+                this.IsDirty = true;
+            }
+        }
+
         private string runbook = string.Empty;
 
         [Export(true)]
@@ -161,6 +215,25 @@ namespace CaPPMS.Model
             set
             {
                 this.runbook = value;
+                this.IsDirty = true;
+            }
+        }
+
+
+        private string runbookLink = string.Empty;
+
+        [Export(true)]
+        [DisplayName("Deployment and Operations Guide(Runbook) Link")]
+        [Browsable(true)]
+        public string RunbookLink
+        {
+            get
+            {
+                return this.runbookLink;
+            }
+            set
+            {
+                this.runbookLink = value;
                 this.IsDirty = true;
             }
         }
@@ -183,6 +256,24 @@ namespace CaPPMS.Model
             }
         }
 
+        private string programmersGuideLink = string.Empty;
+
+        [Export(true)]
+        [DisplayName("Programmers Guide Link")]
+        [Browsable(true)]
+        public string ProgrammersGuideLink
+        {
+            get
+            {
+                return this.programmersGuideLink;
+            }
+            set
+            {
+                this.programmersGuideLink = value;
+                this.IsDirty = true;
+            }
+        }
+
         private string usersGuide = string.Empty;
 
         [Export(true)]
@@ -201,6 +292,24 @@ namespace CaPPMS.Model
             }
         }
 
+        private string usersGuideLink = string.Empty;
+
+        [Export(true)]
+        [DisplayName("Users Guide Link")]
+        [Browsable(true)]
+        public string UsersGuideLink
+        {
+            get
+            {
+                return this.usersGuideLink;
+            }
+            set
+            {
+                this.usersGuideLink = value;
+                this.IsDirty = true;
+            }
+        }
+
         private string testReport = string.Empty;
 
         [Export(true)]
@@ -215,6 +324,24 @@ namespace CaPPMS.Model
             set
             {
                 this.testReport = value;
+                this.IsDirty = true;
+            }
+        }
+
+        private string testReportLink = string.Empty;
+
+        [Export(true)]
+        [DisplayName("Test Report Link")]
+        [Browsable(true)]
+        public string TestReportLink
+        {
+            get
+            {
+                return this.testReportLink;
+            }
+            set
+            {
+                this.testReportLink = value;
                 this.IsDirty = true;
             }
         }
