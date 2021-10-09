@@ -149,11 +149,13 @@
                 </tr>
             }
         <tr>
-            @if (ProjectInformation.Status.Equals("Complete"))
-            {
-                <b>Project Completed @ProjectInformation.SemesterTerm @ProjectInformation.SemesterYear </b>
-            }
-            <hr />
+            <td>
+                @if (ProjectInformation.Status.Equals("Complete"))
+                {
+                    <b>Project Completed @ProjectInformation.SemesterTerm @ProjectInformation.SemesterYear </b>
+                }
+                <hr />
+            </td>
         </tr>
 
         </table>
