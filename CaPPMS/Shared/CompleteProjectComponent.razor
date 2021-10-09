@@ -1,0 +1,297 @@
+﻿@using CaPPMS.Model
+@namespace CaPPMS.Shared
+@inject ProjectManagerService ProjectManager
+
+<div>
+    <EditForm Model="@this.ProjectInformation" OnValidSubmit="@HandleValidSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <div class="p-5">
+            <h2>@this.Title</h2>
+            <label>
+                Semester Term:
+                <select class="form-control" id="SemesterTerm" name="SemesterTerm" @bind="SemesterTermVal">
+                    <option selected="selected">Fall</option>
+                    <option>Spring</option>
+                    <option>Summer</option>
+                </select>
+            </label>
+
+            <label>
+                Semester Year:
+                <select class="form-control" id="SemesterYear" name="SemesterYear" @bind="SemesterYearVal">
+                    <option selected="selected">2022</option>
+                    <option>2021</option>
+                    <option>2020</option>
+                    <option>2019</option>
+                    <option>2018</option>
+                    <option>2017</option>
+                </select>
+            </label>
+            <hr />
+            <label>
+                Project Plan:
+                <select class="form-control" id="ProjectPlan" name="ProjectPlan" @bind="ProjectPlanPath">
+                    @if(ProjectInformation.Attachments.Count == 0)
+                {
+                    <option selected="selected">Select...</option>
+                } 
+                    @foreach (ProjectFile file in ProjectInformation.Attachments)
+                    {
+                        <option>@file.Name</option>
+                    }
+                </select>
+            </label>
+            <hr />
+            <label>
+                Software Requirements Specification (SRS):
+                <select class="form-control" id="SRS" name="SRS" @bind="SRSPath">
+                    @if (ProjectInformation.Attachments.Count == 0)
+                    {
+                        <option selected="selected">Select...</option>
+                    }
+                    @foreach (ProjectFile file in ProjectInformation.Attachments)
+                    {
+                        <option>@file.Name</option>
+                    }
+                </select>
+            </label>
+            <hr />
+            <label>
+                Technical Design Document (TDD):
+                <select class="form-control" id="TDD" name="TDD" @bind="TDDPath">
+                    @if (ProjectInformation.Attachments.Count == 0)
+                    {
+                        <option selected="selected">Select...</option>
+                    }
+                    @foreach (ProjectFile file in ProjectInformation.Attachments)
+                    {
+                        <option>@file.Name</option>
+                    }
+                </select>
+            </label>
+            <hr />
+            <label>
+                Deployment and Operations Guide (Runbook):
+                <select class="form-control" id="Runbook" name="Runbook" @bind="RunbookPath">
+                    @if (ProjectInformation.Attachments.Count == 0)
+                    {
+                        <option selected="selected">Select...</option>
+                    }
+                    @foreach (ProjectFile file in ProjectInformation.Attachments)
+                    {
+                        <option>@file.Name</option>
+                    }
+                </select>
+            </label>
+            <hr />
+            <label>
+                Programmers Guide:
+                <select class="form-control" id="ProgrammersGuide" name="ProgrammersGuide" @bind="ProgGuidePath">
+                    @if (ProjectInformation.Attachments.Count == 0)
+                    {
+                        <option selected="selected">Select...</option>
+                    }
+                    @foreach (ProjectFile file in ProjectInformation.Attachments)
+                    {
+                        <option>@file.Name</option>
+                    }
+                </select>
+            </label>
+            <hr />
+            <label>
+                User Guide:
+                <select class="form-control" id="UserGuide" name="UserGuide" @bind="UserGuidePath">
+                    @if (ProjectInformation.Attachments.Count == 0)
+                    {
+                        <option selected="selected">Select...</option>
+                    }
+                    @foreach (ProjectFile file in ProjectInformation.Attachments)
+                    {
+                        <option>@file.Name</option>
+                    }
+                </select>
+            </label>
+            <hr />
+            <label>
+                Test Report:
+                <select class="form-control" id="TestReport" name="TestReport" @bind="TestReportPath">
+                    @if (ProjectInformation.Attachments.Count == 0)
+                    {
+                        <option selected="selected">Select...</option>
+                    }
+                    @foreach (ProjectFile file in ProjectInformation.Attachments)
+                    {
+                        <option>@file.Name</option>
+                    }
+                </select>
+            </label>
+            <hr />
+            <button type="submit" class="btn-primary" @onclick="e => this.Complete()">
+                Complete
+            </button>
+            <button @onclick="e => this.CancelComplete()">
+                Cancel
+            </button>
+        </div>
+    </EditForm>
+</div>
+
+
+
+@code {
+    [Parameter] public EventCallback<ProjectInformation> ProjectInformationChanged { get; set; }
+    [Parameter]
+    public ProjectInformation ProjectInformation
+    {
+        get { return projectInformation; }
+        set
+        {
+            projectInformation = value;
+        }
+    }
+    [Parameter] public string Title { get; set; } = null;
+
+    
+    private ProjectInformation projectInformation;
+    private Dictionary<ProjectFile, bool> attachmentSelection = new Dictionary<ProjectFile, bool>();
+    private String ProjectPlanPath = "";
+    private String SRSPath = "";
+    private String TDDPath = "";
+    private String RunbookPath = "";
+    private String ProgGuidePath = "";
+    private String UserGuidePath = "";
+    private String TestReportPath = "";
+    private String SemesterTermVal = "";
+    private String SemesterYearVal = "";
+
+    private void CancelComplete()
+    {
+        this.projectInformation = null;
+    }
+    private void Complete()
+    {
+        if(DefaultSelected(this.ProjectPlanPath))
+        {
+            projectInformation.ProjectPlan = "";
+            projectInformation.ProjectPlanLink = "";
+        }
+        else
+        {
+            projectInformation.ProjectPlan = this.ProjectPlanPath;
+            projectInformation.ProjectPlanLink = "";
+
+            foreach(var attachment in ProjectInformation.Attachments)
+            {
+                if(attachment.Name.Equals(this.ProjectPlanPath))
+                {
+                    projectInformation.ProjectPlanLink = attachment.Location;
+                }
+            }
+        }
+
+        if (DefaultSelected(this.SRSPath))
+        {
+            projectInformation.SRS = "";
+        }
+        else
+        {
+            projectInformation.SRS = this.SRSPath;
+        }
+
+        if (DefaultSelected(this.TDDPath))
+        {
+            projectInformation.TDD = "";
+        }
+        else
+        {
+            projectInformation.TDD = this.TDDPath;
+        }
+
+        if (DefaultSelected(this.RunbookPath))
+        {
+            projectInformation.Runbook = "";
+        }
+        else
+        {
+            projectInformation.Runbook = this.RunbookPath;
+        }
+
+        if (DefaultSelected(this.ProgGuidePath))
+        {
+            projectInformation.Runbook = "";
+        }
+        else
+        {
+            projectInformation.Runbook = this.ProgGuidePath;
+        }
+
+        if (DefaultSelected(this.UserGuidePath))
+        {
+            projectInformation.UsersGuide = "";
+        }
+        else
+        {
+            projectInformation.UsersGuide = this.UserGuidePath;
+        }
+
+        if (DefaultSelected(this.TestReportPath))
+        {
+            projectInformation.TestReport = "";
+        }
+        else
+        {
+            projectInformation.TestReport = this.TestReportPath;
+        }
+
+        if (DefaultSelected(this.SemesterTermVal))
+        {
+            projectInformation.SemesterTerm = "";
+        }
+        else
+        {
+            projectInformation.SemesterTerm = this.SemesterTermVal;
+        }
+
+        if (DefaultSelected(this.SemesterYearVal))
+        {
+            projectInformation.SemesterYear = "";
+        }
+        else
+        {
+            projectInformation.SemesterYear = this.SemesterYearVal;
+        }
+
+        projectInformation.Status = "Complete";
+
+        
+    }
+    private bool DefaultSelected(string val)
+    {
+        if(val.Equals("Select..."))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        await Task.Run(async () =>
+        {
+            var uploaded = await ProjectManager.UpdateAsync(projectInformation);
+
+            if (uploaded)
+            {
+                projectInformation.IsDirty = false;
+                //projectInformation = new ProjectInformation();
+            }
+
+            await Task.Delay(2000);
+        });
+    }
+
+}

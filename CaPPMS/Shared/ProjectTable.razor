@@ -32,13 +32,8 @@ else
                         <th @onclick="e => SortByColumn(header.ColumnId)">
                             @header.Value
                         </th>
-                    } 
-                    @if (isAuthenticated)
-                    {
-                        <th>
-                            <span class="fas fa-microscope"></span>
-                        </th>
                     }
+                   
                 </tr>
             </thead>
             <tbody>
@@ -54,12 +49,7 @@ else
                         {
                             @((MarkupString)cell.ToString())
                         }
-                        @if (isAuthenticated)
-                        {
-                            <td>
-                                <button class="btn btn-primary" type="button" @onclick="((e) => ShowView(row.DataBoundItem as ProjectInformation))">VIEW</button>
-                            </td>
-                        }
+                        
                     </tr>
                     @if (!projectListCollapseMap[row.DataBoundItem as ProjectInformation])
                     {
