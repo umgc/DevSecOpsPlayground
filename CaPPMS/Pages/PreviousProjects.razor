@@ -10,10 +10,8 @@
 @inject ProjectManagerService ProjectManager
 @foreach (ProjectInformation idea in ProjectManager.ProjectIdeas.Values)
 {
-     <b> The teams documents are listed below: </b>
     @if (idea.Status.Equals("Complete"))
     {
-        <b>@idea.Status</b>
         <h3>@idea.SemesterTerm @idea.SemesterYear </h3>
         <b> The teams documents are listed below: </b>
         <ul>
