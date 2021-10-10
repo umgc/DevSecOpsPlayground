@@ -1,0 +1,101 @@
+﻿
+@using CaPPMS.Model
+@namespace CaPPMS.Shared
+@inject ProjectManagerService ProjectManager
+
+<div>
+    <EditForm Model="@this.ProjectInformation" OnValidSubmit="@HandleValidSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <div class="p-5">
+            <label>
+                Semester Term:
+                <select class="form-control" id="SemesterTerm" name="SemesterTerm" @bind="this.projectInformation.SemesterTerm">
+                    <option selected="selected">Fall</option>
+                    <option>Spring</option>
+                    <option>Summer</option>
+                </select>
+            </label>
+
+            <label>
+                Semester Year:
+                <select class="form-control" id="SemesterYear" name="SemesterYear" @bind="this.projectInformation.SemesterYear">
+                    <option selected="selected">2022</option>
+                    <option>2021</option>
+                    <option>2020</option>
+                    <option>2019</option>
+                    <option>2018</option>
+                    <option>2017</option>
+                </select>
+            </label>
+            @foreach (CompletedProjectDocumentation completedTeam in this.ProjectInformation.CompletedDocuments)
+            {
+                <label>Team: @completedTeam.TeamName</label>
+            }
+            <button class="btn btn-primary" type="button" @onclick="e => teamsClicked = !teamsClicked">Add Team</button>
+            @if (teamsClicked)
+            {
+                <CompleteProjectComponent @bind-ProjectInformation="projectInformation" />
+            }
+            
+            <hr/>
+            <button id="completeProjectBtn"type="submit" class="btn-primary" @onclick="Complete">
+                Complete Project
+            </button>
+            
+
+            <button @onclick="e => this.CancelComplete()">
+                Cancel
+            </button>
+
+        </div>
+    </EditForm>
+</div>
+
+
+@code {
+    [Parameter] public EventCallback<ProjectInformation> ProjectInformationChanged { get; set; }
+    [Parameter]
+    public ProjectInformation ProjectInformation
+    {
+        get { return projectInformation; }
+        set
+        {
+            projectInformation = value;
+        }
+    }
+
+    public ProjectInformation projectInformation = new ProjectInformation();
+    private bool teamsClicked = false;
+
+    private void CancelComplete()
+    {
+        this.projectInformation = null;
+    }
+
+    private async Task Complete(EventArgs e)
+    {
+        if (!ProjectInformation.IsDirty)
+        {
+            return;
+        }
+        ProjectInformation.IsDirty = !await ProjectManager.UpdateAsync(ProjectInformation);
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        await Task.Run(async () =>
+        {
+            var uploaded = await ProjectManager.UpdateAsync(projectInformation);
+
+            if (uploaded)
+            {
+                projectInformation.IsDirty = false;
+                //projectInformation = new ProjectInformation();
+            }
+
+            await Task.Delay(2000);
+        });
+    }
+
+}
