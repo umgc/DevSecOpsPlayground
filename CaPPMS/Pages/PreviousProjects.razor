@@ -8,42 +8,58 @@
 <hr />
 
 @inject ProjectManagerService ProjectManager
-@foreach (ProjectInformation idea in ProjectManager.ProjectIdeas.Values)
+@foreach (ProjectInformation idea in sortedProjects)
 {
-    @if (idea.Status.Equals("Complete"))
-    {
-        <h3>@idea.SemesterTerm @idea.SemesterYear </h3>
-        <b>@idea.ProjectTitle </b>
-        <p> @idea.ProjectDescription </p>
-        <b> Documents: </b>
-        <ul>
-            <li> <a href="/download/@idea.ProjectPlanLink" download="@idea.ProjectPlan" target="_top">Project Plan</a> </li>
-            <li> <a href="/download/@idea.SRSLink" download="@idea.SRS" target="_top">Software Requirements Specification (SRS)</a> </li>
-            <li> <a href="/download/@idea.TDDLink" download="@idea.TDD" target="_top">Technical Design Document (TDD)</a> </li>
-            <li> <a href="/download/@idea.RunbookLink" download="@idea.Runbook" target="_top">Deployment and Operations Guide (Runbook)</a> </li>
-            <li> <a href="/download/@idea.ProgrammersGuideLink" download="@idea.ProgrammersGuide" target="_top">Programmer Guide</a> </li>
-            <li> <a href="/download/@idea.UsersGuideLink" download="@idea.UsersGuide" target="_top">User Guide</a> </li>
-            <li> <a href="/download/@idea.TestReportLink" download="@idea.TestReport" target="_top">Test Report</a> </li>
-        </ul>
-        <b> Links: </b>
-        <ul>
-            @foreach (string vLink in idea.VideoLinks)
-            {
-                <li><a href="@vLink">Video</a> </li>
-            }
-            <li> <a href="@idea.Github">GitHub</a> </li>
-        </ul>
-        <hr />
-
-    }
-
+    <h3>@idea.SemesterTerm @idea.SemesterYear </h3>
+    <b>@idea.ProjectTitle </b>
+    <p> @idea.ProjectDescription </p>
+    <b> Documents: </b>
+    <ul>
+        <li> <a href="/download/@idea.ProjectPlanLink" download="@idea.ProjectPlan" target="_top">Project Plan</a> </li>
+        <li> <a href="/download/@idea.SRSLink" download="@idea.SRS" target="_top">Software Requirements Specification (SRS)</a> </li>
+        <li> <a href="/download/@idea.TDDLink" download="@idea.TDD" target="_top">Technical Design Document (TDD)</a> </li>
+        <li> <a href="/download/@idea.RunbookLink" download="@idea.Runbook" target="_top">Deployment and Operations Guide (Runbook)</a> </li>
+        <li> <a href="/download/@idea.ProgrammersGuideLink" download="@idea.ProgrammersGuide" target="_top">Programmer Guide</a> </li>
+        <li> <a href="/download/@idea.UsersGuideLink" download="@idea.UsersGuide" target="_top">User Guide</a> </li>
+        <li> <a href="/download/@idea.TestReportLink" download="@idea.TestReport" target="_top">Test Report</a> </li>
+    </ul>
+    <b> Links: </b>
+    <ul>
+        @foreach (string vLink in idea.VideoLinks)
+        {
+            <li><a href="@vLink">Video</a> </li>
+        }
+        <li> <a href="@idea.Github">GitHub</a> </li>
+    </ul>
+    <hr />
 }
 
 
-<br />
-<br />
-
-
-@code {
-
+@code {     
+    IEnumerable<ProjectInformation> sortedProjects;
+    protected override void OnInitialized()
+    {
+        SetCompletedProjectsList();
+        ProjectManagerService.ProjectIdeasChanged += (o, e) =>
+        {
+            SetCompletedProjectsList();
+        };
+        base.OnInitialized();
+    }
+    private void SetCompletedProjectsList()
+    {
+        List<ProjectInformation> completedProjects = new List<ProjectInformation>();
+        foreach(ProjectInformation projectInformation in ProjectManager.ProjectIdeas.Values)
+        {
+            if (projectInformation.Status.Equals("Complete"))
+            {
+                completedProjects.Add(projectInformation);
+            }
+        }
+        sortedProjects = completedProjects
+            .OrderBy(o => o.SemesterYear)
+            .ThenBy(o => o.SemesterTerm == "Fall")
+            .ThenBy(o => o.SemesterTerm == "Summer")
+            .ThenBy(o => o.SemesterTerm == "Spring");
+    }
 }
