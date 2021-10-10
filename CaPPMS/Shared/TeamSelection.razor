@@ -10,7 +10,7 @@
         <div class="p-5">
             <label>
                 Semester Term:
-                <select class="form-control" id="SemesterTerm" name="SemesterTerm" @bind="this.projectInformation.SemesterTerm">
+                <select class="form-control" id="SemesterTerm" name="SemesterTerm" @bind="this.ProjectInformation.SemesterTerm">
                     <option selected="selected">Fall</option>
                     <option>Spring</option>
                     <option>Summer</option>
@@ -19,7 +19,7 @@
 
             <label>
                 Semester Year:
-                <select class="form-control" id="SemesterYear" name="SemesterYear" @bind="this.projectInformation.SemesterYear">
+                <select class="form-control" id="SemesterYear" name="SemesterYear" @bind="this.ProjectInformation.SemesterYear">
                     <option selected="selected">2022</option>
                     <option>2021</option>
                     <option>2020</option>
@@ -28,21 +28,24 @@
                     <option>2017</option>
                 </select>
             </label>
+            <br />
             @foreach (CompletedProjectDocumentation completedTeam in this.ProjectInformation.CompletedDocuments)
             {
                 <label>Team: @completedTeam.TeamName</label>
+                <br />
             }
+            <br />
             <button class="btn btn-primary" type="button" @onclick="e => teamsClicked = !teamsClicked">Add Team</button>
             @if (teamsClicked)
             {
-                <CompleteProjectComponent @bind-ProjectInformation="projectInformation" />
+                <CompleteProjectComponent @bind-ProjectInformation="projectInformation" @bind-IsOpen="teamsClicked"/>
             }
-            
-            <hr/>
-            <button id="completeProjectBtn"type="submit" class="btn-primary" @onclick="Complete">
+
+            <hr />
+            <button id="completeProjectBtn" type="submit" class="btn-primary" >
                 Complete Project
             </button>
-            
+
 
             <button @onclick="e => this.CancelComplete()">
                 Cancel
@@ -54,16 +57,16 @@
 
 
 @code {
-    [Parameter] public EventCallback<ProjectInformation> ProjectInformationChanged { get; set; }
-    [Parameter]
-    public ProjectInformation ProjectInformation
+        [Parameter] public EventCallback<ProjectInformation> ProjectInformationChanged { get; set; }
+        [Parameter]
+        public ProjectInformation ProjectInformation
     {
-        get { return projectInformation; }
-        set
+            get { return projectInformation; }
+            set
         {
-            projectInformation = value;
+                projectInformation = value;
+            }
         }
-    }
 
     public ProjectInformation projectInformation = new ProjectInformation();
     private bool teamsClicked = false;
@@ -73,29 +76,13 @@
         this.projectInformation = null;
     }
 
-    private async Task Complete(EventArgs e)
-    {
-        if (!ProjectInformation.IsDirty)
-        {
-            return;
-        }
-        ProjectInformation.IsDirty = !await ProjectManager.UpdateAsync(ProjectInformation);
-    }
-
     private async Task HandleValidSubmit()
     {
         await Task.Run(async () =>
         {
-            var uploaded = await ProjectManager.UpdateAsync(projectInformation);
-
-            if (uploaded)
-            {
-                projectInformation.IsDirty = false;
-                //projectInformation = new ProjectInformation();
-            }
-
+            ProjectManager.CompleteProject(projectInformation);
             await Task.Delay(2000);
+
         });
     }
-
 }

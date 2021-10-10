@@ -13,19 +13,22 @@
     <h3>@idea.SemesterTerm @idea.SemesterYear </h3>
     <b>@idea.ProjectTitle </b>
     <p> @idea.ProjectDescription </p>
-    <li> <a href="@idea.Github">GitHub</a> </li>
-
+    <b>GitHub Link: </b>
+    <a href="@idea.Github">GitHub</a>
+    <br />
+    <br />
     <p> This project consisted of @idea.CompletedDocuments.Count team(s).</p>
-    <p> Teams:</p>
+
+    <b> Teams:</b>
     @for (int i = 0; i < idea.CompletedDocuments.Count; i++)
     {
         <li>@idea.CompletedDocuments[i].TeamName</li>
     }
-
+    <br />
     <p>Each teams documents are listed below:</p>
     @for (int i = 0; i < idea.CompletedDocuments.Count; i++)
     {
-        <b> Documents for @idea.CompletedDocuments[i].TeamName: </b>
+        <b> Documents for Team @idea.CompletedDocuments[i].TeamName: </b>
         <ul>
             <li> <a href="/download/@idea.CompletedDocuments[i].ProjectPlanLink" download="@idea.CompletedDocuments[i].ProjectPlan" target="_top">Project Plan</a> </li>
             <li> <a href="/download/@idea.CompletedDocuments[i].SRSLink" download="@idea.CompletedDocuments[i].SRS" target="_top">Software Requirements Specification (SRS)</a> </li>
@@ -35,18 +38,22 @@
             <li> <a href="/download/@idea.CompletedDocuments[i].UsersGuideLink" download="@idea.CompletedDocuments[i].UsersGuide" target="_top">User Guide</a> </li>
             <li> <a href="/download/@idea.CompletedDocuments[i]ea.TestReportLink" download="@idea.CompletedDocuments[i].TestReport" target="_top">Test Report</a> </li>
         </ul>
-        <b> Links: </b>
+        @if (idea.CompletedDocuments[i].VideoLinks.Count != 0)
+        {
+            <b> Links: </b>
+        }
         <ul>
             @foreach (string vLink in idea.CompletedDocuments[i].VideoLinks)
             {
                 <li><a href="@vLink">Video</a> </li>
             }
-
         </ul>
-        <hr />
     }
-
+    <hr />
 }
+<br />
+<br />
+<br />
 
 
 @code {
@@ -72,9 +79,9 @@
             }
         }
         sortedProjects = completedProjects
-            .OrderBy(o => o.SemesterYear)
-            .ThenBy(o => o.SemesterTerm == "Fall")
+            .OrderByDescending(o => o.SemesterYear)
+            .ThenBy(o => o.SemesterTerm == "Spring")
             .ThenBy(o => o.SemesterTerm == "Summer")
-            .ThenBy(o => o.SemesterTerm == "Spring");
+            .ThenBy(o => o.SemesterTerm == "Fall");
     }
 }

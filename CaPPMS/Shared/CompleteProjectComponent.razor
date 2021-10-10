@@ -130,8 +130,12 @@
             projectInformation = value;
         }
     }
+
+    [Parameter] public EventCallback<bool> IsOpenChanged { get; set; }
+    [Parameter]
+    public bool IsOpen { get; set; } = false;
+
     [Parameter] public string Title { get; set; } = null;
-    private bool teamsClicked = false;
 
 
     private ProjectInformation projectInformation;
@@ -181,14 +185,21 @@
         projectInformation.SemesterYear = this.SemesterYearVal;
         projectInformation.Status = "Complete";
 
-        projectInformation.CompletedDocuments.Add(completedProject);
+        ProjectInformation.CompletedDocuments.Add(completedProject);
 
-        ProjectInformation = projectInformation;
-        if (!ProjectInformation.IsDirty)
-        {
-            return;
-        }
-        ProjectInformation.IsDirty = !await ProjectManager.UpdateAsync(ProjectInformation);
+        ProjectPlanPath = "";
+        SRSPath = "";
+        TDDPath = "";
+        RunbookPath = "";
+        ProgGuidePath = "";
+        UserGuidePath = "";
+        TestReportPath = "";
+        SemesterTermVal = "";
+        SemesterYearVal = "";
+        TeamName = "";
+
+        IsOpen = false;
+        await IsOpenChanged.InvokeAsync(IsOpen);
 
     }
 
@@ -205,21 +216,5 @@
         return filePath;
     }
 
-    private async Task HandleValidSubmit()
-    {
-        await Task.Run(async () =>
-        {
-            var uploaded = await ProjectManager.UpdateAsync(projectInformation);
-
-            if (uploaded)
-            {
-                projectInformation.IsDirty = false;
-                //projectInformation = new ProjectInformation();
-
-            }
-
-            await Task.Delay(2000);
-        });
-    }
 
 }
