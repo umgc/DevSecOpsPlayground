@@ -12,16 +12,21 @@ namespace CaPPMS.Data
     {
         public static event EventHandler FaqsChanged;
 
-        private readonly string localFaqDb = Path.Combine(BaseDirInfo.FullName, "faqs.json");
+        private readonly string localFaqDb;
 
         public static DirectoryInfo BaseDirInfo { get; } = new(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "StoredData"));
 
-        public FaqManagerService()
+        public FaqManagerService() : this("faqs.json")
+        {
+        }
+        public FaqManagerService(string localFaqFileDBName)
         {
             if (!BaseDirInfo.Exists)
             {
                 BaseDirInfo.Create();
             }
+
+            localFaqDb = Path.Combine(BaseDirInfo.FullName, localFaqFileDBName);
 
             var faqDbFile = new FileInfo(localFaqDb);
 
@@ -41,7 +46,7 @@ namespace CaPPMS.Data
         }
 
         public ConcurrentDictionary<Guid, FaqInformation> FaqInfo { get; } = new();
-        
+
         public ICollection<FaqInformation> GetFaqs => FaqInfo.Values;
 
         public bool Add(FaqInformation faqInformation)
