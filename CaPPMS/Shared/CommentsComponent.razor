@@ -19,6 +19,9 @@
             <div class="card-body">
                 @comment.Comments
             </div>
+            <div>
+                <button @onclick="e => DeleteComment(comment)">Delete</button>
+            </div>
         </div>
     }
 }
@@ -30,19 +33,54 @@ else
 }
 
 <div class="m-2 p-2 rounded">
-    <EditForm OnValidSubmit="@HandleValidSubmit" Model="NewComment">
-        <DataAnnotationsValidator />
-        <ValidationSummary />
-        <div class="card">
-            <div class="card-title">
-                <span class="fas fa-comment"></span> Add Comment:
+    @if (this.isAuthenticated)
+    {
+        <EditForm OnValidSubmit="@HandleValidSubmit" Model="NewComment">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <div class="card">
+                <div class="card-title">
+                    <span class="fas fa-comment"></span> Add Comment:
+                </div>
+                <div class="card-body" style="width:300px">
+                    <InputTextArea @bind-Value="newUserComment" /><br />
+                    <button type="submit" class="btn btn-primary">Add Comment</button>
+                </div>
             </div>
-            <div class="card-body" style="width:300px">
-                <InputTextArea @bind-Value="newUserComment" /><br />
-                <button type="submit" class="btn btn-primary">Add Comment</button>
+        </EditForm>
+    }
+    else
+    {
+        <EditForm OnValidSubmit="@HandleValidSubmit" Model="NewComment">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <div class="card">
+                <div class="card-title">
+                    <span class="fas fa-comment"></span> Add Comment:
+                </div>
+                <div class="card-body" style="width:300px">
+                    <table>
+                        <tr>
+                            <td style="padding-top:0px;">First Name:</td>
+                            <td style="padding-top:0px;">Last Name:</td>
+                            <td style="padding-top:0px;">Email:</td>
+                            <td style="padding-top:0px;">Phone:</td>
+                        </tr>
+                        <tr>
+                            <td style="padding-top:0px;"><InputText @bind-Value="NewContact.FirstName" /></td>
+                            <td style="padding-top:0px;"><InputText @bind-Value="NewContact.LastName" /></td>
+                            <td style="padding-top:0px;"><InputText @bind-Value="NewContact.Email" /></td>
+                            <td style="padding-top:0px;"><InputText @bind-Value="NewContact.Phone" /></td>
+
+                        </tr>
+                    </table>
+                    <InputTextArea @bind-Value="newUserComment" /><br />
+                    <button type="submit" class="btn btn-primary">Add Comment</button>
+                </div>
             </div>
-        </div>
-    </EditForm>
+        </EditForm>
+    }
+
 </div>
 
 
@@ -52,8 +90,10 @@ else
 
     [CascadingParameter]
     private Task<AuthenticationState> authenticationStateTask { get; set; }
+    private bool isAuthenticated;
 
     private Comment NewComment { get; set; }
+    private Contact NewContact { get; set; }
 
     private ICommentManager CommentManager => ProjectManager;
 
@@ -72,7 +112,7 @@ else
         }
     }
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         base.OnInitialized();
 
@@ -81,13 +121,16 @@ else
             throw new ArgumentNullException("Project GUID must be passed into component.");
         }
 
-        NewComment = GenerateNewComment();
+        NewComment = new Comment(ProjectGuid);
+        NewContact = new Contact();
 
         ProjectManagerService.ProjectIdeasChanged += (o, e) =>
         {
             ShouldUpdateState();
         };
 
+        var authState = await authenticationStateTask;
+        this.isAuthenticated = authState.User?.Identity.IsAuthenticated ?? false;
         Comments = CommentManager.GetComments(ProjectGuid);
     }
 
@@ -100,17 +143,24 @@ else
         });
     }
 
-    private Comment GenerateNewComment()
-    {
-        return new Comment(ProjectGuid);
-    }
-
     private async Task HandleValidSubmit()
     {
-        var authState = await authenticationStateTask;
-        NewComment.UserEmail = authState.User?.Identity?.Name ?? string.Empty;
+        if (this.isAuthenticated)
+        {
+            var authState = await authenticationStateTask;
+            NewComment.UserEmail = authState.User?.Identity?.Name ?? string.Empty;
+        } else
+        {
+            NewComment.UserEmail = NewContact.Email;
+        }
+
         NewComment.UpdateDateTime = DateTime.Now;
         CommentManager.AddComment(NewComment);
         NewComment = new Comment(ProjectGuid);
+        NewContact = new Contact();
+    }
+    private void DeleteComment(Comment comment)
+    {
+        CommentManager.DeleteComment(comment);
     }
 }
