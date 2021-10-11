@@ -191,12 +191,23 @@ else
 
     private void InitializeCollapseMap()
     {
+        Dictionary<Guid, bool> oldCollapseMap = new Dictionary<Guid, bool>();
+        foreach (ProjectInformation info in projectListCollapseMap.Keys)
+        {
+            oldCollapseMap.Add(info.ProjectID, projectListCollapseMap[info]);
+        }
+
         projectListCollapseMap.Clear();
         foreach (Row row in this.GetRows())
         {
             if (!projectListCollapseMap.ContainsKey(row.DataBoundItem as ProjectInformation))
             {
-                projectListCollapseMap.Add(row.DataBoundItem as ProjectInformation, true);
+                ProjectInformation newInfo = row.DataBoundItem as ProjectInformation;
+                projectListCollapseMap.Add(newInfo, true);
+                if (oldCollapseMap.ContainsKey(newInfo.ProjectID))
+                {
+                    projectListCollapseMap[newInfo] = oldCollapseMap[newInfo.ProjectID];
+                }
             }
         }
     }

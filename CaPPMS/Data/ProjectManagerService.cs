@@ -74,7 +74,6 @@ namespace CaPPMS.Data
             {
                 return false;
             }
-
             ProjectIdeasChanged?.Invoke(ProjectIdeas.Values, EventArgs.Empty);
             return true;
         }
@@ -125,21 +124,26 @@ namespace CaPPMS.Data
         }
         public async Task<bool> UpdateAsync(ProjectInformation idea)
         {
-            foreach (var file in idea.Attachments)
+            if (!ProjectIdeas.TryGetValue(idea.ProjectID, out ProjectInformation existingProjectInformation))
             {
-                if (file.BrowserFile != null)
+                foreach (var file in idea.Attachments)
                 {
+                    if (existingProjectInformation.Attachments.Contains(file))
+                    {
+                        continue;
+                    }
+                    Console.Error.WriteLine("Adding File: " + file.Name);
                     file.Location = await FileManager.SaveAsync(file.BrowserFile.OpenReadStream(MaxMBSizePerFile), file.File_ID.ToString(), file.Name);
-                    file.BrowserFile = null;
+                }
+
+                bool completed;
+                if (completed = ProjectIdeas.TryUpdate(idea.ProjectID, idea, ProjectIdeas[idea.ProjectID]))
+                {
+                    Console.Error.WriteLine("Successfully updated: " + idea.ProjectID);
+                    ProjectIdeasChanged?.Invoke(ProjectIdeas.Values, EventArgs.Empty);
+                    return true;
                 }
             }
-
-            bool completed;
-            if (completed = ProjectIdeas.TryUpdate(idea.ProjectID, idea, ProjectIdeas[idea.ProjectID]))
-            {
-                ProjectIdeasChanged?.Invoke(ProjectIdeas.Values, EventArgs.Empty);
-                return true;
-            } 
             return false;
         }
 
@@ -305,7 +309,6 @@ namespace CaPPMS.Data
 
         public IEnumerable<Comment> GetComments(Guid projectID)
         {
-            Console.Error.WriteLine("Loading comments:" + projectID);
             if(ProjectIdeas.TryGetValue(projectID, out ProjectInformation project))
             {
                 List<Comment> comments = new List<Comment>();
