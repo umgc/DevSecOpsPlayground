@@ -23,7 +23,7 @@ namespace CaPPMS.Model.Table
 
         public readonly int[] RowsPerPageOptions = new int[] { 10, 25, 50, 100 };
 
-        private int rowsPerPage = 10;
+        private int rowsPerPage = 5;
 
         public Table()
         {
@@ -96,9 +96,12 @@ namespace CaPPMS.Model.Table
 
         public int ColumnCount => this.GetHeaderRow().Count;
 
-        public bool IsReadOnly => false;        
+        public bool IsReadOnly => false;
 
         public int CurrentPage { get; private set; } = 1;
+
+        public int SortColumnIndex { get; set; } = 0;
+        public bool IsColumnSortAscending { get; set; } = true;
 
         #region IList Interface
 
@@ -209,6 +212,14 @@ namespace CaPPMS.Model.Table
                     row.DataBoundItem = dataList[r];
                     rows.Add(row);
                 }
+            }
+
+            if (IsColumnSortAscending)
+            {
+                rows = rows.OrderBy(o => o.Cells[SortColumnIndex]).ToList();
+            } else
+            {
+                rows = rows.OrderByDescending(o => o.Cells[SortColumnIndex]).ToList();
             }
 
             int skipNumber = CurrentPage > 1 ? (CurrentPage * rowsPerPage) - rowsPerPage : 0;

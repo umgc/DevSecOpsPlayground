@@ -19,6 +19,7 @@ else
 
 
 @code {
+    [Parameter] public EventCallback PageChanged { get; set; }
     [Parameter]
     public Table Parent { get; set; }
 
@@ -43,11 +44,13 @@ else
     {
         this.Parent.SetPageNumber(this.Parent.CurrentPage + 1);
         this.StateHasChanged();
+        this.PageChanged.InvokeAsync();
     }
 
     private void PageLeft(MouseEventArgs e)
     {
         this.Parent.SetPageNumber(this.Parent.CurrentPage - 1);
         this.StateHasChanged();
+        this.PageChanged.InvokeAsync();
     }
 }
