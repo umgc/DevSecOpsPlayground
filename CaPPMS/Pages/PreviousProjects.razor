@@ -14,7 +14,15 @@
     <b>@idea.ProjectTitle </b>
     <p> @idea.ProjectDescription </p>
     <b>GitHub Link: </b>
-    <a href="@idea.Github">GitHub</a>
+    @if (idea.Github.StartsWith("http://") || idea.Github.StartsWith("https://"))
+    {
+        <a href="@idea.Github">@idea.Github</a>
+    }
+    else
+    {
+        <a href="//@idea.Github">@idea.Github</a>
+    }
+
     <br />
     <br />
     <p> This project consisted of @idea.CompletedDocuments.Count team(s).</p>
@@ -40,8 +48,16 @@
         </ul>
         <b> Video Link: </b>
         <br />
-        <a href="@idea.CompletedDocuments[i].VideoLink" >Video Link</a>
-       
+        @if (idea.CompletedDocuments[i].VideoLink.StartsWith("http://") || idea.CompletedDocuments[i].VideoLink.StartsWith("https://"))
+        {
+            <a href="@idea.CompletedDocuments[i].VideoLink">@idea.CompletedDocuments[i].VideoLink</a>
+        }
+        else
+        {
+            <a href="//@idea.CompletedDocuments[i].VideoLink">@idea.CompletedDocuments[i].VideoLink</a>
+        }
+        <br />
+        <br />
     }
     <hr />
 }
@@ -61,7 +77,6 @@
         };
         base.OnInitialized();
     }
-    private List<string> TeamNames;
     private void SetCompletedProjectsList()
     {
         List<ProjectInformation> completedProjects = new List<ProjectInformation>();

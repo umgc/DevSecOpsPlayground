@@ -13,9 +13,9 @@
             <label>
                 Semester Term:
                 <select class="form-control" id="SemesterTerm" name="SemesterTerm" @bind="this.projectInformation.SemesterTerm">
-                    @foreach(string term in projectInformation.Terms)
+                    @foreach(string term in Terms)
                 {
-                        if(this.projectInformation.SemesterTerm.Equals(term))
+                        if(this.projectInformation.SemesterTerm.Contains(term))
                     {
                         <option selected="selected">@term</option>
                     }
@@ -31,9 +31,9 @@
             <label>
                 Semester Year:
                 <select class="form-control" id="SemesterYear" name="SemesterYear" @bind="this.projectInformation.SemesterYear">
-                    @foreach (string year in projectInformation.Years)
+                    @foreach (string year in Years)
                     {
-                        if (this.projectInformation.SemesterYear.Equals(year))
+                        if (this.projectInformation.SemesterYear.Contains(year))
                         {
                             <option selected="selected">@year</option>
                         }
@@ -74,16 +74,35 @@
 
 
 @code {
-        [Parameter] public EventCallback<ProjectInformation> ProjectInformationChanged { get; set; }
-        [Parameter]
-        public ProjectInformation ProjectInformation
+    [Parameter] public EventCallback<ProjectInformation> ProjectInformationChanged { get; set; }
+    [Parameter]
+    public ProjectInformation ProjectInformation
     {
-            get { return projectInformation; }
-            set
+        get { return projectInformation; }
+        set
         {
-                projectInformation = value;
-            }
+            projectInformation = value;
         }
+    }
+
+    public List<string> Years { get; set; } = new List<string>();
+    public List<string> Terms { get; set; } = new List<string>();
+
+
+    protected override void OnInitialized()
+    {
+        Terms.Add("Spring");
+        Terms.Add("Fall");
+        Terms.Add("Summer");
+        Years.Add("2021");
+        Years.Add("2020");
+        Years.Add("2019");
+        Years.Add("2018");
+        Years.Add("2017");
+        Years.Add("2016");
+
+        base.OnInitialized();
+    }
 
     private List<string> years { get; set; } = new List<string>();
     public ProjectInformation projectInformation = new ProjectInformation();

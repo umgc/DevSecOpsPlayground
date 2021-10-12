@@ -214,10 +214,7 @@ namespace CaPPMS.Model
         [AttachmentsFileSizeValidator(10)]
         public IList<ProjectFile> Attachments { get; private set; } = new List<ProjectFile>();
         public List<CompletedProjectDocumentation> CompletedDocuments { get; set; } = new List<CompletedProjectDocumentation>();
-        public List<string> Years { get; set; } = new List<string>();
-        public List<string> Terms { get; set; } = new List<string>();
-
-
+        
 
         [DisplayName("Are you the sponsor")]
         [Browsable(true)]
