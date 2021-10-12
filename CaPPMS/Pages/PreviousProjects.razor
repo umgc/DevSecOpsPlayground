@@ -38,16 +38,10 @@
             <li> <a href="/download/@idea.CompletedDocuments[i].UsersGuideLink" download="@idea.CompletedDocuments[i].UsersGuide" target="_top">User Guide</a> </li>
             <li> <a href="/download/@idea.CompletedDocuments[i]ea.TestReportLink" download="@idea.CompletedDocuments[i].TestReport" target="_top">Test Report</a> </li>
         </ul>
-        @if (idea.CompletedDocuments[i].VideoLinks.Count != 0)
-        {
-            <b> Links: </b>
-        }
-        <ul>
-            @foreach (string vLink in idea.CompletedDocuments[i].VideoLinks)
-            {
-                <li><a href="@vLink">Video</a> </li>
-            }
-        </ul>
+        <b> Video Link: </b>
+        <br />
+        <a href="@idea.CompletedDocuments[i].VideoLink" >Video Link</a>
+       
     }
     <hr />
 }

@@ -10,6 +10,9 @@
             <label>Team Name:</label>
             <InputText type="text" @bind-Value="TeamName" />
             <hr />
+            <label>YouTube Video Link:</label>
+            <InputText type="text" @bind-Value="VideoLink" />
+            <hr />
             <label>
                 Project Plan:
                 <select class="form-control" id="ProjectPlan" name="ProjectPlan" @bind="ProjectPlanPath">
@@ -112,7 +115,7 @@
             <button type="button" @onclick="Complete">
                 Done
             </button>
-            
+
         </div>
     </EditForm>
 </div>
@@ -150,6 +153,7 @@
     private String SemesterTermVal = "";
     private String SemesterYearVal = "";
     private String TeamName = "";
+    private String VideoLink = "";
 
     private void CancelComplete()
     {
@@ -159,6 +163,7 @@
     {
         CompletedProjectDocumentation completedProject = new CompletedProjectDocumentation();
         completedProject.TeamName = this.TeamName;
+        completedProject.VideoLink = this.VideoLink;
 
         completedProject.ProjectPlan = this.ProjectPlanPath;
         completedProject.ProjectPlanLink = GetFilePath(this.ProjectPlanPath);
@@ -181,9 +186,9 @@
         completedProject.TestReport = this.TestReportPath;
         completedProject.TestReportLink = GetFilePath(this.TestReportPath);
 
-        projectInformation.SemesterTerm = this.SemesterTermVal;
-        projectInformation.SemesterYear = this.SemesterYearVal;
-        projectInformation.Status = "Complete";
+        ProjectInformation.SemesterTerm = this.SemesterTermVal;
+        ProjectInformation.SemesterYear = this.SemesterYearVal;
+        ProjectInformation.Status = "Complete";
 
         ProjectInformation.CompletedDocuments.Add(completedProject);
 

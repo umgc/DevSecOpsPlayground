@@ -251,6 +251,17 @@
 
     private async Task HandleValidSubmit()
     {
+
+        idea.Terms.Add("Spring");
+        idea.Terms.Add("Fall");
+        idea.Terms.Add("Summer");
+        idea.Years.Add("2021");
+        idea.Years.Add("2020");
+        idea.Years.Add("2019");
+        idea.Years.Add("2018");
+        idea.Years.Add("2017");
+        idea.Years.Add("2016");
+
         this.tableState = "none";
 
         await Task.Run( async () =>

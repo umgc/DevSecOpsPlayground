@@ -8,24 +8,41 @@
         <DataAnnotationsValidator />
         <ValidationSummary />
         <div class="p-5">
+
+            
             <label>
                 Semester Term:
-                <select class="form-control" id="SemesterTerm" name="SemesterTerm" @bind="this.ProjectInformation.SemesterTerm">
-                    <option selected="selected">Fall</option>
-                    <option>Spring</option>
-                    <option>Summer</option>
+                <select class="form-control" id="SemesterTerm" name="SemesterTerm" @bind="this.projectInformation.SemesterTerm">
+                    @foreach(string term in projectInformation.Terms)
+                {
+                        if(this.projectInformation.SemesterTerm.Equals(term))
+                    {
+                        <option selected="selected">@term</option>
+                    }
+                    else
+                    {
+                        <option>@term</option>
+                    }                    
+                }
+                    
                 </select>
             </label>
 
             <label>
                 Semester Year:
-                <select class="form-control" id="SemesterYear" name="SemesterYear" @bind="this.ProjectInformation.SemesterYear">
-                    <option selected="selected">2022</option>
-                    <option>2021</option>
-                    <option>2020</option>
-                    <option>2019</option>
-                    <option>2018</option>
-                    <option>2017</option>
+                <select class="form-control" id="SemesterYear" name="SemesterYear" @bind="this.projectInformation.SemesterYear">
+                    @foreach (string year in projectInformation.Years)
+                    {
+                        if (this.projectInformation.SemesterYear.Equals(year))
+                        {
+                            <option selected="selected">@year</option>
+                        }
+                        else
+                        {
+                            <option>@year</option>
+                        }
+                    }
+
                 </select>
             </label>
             <br />
@@ -68,6 +85,7 @@
             }
         }
 
+    private List<string> years { get; set; } = new List<string>();
     public ProjectInformation projectInformation = new ProjectInformation();
     private bool teamsClicked = false;
 

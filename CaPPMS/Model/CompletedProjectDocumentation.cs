@@ -11,7 +11,6 @@ namespace CaPPMS.Model
     public class CompletedProjectDocumentation
     {
         private string teamName = string.Empty;
-        public IList<string> VideoLinks { get; private set; } = new List<string>();
 
         [Export(true)]
         [DisplayName("Team Name")]
@@ -28,6 +27,25 @@ namespace CaPPMS.Model
                 this.IsDirty = true;
             }
         }
+
+        private string videoLink = string.Empty;
+
+        [Export(true)]
+        [DisplayName("Video Link")]
+        [Browsable(true)]
+        public string VideoLink
+        {
+            get
+            {
+                return this.videoLink;
+            }
+            set
+            {
+                this.videoLink = value;
+                this.IsDirty = true;
+            }
+        }
+
 
         private string projectPlan = string.Empty;
 
