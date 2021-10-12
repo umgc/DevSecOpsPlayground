@@ -147,16 +147,6 @@ namespace CaPPMS.Data
             return false;
         }
 
-        public Task<bool> UpdateProjectAsync(ProjectInformation idea, EventHandler eventHandler)
-        {
-            bool completed;
-            if (completed = ProjectIdeas.TryUpdate(idea.ProjectID, idea, ProjectIdeas[idea.ProjectID]))
-            {
-                eventHandler?.Invoke(ProjectIdeas.Values, EventArgs.Empty);
-            }
-            return Task.FromResult(completed);
-        }
-
         public async Task<string> DeleteAsync(ProjectInformation idea, IPrincipal user)
         {
             return await RemoveAsync(idea, user);
