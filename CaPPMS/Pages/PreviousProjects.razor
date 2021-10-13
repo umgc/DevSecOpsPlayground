@@ -13,29 +13,60 @@
     <h3>@idea.SemesterTerm @idea.SemesterYear </h3>
     <b>@idea.ProjectTitle </b>
     <p> @idea.ProjectDescription </p>
-    <b> Documents: </b>
-    <ul>
-        <li> <a href="/download/@idea.ProjectPlanLink" download="@idea.ProjectPlan" target="_top">Project Plan</a> </li>
-        <li> <a href="/download/@idea.SRSLink" download="@idea.SRS" target="_top">Software Requirements Specification (SRS)</a> </li>
-        <li> <a href="/download/@idea.TDDLink" download="@idea.TDD" target="_top">Technical Design Document (TDD)</a> </li>
-        <li> <a href="/download/@idea.RunbookLink" download="@idea.Runbook" target="_top">Deployment and Operations Guide (Runbook)</a> </li>
-        <li> <a href="/download/@idea.ProgrammersGuideLink" download="@idea.ProgrammersGuide" target="_top">Programmer Guide</a> </li>
-        <li> <a href="/download/@idea.UsersGuideLink" download="@idea.UsersGuide" target="_top">User Guide</a> </li>
-        <li> <a href="/download/@idea.TestReportLink" download="@idea.TestReport" target="_top">Test Report</a> </li>
-    </ul>
-    <b> Links: </b>
-    <ul>
-        @foreach (string vLink in idea.VideoLinks)
+    <b>GitHub Link: </b>
+    @if (idea.Github.StartsWith("http://") || idea.Github.StartsWith("https://"))
+    {
+        <a href="@idea.Github">@idea.Github</a>
+    }
+    else
+    {
+        <a href="//@idea.Github">@idea.Github</a>
+    }
+
+    <br />
+    <br />
+    <p> This project consisted of @idea.CompletedDocuments.Count team(s).</p>
+
+    <b> Teams:</b>
+    @for (int i = 0; i < idea.CompletedDocuments.Count; i++)
+    {
+        <li>@idea.CompletedDocuments[i].TeamName</li>
+    }
+    <br />
+    <p>Each teams documents are listed below:</p>
+    @for (int i = 0; i < idea.CompletedDocuments.Count; i++)
+    {
+        <b> Documents for Team @idea.CompletedDocuments[i].TeamName: </b>
+        <ul>
+            <li> <a href="/download/@idea.CompletedDocuments[i].ProjectPlanLink" download="@idea.CompletedDocuments[i].ProjectPlan" target="_top">Project Plan</a> </li>
+            <li> <a href="/download/@idea.CompletedDocuments[i].SRSLink" download="@idea.CompletedDocuments[i].SRS" target="_top">Software Requirements Specification (SRS)</a> </li>
+            <li> <a href="/download/@idea.CompletedDocuments[i].TDDLink" download="@idea.CompletedDocuments[i].TDD" target="_top">Technical Design Document (TDD)</a> </li>
+            <li> <a href="/download/@idea.CompletedDocuments[i].RunbookLink" download="@idea.CompletedDocuments[i].Runbook" target="_top">Deployment and Operations Guide (Runbook)</a> </li>
+            <li> <a href="/download/@idea.CompletedDocuments[i].ProgrammersGuideLink" download="@idea.CompletedDocuments[i].ProgrammersGuide" target="_top">Programmer Guide</a> </li>
+            <li> <a href="/download/@idea.CompletedDocuments[i].UsersGuideLink" download="@idea.CompletedDocuments[i].UsersGuide" target="_top">User Guide</a> </li>
+            <li> <a href="/download/@idea.CompletedDocuments[i]ea.TestReportLink" download="@idea.CompletedDocuments[i].TestReport" target="_top">Test Report</a> </li>
+        </ul>
+        <b> Video Link: </b>
+        <br />
+        @if (idea.CompletedDocuments[i].VideoLink.StartsWith("http://") || idea.CompletedDocuments[i].VideoLink.StartsWith("https://"))
         {
-            <li><a href="@vLink">Video</a> </li>
+            <a href="@idea.CompletedDocuments[i].VideoLink">@idea.CompletedDocuments[i].VideoLink</a>
         }
-        <li> <a href="@idea.Github">GitHub</a> </li>
-    </ul>
+        else
+        {
+            <a href="//@idea.CompletedDocuments[i].VideoLink">@idea.CompletedDocuments[i].VideoLink</a>
+        }
+        <br />
+        <br />
+    }
     <hr />
 }
+<br />
+<br />
+<br />
 
 
-@code {     
+@code {
     IEnumerable<ProjectInformation> sortedProjects;
     protected override void OnInitialized()
     {
@@ -49,7 +80,7 @@
     private void SetCompletedProjectsList()
     {
         List<ProjectInformation> completedProjects = new List<ProjectInformation>();
-        foreach(ProjectInformation projectInformation in ProjectManager.ProjectIdeas.Values)
+        foreach (ProjectInformation projectInformation in ProjectManager.ProjectIdeas.Values)
         {
             if (projectInformation.Status.Equals("Complete"))
             {
@@ -57,9 +88,9 @@
             }
         }
         sortedProjects = completedProjects
-            .OrderBy(o => o.SemesterYear)
-            .ThenBy(o => o.SemesterTerm == "Fall")
+            .OrderByDescending(o => o.SemesterYear)
+            .ThenBy(o => o.SemesterTerm == "Spring")
             .ThenBy(o => o.SemesterTerm == "Summer")
-            .ThenBy(o => o.SemesterTerm == "Spring");
+            .ThenBy(o => o.SemesterTerm == "Fall");
     }
 }

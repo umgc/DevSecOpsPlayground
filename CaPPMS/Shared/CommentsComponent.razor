@@ -85,6 +85,7 @@ else
 
 
 @code {
+    //private event EventHandler CommentsUpdated;
     [Parameter]
     public Guid ProjectGuid { get; set; }
 
@@ -128,6 +129,10 @@ else
         {
             ShouldUpdateState();
         };
+        /* CommentsUpdated += (o, e) =>
+         {
+             ShouldUpdateState();
+         };*/
 
         var authState = await authenticationStateTask;
         this.isAuthenticated = authState.User?.Identity.IsAuthenticated ?? false;
@@ -156,6 +161,9 @@ else
 
         NewComment.UpdateDateTime = DateTime.Now;
         CommentManager.AddComment(NewComment);
+
+        //CommentsUpdated?.Invoke(this, EventArgs.Empty);
+
         NewComment = new Comment(ProjectGuid);
         NewContact = new Contact();
     }

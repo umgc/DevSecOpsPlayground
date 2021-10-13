@@ -3,40 +3,24 @@
 @inject ProjectManagerService ProjectManager
 
 <div>
-    <EditForm Model="@this.ProjectInformation" OnValidSubmit="@HandleValidSubmit">
+    <EditForm Model="@this.ProjectInformation">
         <DataAnnotationsValidator />
         <ValidationSummary />
         <div class="p-5">
-            <h2>@this.Title</h2>
-            <label>
-                Semester Term:
-                <select class="form-control" id="SemesterTerm" name="SemesterTerm" @bind="SemesterTermVal">
-                    <option selected="selected">Fall</option>
-                    <option>Spring</option>
-                    <option>Summer</option>
-                </select>
-            </label>
-
-            <label>
-                Semester Year:
-                <select class="form-control" id="SemesterYear" name="SemesterYear" @bind="SemesterYearVal">
-                    <option selected="selected">2022</option>
-                    <option>2021</option>
-                    <option>2020</option>
-                    <option>2019</option>
-                    <option>2018</option>
-                    <option>2017</option>
-                </select>
-            </label>
+            <label>Team Name:</label>
+            <InputText type="text" @bind-Value="TeamName" />
+            <hr />
+            <label>YouTube Video Link:</label>
+            <InputText type="text" @bind-Value="VideoLink" />
             <hr />
             <label>
                 Project Plan:
                 <select class="form-control" id="ProjectPlan" name="ProjectPlan" @bind="ProjectPlanPath">
-                    @if(ProjectInformation.Attachments.Count == 0)
-                {
-                    <option selected="selected">Select...</option>
-                } 
-                    @foreach (ProjectFile file in ProjectInformation.Attachments)
+                    @if (this.ProjectInformation.Attachments.Count == 0)
+                    {
+                        <option selected="selected">Select...</option>
+                    }
+                    @foreach (ProjectFile file in this.ProjectInformation.Attachments)
                     {
                         <option>@file.Name</option>
                     }
@@ -46,11 +30,11 @@
             <label>
                 Software Requirements Specification (SRS):
                 <select class="form-control" id="SRS" name="SRS" @bind="SRSPath">
-                    @if (ProjectInformation.Attachments.Count == 0)
+                    @if (this.ProjectInformation.Attachments.Count == 0)
                     {
                         <option selected="selected">Select...</option>
                     }
-                    @foreach (ProjectFile file in ProjectInformation.Attachments)
+                    @foreach (ProjectFile file in this.ProjectInformation.Attachments)
                     {
                         <option>@file.Name</option>
                     }
@@ -60,11 +44,11 @@
             <label>
                 Technical Design Document (TDD):
                 <select class="form-control" id="TDD" name="TDD" @bind="TDDPath">
-                    @if (ProjectInformation.Attachments.Count == 0)
+                    @if (this.ProjectInformation.Attachments.Count == 0)
                     {
                         <option selected="selected">Select...</option>
                     }
-                    @foreach (ProjectFile file in ProjectInformation.Attachments)
+                    @foreach (ProjectFile file in this.ProjectInformation.Attachments)
                     {
                         <option>@file.Name</option>
                     }
@@ -74,11 +58,11 @@
             <label>
                 Deployment and Operations Guide (Runbook):
                 <select class="form-control" id="Runbook" name="Runbook" @bind="RunbookPath">
-                    @if (ProjectInformation.Attachments.Count == 0)
+                    @if (this.ProjectInformation.Attachments.Count == 0)
                     {
                         <option selected="selected">Select...</option>
                     }
-                    @foreach (ProjectFile file in ProjectInformation.Attachments)
+                    @foreach (ProjectFile file in this.ProjectInformation.Attachments)
                     {
                         <option>@file.Name</option>
                     }
@@ -88,11 +72,11 @@
             <label>
                 Programmers Guide:
                 <select class="form-control" id="ProgrammersGuide" name="ProgrammersGuide" @bind="ProgGuidePath">
-                    @if (ProjectInformation.Attachments.Count == 0)
+                    @if (this.ProjectInformation.Attachments.Count == 0)
                     {
                         <option selected="selected">Select...</option>
                     }
-                    @foreach (ProjectFile file in ProjectInformation.Attachments)
+                    @foreach (ProjectFile file in this.ProjectInformation.Attachments)
                     {
                         <option>@file.Name</option>
                     }
@@ -102,11 +86,11 @@
             <label>
                 User Guide:
                 <select class="form-control" id="UserGuide" name="UserGuide" @bind="UserGuidePath">
-                    @if (ProjectInformation.Attachments.Count == 0)
+                    @if (this.ProjectInformation.Attachments.Count == 0)
                     {
                         <option selected="selected">Select...</option>
                     }
-                    @foreach (ProjectFile file in ProjectInformation.Attachments)
+                    @foreach (ProjectFile file in this.ProjectInformation.Attachments)
                     {
                         <option>@file.Name</option>
                     }
@@ -116,23 +100,22 @@
             <label>
                 Test Report:
                 <select class="form-control" id="TestReport" name="TestReport" @bind="TestReportPath">
-                    @if (ProjectInformation.Attachments.Count == 0)
+                    @if (this.ProjectInformation.Attachments.Count == 0)
                     {
                         <option selected="selected">Select...</option>
                     }
-                    @foreach (ProjectFile file in ProjectInformation.Attachments)
+                    @foreach (ProjectFile file in this.ProjectInformation.Attachments)
                     {
                         <option>@file.Name</option>
                     }
                 </select>
             </label>
             <hr />
-            <button type="submit" class="btn-primary" @onclick="e => this.Complete()">
-                Complete
+
+            <button type="button" @onclick="Complete">
+                Done
             </button>
-            <button @onclick="e => this.CancelComplete()">
-                Cancel
-            </button>
+
         </div>
     </EditForm>
 </div>
@@ -150,9 +133,14 @@
             projectInformation = value;
         }
     }
+
+    [Parameter] public EventCallback<bool> IsOpenChanged { get; set; }
+    [Parameter]
+    public bool IsOpen { get; set; } = false;
+
     [Parameter] public string Title { get; set; } = null;
 
-    
+
     private ProjectInformation projectInformation;
     private Dictionary<ProjectFile, bool> attachmentSelection = new Dictionary<ProjectFile, bool>();
     private String ProjectPlanPath = "";
@@ -164,134 +152,72 @@
     private String TestReportPath = "";
     private String SemesterTermVal = "";
     private String SemesterYearVal = "";
+    private String TeamName = "";
+    private String VideoLink = "";
 
     private void CancelComplete()
     {
         this.projectInformation = null;
     }
-    private void Complete()
+    private async Task Complete(EventArgs e)
     {
-        if(DefaultSelected(this.ProjectPlanPath))
-        {
-            projectInformation.ProjectPlan = "";
-            projectInformation.ProjectPlanLink = "";
-        }
-        else
-        {
-            projectInformation.ProjectPlan = this.ProjectPlanPath;
-            projectInformation.ProjectPlanLink = "";
+        CompletedProjectDocumentation completedProject = new CompletedProjectDocumentation();
+        completedProject.TeamName = this.TeamName;
+        completedProject.VideoLink = this.VideoLink;
 
-            foreach(var attachment in ProjectInformation.Attachments)
+        completedProject.ProjectPlan = this.ProjectPlanPath;
+        completedProject.ProjectPlanLink = GetFilePath(this.ProjectPlanPath);
+
+        completedProject.SRS = this.SRSPath;
+        completedProject.SRSLink = GetFilePath(this.SRSPath);
+
+        completedProject.TDD = this.TDDPath;
+        completedProject.TDDLink = GetFilePath(this.TDDPath);
+
+        completedProject.Runbook = this.RunbookPath;
+        completedProject.RunbookLink = GetFilePath(this.RunbookPath);
+
+        completedProject.ProgrammersGuide = this.ProgGuidePath;
+        completedProject.ProgrammersGuideLink = GetFilePath(this.ProgGuidePath);
+
+        completedProject.UsersGuide = this.UserGuidePath;
+        completedProject.UsersGuideLink = GetFilePath(this.UserGuidePath);
+
+        completedProject.TestReport = this.TestReportPath;
+        completedProject.TestReportLink = GetFilePath(this.TestReportPath);
+
+        ProjectInformation.Status = "Complete";
+
+        ProjectInformation.CompletedDocuments.Add(completedProject);
+
+        ProjectPlanPath = "";
+        SRSPath = "";
+        TDDPath = "";
+        RunbookPath = "";
+        ProgGuidePath = "";
+        UserGuidePath = "";
+        TestReportPath = "";
+        SemesterTermVal = "";
+        SemesterYearVal = "";
+        TeamName = "";
+
+        IsOpen = false;
+        await IsOpenChanged.InvokeAsync(IsOpen);
+
+    }
+
+    private string GetFilePath(string fileName)
+    {
+        string filePath = "";
+        foreach (var attachment in ProjectInformation.Attachments)
+        {
+            if (attachment.Name.Equals(fileName))
             {
-                if(attachment.Name.Equals(this.ProjectPlanPath))
-                {
-                    projectInformation.ProjectPlanLink = attachment.Location;
-                }
+                filePath = attachment.Location;
             }
         }
-
-        if (DefaultSelected(this.SRSPath))
-        {
-            projectInformation.SRS = "";
-        }
-        else
-        {
-            projectInformation.SRS = this.SRSPath;
-        }
-
-        if (DefaultSelected(this.TDDPath))
-        {
-            projectInformation.TDD = "";
-        }
-        else
-        {
-            projectInformation.TDD = this.TDDPath;
-        }
-
-        if (DefaultSelected(this.RunbookPath))
-        {
-            projectInformation.Runbook = "";
-        }
-        else
-        {
-            projectInformation.Runbook = this.RunbookPath;
-        }
-
-        if (DefaultSelected(this.ProgGuidePath))
-        {
-            projectInformation.Runbook = "";
-        }
-        else
-        {
-            projectInformation.Runbook = this.ProgGuidePath;
-        }
-
-        if (DefaultSelected(this.UserGuidePath))
-        {
-            projectInformation.UsersGuide = "";
-        }
-        else
-        {
-            projectInformation.UsersGuide = this.UserGuidePath;
-        }
-
-        if (DefaultSelected(this.TestReportPath))
-        {
-            projectInformation.TestReport = "";
-        }
-        else
-        {
-            projectInformation.TestReport = this.TestReportPath;
-        }
-
-        if (DefaultSelected(this.SemesterTermVal))
-        {
-            projectInformation.SemesterTerm = "";
-        }
-        else
-        {
-            projectInformation.SemesterTerm = this.SemesterTermVal;
-        }
-
-        if (DefaultSelected(this.SemesterYearVal))
-        {
-            projectInformation.SemesterYear = "";
-        }
-        else
-        {
-            projectInformation.SemesterYear = this.SemesterYearVal;
-        }
-
-        projectInformation.Status = "Complete";
-
-        
-    }
-    private bool DefaultSelected(string val)
-    {
-        if(val.Equals("Select..."))
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return filePath;
     }
 
-    private async Task HandleValidSubmit()
-    {
-        await Task.Run(async () =>
-        {
-            var uploaded = await ProjectManager.UpdateAsync(projectInformation);
-
-            if (uploaded)
-            {
-                projectInformation.IsDirty = false;
-                //projectInformation = new ProjectInformation();
-            }
-
-            await Task.Delay(2000);
-        });
-    }
 
 }

@@ -264,6 +264,20 @@ namespace CaPPMS.Data
 
             return string.Empty;
         }
+        public void CompleteProject(ProjectInformation idea)
+        {
+            Guid projID = idea.ProjectID;
+            ICollection<Guid> ids = ProjectIdeas.Keys;
+            if (ProjectIdeas.TryGetValue(idea.ProjectID, out ProjectInformation project))
+            {
+                project.Status = idea.Status;
+                project.SemesterTerm = idea.SemesterTerm;
+                project.SemesterYear = idea.SemesterYear;
+                project.CompletedDocuments = idea.CompletedDocuments;
+                ProjectIdeasChanged?.Invoke(this.ProjectIdeas.Values, EventArgs.Empty);
+            }
+        }
+
 
         public void AddComment(Comment comment)
         {
