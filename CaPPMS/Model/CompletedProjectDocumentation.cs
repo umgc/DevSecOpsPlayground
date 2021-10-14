@@ -28,25 +28,6 @@ namespace CaPPMS.Model
             }
         }
 
-        private string videoLink = string.Empty;
-
-        [Export(true)]
-        [DisplayName("Video Link")]
-        [Browsable(true)]
-        public string VideoLink
-        {
-            get
-            {
-                return this.videoLink;
-            }
-            set
-            {
-                this.videoLink = value;
-                this.IsDirty = true;
-            }
-        }
-
-
         private string projectPlan = string.Empty;
 
         [Export(true)]

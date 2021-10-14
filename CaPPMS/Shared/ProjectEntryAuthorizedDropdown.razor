@@ -70,17 +70,35 @@
                     <table>
                         <tr>
                             <td style="padding-top:0px;">Project Title:</td>
-                            <td style="padding-top:0px;">Project Website:</td>
-                            <td style="padding-top:0px;">GitHub:</td>
                             <td style="padding-top:0px;">Project Description:</td>
+
                         </tr>
                         <tr>
                             <td style="padding-top:0px;"><InputText @bind-Value="ProjectInformation.ProjectTitle" /></td>
-                            <td style="padding-top:0px;"><InputText @bind-Value="ProjectInformation.Url" /></td>
-                            <td style="padding-top:0px;"><InputText @bind-Value="ProjectInformation.Github" /></td>
                             <td style="padding-top:0px;"><InputText @bind-Value="ProjectInformation.ProjectDescription" /></td>
                         </tr>
+                       
                     </table>
+
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h6><b>Project Links</b></h6>
+                    <table>
+                        <tr>
+                            <td style="padding-top:0px;">Website Link:</td>
+                            <td style="padding-top:0px;">GitHub Link:</td>
+                            <td style="padding-top:0px;">Video Link:</td>
+                        </tr>
+                        <tr>
+                            <td style="padding-top:0px;"><InputText @bind-Value="ProjectInformation.Url" /></td>
+                            <td style="padding-top:0px;"><InputText @bind-Value="ProjectInformation.Github" /></td>
+                            <td style="padding-top:0px;"><InputText @bind-Value="ProjectInformation.VideoLink" /></td>
+                        </tr>
+
+                    </table>
+
                 </td>
             </tr>
             <tr>
@@ -148,15 +166,15 @@
                     </td>
                 </tr>
             }
-        <tr>
-            <td>
-                @if (ProjectInformation.Status.Equals("Complete"))
-                {
-                    <b>Project Completed @projectInformation.SemesterTerm @projectInformation.SemesterYear </b>
-                }
-                <hr />
-            </td>
-        </tr>
+            <tr>
+                <td>
+                    @if (ProjectInformation.Status.Equals("Complete"))
+                    {
+                        <b>Project Completed @projectInformation.SemesterTerm @projectInformation.SemesterYear </b>
+                    }
+                    <hr />
+                </td>
+            </tr>
 
         </table>
         @if (ProjectInformation.Status.Equals("New"))

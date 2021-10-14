@@ -28,12 +28,12 @@
     {
         <a href="//@idea.Github">@idea.Github</a>
     }
-
+    <br />
 
 
     if (idea.CompletedDocuments.Count > 0)
     {
-        <br />
+
         <br />
         <p> This project consisted of @idea.CompletedDocuments.Count team(s).</p>
 
@@ -56,22 +56,22 @@
                 <li> <a href="/download/@idea.CompletedDocuments[i].UsersGuideLink" download="@idea.CompletedDocuments[i].UsersGuide" target="_top">User Guide</a> </li>
                 <li> <a href="/download/@idea.CompletedDocuments[i]ea.TestReportLink" download="@idea.CompletedDocuments[i].TestReport" target="_top">Test Report</a> </li>
             </ul>
-            if (idea.CompletedDocuments[i].VideoLink.Length > 0)
-            {
-                <b> Video Link: </b>
-                <br />
-                @if (idea.CompletedDocuments[i].VideoLink.StartsWith("http://") || idea.CompletedDocuments[i].VideoLink.StartsWith("https://"))
-                {
-                    <a href="@idea.CompletedDocuments[i].VideoLink">@idea.CompletedDocuments[i].VideoLink</a>
-                }
-                else
-                {
-                    <a href="//@idea.CompletedDocuments[i].VideoLink">@idea.CompletedDocuments[i].VideoLink</a>
-                }
-            }
+
 
             <br />
             <br />
+        }
+    }
+    if (idea.VideoLink.Length > 0)
+    {
+        <b> Video Link: </b>
+        @if (idea.VideoLink.StartsWith("http://") || idea.VideoLink.StartsWith("https://"))
+        {
+            <a href="@idea.VideoLink">@idea.VideoLink</a>
+        }
+        else
+        {
+            <a href="//@idea.VideoLink">@idea.VideoLink</a>
         }
     }
 
