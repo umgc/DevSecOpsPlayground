@@ -60,7 +60,6 @@ namespace CaPPMS.Model
         [Export(true)]
         [DisplayName("Semester Term")]
         [Browsable(true)]
-        [ColumnHeader]
         public string SemesterTerm
         {
             get
@@ -79,7 +78,6 @@ namespace CaPPMS.Model
         [Export(true)]
         [DisplayName("Semester Year")]
         [Browsable(true)]
-        [ColumnHeader]
         public string SemesterYear
         {
             get
