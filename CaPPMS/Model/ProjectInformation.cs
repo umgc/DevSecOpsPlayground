@@ -18,7 +18,7 @@ namespace CaPPMS.Model
 
         [Export(true)]
         [Required]
-        [StringLength(25, ErrorMessage = "Title is either too short or too long. We have confidence you can figure out which.", MinimumLength = 5)]
+        [StringLength(256, ErrorMessage = "Title is either too short or too long. We have confidence you can figure out which.", MinimumLength = 5)]
         [DisplayName("Project Title")]
         [Browsable(true)]
         [ColumnHeader]
