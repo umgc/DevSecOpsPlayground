@@ -19,9 +19,13 @@
             <div class="card-body">
                 @comment.Comments
             </div>
-            <div>
-                <button @onclick="e => DeleteComment(comment)">Delete</button>
-            </div>
+            @if (this.isAuthenticated)
+            {
+                <div>
+                    <button @onclick="e => DeleteComment(comment)">Delete</button>
+                </div>
+            }
+
         </div>
     }
 }
