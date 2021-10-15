@@ -56,31 +56,51 @@
                     </table>
                 </td>
             </tr>
+
             <tr>
                 <td>
                     <h6><b>Project Information</b></h6>
                     <table>
                         <tr>
-                            <td style="padding-top:0px;"><b>Project Title:</b></td>
+                            <td style="padding-top:0px;">Project Title:</td>
                             <td style="padding-top:0px;">@ProjectInformation.ProjectTitle</td>
-                            <td style="padding-top:0px;"><b>Project Description:</b></td>
+
                         </tr>
                         <tr>
-                            <td style="padding-top:0px;"><b>Project Website:</b></td>
-                            <td style="padding-top:0px;"><a href="@ProjectInformation.Url">@ProjectInformation.Url</a></td>
-                            <td style="padding-top:0px;" rowspan="2">@ProjectInformation.ProjectDescription</td>
-                        </tr>
-                        <tr>
-                            <td style="padding-top:0px;"><b>GitHub:</b></td>
-                            <td style="padding-top:0px;"><a href="@ProjectInformation.Github">@ProjectInformation.Github</a></td>
-                        </tr>
-                        <tr>
-                            <td style="padding-top:0px;"><b>Video Link:</b></td>
-                            <td style="padding-top:0px;"><a href="@ProjectInformation.VideoLink">@ProjectInformation.VideoLink</a></td>
+                            <td style="padding-top:0px;">Project Description:</td>
+                            <td style="padding-top:0px;">@ProjectInformation.ProjectDescription</td>
                         </tr>
                     </table>
                 </td>
             </tr>
+            @if (ProjectInformation.CompletedDocuments.Count > 0)
+            {
+                @foreach (CompletedProjectDocumentation proj in ProjectInformation.CompletedDocuments)
+                {
+                    <tr>
+                        <td>
+                            <h6><b>Team @proj.TeamName:</b></h6>
+                            <table>
+                                <tr>
+                                    <td style="padding-top:0px;">Website Link:</td>
+                                    <td style="padding-top:0px;"><a href="@proj.WebsiteLink">@proj.WebsiteLink</a></td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-top:0px;">GitHub Link:</td>
+                                    <td style="padding-top:0px;"><a href="@proj.GitHubLink">@proj.GitHubLink</a></td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-top:0px;">Video Link:</td>
+                                    <td style="padding-top:0px;"><a href="@proj.VideoLink">@proj.VideoLink</a></td>
+                                </tr>
+                            </table>
+
+                        </td>
+                    </tr>
+                }
+
+            }
+
             <tr>
                 <td>
                     <h6><b>Attachments:</b></h6>

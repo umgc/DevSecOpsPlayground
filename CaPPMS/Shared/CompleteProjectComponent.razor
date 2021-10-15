@@ -10,10 +10,17 @@
             <label>Team Name:</label>
             <InputText type="text" @bind-Value="TeamName" />
             <hr />
-            <label>YouTube Video Link:</label>
+            <label>Team Video Link:</label>
             <InputText type="text" @bind-Value="VideoLink" />
             <hr />
+            <label>Team GitHub Link:</label>
+            <InputText type="text" @bind-Value="GitHubLink" />
+            <hr />
+            <label>Team Website Link:</label>
+            <InputText type="text" @bind-Value="WebsiteLink" />
+            <hr />
             <label>
+
                 Project Plan:
                 <select class="form-control" id="ProjectPlan" name="ProjectPlan" @bind="ProjectPlanPath">
                     @if (this.ProjectInformation.Attachments.Count == 0)
@@ -154,6 +161,8 @@
     private String SemesterYearVal = "";
     private String TeamName = "";
     private String VideoLink = "";
+    private String GitHubLink = "";
+    private String WebsiteLink = "";
 
     private void CancelComplete()
     {
@@ -163,7 +172,9 @@
     {
         CompletedProjectDocumentation completedProject = new CompletedProjectDocumentation();
         completedProject.TeamName = this.TeamName;
-        ProjectInformation.VideoLink = this.VideoLink;
+        completedProject.VideoLink = this.VideoLink;
+        completedProject.WebsiteLink = this.WebsiteLink;
+        completedProject.GitHubLink = this.GitHubLink;
 
         completedProject.ProjectPlan = this.ProjectPlanPath;
         completedProject.ProjectPlanLink = GetFilePath(this.ProjectPlanPath);
@@ -200,6 +211,9 @@
         SemesterTermVal = "";
         SemesterYearVal = "";
         TeamName = "";
+        GitHubLink = "";
+        VideoLink = "";
+        WebsiteLink = "";
 
         IsOpen = false;
         await IsOpenChanged.InvokeAsync(IsOpen);

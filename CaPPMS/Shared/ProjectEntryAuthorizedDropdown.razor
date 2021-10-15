@@ -77,30 +77,60 @@
                             <td style="padding-top:0px;"><InputText @bind-Value="ProjectInformation.ProjectTitle" /></td>
                             <td style="padding-top:0px;"><InputText @bind-Value="ProjectInformation.ProjectDescription" /></td>
                         </tr>
-                       
-                    </table>
-
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <h6><b>Project Links</b></h6>
-                    <table>
-                        <tr>
-                            <td style="padding-top:0px;">Website Link:</td>
-                            <td style="padding-top:0px;">GitHub Link:</td>
-                            <td style="padding-top:0px;">Video Link:</td>
-                        </tr>
-                        <tr>
-                            <td style="padding-top:0px;"><InputText @bind-Value="ProjectInformation.Url" /></td>
-                            <td style="padding-top:0px;"><InputText @bind-Value="ProjectInformation.Github" /></td>
-                            <td style="padding-top:0px;"><InputText @bind-Value="ProjectInformation.VideoLink" /></td>
-                        </tr>
 
                     </table>
 
                 </td>
             </tr>
+            @if (ProjectInformation.CompletedDocuments.Count > 0)
+            {
+                @foreach (CompletedProjectDocumentation proj in ProjectInformation.CompletedDocuments)
+                {
+                    <tr>
+                        <td>
+                            <h6><b>Team @proj.TeamName:</b></h6>
+                            <table>
+                                <tr>
+                                    <td style="padding-top:0px;">Website Link:</td>
+                                    <td style="padding-top:0px;">GitHub Link:</td>
+                                    <td style="padding-top:0px;">Video Link:</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-top:0px;"><InputText @bind-Value="@proj.WebsiteLink" /></td>
+                                    <td style="padding-top:0px;"><InputText @bind-Value="@proj.GitHubLink" /></td>
+                                    <td style="padding-top:0px;"><InputText @bind-Value="@proj.VideoLink" /></td>
+                                </tr>
+
+                            </table>
+
+                        </td>
+                    </tr>
+                }
+
+            }
+            else
+            {
+                <tr>
+                    <td>
+                        <h6><b>Project Links</b></h6>
+                        <table>
+                            <tr>
+                                <td style="padding-top:0px;">Website Link:</td>
+                                <td style="padding-top:0px;">GitHub Link:</td>
+                                <td style="padding-top:0px;">Video Link:</td>
+                            </tr>
+                            <tr>
+                                <td style="padding-top:0px;"><InputText @bind-Value="ProjectInformation.Url" /></td>
+                                <td style="padding-top:0px;"><InputText @bind-Value="ProjectInformation.Github" /></td>
+                                <td style="padding-top:0px;"><InputText @bind-Value="ProjectInformation.VideoLink" /></td>
+                            </tr>
+
+                        </table>
+
+                    </td>
+                </tr>
+            }
+
             <tr>
                 <td>
                     <h6><b>Attachments:</b></h6>
