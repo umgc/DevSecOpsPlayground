@@ -16,6 +16,24 @@ namespace CaPPMS.Model
 
         private string projectTitle = string.Empty;
 
+        private string videoLink = string.Empty;
+
+        [Export(true)]
+        [DisplayName("Video Link")]
+        [Browsable(true)]
+        public string VideoLink
+        {
+            get
+            {
+                return this.videoLink;
+            }
+            set
+            {
+                this.videoLink = value;
+                this.IsDirty = true;
+            }
+        }
+
         [Export(true)]
         [Required]
         [StringLength(256, ErrorMessage = "Title is either too short or too long. We have confidence you can figure out which.", MinimumLength = 5)]
