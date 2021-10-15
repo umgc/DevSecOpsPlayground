@@ -17,13 +17,16 @@
         activeTerms.Add(termStr);
     }
 
-    <b>@idea.ProjectTitle </b>
+    <h5><b>@idea.ProjectTitle </b></h5>
     <p> @idea.ProjectDescription </p>
 
     if (idea.CompletedDocuments.Count > 0)
     {
         @foreach (CompletedProjectDocumentation proj in idea.CompletedDocuments)
         {
+            <b> Team:</b>
+            <p>@proj.TeamName</p>
+
             if (proj.GitHubLink.Length > 0)
             {
                 <b>GitHub Link: </b>
@@ -63,20 +66,7 @@
                 }
                 <br />
             }
-
-        }
-        <br />
-        <p> This project consisted of @idea.CompletedDocuments.Count team(s).</p>
-
-        <b> Teams:</b>
-        @foreach (CompletedProjectDocumentation proj in idea.CompletedDocuments)
-        {
-            <li>@proj.TeamName</li>
-        }
-        <br />
-        <p>Each teams documents are listed below:</p>
-        @foreach (CompletedProjectDocumentation proj in idea.CompletedDocuments)
-        {
+            
             <b> Documents for Team @proj.TeamName: </b>
             <ul>
                 <li> <a href="/download/@proj.ProjectPlanLink" download="@proj.ProjectPlan" target="_top">Project Plan</a> </li>
@@ -88,8 +78,8 @@
                 <li> <a href="/download/@proj.TestReportLink" download="@proj.TestReport" target="_top">Test Report</a> </li>
             </ul>
 
-            <br />
         }
+
     }
 
     <hr />
