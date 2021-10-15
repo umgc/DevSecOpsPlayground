@@ -78,7 +78,6 @@ namespace CaPPMS.Model
                 this.IsDirty = true;
             }
         }
-
         private string projectPlan = string.Empty;
 
         [Export(true)]
