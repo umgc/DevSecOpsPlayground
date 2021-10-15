@@ -225,7 +225,7 @@ namespace CaPPMS.Model
         // We will export attachments manually.
         [Browsable(true)]
         // Matches the config.
-        [AttachmentsNumFilesValidator(10)]
+        [AttachmentsNumFilesValidator(50)]
         // Matches the config value. Value is in Mb
         [AttachmentsFileSizeValidator(10)]
         public IList<ProjectFile> Attachments { get; private set; } = new List<ProjectFile>();
