@@ -223,7 +223,7 @@ namespace CaPPMS.Model.Table
             }
 
             int skipNumber = CurrentPage > 1 ? (CurrentPage * rowsPerPage) - rowsPerPage : 0;
-            return rows.Skip(skipNumber - 1).Take(this.rowsPerPage).ToArray();
+            return rows.Skip(skipNumber).Take(this.rowsPerPage).ToArray();
         }
 
         public void SetDataSource(IEnumerable<object> dataSource)
