@@ -10,6 +10,57 @@ namespace CaPPMS.Model
 {
     public class CompletedProjectDocumentation
     {
+        private string websiteLink = string.Empty;
+
+        [Export(true)]
+        [DisplayName("Team Website Link")]
+        [Browsable(true)]
+        public string WebsiteLink
+        {
+            get
+            {
+                return this.websiteLink;
+            }
+            set
+            {
+                this.websiteLink = value;
+                this.IsDirty = true;
+            }
+        }
+        private string videoLink = string.Empty;
+
+        [Export(true)]
+        [DisplayName("Team Video Link")]
+        [Browsable(true)]
+        public string VideoLink
+        {
+            get
+            {
+                return this.videoLink;
+            }
+            set
+            {
+                this.videoLink = value;
+                this.IsDirty = true;
+            }
+        }
+        private string githubLink = string.Empty;
+
+        [Export(true)]
+        [DisplayName("Team GitHub Link")]
+        [Browsable(true)]
+        public string GitHubLink
+        {
+            get
+            {
+                return this.githubLink;
+            }
+            set
+            {
+                this.githubLink = value;
+                this.IsDirty = true;
+            }
+        }
         private string teamName = string.Empty;
 
         [Export(true)]
@@ -27,7 +78,6 @@ namespace CaPPMS.Model
                 this.IsDirty = true;
             }
         }
-
         private string projectPlan = string.Empty;
 
         [Export(true)]
