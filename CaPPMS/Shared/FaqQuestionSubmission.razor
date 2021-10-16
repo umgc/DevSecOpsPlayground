@@ -46,7 +46,6 @@
 @code {
     [CascadingParameter] private Task<AuthenticationState> AuthenticationState { get; set; }
     private FaqInformation NewFaq { get; set; } = new();
-    private event EventHandler FaqQuestionChanged;
     private bool isValidQuestion = false;
     private bool isAuthenticated;
     protected override async Task OnInitializedAsync()
