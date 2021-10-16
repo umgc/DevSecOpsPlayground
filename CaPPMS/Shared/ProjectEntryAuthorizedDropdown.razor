@@ -269,17 +269,7 @@
     private async Task ApproveIdea(MouseEventArgs e)
     {
         ProjectInformation.Status = "Approved";
-        await UpdateRecordAsync(e);
-    }
-
-    private async Task UpdateRecordAsync(EventArgs e)
-    {
-        if (!ProjectInformation.IsDirty)
-        {
-            return;
-        }
-
-        ProjectInformation.IsDirty = !await ProjectManager.UpdateAsync(ProjectInformation);
+        await ProjectManager.UpdateAsync(ProjectInformation);
     }
 
     private async Task UpdateRecord(bool confirmed)

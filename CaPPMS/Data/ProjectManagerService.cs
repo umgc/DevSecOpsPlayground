@@ -124,7 +124,7 @@ namespace CaPPMS.Data
         }
         public async Task<bool> UpdateAsync(ProjectInformation idea)
         {
-            if (!ProjectIdeas.TryGetValue(idea.ProjectID, out ProjectInformation existingProjectInformation))
+            if (ProjectIdeas.TryGetValue(idea.ProjectID, out ProjectInformation existingProjectInformation))
             {
                 foreach (var file in idea.Attachments)
                 {
