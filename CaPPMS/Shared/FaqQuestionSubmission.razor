@@ -6,19 +6,26 @@
         Can't find your question? Ask it here!
     </h4>
     <EditForm Model="NewFaq">
-
+        <DataAnnotationsValidator />
+        <ValidationSummary />
         <div class="card" id="@NewFaq.Guid">
 
             <span class="fas" style="color:black;font-weight:bold"> Add Topic: </span>
-            <InputText @bind-Value=" NewFaq.Topic" /><br />
+            <InputText Value="@NewFaq.Topic"
+                       ValueChanged="AssignNewFaqTopic"
+                       ValueExpression="() => NewFaq.Topic"/><br />
 
             <span class="fas" style="color:black;font-weight:bold"> Add Question: </span>
-            <InputText @bind-Value=" NewFaq.Question" /><br />
+            <InputText Value="@NewFaq.Question"
+                       ValueChanged="AssignNewFaqQuestion"
+                       ValueExpression="() => NewFaq.Question"/><br />
 
             <span class="fas" style="color:black;font-weight:bold"> Add Author: </span>
-            <InputText @bind-Value=" NewFaq.Author" /><br />
+            <InputText Value="@NewFaq.Author"
+                       ValueChanged="AssignNewFaqAuthor"
+                       ValueExpression="() => NewFaq.Author"/><br />
 
-            @if (NewFaq.Topic.Length > 0 && NewFaq.Question.Length > 0 && NewFaq.Author.Length > 0)
+            @if (isValidQuestion)
             {
                 <AcknowledgeDialogBox Command="Submit Question"
                                       Type="submit"
@@ -26,17 +33,21 @@
                                       ConfirmedChanged="HandleValidSubmit" />
             } else
             {
-                <button type="button" disabled>Submit Question</button>
+                <button type="submit" class="btn-primary" disabled>Submit Question</button>
             }
+
+
         </div>
 
-</EditForm>
+    </EditForm>
 }
 
 
 @code {
     [CascadingParameter] private Task<AuthenticationState> AuthenticationState { get; set; }
     private FaqInformation NewFaq { get; set; } = new();
+    private event EventHandler FaqQuestionChanged;
+    private bool isValidQuestion = false;
     private bool isAuthenticated;
     protected override async Task OnInitializedAsync()
     {
@@ -49,5 +60,32 @@
         FaqManager.Add(NewFaq);
 
         NewFaq = new FaqInformation();
+    }
+    private void AssignNewFaqQuestion(string value)
+    {
+        NewFaq.Question = value;
+        CheckQuestionInput();
+    }
+    private void AssignNewFaqTopic(string value)
+    {
+        NewFaq.Topic = value;
+        CheckQuestionInput();
+    }
+    private void AssignNewFaqAuthor(string value)
+    {
+        NewFaq.Author = value;
+        CheckQuestionInput();
+    }
+    private void CheckQuestionInput()
+    {
+        if ((NewFaq.Question.Length < 20 || NewFaq.Question.Length > 500)
+            || (NewFaq.Author.Length < 2 || NewFaq.Author.Length > 500)
+            || (NewFaq.Topic.Length < 5 || NewFaq.Topic.Length > 500))
+        {
+            isValidQuestion = false;
+        } else
+        {
+            isValidQuestion = true;
+        }
     }
 }
