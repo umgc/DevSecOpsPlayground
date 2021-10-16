@@ -68,6 +68,7 @@ namespace CaPPMS.Data
             foreach(var file in idea.Attachments)
             {
                 file.Location = await FileManager.SaveAsync(file.BrowserFile.OpenReadStream(MaxMBSizePerFile), file.File_ID.ToString(), file.Name);
+                file.BrowserFile = null;
             }
 
             if (!ProjectIdeas.TryAdd(idea.ProjectID, idea))
@@ -128,12 +129,13 @@ namespace CaPPMS.Data
             {
                 foreach (var file in idea.Attachments)
                 {
-                    if (existingProjectInformation.Attachments.Contains(file))
+                    if (file.BrowserFile == null)
                     {
+                        Console.Error.WriteLine("Existing contains: " + file.File_ID);
                         continue;
                     }
-                    Console.Error.WriteLine("Adding File: " + file.Name);
                     file.Location = await FileManager.SaveAsync(file.BrowserFile.OpenReadStream(MaxMBSizePerFile), file.File_ID.ToString(), file.Name);
+                    file.BrowserFile = null;
                 }
 
                 bool completed;
