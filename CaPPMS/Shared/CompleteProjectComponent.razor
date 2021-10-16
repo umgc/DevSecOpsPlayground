@@ -172,8 +172,22 @@
     {
         CompletedProjectDocumentation completedProject = new CompletedProjectDocumentation();
         completedProject.TeamName = this.TeamName;
+        if (!this.VideoLink.StartsWith("http://") && !this.VideoLink.StartsWith("https://"))
+        {
+            this.VideoLink = "//" + this.VideoLink;
+        }
         completedProject.VideoLink = this.VideoLink;
+
+        if (!this.WebsiteLink.StartsWith("http://") && !this.WebsiteLink.StartsWith("https://"))
+        {
+            this.WebsiteLink = "//" + this.WebsiteLink;
+        }
         completedProject.WebsiteLink = this.WebsiteLink;
+
+        if (!this.GitHubLink.StartsWith("http://") && !this.GitHubLink.StartsWith("https://"))
+        {
+            this.GitHubLink = "//" + this.GitHubLink;
+        }
         completedProject.GitHubLink = this.GitHubLink;
 
         completedProject.ProjectPlan = this.ProjectPlanPath;

@@ -19,6 +19,18 @@
 
     <h5><b>@idea.ProjectTitle </b></h5>
     <p> @idea.ProjectDescription </p>
+    if (idea.Github.Length > 0)
+    {
+        <b>GitHub Link: </b>
+        <a href="@idea.Github" target="_blank" rel="noopener noreferrer">@idea.Github</a>
+        <br />
+    }
+    if (idea.Url.Length > 0)
+    {
+        <b> Website Link: </b>
+        <a href="@idea.Url" target="_blank" rel="noopener noreferrer">@idea.Url</a>
+        <br />
+    }
 
     if (idea.CompletedDocuments.Count > 0)
     {
@@ -30,43 +42,22 @@
             if (proj.GitHubLink.Length > 0)
             {
                 <b>GitHub Link: </b>
-                @if (proj.GitHubLink.StartsWith("http://") || proj.GitHubLink.StartsWith("https://"))
-                {
-                    <a href="@proj.GitHubLink">@proj.GitHubLink</a>
-                }
-                else
-                {
-                    <a href="//@proj.GitHubLink">@proj.GitHubLink</a>
-                }
+                <a href="@proj.GitHubLink" target="_blank" rel="noopener noreferrer">@proj.GitHubLink</a>
                 <br />
             }
             if (proj.VideoLink.Length > 0)
             {
                 <b> Video Link: </b>
-                @if (proj.VideoLink.StartsWith("http://") || proj.VideoLink.StartsWith("https://"))
-                {
-                    <a href="@proj.VideoLink">@proj.VideoLink</a>
-                }
-                else
-                {
-                    <a href="//@proj.VideoLink">@proj.VideoLink</a>
-                }
+                <a href="@proj.VideoLink" target="_blank" rel="noopener noreferrer">@proj.VideoLink</a>
                 <br />
             }
             if (proj.WebsiteLink.Length > 0)
             {
                 <b> Website Link: </b>
-                @if (proj.WebsiteLink.StartsWith("http://") || proj.WebsiteLink.StartsWith("https://"))
-                {
-                    <a href="@proj.WebsiteLink">@proj.WebsiteLink</a>
-                }
-                else
-                {
-                    <a href="//@proj.WebsiteLink">@proj.WebsiteLink</a>
-                }
+                <a href="@proj.WebsiteLink" target="_blank" rel="noopener noreferrer">@proj.WebsiteLink</a>
                 <br />
             }
-            
+
             <b> Documents for Team @proj.TeamName: </b>
             <ul>
                 <li> <a href="/download/@proj.ProjectPlanLink" download="@proj.ProjectPlan" target="_top">Project Plan</a> </li>
