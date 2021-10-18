@@ -16,10 +16,10 @@ namespace CaPPMS.Model
 
         public Guid CommentId { get; set; } = Guid.NewGuid();
 
-        [StringLength(500, ErrorMessage = "Comment must be at least 20 characters, at most 500 characters", MinimumLength = 20)]
+        [Required]
         public string Comments { get; set; } = string.Empty;
 
-        [StringLength(80, ErrorMessage = "You must include a valid contact email address (Min Length: 10)", MinimumLength =10)]
+        [Required]
         public string UserEmail { get; set; } = string.Empty;
 
         public Contact Contact { get; set; } = new Contact();
