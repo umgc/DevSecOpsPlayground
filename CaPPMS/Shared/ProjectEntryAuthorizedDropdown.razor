@@ -77,7 +77,7 @@
                             <td style="padding-top:0px;"><InputText @bind-Value="ProjectInformation.ProjectTitle" /></td>
                             <td style="padding-top:0px;"><InputText @bind-Value="ProjectInformation.ProjectDescription" /></td>
                         </tr>
-
+                       
                     </table>
 
                 </td>
@@ -269,17 +269,7 @@
     private async Task ApproveIdea(MouseEventArgs e)
     {
         ProjectInformation.Status = "Approved";
-        await UpdateRecordAsync(e);
-    }
-
-    private async Task UpdateRecordAsync(EventArgs e)
-    {
-        if (!ProjectInformation.IsDirty)
-        {
-            return;
-        }
-
-        ProjectInformation.IsDirty = !await ProjectManager.UpdateAsync(ProjectInformation);
+        await ProjectManager.UpdateAsync(ProjectInformation);
     }
 
     private async Task UpdateRecord(bool confirmed)
@@ -288,6 +278,49 @@
         {
             return;
         }
+
+        string link = "";
+        if ((!ProjectInformation.Url.StartsWith("http://") && !ProjectInformation.Url.StartsWith("https://")) && ProjectInformation.Url.Length != 0)
+        {
+            link = "https://" + ProjectInformation.Url;
+            ProjectInformation.Url = "";
+            ProjectInformation.Url = link;
+        }
+
+        if ((!ProjectInformation.Github.StartsWith("http://") && !ProjectInformation.Github.StartsWith("https://")) && ProjectInformation.Github.Length != 0)
+        {
+            link = "https://" + ProjectInformation.Github;
+            ProjectInformation.Github = link;
+        }
+
+        if ((!ProjectInformation.VideoLink.StartsWith("http://") && !ProjectInformation.VideoLink.StartsWith("https://")) && ProjectInformation.VideoLink.Length != 0)
+        {
+            link = "https://" + ProjectInformation.VideoLink;
+            ProjectInformation.VideoLink = link;
+        }
+
+        foreach(CompletedProjectDocumentation proj in ProjectInformation.CompletedDocuments)
+        {
+            if ((!proj.WebsiteLink.StartsWith("http://") && !proj.WebsiteLink.StartsWith("https://")) && proj.WebsiteLink.Length != 0)
+            {
+                link = "https://" + proj.WebsiteLink;
+                proj.WebsiteLink = link;
+            }
+
+            if ((!proj.GitHubLink.StartsWith("http://") && !proj.GitHubLink.StartsWith("https://")) && proj.GitHubLink.Length != 0)
+            {
+                link = "https://" + proj.GitHubLink;
+                proj.GitHubLink = link;
+            }
+
+            if ((!proj.VideoLink.StartsWith("http://") && !proj.VideoLink.StartsWith("https://")) && proj.VideoLink.Length != 0)
+            {
+                link = "https://" + proj.VideoLink;
+                proj.VideoLink = link;
+            }
+
+        }
+
         await Task.Run(async () =>
         {
             var uploaded = await ProjectManager.UpdateAsync(projectInformation);

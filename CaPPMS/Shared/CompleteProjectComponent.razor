@@ -130,22 +130,22 @@
 
 
 @code {
-    [Parameter] public EventCallback<ProjectInformation> ProjectInformationChanged { get; set; }
-    [Parameter]
-    public ProjectInformation ProjectInformation
+        [Parameter] public EventCallback<ProjectInformation> ProjectInformationChanged { get; set; }
+        [Parameter]
+        public ProjectInformation ProjectInformation
     {
-        get { return projectInformation; }
-        set
+            get { return projectInformation; }
+            set
         {
-            projectInformation = value;
+                projectInformation = value;
+            }
         }
-    }
 
-    [Parameter] public EventCallback<bool> IsOpenChanged { get; set; }
-    [Parameter]
-    public bool IsOpen { get; set; } = false;
+        [Parameter] public EventCallback<bool> IsOpenChanged { get; set; }
+        [Parameter]
+        public bool IsOpen { get; set; } = false;
 
-    [Parameter] public string Title { get; set; } = null;
+        [Parameter] public string Title { get; set; } = null;
 
 
     private ProjectInformation projectInformation;
@@ -172,30 +172,72 @@
     {
         CompletedProjectDocumentation completedProject = new CompletedProjectDocumentation();
         completedProject.TeamName = this.TeamName;
+        if (!this.VideoLink.StartsWith("http://") && !this.VideoLink.StartsWith("https://") && this.VideoLink.Length > 0)
+        {
+            this.VideoLink = "//" + this.VideoLink;
+        }
         completedProject.VideoLink = this.VideoLink;
+
+        if (!this.WebsiteLink.StartsWith("http://") && !this.WebsiteLink.StartsWith("https://") && this.WebsiteLink.Length > 0)
+        {
+            this.WebsiteLink = "//" + this.WebsiteLink;
+        }
         completedProject.WebsiteLink = this.WebsiteLink;
+
+        if (!this.GitHubLink.StartsWith("http://") && !this.GitHubLink.StartsWith("https://") && this.GitHubLink.Length > 0)
+        {
+            this.GitHubLink = "//" + this.GitHubLink;
+        }
         completedProject.GitHubLink = this.GitHubLink;
 
         completedProject.ProjectPlan = this.ProjectPlanPath;
-        completedProject.ProjectPlanLink = GetFilePath(this.ProjectPlanPath);
+
+        if (this.ProjectPlanPath.Length > 0)
+        {
+            completedProject.ProjectPlanLink = GetFilePath(this.ProjectPlanPath);
+        }
 
         completedProject.SRS = this.SRSPath;
-        completedProject.SRSLink = GetFilePath(this.SRSPath);
+
+        if (this.SRSPath.Length > 0)
+        {
+            completedProject.SRSLink = GetFilePath(this.SRSPath);
+        }
 
         completedProject.TDD = this.TDDPath;
-        completedProject.TDDLink = GetFilePath(this.TDDPath);
+
+        if (this.TDDPath.Length > 0)
+        {
+            completedProject.TDDLink = GetFilePath(this.TDDPath);
+        }
 
         completedProject.Runbook = this.RunbookPath;
-        completedProject.RunbookLink = GetFilePath(this.RunbookPath);
+
+        if (this.RunbookPath.Length > 0)
+        {
+            completedProject.RunbookLink = GetFilePath(this.RunbookPath);
+        }
 
         completedProject.ProgrammersGuide = this.ProgGuidePath;
-        completedProject.ProgrammersGuideLink = GetFilePath(this.ProgGuidePath);
+
+        if (this.ProgGuidePath.Length > 0)
+        {
+            completedProject.ProgrammersGuideLink = GetFilePath(this.ProgGuidePath);
+        }
 
         completedProject.UsersGuide = this.UserGuidePath;
-        completedProject.UsersGuideLink = GetFilePath(this.UserGuidePath);
+
+        if (this.UserGuidePath.Length > 0)
+        {
+            completedProject.UsersGuideLink = GetFilePath(this.UserGuidePath);
+        }
 
         completedProject.TestReport = this.TestReportPath;
-        completedProject.TestReportLink = GetFilePath(this.TestReportPath);
+
+        if (this.TestReportPath.Length > 0)
+        {
+            completedProject.TestReportLink = GetFilePath(this.TestReportPath);
+        }
 
         ProjectInformation.Status = "Complete";
 

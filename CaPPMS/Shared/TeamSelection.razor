@@ -9,22 +9,22 @@
         <ValidationSummary />
         <div class="p-5">
 
-            
+
             <label>
                 Semester Term:
                 <select class="form-control" id="SemesterTerm" name="SemesterTerm" @bind="this.projectInformation.SemesterTerm">
-                    @foreach(string term in Terms)
-                {
-                        if(this.projectInformation.SemesterTerm.Contains(term))
+                    @foreach (string term in Terms)
                     {
-                        <option selected="selected">@term</option>
+                        if (this.projectInformation.SemesterTerm.Contains(term))
+                        {
+                            <option selected="selected">@term</option>
+                        }
+                        else
+                        {
+                            <option>@term</option>
+                        }
                     }
-                    else
-                    {
-                        <option>@term</option>
-                    }                    
-                }
-                    
+
                 </select>
             </label>
 
@@ -55,18 +55,16 @@
             <button class="btn btn-primary" type="button" @onclick="e => teamsClicked = !teamsClicked">Add Team</button>
             @if (teamsClicked)
             {
-                <CompleteProjectComponent @bind-ProjectInformation="projectInformation" @bind-IsOpen="teamsClicked"/>
+                <CompleteProjectComponent @bind-ProjectInformation="projectInformation" @bind-IsOpen="teamsClicked" />
+            }
+            @if (this.ProjectInformation.CompletedDocuments.Count > 0)
+            {
+                <hr />
+                <button id="completeProjectBtn" type="submit" class="btn-primary">
+                    Complete Project
+                </button>
             }
 
-            <hr />
-            <button id="completeProjectBtn" type="submit" class="btn-primary" >
-                Complete Project
-            </button>
-
-
-            <button @onclick="e => this.CancelComplete()">
-                Cancel
-            </button>
 
         </div>
     </EditForm>
@@ -107,11 +105,6 @@
     private List<string> years { get; set; } = new List<string>();
     public ProjectInformation projectInformation = new ProjectInformation();
     private bool teamsClicked = false;
-
-    private void CancelComplete()
-    {
-        this.projectInformation = null;
-    }
 
     private async Task HandleValidSubmit()
     {
