@@ -48,7 +48,7 @@ else
                 </div>
                 <div class="card-body" style="width:300px">
                     Comment:
-                    <InputTextArea @bind-Value="newUserComment" /><br />
+                    <InputTextArea @bind-Value="NewComment.Comments" /><br />
                     <button type="submit" class="btn btn-primary">Add Comment</button>
                 </div>
             </div>
@@ -74,14 +74,14 @@ else
                         <tr>
                             <td style="padding-top:0px;"><InputText @bind-Value="NewContact.FirstName" /></td>
                             <td style="padding-top:0px;"><InputText @bind-Value="NewContact.LastName" /></td>
-                            <td style="padding-top:0px;"><InputText @bind-Value="NewContact.Email" /></td>
+                            <td style="padding-top:0px;"><InputText @bind-Value="NewComment.UserEmail" /></td>
                             <td style="padding-top:0px;"><InputText @bind-Value="NewContact.Phone" /></td>
 
                         </tr>
                     </table>
                     Comment: 
                     <br />
-                    <InputTextArea @bind-Value="newUserComment" /><br />
+                    <InputTextArea @bind-Value="NewComment.Comments" /><br />
                     <button type="submit" class="btn btn-primary">Add Comment</button>
                 </div>
             </div>
@@ -92,7 +92,6 @@ else
 
 
 @code {
-    //private event EventHandler CommentsUpdated;
     [Parameter]
     public Guid ProjectGuid { get; set; }
 
@@ -106,19 +105,6 @@ else
     private ICommentManager CommentManager => ProjectManager;
 
     private IEnumerable<Comment> Comments;
-
-    [StringLength(1000, MinimumLength = 10, ErrorMessage = "Minimum length is 10 and maximum is 1000 characters.")]
-    private string newUserComment
-    {
-        get
-        {
-            return NewComment.Comments;
-        }
-        set
-        {
-            NewComment.Comments = value;
-        }
-    }
 
     protected override async Task OnInitializedAsync()
     {
@@ -136,11 +122,6 @@ else
         {
             ShouldUpdateState();
         };
-        /* CommentsUpdated += (o, e) =>
-         {
-             ShouldUpdateState();
-         };*/
-
         var authState = await authenticationStateTask;
         this.isAuthenticated = authState.User?.Identity.IsAuthenticated ?? false;
         Comments = CommentManager.GetComments(ProjectGuid);
@@ -161,15 +142,10 @@ else
         {
             var authState = await authenticationStateTask;
             NewComment.UserEmail = authState.User?.Identity?.Name ?? string.Empty;
-        } else
-        {
-            NewComment.UserEmail = NewContact.Email;
         }
 
         NewComment.UpdateDateTime = DateTime.Now;
         CommentManager.AddComment(NewComment);
-
-        //CommentsUpdated?.Invoke(this, EventArgs.Empty);
 
         NewComment = new Comment(ProjectGuid);
         NewContact = new Contact();
