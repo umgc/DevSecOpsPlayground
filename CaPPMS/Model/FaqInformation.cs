@@ -1,5 +1,4 @@
 using System;
-using System.ComponentModel.DataAnnotations;
 
 namespace CaPPMS.Model
 {
@@ -7,13 +6,10 @@ namespace CaPPMS.Model
     {
         public Guid Guid { get; set; } = Guid.NewGuid();
 
-        [StringLength(500, MinimumLength = 20, ErrorMessage = "Question must be between 20 and 500 characters long")]
         public string Question { get; set; } = string.Empty;
-        [StringLength(500, MinimumLength = 2, ErrorMessage = "Must include author name")]
         public string Author { get; set; } = string.Empty;
 
         public string Reply { get; set; } = string.Empty;
-        [StringLength(500, MinimumLength = 5, ErrorMessage = "Topic must be between 20 and 500 characters long")]
         public string Topic { get; set; } = string.Empty;
 
     }
