@@ -21,7 +21,7 @@
     }
 </style>
 
-<div class="panel panel-default border @CollapseEntry">
+<div class="panel panel-default border @CollapseEntry" style="display:@tableState">
     <EditForm Model="@ProjectInformation">
         <DataAnnotationsValidator />
         <ValidationSummary />
@@ -223,6 +223,13 @@
     </EditForm>
 </div>
 
+<div style="visibility:@waitBar">
+    Updating Entry ...
+    <div>
+        <Wander Center="true" />
+    </div>
+</div>
+
 @code {
     [Parameter]
     public ProjectInformation ProjectInformation
@@ -249,6 +256,10 @@
 
     private Dictionary<ProjectFile, bool> attachmentSelection = new Dictionary<ProjectFile, bool>();
 
+    private string tableState = "block";
+
+    private string waitBar => tableState.Equals("none") ? "visible" : "hidden";
+
     private async Task DeleteRecord(bool confirmed)
     {
         if (!confirmed)
@@ -274,6 +285,7 @@
 
     private async Task UpdateRecord(bool confirmed)
     {
+        this.tableState = "none";
         if (!confirmed)
         {
             return;
@@ -332,6 +344,7 @@
 
             await Task.Delay(2000);
         });
+        this.tableState = "block";
     }
 
     private async Task DeleteSelectedAttachments(bool confirmed)
