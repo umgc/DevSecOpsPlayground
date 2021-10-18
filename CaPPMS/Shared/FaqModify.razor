@@ -10,6 +10,13 @@
                 <tr class="row w-25">
                     <td class="d-xl-table-cell">
                         <label>
+                            Submitter: @_faqPlaceholder.Author
+                        </label>
+                    </td>
+                </tr>
+                <tr class="row w-25">
+                    <td class="d-xl-table-cell">
+                        <label>
                             Topic:
                             <InputText id="topic" @bind-Value="_faqPlaceholder.Topic" />
                         </label>
@@ -71,6 +78,7 @@
         _faqPlaceholder.Topic = SelectedFaq.Topic;
         _faqPlaceholder.Question = SelectedFaq.Question;
         _faqPlaceholder.Reply = SelectedFaq.Reply;
+        _faqPlaceholder.Author = SelectedFaq.Author;
     }
     private void CancelModify()
     {
