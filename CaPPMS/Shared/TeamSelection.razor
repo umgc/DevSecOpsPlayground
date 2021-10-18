@@ -12,7 +12,7 @@
 
             <label>
                 Semester Term:
-                <select class="form-control" id="SemesterTerm" name="SemesterTerm" @bind="this.projectInformation.SemesterTerm">
+                <select class="form-control" id="SemesterTerm" name="SemesterTerm" @bind="this.projectInformation.SemesterTerm"  required>
                     @foreach (string term in Terms)
                     {
                         if (this.projectInformation.SemesterTerm.Contains(term))
@@ -30,7 +30,7 @@
 
             <label>
                 Semester Year:
-                <select class="form-control" id="SemesterYear" name="SemesterYear" @bind="this.projectInformation.SemesterYear">
+                <select class="form-control" id="SemesterYear" name="SemesterYear" @bind="this.projectInformation.SemesterYear"  required>
                     @foreach (string year in Years)
                     {
                         if (this.projectInformation.SemesterYear.Contains(year))

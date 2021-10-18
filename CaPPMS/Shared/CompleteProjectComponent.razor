@@ -3,26 +3,26 @@
 @inject ProjectManagerService ProjectManager
 
 <div>
-    <EditForm Model="@this.ProjectInformation">
+    <EditForm Model="@this.ProjectInformation" OnValidSubmit="@HandleValidSubmit">
         <DataAnnotationsValidator />
         <ValidationSummary />
         <div class="p-5">
             <label>Team Name:</label>
-            <InputText type="text" @bind-Value="TeamName" />
+            <InputText type="text" @bind-Value="completedProject.TeamName"  required/>
             <hr />
             <label>Team Video Link:</label>
-            <InputText type="text" @bind-Value="VideoLink" />
+            <InputText type="text" @bind-Value="completedProject.VideoLink" />
             <hr />
             <label>Team GitHub Link:</label>
-            <InputText type="text" @bind-Value="GitHubLink" />
+            <InputText type="text" @bind-Value="completedProject.GitHubLink" />
             <hr />
             <label>Team Website Link:</label>
-            <InputText type="text" @bind-Value="WebsiteLink" />
+            <InputText type="text" @bind-Value="completedProject.WebsiteLink" />
             <hr />
             <label>
 
                 Project Plan:
-                <select class="form-control" id="ProjectPlan" name="ProjectPlan" @bind="ProjectPlanPath">
+                <select class="form-control" id="ProjectPlan" name="ProjectPlan" @bind="completedProject.ProjectPlan" required>
                     @if (this.ProjectInformation.Attachments.Count == 0)
                     {
                         <option selected="selected">Select...</option>
@@ -36,7 +36,7 @@
             <hr />
             <label>
                 Software Requirements Specification (SRS):
-                <select class="form-control" id="SRS" name="SRS" @bind="SRSPath">
+                <select class="form-control" id="SRS" name="SRS" @bind="completedProject.SRS" required>
                     @if (this.ProjectInformation.Attachments.Count == 0)
                     {
                         <option selected="selected">Select...</option>
@@ -50,7 +50,7 @@
             <hr />
             <label>
                 Technical Design Document (TDD):
-                <select class="form-control" id="TDD" name="TDD" @bind="TDDPath">
+                <select class="form-control" id="TDD" name="TDD" @bind="completedProject.TDD" required>
                     @if (this.ProjectInformation.Attachments.Count == 0)
                     {
                         <option selected="selected">Select...</option>
@@ -64,7 +64,7 @@
             <hr />
             <label>
                 Deployment and Operations Guide (Runbook):
-                <select class="form-control" id="Runbook" name="Runbook" @bind="RunbookPath">
+                <select class="form-control" id="Runbook" name="Runbook" @bind="completedProject.Runbook" required>
                     @if (this.ProjectInformation.Attachments.Count == 0)
                     {
                         <option selected="selected">Select...</option>
@@ -78,7 +78,7 @@
             <hr />
             <label>
                 Programmers Guide:
-                <select class="form-control" id="ProgrammersGuide" name="ProgrammersGuide" @bind="ProgGuidePath">
+                <select class="form-control" id="ProgrammersGuide" name="ProgrammersGuide" @bind="completedProject.ProgrammersGuide" required>
                     @if (this.ProjectInformation.Attachments.Count == 0)
                     {
                         <option selected="selected">Select...</option>
@@ -92,7 +92,7 @@
             <hr />
             <label>
                 User Guide:
-                <select class="form-control" id="UserGuide" name="UserGuide" @bind="UserGuidePath">
+                <select class="form-control" id="UserGuide" name="UserGuide" @bind="completedProject.UsersGuide" required>
                     @if (this.ProjectInformation.Attachments.Count == 0)
                     {
                         <option selected="selected">Select...</option>
@@ -106,7 +106,7 @@
             <hr />
             <label>
                 Test Report:
-                <select class="form-control" id="TestReport" name="TestReport" @bind="TestReportPath">
+                <select class="form-control" id="TestReport" name="TestReport" @bind="completedProject.TestReport" required>
                     @if (this.ProjectInformation.Attachments.Count == 0)
                     {
                         <option selected="selected">Select...</option>
@@ -118,10 +118,8 @@
                 </select>
             </label>
             <hr />
-
-            <button type="button" @onclick="Complete">
-                Done
-            </button>
+            <button type="submit" class="btn btn-primary">Done</button>
+            
 
         </div>
     </EditForm>
@@ -130,39 +128,27 @@
 
 
 @code {
-        [Parameter] public EventCallback<ProjectInformation> ProjectInformationChanged { get; set; }
-        [Parameter]
-        public ProjectInformation ProjectInformation
+    [Parameter] public EventCallback<ProjectInformation> ProjectInformationChanged { get; set; }
+    [Parameter]
+    public ProjectInformation ProjectInformation
     {
-            get { return projectInformation; }
-            set
+        get { return projectInformation; }
+        set
         {
-                projectInformation = value;
-            }
+            projectInformation = value;
         }
+    }
 
-        [Parameter] public EventCallback<bool> IsOpenChanged { get; set; }
-        [Parameter]
-        public bool IsOpen { get; set; } = false;
+    [Parameter] public EventCallback<bool> IsOpenChanged { get; set; }
+    [Parameter]
+    public bool IsOpen { get; set; } = false;
 
-        [Parameter] public string Title { get; set; } = null;
+    [Parameter] public string Title { get; set; } = null;
 
 
     private ProjectInformation projectInformation;
     private Dictionary<ProjectFile, bool> attachmentSelection = new Dictionary<ProjectFile, bool>();
-    private String ProjectPlanPath = "";
-    private String SRSPath = "";
-    private String TDDPath = "";
-    private String RunbookPath = "";
-    private String ProgGuidePath = "";
-    private String UserGuidePath = "";
-    private String TestReportPath = "";
-    private String SemesterTermVal = "";
-    private String SemesterYearVal = "";
-    private String TeamName = "";
-    private String VideoLink = "";
-    private String GitHubLink = "";
-    private String WebsiteLink = "";
+    private CompletedProjectDocumentation completedProject = new CompletedProjectDocumentation();
 
     private void CancelComplete()
     {
@@ -170,96 +156,123 @@
     }
     private async Task Complete(EventArgs e)
     {
-        CompletedProjectDocumentation completedProject = new CompletedProjectDocumentation();
-        completedProject.TeamName = this.TeamName;
-        if (!this.VideoLink.StartsWith("http://") && !this.VideoLink.StartsWith("https://") && this.VideoLink.Length > 0)
+        if (!completedProject.VideoLink.StartsWith("http://") && !completedProject.VideoLink.StartsWith("https://") && completedProject.VideoLink.Length > 0)
         {
-            this.VideoLink = "//" + this.VideoLink;
-        }
-        completedProject.VideoLink = this.VideoLink;
-
-        if (!this.WebsiteLink.StartsWith("http://") && !this.WebsiteLink.StartsWith("https://") && this.WebsiteLink.Length > 0)
-        {
-            this.WebsiteLink = "//" + this.WebsiteLink;
-        }
-        completedProject.WebsiteLink = this.WebsiteLink;
-
-        if (!this.GitHubLink.StartsWith("http://") && !this.GitHubLink.StartsWith("https://") && this.GitHubLink.Length > 0)
-        {
-            this.GitHubLink = "//" + this.GitHubLink;
-        }
-        completedProject.GitHubLink = this.GitHubLink;
-
-        completedProject.ProjectPlan = this.ProjectPlanPath;
-
-        if (this.ProjectPlanPath.Length > 0)
-        {
-            completedProject.ProjectPlanLink = GetFilePath(this.ProjectPlanPath);
+            completedProject.VideoLink = "//" + completedProject.VideoLink;
         }
 
-        completedProject.SRS = this.SRSPath;
-
-        if (this.SRSPath.Length > 0)
+        if (!completedProject.WebsiteLink.StartsWith("http://") && !completedProject.WebsiteLink.StartsWith("https://") && completedProject.WebsiteLink.Length > 0)
         {
-            completedProject.SRSLink = GetFilePath(this.SRSPath);
+            completedProject.WebsiteLink = "//" + completedProject.WebsiteLink;
         }
 
-        completedProject.TDD = this.TDDPath;
-
-        if (this.TDDPath.Length > 0)
+        if (!completedProject.GitHubLink.StartsWith("http://") && !completedProject.GitHubLink.StartsWith("https://") && completedProject.GitHubLink.Length > 0)
         {
-            completedProject.TDDLink = GetFilePath(this.TDDPath);
+            completedProject.GitHubLink = "//" + completedProject.GitHubLink;
         }
 
-        completedProject.Runbook = this.RunbookPath;
-
-        if (this.RunbookPath.Length > 0)
+        if (completedProject.ProjectPlan.Length > 0)
         {
-            completedProject.RunbookLink = GetFilePath(this.RunbookPath);
+            completedProject.ProjectPlanLink = GetFilePath(completedProject.ProjectPlan);
         }
 
-        completedProject.ProgrammersGuide = this.ProgGuidePath;
-
-        if (this.ProgGuidePath.Length > 0)
+        if (completedProject.SRS.Length > 0)
         {
-            completedProject.ProgrammersGuideLink = GetFilePath(this.ProgGuidePath);
+            completedProject.SRSLink = GetFilePath(completedProject.SRS);
         }
 
-        completedProject.UsersGuide = this.UserGuidePath;
-
-        if (this.UserGuidePath.Length > 0)
+        if (completedProject.TDD.Length > 0)
         {
-            completedProject.UsersGuideLink = GetFilePath(this.UserGuidePath);
+            completedProject.TDDLink = GetFilePath(completedProject.TDD);
         }
 
-        completedProject.TestReport = this.TestReportPath;
-
-        if (this.TestReportPath.Length > 0)
+        if (completedProject.Runbook.Length > 0)
         {
-            completedProject.TestReportLink = GetFilePath(this.TestReportPath);
+            completedProject.RunbookLink = GetFilePath(completedProject.Runbook);
+        }
+
+        if (completedProject.ProgrammersGuide.Length > 0)
+        {
+            completedProject.ProgrammersGuideLink = GetFilePath(completedProject.ProgrammersGuide);
+        }
+
+        if (completedProject.UsersGuide.Length > 0)
+        {
+            completedProject.UsersGuideLink = GetFilePath(completedProject.UsersGuide);
+        }
+
+        if (completedProject.TestReport.Length > 0)
+        {
+            completedProject.TestReportLink = GetFilePath(completedProject.TestReport);
         }
 
         ProjectInformation.Status = "Complete";
 
         ProjectInformation.CompletedDocuments.Add(completedProject);
 
-        ProjectPlanPath = "";
-        SRSPath = "";
-        TDDPath = "";
-        RunbookPath = "";
-        ProgGuidePath = "";
-        UserGuidePath = "";
-        TestReportPath = "";
-        SemesterTermVal = "";
-        SemesterYearVal = "";
-        TeamName = "";
-        GitHubLink = "";
-        VideoLink = "";
-        WebsiteLink = "";
-
         IsOpen = false;
         await IsOpenChanged.InvokeAsync(IsOpen);
 
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        if (!completedProject.VideoLink.StartsWith("http://") && !completedProject.VideoLink.StartsWith("https://") && completedProject.VideoLink.Length > 0)
+        {
+            completedProject.VideoLink = "//" + completedProject.VideoLink;
+        }
+
+        if (!completedProject.WebsiteLink.StartsWith("http://") && !completedProject.WebsiteLink.StartsWith("https://") && completedProject.WebsiteLink.Length > 0)
+        {
+            completedProject.WebsiteLink = "//" + completedProject.WebsiteLink;
+        }
+
+        if (!completedProject.GitHubLink.StartsWith("http://") && !completedProject.GitHubLink.StartsWith("https://") && completedProject.GitHubLink.Length > 0)
+        {
+            completedProject.GitHubLink = "//" + completedProject.GitHubLink;
+        }
+
+        if (completedProject.ProjectPlan.Length > 0)
+        {
+            completedProject.ProjectPlanLink = GetFilePath(completedProject.ProjectPlan);
+        }
+
+        if (completedProject.SRS.Length > 0)
+        {
+            completedProject.SRSLink = GetFilePath(completedProject.SRS);
+        }
+
+        if (completedProject.TDD.Length > 0)
+        {
+            completedProject.TDDLink = GetFilePath(completedProject.TDD);
+        }
+
+        if (completedProject.Runbook.Length > 0)
+        {
+            completedProject.RunbookLink = GetFilePath(completedProject.Runbook);
+        }
+
+        if (completedProject.ProgrammersGuide.Length > 0)
+        {
+            completedProject.ProgrammersGuideLink = GetFilePath(completedProject.ProgrammersGuide);
+        }
+
+        if (completedProject.UsersGuide.Length > 0)
+        {
+            completedProject.UsersGuideLink = GetFilePath(completedProject.UsersGuide);
+        }
+
+        if (completedProject.TestReport.Length > 0)
+        {
+            completedProject.TestReportLink = GetFilePath(completedProject.TestReport);
+        }
+
+        ProjectInformation.Status = "Complete";
+
+        ProjectInformation.CompletedDocuments.Add(completedProject);
+
+        IsOpen = false;
+        await IsOpenChanged.InvokeAsync(IsOpen);
     }
 
     private string GetFilePath(string fileName)

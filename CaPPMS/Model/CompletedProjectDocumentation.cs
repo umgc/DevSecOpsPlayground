@@ -66,6 +66,7 @@ namespace CaPPMS.Model
         [Export(true)]
         [DisplayName("Team Name")]
         [Browsable(true)]
+        [Required(ErrorMessage = "Team Name Required")]
         public string TeamName
         {
             get
@@ -83,6 +84,7 @@ namespace CaPPMS.Model
         [Export(true)]
         [DisplayName("Project Plan")]
         [Browsable(true)]
+        [Required(ErrorMessage = "Team Name Required")]
         public string ProjectPlan
         {
             get
@@ -101,6 +103,7 @@ namespace CaPPMS.Model
         [Export(true)]
         [DisplayName("Project Plan Link")]
         [Browsable(true)]
+        [Required(ErrorMessage = "Team Name Required")]
         public string ProjectPlanLink
         {
             get
@@ -119,6 +122,7 @@ namespace CaPPMS.Model
         [Export(true)]
         [DisplayName("Software Requirements Specification")]
         [Browsable(true)]
+        [Required(ErrorMessage = "Team Name Required")]
         public string SRS
         {
             get
@@ -137,6 +141,7 @@ namespace CaPPMS.Model
         [Export(true)]
         [DisplayName("Software Requirements Specification Link")]
         [Browsable(true)]
+        [Required(ErrorMessage = "Team Name Required")]
         public string SRSLink
         {
             get
@@ -155,6 +160,7 @@ namespace CaPPMS.Model
         [Export(true)]
         [DisplayName("Technical Design Document")]
         [Browsable(true)]
+        [Required(ErrorMessage = "Team Name Required")]
         public string TDD
         {
             get
@@ -173,6 +179,7 @@ namespace CaPPMS.Model
         [Export(true)]
         [DisplayName("Technical Design Document Link")]
         [Browsable(true)]
+        [Required(ErrorMessage = "Team Name Required")]
         public string TDDLink
         {
             get
@@ -191,6 +198,7 @@ namespace CaPPMS.Model
         [Export(true)]
         [DisplayName("Deployment and Operations Guide(Runbook)")]
         [Browsable(true)]
+        [Required(ErrorMessage = "Team Name Required")]
         public string Runbook
         {
             get
@@ -210,6 +218,7 @@ namespace CaPPMS.Model
         [Export(true)]
         [DisplayName("Deployment and Operations Guide(Runbook) Link")]
         [Browsable(true)]
+        [Required(ErrorMessage = "Team Name Required")]
         public string RunbookLink
         {
             get
@@ -228,6 +237,7 @@ namespace CaPPMS.Model
         [Export(true)]
         [DisplayName("Programmers Guide")]
         [Browsable(true)]
+        [Required(ErrorMessage = "Team Name Required")]
         public string ProgrammersGuide
         {
             get
@@ -246,6 +256,7 @@ namespace CaPPMS.Model
         [Export(true)]
         [DisplayName("Programmers Guide Link")]
         [Browsable(true)]
+        [Required(ErrorMessage = "Team Name Required")]
         public string ProgrammersGuideLink
         {
             get
@@ -264,6 +275,7 @@ namespace CaPPMS.Model
         [Export(true)]
         [DisplayName("Users Guide")]
         [Browsable(true)]
+        [Required(ErrorMessage = "Team Name Required")]
         public string UsersGuide
         {
             get
@@ -282,6 +294,7 @@ namespace CaPPMS.Model
         [Export(true)]
         [DisplayName("Users Guide Link")]
         [Browsable(true)]
+        [Required(ErrorMessage = "Team Name Required")]
         public string UsersGuideLink
         {
             get
@@ -300,6 +313,7 @@ namespace CaPPMS.Model
         [Export(true)]
         [DisplayName("Test Report")]
         [Browsable(true)]
+        [Required(ErrorMessage = "Team Name Required")]
         public string TestReport
         {
             get
@@ -318,6 +332,7 @@ namespace CaPPMS.Model
         [Export(true)]
         [DisplayName("Test Report Link")]
         [Browsable(true)]
+        [Required(ErrorMessage = "Team Name Required")]
         public string TestReportLink
         {
             get
