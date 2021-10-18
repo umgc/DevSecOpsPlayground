@@ -6,8 +6,6 @@
         Can't find your question? Ask it here!
     </h4>
     <EditForm Model="NewFaq">
-        <DataAnnotationsValidator />
-        <ValidationSummary />
         <div class="card" id="@NewFaq.Guid">
 
             <span class="fas" style="color:black;font-weight:bold"> Add Topic: </span>
@@ -58,7 +56,7 @@
     {
         FaqManager.Add(NewFaq);
 
-        NewFaq = new FaqInformation();
+        NewFaq = new();
         isValidQuestion = false;
     }
     private void AssignNewFaqQuestion(string value)
@@ -78,9 +76,9 @@
     }
     private void CheckQuestionInput()
     {
-        if ((NewFaq.Question.Length < 20 || NewFaq.Question.Length > 500)
-            || (NewFaq.Author.Length < 2 || NewFaq.Author.Length > 500)
-            || (NewFaq.Topic.Length < 5 || NewFaq.Topic.Length > 500))
+        if ((NewFaq.Question.Length == 0)
+            || (NewFaq.Author.Length == 0)
+            || (NewFaq.Topic.Length == 0))
         {
             isValidQuestion = false;
         } else
