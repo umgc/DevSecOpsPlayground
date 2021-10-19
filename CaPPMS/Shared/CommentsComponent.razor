@@ -115,9 +115,6 @@ else
             throw new ArgumentNullException("Project GUID must be passed into component.");
         }
 
-        NewComment = new Comment(ProjectGuid);
-        NewContact = new Contact();
-
         ProjectManagerService.ProjectIdeasChanged += (o, e) =>
         {
             ShouldUpdateState();
@@ -125,6 +122,12 @@ else
         var authState = await authenticationStateTask;
         this.isAuthenticated = authState.User?.Identity.IsAuthenticated ?? false;
         Comments = CommentManager.GetComments(ProjectGuid);
+        NewComment = new Comment(ProjectGuid);
+        NewContact = new Contact();
+        if (this.isAuthenticated)
+        {
+            NewComment.UserEmail = authState.User?.Identity?.Name ?? "Unidentified User";
+        }
     }
 
     private void ShouldUpdateState()
@@ -141,7 +144,7 @@ else
         if (this.isAuthenticated)
         {
             var authState = await authenticationStateTask;
-            NewComment.UserEmail = authState.User?.Identity?.Name ?? string.Empty;
+            NewComment.UserEmail = authState.User?.Identity?.Name ?? "Unidentified User";
         }
 
         NewComment.UpdateDateTime = DateTime.Now;
