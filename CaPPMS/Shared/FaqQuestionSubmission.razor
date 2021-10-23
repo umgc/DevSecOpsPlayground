@@ -27,11 +27,16 @@
             {
                 <AcknowledgeDialogBox Command="Submit Question"
                                       Type="submit"
+                                      ButtonClass="btn btn-primary"
                                       Prompt="Your question has been submitted!"
                                       ConfirmedChanged="HandleValidSubmit" />
             } else
             {
-                <button type="submit" class="btn-primary" disabled>Submit Question</button>
+                <button type="submit" 
+                        class="btn btn-secondary" 
+                        disabled>
+                    Submit Question
+                </button>
             }
 
 

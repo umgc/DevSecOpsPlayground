@@ -22,7 +22,10 @@
             @if (this.isAuthenticated)
             {
                 <div>
-                    <button @onclick="e => DeleteComment(comment)">Delete</button>
+                    <button @onclick="e => DeleteComment(comment)"
+                            class="btn btn-secondary">
+                        Delete
+                    </button>
                 </div>
             }
 

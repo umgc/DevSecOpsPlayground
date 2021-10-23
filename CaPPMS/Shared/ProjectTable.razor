@@ -41,7 +41,8 @@ else
                 {
                     <tr>
                         <td>
-                            <button @onclick="e => projectListCollapseMap[row.DataBoundItem as ProjectInformation] = !projectListCollapseMap[row.DataBoundItem as ProjectInformation]">
+                            <button @onclick="e => projectListCollapseMap[row.DataBoundItem as ProjectInformation] = !projectListCollapseMap[row.DataBoundItem as ProjectInformation]"
+                                    class="btn btn-primary">
                                 @(projectListCollapseMap[row.DataBoundItem as ProjectInformation] ? "+" : "-")
                             </button>
                         </td>
