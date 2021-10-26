@@ -49,9 +49,9 @@ else
                 <div class="card-title">
                     <span class="fas fa-comment"></span> Add Comment:
                 </div>
-                <div class="card-body" style="width:300px">
+                <div class="card-body" style="width:100%">
                     Comment:
-                    <InputTextArea @bind-Value="NewComment.Comments" /><br />
+                    <InputTextArea style="width:100%" @bind-Value="NewComment.Comments" /><br />
                     <button type="submit" class="btn btn-primary">Add Comment</button>
                 </div>
             </div>
@@ -66,7 +66,7 @@ else
                 <div class="card-title">
                     <span class="fas fa-comment"></span> Add Comment:
                 </div>
-                <div class="card-body" style="width:300px">
+                <div class="card-body" style="width:100%">
                     <table>
                         <tr>
                             <td style="padding-top:0px;">First Name:</td>
@@ -84,7 +84,7 @@ else
                     </table>
                     Comment: 
                     <br />
-                    <InputTextArea @bind-Value="NewComment.Comments" /><br />
+                    <InputTextArea style="width:100%" @bind-Value="NewComment.Comments" /><br />
                     <button type="submit" class="btn btn-primary">Add Comment</button>
                 </div>
             </div>
