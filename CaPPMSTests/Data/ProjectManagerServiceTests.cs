@@ -129,7 +129,13 @@ namespace CaPPMSTests.Data
             // Delete projects file.
             foreach (var file in ProjectManagerService.BaseDirInfo.GetFiles())
             {
-                file.Delete();
+                try
+                {
+                    file.Delete();
+                }
+                catch (IOException)
+                {
+                }
             }
         }
     }
