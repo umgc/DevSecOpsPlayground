@@ -63,7 +63,7 @@ namespace CaPPMSTests.ComponentTests
 
             string[] notExpectedErrorMessages = new[]
 {
-                "Exceeded max number of files. Max:10"
+                "Exceeded max number of files. Max:50"
             };
 
             ExpectedNotToHave(validation, notExpectedErrorMessages);
@@ -74,7 +74,7 @@ namespace CaPPMSTests.ComponentTests
         {
             var cut = RenderComponent<Idea>();
 
-            var attachedTestFiles = GenerateAttachedFiles(9, 11, "testfile");
+            var attachedTestFiles = GenerateAttachedFiles(9, 51, "testfile");
 
             cut.Instance.ProjectIdea.SetAttachments(attachedTestFiles);
 
@@ -86,7 +86,7 @@ namespace CaPPMSTests.ComponentTests
 
             string[] expectedErrorMessages = new[]
             {
-                "Exceeded max number of files. Max:10."
+                "Exceeded max number of files. Max:50."
             };
 
             HasExpectedResults(validation, expectedErrorMessages);
