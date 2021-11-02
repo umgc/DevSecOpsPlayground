@@ -1,0 +1,38 @@
+﻿@using CaPPMS.Model
+@using CaPPMS.Data
+@inject ProjectManagerService ProjectManager
+
+<div>
+    <div class="card m-2 p-2">
+        <div class="card-title p-2">
+            <div class="row">Author:@comment.UserEmail</div>
+            <div class="row">
+                @if (this.isAuthenticated)
+                {
+                    <ConfirmationDialogBox Command="Delete"
+                                           Prompt="Are you sure you want to delete?"
+                                           ConfirmedChanged="DeleteComment" />
+                }
+            </div>
+        </div>
+        <div class="card-body">
+            @comment.Comments
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter] public Comment comment { get; set; }
+    [Parameter] public bool isAuthenticated { get; set; }
+
+    private ICommentManager CommentManager => ProjectManager;
+
+    private void DeleteComment(bool confirmed)
+    {
+        if (!confirmed)
+        {
+            return;
+        }
+        CommentManager.DeleteComment(comment);
+    }
+}
