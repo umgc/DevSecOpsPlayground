@@ -12,24 +12,9 @@
 {
     foreach(var comment in Comments)
     {
-        <div class="card m-2 p-2">
-            <div class="card-title p-2">
-                Author:@comment.UserEmail
-            </div>
-            <div class="card-body">
-                @comment.Comments
-            </div>
-            @if (this.isAuthenticated)
-            {
-                <div>
-                    <button @onclick="e => DeleteComment(comment)"
-                            class="btn btn-secondary">
-                        Delete
-                    </button>
-                </div>
-            }
-
-        </div>
+        <CommentEntry comment="comment"
+                      isAuthenticated="@this.isAuthenticated"
+        />
     }
 }
 else
