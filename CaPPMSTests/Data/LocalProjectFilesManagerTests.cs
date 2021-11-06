@@ -13,7 +13,7 @@ namespace CaPPMSTests.Data.Table
         private string filePath = string.Empty;
 
         [TestMethod]
-        public void DeleteFile()
+        public void deleteFile()
         {
             var projectFileManager = new LocalProjectFilesManager();
             var filePath = Path.Combine(projectFileManager.FileDirInfo.FullName, "DeleteFile.text");

@@ -24,8 +24,8 @@ namespace CaPPMSTests.Data
         public void Add()
         {
             FaqManagerService faqManagerService = new FaqManagerService("add.json");
-            var faq = CreateFaq();
-            //Assert.IsTrue(Task.Run(async () => await faqManagerService.AddAsync(idea)).Result);
+            var faq = createFAQ();
+           
             Assert.IsTrue(faqManagerService.Add(faq));
             Assert.AreEqual(1, faqManagerService.GetFaqs.Count());
 
@@ -36,29 +36,24 @@ namespace CaPPMSTests.Data
         public void Remove()
         {
             FaqManagerService faqManagerService = new FaqManagerService("remove.json");
-            var faq = CreateFaq();
+            var faq = createFAQ();
 
-            //Task.Run(async () => await faqManagerService.AddAsync(faq)).Wait();
+            
             faqManagerService.Add(faq);
             Assert.AreEqual(1, faqManagerService.GetFaqs.Count());
 
-            //Assert.IsTrue(Task.Run(async () => await faqManagerService.RemoveAsync(faq)).Result);
             Assert.IsTrue(faqManagerService.Remove(faq));
 
-            //// Need a delay for Async testing
-            //Task.Delay(TimeSpan.FromSeconds(1)).Wait();
 
             Assert.AreEqual(0, faqManagerService.GetFaqs.Count());
         }
 
         [TestMethod]
-        public void FileDidSave()
+        public void fileSave()
         {
             FaqManagerService faqManagerService = new FaqManagerService("savefile.json");
-            //Task.Run(async () => await faqManagerService.AddAsync(CreateFaq())).Wait();
-            faqManagerService.Add(CreateFaq());
+            faqManagerService.Add(createFAQ());
 
-            // Wait on second to over come flaky test syndrome.
             Task.Delay(TimeSpan.FromSeconds(10)).Wait();
 
             var filePath = Path.Combine(FaqManagerService.BaseDirInfo.FullName, "savefile.json");
@@ -72,12 +67,12 @@ namespace CaPPMSTests.Data
         }
 
         [TestMethod]
-        public void DidUpdateProjectManager()
+        public void updateFAQ()
         {
             string newQuestion = $"New question-{Guid.NewGuid()}";
             FaqManagerService faqManagerService = new FaqManagerService("update.json");
-            var faq = CreateFaq();
-            //Assert.IsTrue(Task.Run(async () => await faqManagerService.AddAsync(faq)).Result);
+            var faq = createFAQ();
+
             Assert.IsTrue(faqManagerService.Add(faq));
             Assert.AreEqual(1, faqManagerService.GetFaqs.Count());
 
@@ -88,7 +83,7 @@ namespace CaPPMSTests.Data
             Assert.AreEqual(newQuestion, faqManagerService.GetFaqs.ToList()[0].Question);
         }
 
-        private FaqInformation CreateFaq()
+        private FaqInformation createFAQ()
         {
             var idea = new FaqInformation
             {

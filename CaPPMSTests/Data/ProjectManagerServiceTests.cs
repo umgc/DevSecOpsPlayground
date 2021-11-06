@@ -53,7 +53,7 @@ namespace CaPPMSTests.Data
         }
 
         [TestMethod]
-        public void FileDidSave()
+        public void fileDidSave()
         {
             ProjectManagerService projectManagerService = new ProjectManagerService("savefile.json");
             Task.Run(async () => await projectManagerService.AddAsync(CreateIdea())).Wait();
@@ -72,7 +72,7 @@ namespace CaPPMSTests.Data
         }
 
         [TestMethod]
-        public void DidUpdateProjectManager()
+        public void didUpdateProjectManager()
         {
             string newProjectTitle = $"New Test Project Title-{Guid.NewGuid()}";
             ProjectManagerService projectManagerService = new ProjectManagerService("update.json");
@@ -88,7 +88,7 @@ namespace CaPPMSTests.Data
         }
 
         [TestMethod]
-        public void DoesExportMatch()
+        public void doesExportMatch()
         {
             ProjectManagerService projectManagerService = new ProjectManagerService("add.json");
             var idea = CreateIdea();

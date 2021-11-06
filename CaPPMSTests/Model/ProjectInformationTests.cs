@@ -18,7 +18,7 @@ namespace CaPPMSTests.Model
         /// Test fields initialization
         /// </summary>
         [TestMethod]
-        public void TestInitialization()
+        public void testInitialization()
         {
             ProjectInformation faqInformation = new ProjectInformation();
 
@@ -39,7 +39,7 @@ namespace CaPPMSTests.Model
         /// test the AddAttachments method and Attachments list
         /// </summary>
         [TestMethod]
-        public void TestAttachments()
+        public void testAttachments()
         {
             ProjectInformation projectInformation = new ProjectInformation();
 
