@@ -8,7 +8,7 @@ namespace CaPPMSTests.Model
     public class ContactTests
     {
         [TestMethod]
-        public void ContactInitialization()
+        public void contactInitialization()
         {
             var contact = new Contact();
 
