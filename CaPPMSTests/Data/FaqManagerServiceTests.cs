@@ -25,7 +25,7 @@ namespace CaPPMSTests.Data
         {
             FaqManagerService faqManagerService = new FaqManagerService("add.json");
             var faq = CreateFaq();
-            //Assert.IsTrue(Task.Run(async () => await faqManagerService.AddAsync(idea)).Result);
+
             Assert.IsTrue(faqManagerService.Add(faq));
             Assert.AreEqual(1, faqManagerService.GetFaqs.Count());
 
@@ -38,27 +38,24 @@ namespace CaPPMSTests.Data
             FaqManagerService faqManagerService = new FaqManagerService("remove.json");
             var faq = CreateFaq();
 
-            //Task.Run(async () => await faqManagerService.AddAsync(faq)).Wait();
+
             faqManagerService.Add(faq);
             Assert.AreEqual(1, faqManagerService.GetFaqs.Count());
 
-            //Assert.IsTrue(Task.Run(async () => await faqManagerService.RemoveAsync(faq)).Result);
+          
             Assert.IsTrue(faqManagerService.Remove(faq));
-
-            //// Need a delay for Async testing
-            //Task.Delay(TimeSpan.FromSeconds(1)).Wait();
 
             Assert.AreEqual(0, faqManagerService.GetFaqs.Count());
         }
 
         [TestMethod]
-        public void FileDidSave()
+        public void fileDidSave()
         {
             FaqManagerService faqManagerService = new FaqManagerService("savefile.json");
-            //Task.Run(async () => await faqManagerService.AddAsync(CreateFaq())).Wait();
+
             faqManagerService.Add(CreateFaq());
 
-            // Wait on second to over come flaky test syndrome.
+
             Task.Delay(TimeSpan.FromSeconds(10)).Wait();
 
             var filePath = Path.Combine(FaqManagerService.BaseDirInfo.FullName, "savefile.json");
@@ -72,12 +69,12 @@ namespace CaPPMSTests.Data
         }
 
         [TestMethod]
-        public void DidUpdateProjectManager()
+        public void didUpdateFaq()
         {
             string newQuestion = $"New question-{Guid.NewGuid()}";
             FaqManagerService faqManagerService = new FaqManagerService("update.json");
             var faq = CreateFaq();
-            //Assert.IsTrue(Task.Run(async () => await faqManagerService.AddAsync(faq)).Result);
+
             Assert.IsTrue(faqManagerService.Add(faq));
             Assert.AreEqual(1, faqManagerService.GetFaqs.Count());
 

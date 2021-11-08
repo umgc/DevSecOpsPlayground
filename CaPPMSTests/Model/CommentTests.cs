@@ -18,7 +18,7 @@ namespace CaPPMSTests.Model
         /// Testing the intiilization of the Comment
         /// </summary>
         [TestMethod]
-        public void CommentInitialization()
+        public void commentInitialization()
         {
             var projectID = Guid.NewGuid();
             var comment = new Comment(projectID);

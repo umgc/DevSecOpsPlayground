@@ -18,7 +18,7 @@ namespace CaPPMSTests.Model
         /// Test if the fields are properly initialized
         /// </summary>
         [TestMethod]
-        public void TestInitialization()
+        public void testInitialization()
         {
             FaqInformation faqInformation = new FaqInformation();
 
