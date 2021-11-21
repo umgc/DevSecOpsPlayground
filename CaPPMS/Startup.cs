@@ -8,6 +8,9 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Identity.Web.UI;
 using CaPPMS.Data;
 
+using System.Linq;
+using System;
+
 namespace CaPPMS
 {
     public class Startup
@@ -78,11 +81,18 @@ namespace CaPPMS
 
         private string GetClientSecret()
         {
-            // Programmer issued secret. Limited time.
+            // Return programmer specified secrets
             // return string.Empty;
 
-            // System issued Api Key
-            return System.Environment.GetEnvironmentVariable("GRAPH_SECRET");
+            // Used for Production.
+            string clientId = System.Environment.GetEnvironmentVariable("GRAPH_SECRET");
+
+            if (string.IsNullOrEmpty(clientId))
+            {
+                throw new ArgumentException($"Graph Secret could not be retrieved from the environment variables.");
+            }
+
+            return clientId;
         }
     }
 }
