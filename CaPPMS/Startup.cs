@@ -39,9 +39,9 @@ namespace CaPPMS
                 .AddMicrosoftGraph(Configuration.GetSection("Graph"))
                 .AddInMemoryTokenCaches();
 
-            //string tenantId = Configuration.GetValue<string>("AzureAd:TenantId");
-            //services.Configure<MicrosoftIdentityOptions>(
-            //   options => { options.ClientSecret = GetSecretFromKeyVault(tenantId, "ENTER_YOUR_SECRET_NAME_HERE"); });
+            string tenantId = Configuration.GetValue<string>("AzureAd:TenantId");
+            services.Configure<MicrosoftIdentityOptions>(
+               options => { options.ClientSecret = GetClientSecret(); });
 
             services.AddHttpContextAccessor();
 
@@ -89,21 +89,16 @@ namespace CaPPMS
         /// </summary>
         /// <remarks>https://github.com/Azure-Samples/app-service-msi-keyvault-dotnet/blob/master/README.md</remarks>
         /// <returns></returns>
-        private string GetSecretFromKeyVault(string tenantId, string secretName)
+        private string GetClientSecret()
         {
-            // this should point to your vault's URI, like https://<yourkeyvault>.vault.azure.net/
-            string uri = Environment.GetEnvironmentVariable("vault-url");
-            DefaultAzureCredentialOptions options = new DefaultAzureCredentialOptions();
+#if (DEBUG)
+            // Programmer issued secret. Limited time.
+            return string.Empty;
+#else
+            return System.Environment.GetEnvironmentVariable("GRAPH_SECRET");
+#endif
 
-            // Specify the tenant ID to use the dev credentials when running the app locally
-            options.VisualStudioTenantId = tenantId;
-            options.SharedTokenCacheTenantId = tenantId;
-            SecretClient client = new SecretClient(new Uri(uri), new DefaultAzureCredential(options));
 
-            // The secret name, for example if the full url to the secret is https://<yourkeyvault>.vault.azure.net/secrets/ENTER_YOUR_SECRET_NAME_HERE
-            Response<KeyVaultSecret> secret = client.GetSecretAsync(secretName).Result;
-
-            return secret.Value.Value;
         }
     }
 }
