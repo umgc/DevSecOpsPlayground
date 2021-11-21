@@ -1,21 +1,12 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Identity.Web;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Identity.Web.UI;
 using CaPPMS.Data;
-using System.IdentityModel.Tokens.Jwt;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
-
-using Azure.Security.KeyVault.Secrets;
-using System;
-using Azure.Identity;
-using Azure;
 
 namespace CaPPMS
 {
