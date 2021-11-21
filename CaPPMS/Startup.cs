@@ -78,14 +78,11 @@ namespace CaPPMS
 
         private string GetClientSecret()
         {
-#if (DEBUG)
             // Programmer issued secret. Limited time.
-            return string.Empty;
-#else
+            // return string.Empty;
+
+            // System issued Api Key
             return System.Environment.GetEnvironmentVariable("GRAPH_SECRET");
-#endif
-
-
         }
     }
 }
