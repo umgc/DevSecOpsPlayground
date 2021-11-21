@@ -1,0 +1,45 @@
+@using CaPPMS.Data
+
+@inject FaqManagerService FaqManager
+
+@page "/faqList"
+
+<h3>FAQ List</h3>
+<label>
+    <input id="filter"
+           class="input-group-text p-2 mb-lg-3"
+           type="text"
+           placeholder="Search for a question..."
+           @bind="_filter"
+           @bind:event="oninput"/>
+
+</label>
+<div class="sidebar" style="width:25%">
+    <FaqQuestionSubmission></FaqQuestionSubmission>
+    <CascadingAuthenticationState>
+        <FaqReplySubmission @bind-SelectedFaq="_selectedFaq"
+                            @bind-Title="_popOverTitle" />
+    </CascadingAuthenticationState>
+</div>
+<div class="body-text">
+        <FaqTopics FaqKeys="new List<FaqInformation>(FaqManager.GetFaqs)"
+                    Filter="@_filter"
+                   @bind-SelectedFaq="_selectedFaq"
+                   @bind-Title="_popOverTitle"/>
+</div>
+
+@if (_selectedFaq != null)
+{
+    <div class="popOver">
+        <FaqModify 
+            Title=@_popOverTitle
+            @bind-SelectedFaq="_selectedFaq" 
+        />
+    </div>
+} 
+
+@code {
+    private FaqInformation _selectedFaq;
+    private string _popOverTitle;
+    private string _filter = "";
+}

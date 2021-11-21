@@ -68,13 +68,13 @@ namespace CaPPMS.Data
             foreach(var file in idea.Attachments)
             {
                 file.Location = await FileManager.SaveAsync(file.BrowserFile.OpenReadStream(MaxMBSizePerFile), file.File_ID.ToString(), file.Name);
+                file.BrowserFile = null;
             }
 
             if (!ProjectIdeas.TryAdd(idea.ProjectID, idea))
             {
                 return false;
             }
-
             ProjectIdeasChanged?.Invoke(ProjectIdeas.Values, EventArgs.Empty);
             return true;
         }
@@ -111,15 +111,43 @@ namespace CaPPMS.Data
             return error;
         }
 
-        public Task<bool> UpdateAsync(ProjectInformation idea)
+        public async Task<string> RemoveFileAsync(ProjectInformation idea, ProjectFile file, IPrincipal user)
         {
-            bool completed;
-            if (completed = ProjectIdeas.TryUpdate(idea.ProjectID, idea, ProjectIdeas[idea.ProjectID]))
+            idea.Attachments.Remove(file);
+            if (ProjectIdeas.TryUpdate(idea.ProjectID, idea, ProjectIdeas[idea.ProjectID]))
             {
                 ProjectIdeasChanged?.Invoke(ProjectIdeas.Values, EventArgs.Empty);
             }
+            else
+            {
+                return null;
+            }
+            return await this.FileManager.DeleteAsync(file.Location, user);
+        }
+        public async Task<bool> UpdateAsync(ProjectInformation idea)
+        {
+            if (ProjectIdeas.TryGetValue(idea.ProjectID, out ProjectInformation existingProjectInformation))
+            {
+                foreach (var file in idea.Attachments)
+                {
+                    if (file.BrowserFile == null)
+                    {
+                        Console.Error.WriteLine("Existing contains: " + file.File_ID);
+                        continue;
+                    }
+                    file.Location = await FileManager.SaveAsync(file.BrowserFile.OpenReadStream(MaxMBSizePerFile), file.File_ID.ToString(), file.Name);
+                    file.BrowserFile = null;
+                }
 
-            return Task.FromResult(completed);
+                bool completed;
+                if (completed = ProjectIdeas.TryUpdate(idea.ProjectID, idea, ProjectIdeas[idea.ProjectID]))
+                {
+                    Console.Error.WriteLine("Successfully updated: " + idea.ProjectID);
+                    ProjectIdeasChanged?.Invoke(ProjectIdeas.Values, EventArgs.Empty);
+                    return true;
+                }
+            }
+            return false;
         }
 
         public async Task<string> DeleteAsync(ProjectInformation idea, IPrincipal user)
@@ -240,11 +268,34 @@ namespace CaPPMS.Data
             return string.Empty;
         }
 
+        public void CompleteProject(ProjectInformation idea)
+        {
+            Guid projID = idea.ProjectID;
+            ICollection<Guid> ids = ProjectIdeas.Keys;
+            if (ProjectIdeas.TryGetValue(idea.ProjectID, out ProjectInformation project))
+            {
+                project.Status = idea.Status;
+                project.SemesterTerm = idea.SemesterTerm;
+                project.SemesterYear = idea.SemesterYear;
+                project.CompletedDocuments = idea.CompletedDocuments;
+                ProjectIdeasChanged?.Invoke(this.ProjectIdeas.Values, EventArgs.Empty);
+            }
+        }
+
         public void AddComment(Comment comment)
         {
             if(ProjectIdeas.TryGetValue(comment.ProjectID, out ProjectInformation project))
             {
                 project.Comments.Add(comment);
+                ProjectIdeasChanged?.Invoke(ProjectIdeas.Values, EventArgs.Empty);
+            }
+        }
+
+        public void DeleteComment(Comment comment)
+        {
+            if (ProjectIdeas.TryGetValue(comment.ProjectID, out ProjectInformation project))
+            {
+                project.Comments.Remove(comment.CommentId);
                 ProjectIdeasChanged?.Invoke(ProjectIdeas.Values, EventArgs.Empty);
             }
         }

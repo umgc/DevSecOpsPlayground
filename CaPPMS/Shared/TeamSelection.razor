@@ -1,0 +1,118 @@
+﻿
+@using CaPPMS.Model
+@namespace CaPPMS.Shared
+@inject ProjectManagerService ProjectManager
+
+<div>
+    <EditForm Model="@this.ProjectInformation" OnValidSubmit="@HandleValidSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <div class="p-5">
+
+
+            <label>
+                Semester Term:
+                <select class="form-control" id="SemesterTerm" name="SemesterTerm" @bind="this.projectInformation.SemesterTerm"  required>
+                    @foreach (string term in Terms)
+                    {
+                        if (this.projectInformation.SemesterTerm.Contains(term))
+                        {
+                            <option selected="selected">@term</option>
+                        }
+                        else
+                        {
+                            <option>@term</option>
+                        }
+                    }
+
+                </select>
+            </label>
+
+            <label>
+                Semester Year:
+                <select class="form-control" id="SemesterYear" name="SemesterYear" @bind="this.projectInformation.SemesterYear"  required>
+                    @foreach (string year in Years)
+                    {
+                        if (this.projectInformation.SemesterYear.Contains(year))
+                        {
+                            <option selected="selected">@year</option>
+                        }
+                        else
+                        {
+                            <option>@year</option>
+                        }
+                    }
+
+                </select>
+            </label>
+            <br />
+            @foreach (CompletedProjectDocumentation completedTeam in this.ProjectInformation.CompletedDocuments)
+            {
+                <label>Team: @completedTeam.TeamName</label>
+                <br />
+            }
+            <br />
+            <button class="btn btn-primary" type="button" @onclick="e => teamsClicked = !teamsClicked">Add Team</button>
+            @if (teamsClicked)
+            {
+                <CompleteProjectComponent @bind-ProjectInformation="projectInformation" @bind-IsOpen="teamsClicked" />
+            }
+            @if (this.ProjectInformation.CompletedDocuments.Count > 0)
+            {
+                <hr />
+                <button id="completeProjectBtn" type="submit" class="btn-primary">
+                    Complete Project
+                </button>
+            }
+
+
+        </div>
+    </EditForm>
+</div>
+
+
+@code {
+    [Parameter] public EventCallback<ProjectInformation> ProjectInformationChanged { get; set; }
+    [Parameter]
+    public ProjectInformation ProjectInformation
+    {
+        get { return projectInformation; }
+        set
+        {
+            projectInformation = value;
+        }
+    }
+
+    public List<string> Years { get; set; } = new List<string>();
+    public List<string> Terms { get; set; } = new List<string>();
+
+
+    protected override void OnInitialized()
+    {
+        Terms.Add("Spring");
+        Terms.Add("Fall");
+        Terms.Add("Summer");
+        Years.Add("2021");
+        Years.Add("2020");
+        Years.Add("2019");
+        Years.Add("2018");
+        Years.Add("2017");
+        Years.Add("2016");
+
+        base.OnInitialized();
+    }
+
+    private List<string> years { get; set; } = new List<string>();
+    public ProjectInformation projectInformation = new ProjectInformation();
+    private bool teamsClicked = false;
+
+    private async Task HandleValidSubmit()
+    {
+        await Task.Run(async () =>
+        {
+            ProjectManager.CompleteProject(projectInformation);
+            await Task.Delay(2000);
+
+        });
+    }
+}

@@ -1,24 +1,25 @@
 ﻿
 @if (IsDisabled(true))
 {
-    <button type="button" class="rounded" disabled><span class="fas fa-arrow-left"></span></button>
+    <button type="button" class="btn btn-secondary" disabled><span class="fas fa-arrow-left"></span></button>
 }
 else
 {
-    <button type="button" class="rounded" @onclick="PageLeft"><span class="fas fa-arrow-left"></span></button>
+    <button type="button" class="btn btn-secondary" @onclick="PageLeft"><span class="fas fa-arrow-left"></span></button>
 }
 &nbsp; @this.Parent.CurrentPage/@GetNumberOfPages() &nbsp;
 @if (IsDisabled(false))
 {
-    <button type="button" class="rounded" disabled><span class="fas fa-arrow-right"></span></button>
+    <button type="button" class="btn btn-secondary" disabled><span class="fas fa-arrow-right"></span></button>
 }
 else
 {
-    <button type="button" class="rounded" @onclick="PageRight"><span class="fas fa-arrow-right"></span></button>
+    <button type="button" class="btn btn-secondary" @onclick="PageRight"><span class="fas fa-arrow-right"></span></button>
 }
 
 
 @code {
+    [Parameter] public EventCallback PageChanged { get; set; }
     [Parameter]
     public Table Parent { get; set; }
 
@@ -43,11 +44,13 @@ else
     {
         this.Parent.SetPageNumber(this.Parent.CurrentPage + 1);
         this.StateHasChanged();
+        this.PageChanged.InvokeAsync();
     }
 
     private void PageLeft(MouseEventArgs e)
     {
         this.Parent.SetPageNumber(this.Parent.CurrentPage - 1);
         this.StateHasChanged();
+        this.PageChanged.InvokeAsync();
     }
 }

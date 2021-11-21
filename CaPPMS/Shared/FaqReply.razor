@@ -1,0 +1,32 @@
+﻿@using CaPPMS.Model
+@namespace CaPPMS.Shared
+
+<div class="panel panel-default @CollapseReply">
+    <div class="panel-body">
+        <div class="container-fluid">
+            <div class="row">
+                <div>@FaqInformation.Reply</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string CollapseReply { get; set; } = "collapse";
+
+    private FaqInformation faqInfo = new FaqInformation();
+
+    [Parameter]
+    public FaqInformation FaqInformation
+    {
+        get
+        {
+            return faqInfo;
+        }
+        set
+        {
+            faqInfo = value;
+        }
+    }
+}

@@ -100,9 +100,10 @@ navLink-active {
 }
 
 .popOver {
-    position: absolute;
-    top: 10%;
-    left: 40%;
+    position: fixed;
+    top: 15%;
+    left: 20%;
+    right:20%;
     background-color: white;
     height: 70%;
     margin: auto;
@@ -129,4 +130,36 @@ navLink-active {
     width : 300px;
     padding: 2px;
     margin: auto;
+}
+
+.sidebar {
+    height: 100%;
+    width: 20%;
+    position: absolute;
+    right: 0;
+    top: 0;
+    margin-top:100px;
+    margin-right:5%;
+}
+
+.body-text {
+    margin-right: 30%;
+}
+
+.pop-confirmation {
+    position: fixed;
+    height: auto;
+    width: 500px;
+    top: 30%;
+    left: 50%;
+    margin-left: -200px;
+    background-color: white;
+    border-radius: 5px;
+    border: 2px solid darkred;
+    padding: 3px;
+    z-index: 101;
+}
+.center {
+    text-align: center;
+    padding:10px 0;
 }

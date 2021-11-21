@@ -1,0 +1,113 @@
+@page "/previousprojects"
+
+<h2>Previous Projects</h2>
+
+<p>
+    The documents and products created by students from each semester can be found here.
+</p>
+<hr />
+
+@inject ProjectManagerService ProjectManager
+@foreach (ProjectInformation idea in sortedProjects)
+{
+    termStr = idea.SemesterTerm + idea.SemesterYear;
+    if (!activeTerms.Contains(termStr))
+    {
+        <h3>@idea.SemesterTerm @idea.SemesterYear </h3>
+        activeTerms.Add(termStr);
+    }
+
+    <h5><b>@idea.ProjectTitle </b></h5>
+    <p> @idea.ProjectDescription </p>
+    if (idea.Github.Length > 0)
+    {
+        <b>Project GitHub Link: </b>
+        <a href="@idea.Github" target="_blank" rel="noopener noreferrer">@idea.Github</a>
+        <br />
+    }
+    if (idea.Url.Length > 0)
+    {
+        <b> Project Website Link: </b>
+        <a href="@idea.Url" target="_blank" rel="noopener noreferrer">@idea.Url</a>
+        <br />
+    }
+
+    if (idea.CompletedDocuments.Count > 0)
+    {
+        @foreach (CompletedProjectDocumentation proj in idea.CompletedDocuments)
+        {
+            <b> Team:</b>
+            <p>@proj.TeamName</p>
+
+            if (proj.GitHubLink.Length > 0)
+            {
+                <b>Team GitHub Link: </b>
+                <a href="@proj.GitHubLink" target="_blank" rel="noopener noreferrer">@proj.GitHubLink</a>
+                <br />
+            }
+            if (proj.VideoLink.Length > 0)
+            {
+                <b>Team Video Link: </b>
+                <a href="@proj.VideoLink" target="_blank" rel="noopener noreferrer">@proj.VideoLink</a>
+                <br />
+            }
+            if (proj.WebsiteLink.Length > 0)
+            {
+                <b> Team Website Link: </b>
+                <a href="@proj.WebsiteLink" target="_blank" rel="noopener noreferrer">@proj.WebsiteLink</a>
+                <br />
+            }
+
+            <b> Documents for Team @proj.TeamName: </b>
+            <ul>
+                <li> <a href="/download/@proj.ProjectPlanLink" download="@proj.ProjectPlan" target="_top">Project Plan</a> </li>
+                <li> <a href="/download/@proj.SRSLink" download="@proj.SRS" target="_top">Software Requirements Specification (SRS)</a> </li>
+                <li> <a href="/download/@proj.TDDLink" download="@proj.TDD" target="_top">Technical Design Document (TDD)</a> </li>
+                <li> <a href="/download/@proj.RunbookLink" download="@proj.Runbook" target="_top">Deployment and Operations Guide (Runbook)</a> </li>
+                <li> <a href="/download/@proj.ProgrammersGuideLink" download="@proj.ProgrammersGuide" target="_top">Programmer Guide</a> </li>
+                <li> <a href="/download/@proj.UsersGuideLink" download="@proj.UsersGuide" target="_top">User Guide</a> </li>
+                <li> <a href="/download/@proj.TestReportLink" download="@proj.TestReport" target="_top">Test Report</a> </li>
+            </ul>
+
+        }
+
+    }
+
+    <hr />
+}
+<br />
+<br />
+<br />
+
+
+@code {
+    IEnumerable<ProjectInformation> sortedProjects;
+    protected override void OnInitialized()
+    {
+        SetCompletedProjectsList();
+        ProjectManagerService.ProjectIdeasChanged += (o, e) =>
+        {
+            SetCompletedProjectsList();
+        };
+        base.OnInitialized();
+    }
+
+    private List<string> activeTerms = new List<string>();
+    private string termStr;
+    private void SetCompletedProjectsList()
+    {
+        List<ProjectInformation> completedProjects = new List<ProjectInformation>();
+        foreach (ProjectInformation projectInformation in ProjectManager.ProjectIdeas.Values)
+        {
+            if (projectInformation.Status.Equals("Complete"))
+            {
+                completedProjects.Add(projectInformation);
+            }
+        }
+        sortedProjects = completedProjects
+            .OrderByDescending(o => o.SemesterYear)
+            .ThenBy(o => o.SemesterTerm == "Spring")
+            .ThenBy(o => o.SemesterTerm == "Summer")
+            .ThenBy(o => o.SemesterTerm == "Fall");
+    }
+}

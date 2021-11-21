@@ -1,0 +1,425 @@
+﻿@using CaPPMS.Model
+@namespace CaPPMS.Shared
+@inject ProjectManagerService ProjectManager
+@inject NavigationManager NavigationManager
+
+<style>
+    table {
+        width: 100%;
+    }
+
+    tr {
+        margin-top: 0;
+        padding: 0px;
+        text-align: center;
+    }
+
+    td {
+        text-align: left;
+        margin-top: 0;
+        padding-top: 0;
+    }
+</style>
+
+<div class="panel panel-default border @CollapseEntry" style="display:@tableState">
+    <EditForm Model="@ProjectInformation">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <table>
+            <tr>
+                <td>
+                    <h6><b>Submitter Information</b></h6>
+                    <table>
+                        <tr>
+                            <td style="padding-top:0px;">First Name:</td>
+                            <td style="padding-top:0px;">Last Name:</td>
+                            <td style="padding-top:0px;">Email:</td>
+                            <td style="padding-top:0px;">Phone:</td>
+                        </tr>
+                        <tr>
+                            <td style="padding-top:0px;"><InputText @bind-Value="_infoPlaceholder.FirstName" /></td>
+                            <td style="padding-top:0px;"><InputText @bind-Value="_infoPlaceholder.LastName" /></td>
+                            <td style="padding-top:0px;"><InputText @bind-Value="_infoPlaceholder.Email" /></td>
+                            <td style="padding-top:0px;"><InputText @bind-Value="_infoPlaceholder.Phone" /></td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h6><b>Sponsor Information</b></h6>
+                    <table>
+                        <tr>
+                            <td style="padding-top:0px;">First Name:</td>
+                            <td style="padding-top:0px;">Last Name:</td>
+                            <td style="padding-top:0px;">Email:</td>
+                            <td style="padding-top:0px;">Phone:</td>
+                        </tr>
+                        <tr>
+                            <td style="padding-top:0px;"><InputText @bind-Value="_infoPlaceholder.SponsorFirstName" /></td>
+                            <td style="padding-top:0px;"><InputText @bind-Value="_infoPlaceholder.SponsorLastName" /></td>
+                            <td style="padding-top:0px;"><InputText @bind-Value="_infoPlaceholder.SponsorEmail" /></td>
+                            <td style="padding-top:0px;"><InputText @bind-Value="_infoPlaceholder.SponsorPhone" /></td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+               <td>
+                    <h6><b>Project Information</b></h6>
+                    <table>
+                        <tr>
+                            <td style="padding-top:0px;">Project Title:</td>
+                            <td style="padding-top:0px;">Project Description:</td>
+
+                        </tr>
+                        <tr>
+                            <td style="padding-top:0px;"><InputText @bind-Value="_infoPlaceholder.ProjectTitle" /></td>
+                            <td style="padding-top:0px;"><InputText @bind-Value="_infoPlaceholder.ProjectDescription" /></td>
+                        </tr>
+                       
+                    </table>
+
+                </td>
+            </tr>
+            @if (ProjectInformation.CompletedDocuments.Count > 0)
+            {
+                @foreach (CompletedProjectDocumentation proj in ProjectInformation.CompletedDocuments)
+                {
+                    <tr>
+                        <td>
+                            <h6><b>Team @proj.TeamName:</b></h6>
+                            <table>
+                                <tr>
+                                    <td style="padding-top:0px;">Website Link:</td>
+                                    <td style="padding-top:0px;">GitHub Link:</td>
+                                    <td style="padding-top:0px;">Video Link:</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-top:0px;"><InputText @bind-Value="@proj.WebsiteLink" /></td>
+                                    <td style="padding-top:0px;"><InputText @bind-Value="@proj.GitHubLink" /></td>
+                                    <td style="padding-top:0px;"><InputText @bind-Value="@proj.VideoLink" /></td>
+                                </tr>
+
+                            </table>
+
+                        </td>
+                    </tr>
+                }
+
+            }
+            else
+            {
+                <tr>
+                    <td>
+                        <h6><b>Project Links</b></h6>
+                        <table>
+                            <tr>
+                                <td style="padding-top:0px;">Website Link:</td>
+                                <td style="padding-top:0px;">GitHub Link:</td>
+                                <td style="padding-top:0px;">Video Link:</td>
+                            </tr>
+                            <tr>
+                                <td style="padding-top:0px;"><InputText @bind-Value="_infoPlaceholder.Url" /></td>
+                                <td style="padding-top:0px;"><InputText @bind-Value="_infoPlaceholder.Github" /></td>
+                                <td style="padding-top:0px;"><InputText @bind-Value="_infoPlaceholder.VideoLink" /></td>
+                            </tr>
+
+                        </table>
+
+                    </td>
+                </tr>
+            }
+            <tr>
+                <td>
+                    <h6><b>Attachments:</b></h6>
+                    <div class="row">
+                        <div class="col-9">
+                            <table>
+                                @foreach (ProjectFile file in attachmentSelection.Keys)
+                                {
+                                    <tr>
+                                        <td>
+                                            <input type="checkbox" @bind-value="attachmentSelection[file]" />
+                                        </td>
+                                        <td>
+                                            @if (attachmentSelection[file])
+                                            {
+                                                <a href="/download/@file.Location"
+                                                   download="@file.Name"
+                                                   target="_top">
+                                                    <b>@file.Name </b>
+                                                </a>
+                                            }
+                                            else
+                                            {
+                                                <a href="/download/@file.Location"
+                                                   download="@file.Name"
+                                                   target="_top">
+                                                    @file.Name
+                                                </a>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </table>
+                        </div>
+                        <div class="col-3">
+                            <label>
+                                Attachment(s):
+                                <InputFile id="attachment" 
+                                           OnChange="LoadFiles" 
+                                           multiple accept=".doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,.ppt,.pptx,.pdf,.txt" />
+                            </label>
+                            <ConfirmationDialogBox Command="Delete Selected"
+                                                   Prompt="Are you sure you want to delete selected attachment(s)?"
+                                                   ButtonClass="btn btn-danger"
+                                                   ConfirmedChanged="DeleteSelectedAttachments" />
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <CascadingAuthenticationState>
+                        <CommentsComponent ProjectGuid="ProjectInformation.ProjectID" />
+                    </CascadingAuthenticationState>
+                </td>
+            </tr>
+            @if (ProjectInformation.Status.Equals("Approved"))
+            {
+                <tr>
+                    <td>
+                        <button class="btn btn-primary" type="button" @onclick="e => completeClicked = !completeClicked">Complete Project</button>
+                        @if (completeClicked)
+                        {
+                            <TeamSelection @bind-ProjectInformation="projectInformation" />
+                        }
+                    </td>
+                </tr>
+            }
+            <tr>
+                <td>
+                    @if (ProjectInformation.Status.Equals("Complete"))
+                    {
+                        <b>Project Completed @projectInformation.SemesterTerm @projectInformation.SemesterYear </b>
+                    }
+                    <hr />
+                </td>
+            </tr>
+
+        </table>
+        @if (ProjectInformation.Status.Equals("New"))
+        {
+            <button type="button" class="btn btn-success" @onclick="ApproveIdea">Approve</button><span>&nbsp;</span>
+        }
+
+       
+
+        <ConfirmationDialogBox Command="Update"
+                               Prompt="Confirm changes?"
+                               ButtonClass="btn btn-secondary"
+                               ConfirmedChanged="UpdateRecord" />
+        <button type="button" class="btn btn-secondary" @onclick="ExportEntry">Export</button>
+        <ConfirmationDialogBox Command="Delete"
+                               Prompt="Are you sure you want to delete this entry?"
+                               ButtonClass="btn btn-danger"
+                               ConfirmedChanged="DeleteRecord" />
+    </EditForm>
+</div>
+
+<div style="visibility:@waitBar">
+    Updating Entry ...
+    <div>
+        <Wander Center="true" />
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public ProjectInformation ProjectInformation
+    {
+        get
+        {
+            return projectInformation;
+        }
+        set
+        {
+            projectInformation = value;
+            SetupPlaceholder();
+            attachmentSelection.Clear();
+            foreach (ProjectFile file in projectInformation.Attachments)
+            {
+                attachmentSelection.Add(file, false);
+            }
+
+        }
+    }
+    [CascadingParameter] private Task<AuthenticationState> authenticationState { get; set; }
+    [Parameter] public string CollapseEntry { get; set; } = "collapse";
+    private ProjectInformation projectInformation;
+    private ProjectInformation _infoPlaceholder;
+    private bool completeClicked = false;
+
+    private Dictionary<ProjectFile, bool> attachmentSelection = new Dictionary<ProjectFile, bool>();
+
+    private string tableState = "block";
+
+    private string waitBar => tableState.Equals("none") ? "visible" : "hidden";
+
+    private void SetupPlaceholder()
+    {
+        if (projectInformation == null)
+        {
+            return;
+        }
+        _infoPlaceholder = new ProjectInformation();
+        _infoPlaceholder.VideoLink = projectInformation.VideoLink;
+        _infoPlaceholder.ProjectTitle = projectInformation.ProjectTitle;
+        _infoPlaceholder.ProjectDescription = projectInformation.ProjectDescription;
+        _infoPlaceholder.Url = projectInformation.Url;
+        _infoPlaceholder.Github = projectInformation.Github;
+        _infoPlaceholder.FirstName = projectInformation.FirstName;
+        _infoPlaceholder.LastName = projectInformation.LastName;
+        _infoPlaceholder.Email = projectInformation.Email;
+        _infoPlaceholder.Phone = projectInformation.Phone;
+        _infoPlaceholder.SponsorFirstName = projectInformation.SponsorFirstName;
+        _infoPlaceholder.SponsorLastName = projectInformation.SponsorLastName;
+        _infoPlaceholder.SponsorEmail = projectInformation.SponsorEmail;
+        _infoPlaceholder.SponsorPhone = projectInformation.SponsorPhone;
+    }
+    private async Task DeleteRecord(bool confirmed)
+    {
+        if (!confirmed)
+        {
+            return;
+        }
+        var authState = await authenticationState;
+        string error = await ProjectManager.DeleteAsync(projectInformation, authState.User);
+    }
+    private async Task ExportEntry()
+    {
+        var location = await this.ProjectManager.ExportAsync(projectInformation);
+
+        NavigationManager.NavigateTo($"{ProjectManager.FileManager.DownloadPath}{location}", true);
+
+    }
+
+    private async Task ApproveIdea(MouseEventArgs e)
+    {
+        ProjectInformation.Status = "Approved";
+        await ProjectManager.UpdateAsync(ProjectInformation);
+    }
+
+    private async Task UpdateRecord(bool confirmed)
+    {
+        this.tableState = "none";
+        if (!confirmed)
+        {
+            return;
+        }
+
+        projectInformation.VideoLink = _infoPlaceholder.VideoLink;
+        projectInformation.ProjectTitle = _infoPlaceholder.ProjectTitle;
+        projectInformation.ProjectDescription = _infoPlaceholder.ProjectDescription;
+        projectInformation.Url = _infoPlaceholder.Url;
+        projectInformation.Github = _infoPlaceholder.Github;
+        projectInformation.FirstName = _infoPlaceholder.FirstName;
+        projectInformation.LastName = _infoPlaceholder.LastName;
+        projectInformation.Email = _infoPlaceholder.Email;
+        projectInformation.Phone = _infoPlaceholder.Phone;
+        projectInformation.SponsorFirstName = _infoPlaceholder.SponsorFirstName;
+        projectInformation.SponsorLastName = _infoPlaceholder.SponsorLastName;
+        projectInformation.SponsorEmail = _infoPlaceholder.SponsorEmail;
+        projectInformation.SponsorPhone = _infoPlaceholder.SponsorPhone;
+
+        string link = "";
+        if ((!ProjectInformation.Url.StartsWith("http://") && !ProjectInformation.Url.StartsWith("https://")) && ProjectInformation.Url.Length != 0)
+        {
+            link = "https://" + ProjectInformation.Url;
+            ProjectInformation.Url = "";
+            ProjectInformation.Url = link;
+        }
+
+        if ((!ProjectInformation.Github.StartsWith("http://") && !ProjectInformation.Github.StartsWith("https://")) && ProjectInformation.Github.Length != 0)
+        {
+            link = "https://" + ProjectInformation.Github;
+            ProjectInformation.Github = link;
+        }
+
+        if ((!ProjectInformation.VideoLink.StartsWith("http://") && !ProjectInformation.VideoLink.StartsWith("https://")) && ProjectInformation.VideoLink.Length != 0)
+        {
+            link = "https://" + ProjectInformation.VideoLink;
+            ProjectInformation.VideoLink = link;
+        }
+
+        foreach(CompletedProjectDocumentation proj in ProjectInformation.CompletedDocuments)
+        {
+            if ((!proj.WebsiteLink.StartsWith("http://") && !proj.WebsiteLink.StartsWith("https://")) && proj.WebsiteLink.Length != 0)
+            {
+                link = "https://" + proj.WebsiteLink;
+                proj.WebsiteLink = link;
+            }
+
+            if ((!proj.GitHubLink.StartsWith("http://") && !proj.GitHubLink.StartsWith("https://")) && proj.GitHubLink.Length != 0)
+            {
+                link = "https://" + proj.GitHubLink;
+                proj.GitHubLink = link;
+            }
+
+            if ((!proj.VideoLink.StartsWith("http://") && !proj.VideoLink.StartsWith("https://")) && proj.VideoLink.Length != 0)
+            {
+                link = "https://" + proj.VideoLink;
+                proj.VideoLink = link;
+            }
+
+        }
+
+        await Task.Run(async () =>
+        {
+            var uploaded = await ProjectManager.UpdateAsync(projectInformation);
+
+            if (uploaded)
+            {
+                projectInformation.IsDirty = false;
+            }
+
+            await Task.Delay(2000);
+        });
+        this.tableState = "block";
+    }
+
+    private async Task DeleteSelectedAttachments(bool confirmed)
+    {
+        if (!confirmed)
+        {
+            return;
+        }
+        var authState = await authenticationState;
+        foreach (ProjectFile file in attachmentSelection.Keys)
+        {
+            if (attachmentSelection[file])
+            {
+                await ProjectManager.RemoveFileAsync(projectInformation, file, authState.User);
+            }
+        }
+    }
+    private void LoadFiles(InputFileChangeEventArgs inputFile)
+    {
+        List<IProjectFile> loadedFiles = new();
+
+        foreach (var file in inputFile.GetMultipleFiles().Take(ProjectManager.MaxNumberOfFiles))
+        {
+            if (file.Size > ProjectManager.MaxMBSizePerFile)
+            {
+                continue;
+            }
+
+            var projectFile = new ProjectFile { BrowserFile = file };
+
+            loadedFiles.Add(projectFile);
+        }
+
+        projectInformation.AddAttachments(loadedFiles);
+    }
+}

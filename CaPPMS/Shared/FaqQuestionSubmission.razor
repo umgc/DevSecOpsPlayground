@@ -1,0 +1,94 @@
+﻿@inject FaqManagerService FaqManager
+
+@if (!isAuthenticated)
+{
+    <h4>
+        Can't find your question? Ask it here!
+    </h4>
+    <EditForm Model="NewFaq">
+        <div class="card" id="@NewFaq.Guid">
+
+            <span class="fas" style="color:black;font-weight:bold"> Add Topic: </span>
+            <InputText Value="@NewFaq.Topic"
+                       ValueChanged="AssignNewFaqTopic"
+                       ValueExpression="() => NewFaq.Topic"/><br />
+
+            <span class="fas" style="color:black;font-weight:bold"> Add Question: </span>
+            <InputText Value="@NewFaq.Question"
+                       ValueChanged="AssignNewFaqQuestion"
+                       ValueExpression="() => NewFaq.Question"/><br />
+
+            <span class="fas" style="color:black;font-weight:bold"> Add Email: </span>
+            <InputText Value="@NewFaq.Author"
+                       ValueChanged="AssignNewFaqAuthor"
+                       ValueExpression="() => NewFaq.Author"/><br />
+
+            @if (isValidQuestion)
+            {
+                <AcknowledgeDialogBox Command="Submit Question"
+                                      Type="submit"
+                                      ButtonClass="btn btn-primary"
+                                      Prompt="Your question has been submitted!"
+                                      ConfirmedChanged="HandleValidSubmit" />
+            } else
+            {
+                <button type="submit" 
+                        class="btn btn-secondary" 
+                        disabled>
+                    Submit Question
+                </button>
+            }
+
+
+        </div>
+
+    </EditForm>
+}
+
+
+@code {
+    [CascadingParameter] private Task<AuthenticationState> AuthenticationState { get; set; }
+    private FaqInformation NewFaq { get; set; } = new();
+    private bool isValidQuestion = false;
+    private bool isAuthenticated;
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationState;
+        this.isAuthenticated = authState.User?.Identity.IsAuthenticated ?? false;
+        await base.OnInitializedAsync();
+    }
+    private void HandleValidSubmit()
+    {
+        FaqManager.Add(NewFaq);
+
+        NewFaq = new();
+        isValidQuestion = false;
+    }
+    private void AssignNewFaqQuestion(string value)
+    {
+        NewFaq.Question = value;
+        CheckQuestionInput();
+    }
+    private void AssignNewFaqTopic(string value)
+    {
+        NewFaq.Topic = value;
+        CheckQuestionInput();
+    }
+    private void AssignNewFaqAuthor(string value)
+    {
+        NewFaq.Author = value;
+        CheckQuestionInput();
+    }
+    private void CheckQuestionInput()
+    {
+        if ((NewFaq.Question.Length == 0)
+            || (NewFaq.Author.Length == 0)
+            || (NewFaq.Topic.Length == 0))
+        {
+            isValidQuestion = false;
+        } else
+        {
+            isValidQuestion = true;
+        }
+    }
+}

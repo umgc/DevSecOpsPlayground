@@ -16,9 +16,27 @@ namespace CaPPMS.Model
 
         private string projectTitle = string.Empty;
 
+        private string videoLink = string.Empty;
+
+        [Export(true)]
+        [DisplayName("Video Link")]
+        [Browsable(true)]
+        public string VideoLink
+        {
+            get
+            {
+                return this.videoLink;
+            }
+            set
+            {
+                this.videoLink = value;
+                this.IsDirty = true;
+            }
+        }
+
         [Export(true)]
         [Required]
-        [StringLength(25, ErrorMessage = "Title is either too short or too long. We have confidence you can figure out which.", MinimumLength = 5)]
+        [StringLength(256, ErrorMessage = "Title is either too short or too long. We have confidence you can figure out which.", MinimumLength = 5)]
         [DisplayName("Project Title")]
         [Browsable(true)]
         [ColumnHeader]
@@ -55,12 +73,47 @@ namespace CaPPMS.Model
             }
         }
 
+        private string semesterTerm = string.Empty;
+
+        [Export(true)]
+        [DisplayName("Semester Term")]
+        [Browsable(true)]
+        public string SemesterTerm
+        {
+            get
+            {
+                return this.semesterTerm;
+            }
+            set
+            {
+                this.semesterTerm = value;
+                this.IsDirty = true;
+            }
+        }
+
+        private string semesterYear = string.Empty;
+
+        [Export(true)]
+        [DisplayName("Semester Year")]
+        [Browsable(true)]
+        public string SemesterYear
+        {
+            get
+            {
+                return this.semesterYear;
+            }
+            set
+            {
+                this.semesterYear = value;
+                this.IsDirty = true;
+            }
+        }
+      
         private string url = string.Empty;
 
         [Export(true)]
         [DisplayName("Project Website")]
         [Browsable(true)]
-        [ColumnHeader]
         public string Url
         {
             get
@@ -79,7 +132,6 @@ namespace CaPPMS.Model
         [Export(true)]
         [DisplayName("GitHub")]
         [Browsable(true)]
-        [ColumnHeader]
         [SpanIcon("fab fa-github", true)]
         public string Github
         {
@@ -173,10 +225,12 @@ namespace CaPPMS.Model
         // We will export attachments manually.
         [Browsable(true)]
         // Matches the config.
-        [AttachmentsNumFilesValidator(10)]
+        [AttachmentsNumFilesValidator(50)]
         // Matches the config value. Value is in Mb
         [AttachmentsFileSizeValidator(10)]
         public IList<ProjectFile> Attachments { get; private set; } = new List<ProjectFile>();
+        public List<CompletedProjectDocumentation> CompletedDocuments { get; set; } = new List<CompletedProjectDocumentation>();
+        
 
         [DisplayName("Are you the sponsor")]
         [Browsable(true)]
@@ -282,6 +336,16 @@ namespace CaPPMS.Model
             this.Attachments.Clear();
 
             foreach(var file in files)
+            {
+                this.Attachments.Add(file as ProjectFile);
+            }
+
+            this.IsDirty = true;
+        }
+
+        public void AddAttachments(IList<IProjectFile> files)
+        {
+            foreach (var file in files)
             {
                 this.Attachments.Add(file as ProjectFile);
             }

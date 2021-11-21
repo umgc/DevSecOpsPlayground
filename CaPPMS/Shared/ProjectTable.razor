@@ -16,46 +16,72 @@ else
 <div>
     <div>
         <label>
-            <input id="filter" class="input-group-text p-2 mb-lg-3" type="text" placeholder="Filter the data here" @bind="Filter" @bind:event="oninput" />
+            <input id="filter" 
+                   class="input-group-text p-2 mb-lg-3" 
+                   type="text" 
+                   placeholder="Filter the data here" 
+                   @bind="Filter" 
+                   @bind:event="oninput" />
         </label>
-        <table class="@string.Join(" ", TableCssClasses)">
+        <table id="projectEntriesTable" class="@string.Join(" ", TableCssClasses)">
             <thead class="thead-light">
                 <tr>
-                    @foreach (var headerCell in this.HeaderRow)
+                    <th></th>
+                    @foreach (var header in this.HeaderRow)
                     {
-                        <th>
-                            @headerCell.Value
+                        <th @onclick="e => SortByColumn(header.ColumnId)">
+                            @header.Value
                         </th>
                     }
-                    @if (isAuthenticated)
-                    {
-                        <th>
-                            <span class="fas fa-microscope"></span>
-                        </th>
-                    }
+                   
                 </tr>
             </thead>
             <tbody>
-                @foreach(var row in this.GetRows())
+                @foreach (var row in this.GetRows())
                 {
-                <tr>
-                    @foreach (var cell in row)
-                    {
-                        @((MarkupString)cell.ToString())
-                    }
-                    @if (isAuthenticated)
-                    {
+                    <tr>
                         <td>
-                            <button class="btn btn-primary" type="button" @onclick="((e) => ShowView(row.DataBoundItem as ProjectInformation))">VIEW</button>
+                            <button @onclick="e => projectListCollapseMap[row.DataBoundItem as ProjectInformation] = !projectListCollapseMap[row.DataBoundItem as ProjectInformation]"
+                                    class="btn btn-primary">
+                                @(projectListCollapseMap[row.DataBoundItem as ProjectInformation] ? "+" : "-")
+                            </button>
                         </td>
+                        @foreach (var cell in row)
+                        {
+                            @((MarkupString)cell.ToString())
+                        }
+                        
+                    </tr>
+                    @if (!projectListCollapseMap[row.DataBoundItem as ProjectInformation])
+                    {
+                        <tr>
+                            <td colspan="100">
+                                @if (isAuthenticated)
+                                {
+                                    <CascadingAuthenticationState>
+                                        <ProjectEntryAuthorizedDropdown 
+                                            CollapseEntry="@(projectListCollapseMap[row.DataBoundItem as ProjectInformation] ? "collapse" : "")"
+                                            ProjectInformation="row.DataBoundItem as ProjectInformation">
+                                        </ProjectEntryAuthorizedDropdown>
+                                    </CascadingAuthenticationState>                                    
+                                }
+                                else
+                                {
+                                    <ProjectEntryDropdown CollapseEntry="@(projectListCollapseMap[row.DataBoundItem as ProjectInformation] ? "collapse" : "")"
+                                                          ProjectInformation="row.DataBoundItem as ProjectInformation">
+                                    </ProjectEntryDropdown>
+                                }
+
+                            </td>
+                        </tr>
                     }
-                </tr>
                 }
             </tbody>
             <tfoot>
                 <tr>
                     <td colspan="@this.ColumnCount + 1">
-                        <Paginate Parent="@this" />
+                        <Paginate Parent="@this"
+                                  PageChanged="InitializeCollapseMap"/>
                     </td>
                 </tr>
             </tfoot>
@@ -69,6 +95,8 @@ else
             </CascadingAuthenticationState>
         </div>
     }
+    <br />
+    <br />
 </div>
 }
 
@@ -97,12 +125,15 @@ else
 
     private bool isAuthenticated;
 
+    private Dictionary<ProjectInformation, bool> projectListCollapseMap = new Dictionary<ProjectInformation, bool>();
+
     protected override async Task OnInitializedAsync()
     {
 
         var authState = await authenticationState;
 
         this.isAuthenticated = authState.User?.Identity.IsAuthenticated ?? false;
+        InitializeCollapseMap();
 
         this.DataSourceChanged += (o, e) =>
         {
@@ -112,12 +143,14 @@ else
             }
 
             this.ShouldProcessStateChange();
+            InitializeCollapseMap();
         };
 
         this.FilterChanged += (o, e) =>
         {
             this.SetPageNumber(1);
             this.ShouldProcessStateChange();
+            InitializeCollapseMap();
         };
 
         ProjectManagerService.ProjectIdeasChanged += (o, e) =>
@@ -152,5 +185,42 @@ else
         {
             this.StateHasChanged();
         });
+    }
+
+    private void InitializeCollapseMap()
+    {
+        Dictionary<Guid, bool> oldCollapseMap = new Dictionary<Guid, bool>();
+        foreach (ProjectInformation info in projectListCollapseMap.Keys)
+        {
+            oldCollapseMap.Add(info.ProjectID, projectListCollapseMap[info]);
+        }
+
+        projectListCollapseMap.Clear();
+        foreach (Row row in this.GetRows())
+        {
+            if (!projectListCollapseMap.ContainsKey(row.DataBoundItem as ProjectInformation))
+            {
+                ProjectInformation newInfo = row.DataBoundItem as ProjectInformation;
+                projectListCollapseMap.Add(newInfo, true);
+                if (oldCollapseMap.ContainsKey(newInfo.ProjectID))
+                {
+                    projectListCollapseMap[newInfo] = oldCollapseMap[newInfo.ProjectID];
+                }
+            }
+        }
+    }
+
+    private void SortByColumn(int column)
+    {
+        Console.Error.WriteLine(column + " clicked");
+        if (SortColumnIndex == column)
+        {
+            IsColumnSortAscending = !IsColumnSortAscending;
+        } else
+        {
+            IsColumnSortAscending = true;
+            SortColumnIndex = column;
+        }
+        InitializeCollapseMap();
     }
 }

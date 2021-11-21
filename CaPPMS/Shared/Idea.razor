@@ -251,6 +251,25 @@
 
     private async Task HandleValidSubmit()
     {
+        string link = "";
+        if (!idea.Url.StartsWith("http://") && !idea.Url.StartsWith("https://") && idea.Url.Length != 0)
+        {
+            link = "https://" + idea.Url;
+            idea.Url = link;
+        }
+
+        if (!idea.Github.StartsWith("http://") && !idea.Github.StartsWith("https://") && idea.Github.Length != 0)
+        {
+            link = "https://" + idea.Github;
+            idea.Github = link;
+        }
+
+        if (!idea.VideoLink.StartsWith("http://") && !idea.VideoLink.StartsWith("https://") && idea.VideoLink.Length != 0)
+        {
+            link = "https://" + idea.VideoLink;
+            idea.VideoLink = link;
+        }
+
         this.tableState = "none";
 
         await Task.Run( async () =>

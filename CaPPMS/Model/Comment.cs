@@ -16,13 +16,16 @@ namespace CaPPMS.Model
 
         public Guid CommentId { get; set; } = Guid.NewGuid();
 
-        [StringLength(500, ErrorMessage = "Min: 20 characters. Max: 500 Characters", MinimumLength = 20)]
+        [Required]
         public string Comments { get; set; } = string.Empty;
 
+        [Required]
         public string UserEmail { get; set; } = string.Empty;
+
+        public Contact Contact { get; set; } = new Contact();
 
         public DateTime UpdateDateTime { get; set; } = default;
 
-        public Guid ProjectID { get; private set; } = Guid.Empty;
+        public Guid ProjectID { get; set; } = Guid.Empty;
     }
 }

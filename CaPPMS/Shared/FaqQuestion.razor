@@ -1,0 +1,42 @@
+﻿@using CaPPMS.Model
+@namespace CaPPMS.Shared
+
+<div class="panel panel-default border @CollapseQuestion">
+    <div class="panel-body">
+        <div class="container-fluid">
+            <div class="row">
+                <div>
+                    <button @onclick="e => this.IsCollapsedReply = !this.IsCollapsedReply"
+                            class="btn btn-primary">
+                        @(this.IsCollapsedReply ? "+" : "-")
+                    </button>
+                    @if (IsAuthenticated)
+                    {
+                        <button @onclick="e => SelectFaq()"
+                                class="btn btn-secondary">
+                            Modify
+                        </button>
+                    }
+                </div>
+                <div class="font-italic" style="text-align:left">&nbsp;@FaqInformation.Question</div>
+            </div>
+            <FaqReply
+                CollapseReply="@(this.IsCollapsedReply ? "collapse" : "")"
+                FaqInformation="@FaqInformation">
+
+            </FaqReply>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter] public bool IsAuthenticated { get; set; }
+    [Parameter] public FaqInformation FaqInformation { get; set; }
+    [Parameter] public EventCallback<FaqInformation> OnSelectedQuestion { get; set; }
+    [Parameter] public string CollapseQuestion { get; set; } = "collapse";
+    private bool IsCollapsedReply = true;
+
+    private void SelectFaq() {
+        OnSelectedQuestion.InvokeAsync(FaqInformation);
+    }
+}
