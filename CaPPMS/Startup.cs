@@ -85,10 +85,6 @@ namespace CaPPMS
             });
         }
 
-        /// Gets the secret from key vault via an enabled Managed Identity.
-        /// </summary>
-        /// <remarks>https://github.com/Azure-Samples/app-service-msi-keyvault-dotnet/blob/master/README.md</remarks>
-        /// <returns></returns>
         private string GetClientSecret()
         {
 #if (DEBUG)
