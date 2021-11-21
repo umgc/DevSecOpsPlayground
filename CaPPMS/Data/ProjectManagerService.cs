@@ -117,7 +117,8 @@ namespace CaPPMS.Data
             if (ProjectIdeas.TryUpdate(idea.ProjectID, idea, ProjectIdeas[idea.ProjectID]))
             {
                 ProjectIdeasChanged?.Invoke(ProjectIdeas.Values, EventArgs.Empty);
-            } else
+            }
+            else
             {
                 return null;
             }
@@ -266,6 +267,7 @@ namespace CaPPMS.Data
 
             return string.Empty;
         }
+
         public void CompleteProject(ProjectInformation idea)
         {
             Guid projID = idea.ProjectID;
@@ -279,7 +281,6 @@ namespace CaPPMS.Data
                 ProjectIdeasChanged?.Invoke(this.ProjectIdeas.Values, EventArgs.Empty);
             }
         }
-
 
         public void AddComment(Comment comment)
         {

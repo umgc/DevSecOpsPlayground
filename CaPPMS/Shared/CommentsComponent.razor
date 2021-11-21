@@ -107,6 +107,7 @@ else
         {
             ShouldUpdateState();
         };
+        
         var authState = await authenticationStateTask;
         this.isAuthenticated = authState.User?.Identity.IsAuthenticated ?? false;
         Comments = CommentManager.GetComments(ProjectGuid);
@@ -141,6 +142,7 @@ else
         NewComment = new Comment(ProjectGuid);
         NewContact = new Contact();
     }
+    
     private void DeleteComment(Comment comment)
     {
         CommentManager.DeleteComment(comment);

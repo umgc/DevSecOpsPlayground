@@ -46,7 +46,6 @@ namespace CaPPMS.Data
         }
 
         public ConcurrentDictionary<Guid, FaqInformation> FaqInfo { get; } = new();
-
         public ICollection<FaqInformation> GetFaqs => FaqInfo.Values;
 
         public bool Add(FaqInformation faqInformation)

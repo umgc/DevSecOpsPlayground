@@ -13,5 +13,4 @@ namespace CaPPMS.Model
         public string Topic { get; set; } = string.Empty;
 
     }
-
 }

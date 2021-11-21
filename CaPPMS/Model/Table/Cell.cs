@@ -12,7 +12,7 @@ namespace CaPPMS.Model.Table
         Header,
         Data
     }
-
+    
     public class Cell : IComparable
     {
         public Cell() { }
