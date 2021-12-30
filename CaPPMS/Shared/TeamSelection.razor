@@ -92,12 +92,11 @@
         Terms.Add("Spring");
         Terms.Add("Fall");
         Terms.Add("Summer");
-        Years.Add("2021");
-        Years.Add("2020");
-        Years.Add("2019");
-        Years.Add("2018");
-        Years.Add("2017");
-        Years.Add("2016");
+
+        for(int y = 1; y >= -5; y--)
+        {
+            Years.Add(DateTime.Now.AddYears(y).Year.ToString());
+        }
 
         base.OnInitialized();
     }
@@ -111,8 +110,8 @@
         await Task.Run(async () =>
         {
             ProjectManager.CompleteProject(projectInformation);
+            // TODO: Investigate why there is a Task.Delay here.
             await Task.Delay(2000);
-
         });
     }
 }
