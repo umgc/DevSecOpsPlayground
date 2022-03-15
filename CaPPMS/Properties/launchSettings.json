@@ -13,23 +13,24 @@
       "launchBrowser": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
-      }
+      },
+      "use64Bit": true
     },
     "CaPPMS": {
       "commandName": "Project",
       "launchBrowser": true,
-      "applicationUrl": "https://localhost:5001;http://localhost:5000",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development",
-        "GRAPH_SECRET": "egV7Q~vnJPRpOidPcrFR3ylJiVrYhuwZDFLBP",
-        "GITHUB_TOKEN": "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"
-      }
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "dotnetRunMessages": "true",
+      "applicationUrl": "https://localhost:5001;http://localhost:5000"
     },
     "Docker": {
       "commandName": "Docker",
       "launchBrowser": true,
       "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}",
-      "environmentVariables": {}
+      "publishAllPorts": true,
+      "useSSL": true
     }
   }
 }
