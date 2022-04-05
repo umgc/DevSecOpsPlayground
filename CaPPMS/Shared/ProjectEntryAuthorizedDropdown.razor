@@ -1,5 +1,4 @@
 ﻿@using CaPPMS.Model
-@using System.Windows;
 @namespace CaPPMS.Shared
 @inject ProjectManagerService ProjectManager
 @inject NavigationManager NavigationManager
@@ -220,10 +219,6 @@
         @if (ProjectInformation.Status.Equals("New"))
         {
             <button type="button" class="btn btn-success" @onclick="ApproveIdea">Approve</button><span>&nbsp;</span>
-            //<ConfirmationDialogBox Command="Approve"
-            //                       Prompt="Are you sure you want to approve this project?"
-            //                      ButtonClass="btn btn-success"
-            //                       ConfirmedChanged="ApproveIdea2" />
         }
 
 
@@ -337,35 +332,6 @@
         NavigationManager.NavigateTo($"{ProjectManager.FileManager.DownloadPath}{location}", true);
 
     }
-    private async Task ApproveIdea2(bool confirmed)
-    {
-        if (!confirmed)
-        {
-            return;
-        }
-        var gitHubOrganization = "umgc";
-        var formattedRepoName = projectInformation.ProjectTitle.Replace(' ', '-');
-        try
-        {
-            this.gitHubState = "none";
-            await GitHub.doAllTasks(gitHubOrganization, formattedRepoName, projectInformation.ProjectDescription).ConfigureAwait(false);
-            this.gitHubState = "block";
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine("Error Message - {0}", ex.Message);
-            this.gitHubState = "block";
-            await Task.Delay(2000).ConfigureAwait(false);
-            this.gitHubErrorState = "none";
-            return;
-        }
-
-        this.gitHubSuccessState = "none";
-        ProjectInformation.Status = "Approved";
-        await ProjectManager.UpdateAsync(ProjectInformation).ConfigureAwait(false);
-        await Task.Delay(3000).ConfigureAwait(false);
-        this.gitHubSuccessState = "block";
-    }
 
     private async Task ApproveIdea(MouseEventArgs e)
     {
@@ -374,7 +340,7 @@
         try
         {
             this.gitHubState = "none";
-            await GitHub.doAllTasks(gitHubOrganization, formattedRepoName, projectInformation.ProjectDescription).ConfigureAwait(false);
+            await GitHub.DoAllTasks(gitHubOrganization, formattedRepoName, projectInformation.ProjectDescription).ConfigureAwait(false);
             this.gitHubState = "block";
         }
         catch (Exception ex)
