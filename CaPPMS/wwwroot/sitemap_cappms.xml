@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+	<url>
+		<loc>https://umgc-cappms.azurewebsites.net</loc>
+		<lastmod>2022-04-09</lastmod>
+		<changefreq>yearly</changefreq>
+		<priority>0.1</priority>
+	</url>
+	<url>
+		<loc>https://umgc-cappms.azurewebsites.net/about</loc>
+		<lastmod>2022-04-09</lastmod>
+		<changefreq>yearly</changefreq>
+		<priority>0.2</priority>
+	</url>
+	<url>
+		<loc>https://umgc-cappms.azurewebsites.net/previousprojects</loc>
+		<lastmod>2022-04-09</lastmod>
+		<changefreq>monthly</changefreq>
+		<priority>1.0</priority>
+	</url>
+	<url>
+		<loc>https://umgc-cappms.azurewebsites.net/faqList</loc>
+		<lastmod>2022-04-09</lastmod>
+		<changefreq>monthly</changefreq>
+		<priority>0.5</priority>
+	</url>
+</urlset>
