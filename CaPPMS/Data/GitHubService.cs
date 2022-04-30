@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Octokit;
+
 namespace CaPPMS.Data
 {
     public class GitHubService
