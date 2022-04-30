@@ -43,7 +43,7 @@ namespace CaPPMS.Model
                     return BrowserFile.Name;
                 }
 
-                return Location.Split(ProjectFileManager.Delimiter, StringSplitOptions.RemoveEmptyEntries).Last();
+                return Location?.Split(ProjectFileManager.Delimiter, StringSplitOptions.RemoveEmptyEntries).Last() ?? string.Empty;
             }
         }
 
