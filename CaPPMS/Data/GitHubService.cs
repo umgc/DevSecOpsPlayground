@@ -90,40 +90,41 @@ namespace CaPPMS.Data
             }).ConfigureAwait(false);
         }
 
-        public async Task DoAllTasks(string OrganizationName, string RepoName, string Description)
+        public async Task<string> DoAllTasks(string OrganizationName, string RepoName, string Description)
         {
-            await Task.Run(async () =>
+            string error = string.Empty;
+
+            try
             {
-                try
+                var repository = new NewRepository(RepoName)
                 {
-                    var repository = new NewRepository(RepoName)
-                    {
-                        AutoInit = true,
-                        Description = Description,
-                        Private = false
-                    };
-                    var newRepository = gitHubClient.Repository.Create(OrganizationName, repository).GetAwaiter().GetResult();
-                    await Task.Delay(2000);
+                    AutoInit = true,
+                    Description = Description,
+                    Private = false
+                };
 
-                    var masterReference = await gitHubClient.Git.Reference.Get(OrganizationName, RepoName, heads + mainBranch);
-                    var branchReference = new NewReference(heads + developmentBranch, masterReference.Object.Sha);
-                    _ = gitHubClient.Git.Reference.Create(OrganizationName, RepoName, branchReference);
+                var newRepository = await gitHubClient.Repository.Create(OrganizationName, repository);
 
-                    var repoUpdateVar = new RepositoryUpdate(RepoName) { DefaultBranch = developmentBranch };
-                    _ = gitHubClient.Repository.Edit(OrganizationName, RepoName, repoUpdateVar);
+                var masterReference = await gitHubClient.Git.Reference.Get(OrganizationName, RepoName, heads + mainBranch);
+                var branchReference = new NewReference(heads + developmentBranch, masterReference.Object.Sha);
+                _ = gitHubClient.Git.Reference.Create(OrganizationName, RepoName, branchReference);
 
-                    var protection = new BranchProtectionSettingsUpdate(
-                        new BranchProtectionRequiredReviewsUpdate(false, true, 1)
-                    );
-                    _ = gitHubClient.Repository.Branch.UpdateBranchProtection(OrganizationName, RepoName, mainBranch, protection);
-                    _ = gitHubClient.Repository.Branch.UpdateBranchProtection(OrganizationName, RepoName, developmentBranch, protection);
+                var repoUpdateVar = new RepositoryUpdate(RepoName) { DefaultBranch = developmentBranch };
+                _ = gitHubClient.Repository.Edit(OrganizationName, RepoName, repoUpdateVar);
 
-                }
-                catch (AggregateException e)
-                {
-                    Console.Error.WriteLine($"E: For some reason, the repository {RepoName}  can't be created. It may already exist. {e.Message}");
-                }
-            }).ConfigureAwait(false);
+                var protection = new BranchProtectionSettingsUpdate(
+                            new BranchProtectionRequiredReviewsUpdate(false, true, 1));
+
+                _ = gitHubClient.Repository.Branch.UpdateBranchProtection(OrganizationName, RepoName, mainBranch, protection);
+                _ = gitHubClient.Repository.Branch.UpdateBranchProtection(OrganizationName, RepoName, developmentBranch, protection);
+
+            }
+            catch (Exception e)
+            {
+                error = $"Repository:{RepoName} cannot be created. Error: {e.Message}";
+            }
+
+            return error;
         }
     }
 }

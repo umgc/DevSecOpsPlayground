@@ -210,7 +210,10 @@
             </tr>
 
             <div style="visibility:@gitHubErrorBar">
-                <b style="color:red">Could not create GitHub Repo... Please make sure Repo doesn't already exist!</b>
+                <p style="color:red">
+                    <b>Could not create GitHub Repo...</b><br />
+                    @gitHubError
+                </p>
             </div>
             <div style="visibility:@gitHubSuccessBar">
                 <b>Successfully Created Repository!</b>
@@ -218,10 +221,12 @@
         </table>
         @if (!ProjectInformation.IsDirty && ProjectInformation.Status.Equals("New"))
         {
-            <p>Create GitHub Repository:<InputCheckbox @bind-Value="createGitHubRepository" class="btn" /></p>
+            <p>
+                Create GitHub Repository:&nbsp;&emsp;<InputCheckbox @bind-Value="createGitHubRepository" class="form-check-input" />
+            </p>
             if (createGitHubRepository)
             {
-                <p>Repository Name:<InputText @bind-Value="gitHubRepositoryName" class="btn" /></p>
+                <p>Repository Name:&nbsp;<InputText @bind-Value="gitHubRepositoryName" class="form-text" /></p>
             }
 
             <button type="button" class="btn btn-success" @onclick="ApproveIdea">Approve</button><span>&nbsp;</span>
@@ -306,6 +311,7 @@
     // Should create GitHub Repository
     private bool createGitHubRepository = false;
     private string gitHubRepositoryName;
+    private string gitHubError = string.Empty;
 
     protected override void OnInitialized()
     {
@@ -365,8 +371,13 @@
             try
             {
                 this.gitHubState = "none";
-                await GitHub.DoAllTasks(gitHubOrganization, formattedRepoName, projectInformation.ProjectDescription).ConfigureAwait(false);
+                gitHubError = await GitHub.DoAllTasks(gitHubOrganization, formattedRepoName, projectInformation.ProjectDescription);
                 this.gitHubState = "block";
+                if (!string.IsNullOrEmpty(gitHubError))
+                {
+                    this.gitHubErrorState = "none";
+                    return;
+                }
             }
             catch (Exception ex)
             {
