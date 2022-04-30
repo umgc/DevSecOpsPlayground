@@ -229,6 +229,7 @@ namespace CaPPMS.Model
         // Matches the config value. Value is in Mb
         [AttachmentsFileSizeValidator(10)]
         public IList<ProjectFile> Attachments { get; private set; } = new List<ProjectFile>();
+
         public List<CompletedProjectDocumentation> CompletedDocuments { get; set; } = new List<CompletedProjectDocumentation>();
         
 
@@ -333,6 +334,12 @@ namespace CaPPMS.Model
 
         public void SetAttachments(IList<IProjectFile> files)
         {
+            if (files.Count == 0)
+            {
+                this.IsDirty = false;
+                return;
+            }
+
             this.Attachments.Clear();
 
             foreach(var file in files)
@@ -345,6 +352,13 @@ namespace CaPPMS.Model
 
         public void AddAttachments(IList<IProjectFile> files)
         {
+            if (files.Count == 0)
+            {
+                this.IsDirty = false;
+
+                return;
+            }
+
             foreach (var file in files)
             {
                 this.Attachments.Add(file as ProjectFile);

@@ -7,11 +7,32 @@ namespace CaPPMS.Model
 {
     public class ProjectFile : IProjectFile
     {
+        private string location = string.Empty;
+
+        // Parameterless contructor for Deserialization
+        public ProjectFile() { }
+
+        public ProjectFile(IBrowserFile browserFile)
+        {
+            this.BrowserFile = browserFile;
+        }
+
         private long size;
 
         public Guid File_ID { get; set; } = Guid.NewGuid();
 
-        public string Location { get; set; } = string.Empty;
+        public string Location
+        {
+            get
+            {
+                return location;
+            }
+            set
+            {
+                this.location = value;
+                this.BrowserFile = null;
+            }
+        }
 
         public string Name
         {
@@ -44,7 +65,7 @@ namespace CaPPMS.Model
         }
         
         [JsonIgnore]
-        public IBrowserFile BrowserFile { get; set; }
+        public IBrowserFile BrowserFile { get; private set; }
 
         public override string ToString()
         {
