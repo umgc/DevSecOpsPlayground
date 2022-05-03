@@ -299,7 +299,7 @@
                 continue;
             }
 
-            var projectFile = new ProjectFile { BrowserFile = file };
+            var projectFile = new ProjectFile(file);
 
             this.loadedFiles.Add(projectFile);
         }

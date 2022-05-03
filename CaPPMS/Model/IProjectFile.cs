@@ -7,7 +7,7 @@ namespace CaPPMS.Model
         /// <summary>
         /// Files received from the browser.
         /// </summary>
-        IBrowserFile BrowserFile { get; set; }
+        IBrowserFile BrowserFile { get; }
 
         /// <summary>
         /// Location stored on the backend.

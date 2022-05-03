@@ -16,7 +16,8 @@ namespace CaPPMS.Data
     {
         public static event EventHandler ProjectIdeasChanged;
 
-        private readonly string localProjectDb;
+        private static readonly object fileSyncLock = new object();
+        private readonly string localProjectDbFilePath;
 
         public static DirectoryInfo BaseDirInfo { get; } = new (Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "StoredData"));
 
@@ -29,15 +30,16 @@ namespace CaPPMS.Data
                 BaseDirInfo.Create();
             }
 
-            localProjectDb = Path.Combine(BaseDirInfo.FullName, localProjectFileDBName);
+            localProjectDbFilePath = Path.Combine(BaseDirInfo.FullName, localProjectFileDBName);
 
-            var projectsDbFile = new FileInfo(localProjectDb);
+            var projectsDbFile = new FileInfo(localProjectDbFilePath);
 
             if (projectsDbFile.Exists)
             {
                 var ideas = JsonConvert.DeserializeObject<Dictionary<Guid, ProjectInformation>>(File.ReadAllText(projectsDbFile.FullName));
                 foreach (var idea in ideas)
                 {
+                    idea.Value.IsDirty = false;
                     _ = ProjectIdeas.TryAdd(idea.Key, idea.Value);
                 }
             }
@@ -68,13 +70,13 @@ namespace CaPPMS.Data
             foreach(var file in idea.Attachments)
             {
                 file.Location = await FileManager.SaveAsync(file.BrowserFile.OpenReadStream(MaxMBSizePerFile), file.File_ID.ToString(), file.Name);
-                file.BrowserFile = null;
             }
 
             if (!ProjectIdeas.TryAdd(idea.ProjectID, idea))
             {
                 return false;
             }
+
             ProjectIdeasChanged?.Invoke(ProjectIdeas.Values, EventArgs.Empty);
             return true;
         }
@@ -135,8 +137,8 @@ namespace CaPPMS.Data
                         Console.Error.WriteLine("Existing contains: " + file.File_ID);
                         continue;
                     }
+
                     file.Location = await FileManager.SaveAsync(file.BrowserFile.OpenReadStream(MaxMBSizePerFile), file.File_ID.ToString(), file.Name);
-                    file.BrowserFile = null;
                 }
 
                 bool completed;
@@ -318,33 +320,18 @@ namespace CaPPMS.Data
 
         private void ProjectManagerService_ProjectIdeasChanged(object sender, EventArgs e)
         {
-            var tempFile = new FileInfo(Path.Combine(localProjectDb + ".temp"));
-
             // Let's build a gate to control flow. It might be a bit extra but it should be fun.
-            Task.Run(async () =>
-            {
-                while (File.Exists(tempFile.FullName))
-                {
-                    // Use a prime number to reduce the chance of a race condition.
-                    await Task.Delay(10);
-                }
-            }).ContinueWith((context) =>
+            Task.Run(() =>
             {
                 // Update the file backed db.
-                lock (ProjectIdeas)
+                lock (fileSyncLock)
                 {
-                    // The task to move some time happens before the os knows that it exists =0
-                    Task.Run(async () =>
+                    if (File.Exists(localProjectDbFilePath))
                     {
-                        File.WriteAllText(tempFile.FullName, JsonConvert.SerializeObject(ProjectIdeas, Formatting.Indented));
+                        File.Delete(localProjectDbFilePath);
+                    }
 
-                        while (!File.Exists(tempFile.FullName))
-                        {
-                            await Task.Delay(17);
-                        }
-
-                        tempFile.MoveTo(localProjectDb, true);
-                    });
+                    File.WriteAllText(localProjectDbFilePath, JsonConvert.SerializeObject(ProjectIdeas, Formatting.Indented));
                 }
             });
         }

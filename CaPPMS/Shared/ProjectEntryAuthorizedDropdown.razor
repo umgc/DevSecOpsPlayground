@@ -210,14 +210,25 @@
             </tr>
 
             <div style="visibility:@gitHubErrorBar">
-                <b style="color:red">Could not create GitHub Repo... Please make sure Repo doesn't already exist!</b>
+                <p style="color:red">
+                    <b>Could not create GitHub Repo...</b><br />
+                    @gitHubError
+                </p>
             </div>
             <div style="visibility:@gitHubSuccessBar">
                 <b>Successfully Created Repository!</b>
             </div>
         </table>
-        @if (ProjectInformation.Status.Equals("New"))
+        @if (!ProjectInformation.IsDirty && ProjectInformation.Status.Equals("New"))
         {
+            <p>
+                Create GitHub Repository:&nbsp;&emsp;<InputCheckbox @bind-Value="createGitHubRepository" class="form-check-input" />
+            </p>
+            if (createGitHubRepository)
+            {
+                <p>Repository Name:&nbsp;<InputText @bind-Value="gitHubRepositoryName" class="form-text" /></p>
+            }
+
             <button type="button" class="btn btn-success" @onclick="ApproveIdea">Approve</button><span>&nbsp;</span>
         }
 
@@ -252,6 +263,7 @@
 
 
 @code {
+
     [Parameter]
     public ProjectInformation ProjectInformation
     {
@@ -271,6 +283,7 @@
 
         }
     }
+
     [CascadingParameter] private Task<AuthenticationState> authenticationState { get; set; }
     [Parameter] public string CollapseEntry { get; set; } = "collapse";
     private ProjectInformation projectInformation;
@@ -295,12 +308,25 @@
     private string gitHubSuccessState = "block";
     private string gitHubSuccessBar => gitHubSuccessState.Equals("none") ? "visible" : "hidden";
 
+    // Should create GitHub Repository
+    private bool createGitHubRepository = false;
+    private string gitHubRepositoryName;
+    private string gitHubError = string.Empty;
+
+    protected override void OnInitialized()
+    {
+        this.gitHubRepositoryName = this.GetSuggestedName();
+
+        base.OnInitialized();
+    }
+
     private void SetupPlaceholder()
     {
         if (projectInformation == null)
         {
             return;
         }
+
         _infoPlaceholder = new ProjectInformation();
         _infoPlaceholder.VideoLink = projectInformation.VideoLink;
         _infoPlaceholder.ProjectTitle = projectInformation.ProjectTitle;
@@ -316,15 +342,18 @@
         _infoPlaceholder.SponsorEmail = projectInformation.SponsorEmail;
         _infoPlaceholder.SponsorPhone = projectInformation.SponsorPhone;
     }
+
     private async Task DeleteRecord(bool confirmed)
     {
         if (!confirmed)
         {
             return;
         }
+
         var authState = await authenticationState;
         string error = await ProjectManager.DeleteAsync(projectInformation, authState.User);
     }
+
     private async Task ExportEntry()
     {
         var location = await this.ProjectManager.ExportAsync(projectInformation);
@@ -335,27 +364,36 @@
 
     private async Task ApproveIdea(MouseEventArgs e)
     {
-        var gitHubOrganization = "umgc";
-        var formattedRepoName = projectInformation.ProjectTitle.Replace(' ', '-');
-        try
+        if (createGitHubRepository)
         {
-            this.gitHubState = "none";
-            await GitHub.DoAllTasks(gitHubOrganization, formattedRepoName, projectInformation.ProjectDescription).ConfigureAwait(false);
-            this.gitHubState = "block";
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine("Error Message - {0}", ex.Message);
-            this.gitHubState = "block";
-            await Task.Delay(2000).ConfigureAwait(false);
-            this.gitHubErrorState = "none";
-            return;
+            var gitHubOrganization = "umgc";
+            var formattedRepoName = this.gitHubRepositoryName.Replace(' ', '-').ToLower();
+            try
+            {
+                this.gitHubState = "none";
+                gitHubError = await GitHub.DoAllTasks(gitHubOrganization, formattedRepoName, projectInformation.ProjectDescription);
+                this.gitHubState = "block";
+                if (!string.IsNullOrEmpty(gitHubError))
+                {
+                    this.gitHubErrorState = "none";
+                    return;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error Message - {0}", ex.Message);
+                this.gitHubState = "block";
+                await Task.Delay(TimeSpan.FromSeconds(5)).ConfigureAwait(false);
+                this.gitHubErrorState = "none";
+                return;
+            }
+
+            this.gitHubSuccessState = "none";
         }
 
-        this.gitHubSuccessState = "none";
+
         ProjectInformation.Status = "Approved";
         await ProjectManager.UpdateAsync(ProjectInformation).ConfigureAwait(false);
-        await Task.Delay(3000).ConfigureAwait(false);
         this.gitHubSuccessState = "block";
     }
 
@@ -431,9 +469,8 @@
             {
                 projectInformation.IsDirty = false;
             }
-
-            await Task.Delay(2000);
         });
+
         this.tableState = "block";
     }
 
@@ -443,6 +480,7 @@
         {
             return;
         }
+
         var authState = await authenticationState;
         foreach (ProjectFile file in attachmentSelection.Keys)
         {
@@ -452,6 +490,7 @@
             }
         }
     }
+
     private void LoadFiles(InputFileChangeEventArgs inputFile)
     {
         List<IProjectFile> loadedFiles = new();
@@ -463,11 +502,33 @@
                 continue;
             }
 
-            var projectFile = new ProjectFile { BrowserFile = file };
+            var projectFile = new ProjectFile(file);
 
             loadedFiles.Add(projectFile);
         }
 
         projectInformation.AddAttachments(loadedFiles);
+    }
+
+    private string GetSuggestedName()
+    {
+        string[] semesters = new[] { "Summer", "Fall", "Spring" };
+        string year = DateTime.Now.Year.ToString();
+        int month = DateTime.Now.Month;
+
+        // Check for Summer Condition
+        if (month >= 3 && month <= 6)
+        {
+            return $"{semesters[0]}{year}";
+        }
+        // Check for fall condition
+        else if (month >= 7 && month <= 10)
+        {
+            return $"{semesters[1]}{year}";
+        }
+        else
+        {
+            return $"{semesters[2]}{year}";
+        }
     }
 }
