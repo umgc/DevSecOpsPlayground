@@ -1,0 +1,38 @@
+﻿@using Blazor_Server.Data
+@using Octokit
+@inject GitHubService GitHubService
+
+
+@if (repositories is null)
+{
+    <p>
+        <em>Loading...</em>
+    </p>
+}
+else
+{
+    <h2>@Title</h2>
+    <h3>Repository List</h3>
+
+    @foreach (var repo in repositories)
+    {
+        <div class="alert alert-secondary mt-4" role="alert">
+            <span class="oi oi-external-link mr-2" aria-hidden="true"></span>
+            <a href="@repo.HtmlUrl" target="@repo.Name">@repo.FullName</a>
+        </div>
+    }
+}
+
+
+@code {
+
+    [Parameter]
+    public string Title { get; set; }
+
+    private IReadOnlyList<Repository> repositories;
+
+    protected override async Task OnInitializedAsync()
+    {
+        repositories = await GitHubService.GetRepositories("umgc");
+    }
+}
