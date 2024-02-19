@@ -2,7 +2,8 @@ CREATE TABLE [dbo].[FAQ]
 (
 	[FAQ_ID] INT NOT NULL PRIMARY KEY, 
     [FAQ_Question] NVARCHAR(50) NOT NULL, 
-    [FAQ_Answer] NVARCHAR(MAX) NULL
+    [FAQ_Answer] NVARCHAR(MAX) NULL,
+    [Author] NVARCHAR(MAX) NULL
 )
 
 CREATE TABLE [dbo].[Contact]
@@ -52,6 +53,36 @@ CREATE TABLE [dbo].[Project_Idea]
     [Sponsor_ID] BIGINT NOT NULL, 
     CONSTRAINT [FK_Project_Idea_Project_Information] FOREIGN KEY ([P_ID]) REFERENCES [Project_Information]([P_ID]), 
     CONSTRAINT [FK_Project_Idea_Contact] FOREIGN KEY ([Sponsor_ID]) REFERENCES [Contact]([Contact_ID])
+)
+
+CREATE TABLE [dbo].[Zip]
+(
+    [Zip_Id] BIGINT NOT NULL PRIMARY KEY, 
+    [Zip_Name] NVARCHAR(50) NULL, 
+    [Zip_Path] NVARCHAR(MAX) NOT NULL, 
+    [Zip_Size] NVARCHAR(MAX) NULL,
+    [Zip_Description] BIGINT NULL,
+    [P_ID] BIGINT NOT NULL,
+    [File_ID] BIGINT NOT NULL,
+    CONSTRAINT [FK_Zip_Project_Information] FOREIGN KEY ([P_ID]) REFERENCES [Project_Information]([P_ID]),
+    CONSTRAINT [FK_Zip_Attachment] FOREIGN KEY ([File_ID]) REFERENCES [Attachment]([File_ID])
+)
+
+CREATE TABLE [dbo].[Link]
+(
+    [Link_Id] BIGINT NOT NULL PRIMARY KEY, 
+    [Link_URL] NVARCHAR(MAX) NOT NULL, 
+    [P_ID] BIGINT NOT NULL,
+    CONSTRAINT [FK_Link_Project_Information] FOREIGN KEY ([P_ID]) REFERENCES [Project_Information]([P_ID])
+)
+
+
+CREATE TABLE [dbo].[Team_Members]
+(
+    [TM_Id] BIGINT NOT NULL PRIMARY KEY, 
+    [Name] NVARCHAR(50) NULL,  
+    [P_ID] BIGINT NOT NULL,
+    CONSTRAINT [FK_Team_members_Project_Information] FOREIGN KEY ([P_ID]) REFERENCES [Project_Information]([P_ID])
 )
 
 GO
