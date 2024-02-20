@@ -72,13 +72,15 @@
                         <tr>
                             <td style="padding-top:0px;">Project Title:</td>
                             <td style="padding-top:0px;">Project Description:</td>
-
+                            <td style="padding-top:0px;">Team Member:</td>
+                            <td style="padding-top:0px;">Link Name</td>
                         </tr>
                         <tr>
                             <td style="padding-top:0px;"><InputText @bind-Value="_infoPlaceholder.ProjectTitle" /></td>
                             <td style="padding-top:0px;"><InputText @bind-Value="_infoPlaceholder.ProjectDescription" /></td>
+                            <td style="padding-top:0px;"><InputText @bind-Value="_infoPlaceholder.TeamMember" /></td>
+                            <td style="padding-top:0px;"><InputText @bind-Value="_infoPlaceholder.LinkName" /></td>
                         </tr>
-
                     </table>
 
                 </td>
@@ -332,6 +334,8 @@
         _infoPlaceholder.VideoLink = projectInformation.VideoLink;
         _infoPlaceholder.ProjectTitle = projectInformation.ProjectTitle;
         _infoPlaceholder.ProjectDescription = projectInformation.ProjectDescription;
+        _infoPlaceholder.TeamMember = projectInformation.TeamMember;
+        _infoPlaceholder.LinkName = projectInformation.LinkName;
         _infoPlaceholder.Url = projectInformation.Url;
         _infoPlaceholder.Github = projectInformation.Github;
         _infoPlaceholder.FirstName = projectInformation.FirstName;
@@ -409,6 +413,8 @@
         projectInformation.VideoLink = _infoPlaceholder.VideoLink;
         projectInformation.ProjectTitle = _infoPlaceholder.ProjectTitle;
         projectInformation.ProjectDescription = _infoPlaceholder.ProjectDescription;
+        projectInformation.TeamMember = _infoPlaceholder.TeamMember;
+        projectInformation.LinkName = _infoPlaceholder.LinkName;
         projectInformation.Url = _infoPlaceholder.Url;
         projectInformation.Github = _infoPlaceholder.Github;
         projectInformation.FirstName = _infoPlaceholder.FirstName;
