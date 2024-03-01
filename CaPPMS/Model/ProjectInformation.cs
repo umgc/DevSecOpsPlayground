@@ -132,7 +132,6 @@ namespace CaPPMS.Model
         [Export(true)]
         [DisplayName("Team Member")]
         [Browsable(true)]
-        [ColumnHeader]
         public string TeamMember
         {
             get
@@ -151,7 +150,6 @@ namespace CaPPMS.Model
         [Export(true)]
         [DisplayName("Link Name")]
         [Browsable(true)]
-        [ColumnHeader]
         public string LinkName
         {
             get

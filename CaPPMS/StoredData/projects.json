@@ -294,7 +294,7 @@
   },
   "fec2ea66-ec65-4468-9c81-2f33c470230e": {
     "ProjectID": "fec2ea66-ec65-4468-9c81-2f33c470230e",
-    "TeamMembers": "test",
+    "TeamMember": "test",
     "VideoLink": "https://www.youtube.com/watch?v=ZCp-iVK1704",
     "ProjectTitle": "ADA Compatible USPS Digest",
     "ProjectDescription": "The current digest email to customers lack ADA compatible feature that enable blind users for example to get a good sense of what to expect in their email. There should be a solution that can determine based on a picture where and in what context the mail, mailers, and other items from the digest are.",
@@ -847,7 +847,7 @@
   },
   "052d7137-639a-4a1a-a0ec-689fb26c4b9b": {
     "ProjectID": "052d7137-639a-4a1a-a0ec-689fb26c4b9b",
-    "TeamMembers": "test",
+    "TeamMember": "test",
     "VideoLink": "",
     "ProjectTitle": "ADA Compatible USPS Digest v2",
     "ProjectDescription": "The current digest email to customers lack ADA compatible feature that enable blind users for example to get a good sense of what to expect in their email. There should be a solution that can determine based on a picture where and in what context the mail, mailers, and other items from the digest are.",
