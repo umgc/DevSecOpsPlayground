@@ -1,0 +1,2686 @@
+{
+  "9abf0431-e318-4fbb-be85-505b011757e8": {
+    "ProjectID": "9abf0431-e318-4fbb-be85-505b011757e8",
+    "VideoLink": "",
+    "ProjectTitle": "CaPPMS",
+    "ProjectDescription": "A platform is needed where clients and customers can submit capstone project proposals for \nfuture University of Maryland Global Campus (UMGC) Software Engineering (SWEN) 670 \nstudents. Those projects would then go through an approval process involving UMGC professors \nand stakeholders who would review and determine which project could be completed by the \nstudents. \nThe UMGC Capstone Project Proposal Management System (CaPPMS) is a web-based \napplication which allows customer, clients, and former students to submit detailed proposals of \nprojects to be designed and implemented by UMGC SWEN 670 students as well as track the \nstages during the approval process.",
+    "SemesterTerm": "Fall",
+    "SemesterYear": "2020",
+    "Url": "",
+    "Github": "https://github.com/umgc/umgc.idea.tracker",
+    "FirstName": "Mir",
+    "LastName": "Assadullah",
+    "Email": "Mir.Assadullah@faculty.umgc.edu",
+    "Phone": "800-888-8682",
+    "Attachments": [
+      {
+        "File_ID": "714eefd7-7a03-43df-9ee5-b1f6660366d8",
+        "Location": "714eefd7-7a03-43df-9ee5-b1f6660366d8----CaPPMS_Deployment_Guide_v2_final.pdf",
+        "Name": "CaPPMS_Deployment_Guide_v2_final.pdf",
+        "Size": 605058
+      },
+      {
+        "File_ID": "d8bdca6c-1fbd-4de1-9247-ac09dfe4f757",
+        "Location": "d8bdca6c-1fbd-4de1-9247-ac09dfe4f757----CaPPMS_ProgrammerGuide_v2_final.pdf",
+        "Name": "CaPPMS_ProgrammerGuide_v2_final.pdf",
+        "Size": 656801
+      },
+      {
+        "File_ID": "224852cd-cddb-4f94-a175-ce544b05cd8b",
+        "Location": "224852cd-cddb-4f94-a175-ce544b05cd8b----CaPPMS_Project_Plan_v3.0_final.pdf",
+        "Name": "CaPPMS_Project_Plan_v3.0_final.pdf",
+        "Size": 932829
+      },
+      {
+        "File_ID": "d22b2fd4-49c6-4576-ae6f-15977d37b8b7",
+        "Location": "d22b2fd4-49c6-4576-ae6f-15977d37b8b7----CaPPMS_SRS_v2.0.pdf",
+        "Name": "CaPPMS_SRS_v2.0.pdf",
+        "Size": 382491
+      },
+      {
+        "File_ID": "432ba541-30a9-4bde-af3a-82186c153fd6",
+        "Location": "432ba541-30a9-4bde-af3a-82186c153fd6----CaPPMS_Technical_Design_Document_v1.0.pdf",
+        "Name": "CaPPMS_Technical_Design_Document_v1.0.pdf",
+        "Size": 1065432
+      },
+      {
+        "File_ID": "b156c09d-52ed-4bb1-b2a7-ff6415dc267e",
+        "Location": "b156c09d-52ed-4bb1-b2a7-ff6415dc267e----CaPPMS_Test_Report_final.pdf",
+        "Name": "CaPPMS_Test_Report_final.pdf",
+        "Size": 614755
+      },
+      {
+        "File_ID": "00fce418-04f1-4192-bf24-b312148aaa6c",
+        "Location": "00fce418-04f1-4192-bf24-b312148aaa6c----CaPPMS_User_Guide_final.pdf",
+        "Name": "CaPPMS_User_Guide_final.pdf",
+        "Size": 844481
+      }
+    ],
+    "CompletedDocuments": [
+      {
+        "WebsiteLink": "https://umgc-cappms.azurewebsites.net/",
+        "VideoLink": "",
+        "GitHubLink": "https://github.com/umgc/umgc.idea.tracker",
+        "TeamName": "Project Tracker",
+        "ProjectPlan": "CaPPMS_Project_Plan_v3.0_final.pdf",
+        "ProjectPlanLink": "224852cd-cddb-4f94-a175-ce544b05cd8b----CaPPMS_Project_Plan_v3.0_final.pdf",
+        "SRS": "CaPPMS_SRS_v2.0.pdf",
+        "SRSLink": "d22b2fd4-49c6-4576-ae6f-15977d37b8b7----CaPPMS_SRS_v2.0.pdf",
+        "TDD": "CaPPMS_Technical_Design_Document_v1.0.pdf",
+        "TDDLink": "432ba541-30a9-4bde-af3a-82186c153fd6----CaPPMS_Technical_Design_Document_v1.0.pdf",
+        "Runbook": "CaPPMS_ProgrammerGuide_v2_final.pdf",
+        "RunbookLink": "d8bdca6c-1fbd-4de1-9247-ac09dfe4f757----CaPPMS_ProgrammerGuide_v2_final.pdf",
+        "ProgrammersGuide": "CaPPMS_ProgrammerGuide_v2_final.pdf",
+        "ProgrammersGuideLink": "d8bdca6c-1fbd-4de1-9247-ac09dfe4f757----CaPPMS_ProgrammerGuide_v2_final.pdf",
+        "UsersGuide": "CaPPMS_User_Guide_final.pdf",
+        "UsersGuideLink": "00fce418-04f1-4192-bf24-b312148aaa6c----CaPPMS_User_Guide_final.pdf",
+        "TestReport": "CaPPMS_Test_Report_final.pdf",
+        "TestReportLink": "b156c09d-52ed-4bb1-b2a7-ff6415dc267e----CaPPMS_Test_Report_final.pdf"
+      }
+    ],
+    "IsSponsor": true,
+    "SponsorFirstName": "Mir",
+    "SponsorLastName": "Assadullah",
+    "SponsorEmail": "Mir.Assadullah@faculty.umgc.edu",
+    "SponsorPhone": "800-888-8682",
+    "Status": "Complete",
+    "Comments": {}
+  },
+  "e2c4ab22-9d63-4d65-9f69-ec3b51244299": {
+    "ProjectID": "e2c4ab22-9d63-4d65-9f69-ec3b51244299",
+    "VideoLink": "",
+    "ProjectTitle": "MemorEz",
+    "ProjectDescription": "About 14 million people in the United States have a disability that impairs their short-term memory. Short-term memory (STM) indicates different systems of memory involved in the retention of pieces of data for a relatively short time (usually up to 30 seconds). The causes of the disability range from aging to dementia to Alzheimer’s. According to the U.S. Centers for Disease Control and Prevention, noticing a decline in your mental abilities (\"cognitive decline\") is one of the earliest signs of impending Alzheimer's disease or dementia. There is a need to provide a solution to adults that assists them with the short-term memory function. To meet this need, United Global Masters Coders proposes the development of a mobile application that recognizes the speech of the user as they engage in a conversation and help them live a fuller life despite their disability. The purpose of this project is to develop the Memory Magic App for people with short-term memory disabilities. Memory Magic expands on previous capstone work. There are several ways to develop this app and this effort is to determine which way would be the most optimal. The Memory Magic App meets the business need by providing a solution for a critical and underserved market segment to have a solution with them that meets their need for memory assistance.",
+    "SemesterTerm": "Spring",
+    "SemesterYear": "2022",
+    "Url": "",
+    "Github": "https://github.com/umgc/spring2022",
+    "FirstName": "Robert",
+    "LastName": "Wilson",
+    "Email": "rwilson@umgc.dev",
+    "Phone": "19104894873",
+    "Attachments": [
+      {
+        "File_ID": "7f2dbefc-b0a5-41d3-99d3-fdb1d9e86a53",
+        "Location": "7f2dbefc-b0a5-41d3-99d3-fdb1d9e86a53----SWEN 670 Spring 2022 Milestone-1_Project-Plans_Spring2022_v3.0.pdf",
+        "Name": "SWEN 670 Spring 2022 Milestone-1_Project-Plans_Spring2022_v3.0.pdf",
+        "Size": 2540700
+      },
+      {
+        "File_ID": "fb1237fa-a1b2-45f7-8caf-2baa87d3250b",
+        "Location": "fb1237fa-a1b2-45f7-8caf-2baa87d3250b----SWEN 670 Spring 2022 Milestone-2_SRS_Spring2022v2.pdf",
+        "Name": "SWEN 670 Spring 2022 Milestone-2_SRS_Spring2022v2.pdf",
+        "Size": 3514975
+      },
+      {
+        "File_ID": "5672f7cb-3eee-4113-bc1f-47e4c078d218",
+        "Location": "5672f7cb-3eee-4113-bc1f-47e4c078d218----SWEN 670 Spring 2022 Milestone-2_TDD_Spring2022_v2.0.pdf",
+        "Name": "SWEN 670 Spring 2022 Milestone-2_TDD_Spring2022_v2.0.pdf",
+        "Size": 3357377
+      },
+      {
+        "File_ID": "4e377cd4-6c58-4381-af58-adc73c92d77e",
+        "Location": "4e377cd4-6c58-4381-af58-adc73c92d77e----SWEN 670 Spring 2022 Milestone-3_Programmers-Guides_Spring2022_v1.pdf",
+        "Name": "SWEN 670 Spring 2022 Milestone-3_Programmers-Guides_Spring2022_v1.pdf",
+        "Size": 1463728
+      },
+      {
+        "File_ID": "a42fddff-665b-405f-a194-7d15ef7c30f2",
+        "Location": "a42fddff-665b-405f-a194-7d15ef7c30f2----SWEN 670 Spring 2022 Milestone-3_Runbooks_Spring2022_v1.pdf",
+        "Name": "SWEN 670 Spring 2022 Milestone-3_Runbooks_Spring2022_v1.pdf",
+        "Size": 2597916
+      },
+      {
+        "File_ID": "b150b410-3ae9-400e-aeb8-dfd434b1f16e",
+        "Location": "b150b410-3ae9-400e-aeb8-dfd434b1f16e----SWEN 670 Spring 2022 Milestone-4_Dev-Test-Reports_Spring-2022-v1.pdf",
+        "Name": "SWEN 670 Spring 2022 Milestone-4_Dev-Test-Reports_Spring-2022-v1.pdf",
+        "Size": 1846595
+      },
+      {
+        "File_ID": "8f23b2ae-b71f-4dc0-8890-f1c149427423",
+        "Location": "8f23b2ae-b71f-4dc0-8890-f1c149427423----SWEN 670 Spring 2022 Milestone-4_Dev-User-Guides_Spring-2022-v1.pdf",
+        "Name": "SWEN 670 Spring 2022 Milestone-4_Dev-User-Guides_Spring-2022-v1.pdf",
+        "Size": 4891612
+      }
+    ],
+    "CompletedDocuments": [
+      {
+        "WebsiteLink": "",
+        "VideoLink": "",
+        "GitHubLink": "",
+        "TeamName": "Fluttering Mind/Remember All",
+        "ProjectPlan": "SWEN 670 Spring 2022 Milestone-1_Project-Plans_Spring2022_v3.0.pdf",
+        "ProjectPlanLink": "7f2dbefc-b0a5-41d3-99d3-fdb1d9e86a53----SWEN 670 Spring 2022 Milestone-1_Project-Plans_Spring2022_v3.0.pdf",
+        "SRS": "SWEN 670 Spring 2022 Milestone-2_SRS_Spring2022v2.pdf",
+        "SRSLink": "fb1237fa-a1b2-45f7-8caf-2baa87d3250b----SWEN 670 Spring 2022 Milestone-2_SRS_Spring2022v2.pdf",
+        "TDD": "SWEN 670 Spring 2022 Milestone-2_TDD_Spring2022_v2.0.pdf",
+        "TDDLink": "5672f7cb-3eee-4113-bc1f-47e4c078d218----SWEN 670 Spring 2022 Milestone-2_TDD_Spring2022_v2.0.pdf",
+        "Runbook": "SWEN 670 Spring 2022 Milestone-3_Runbooks_Spring2022_v1.pdf",
+        "RunbookLink": "a42fddff-665b-405f-a194-7d15ef7c30f2----SWEN 670 Spring 2022 Milestone-3_Runbooks_Spring2022_v1.pdf",
+        "ProgrammersGuide": "SWEN 670 Spring 2022 Milestone-3_Programmers-Guides_Spring2022_v1.pdf",
+        "ProgrammersGuideLink": "4e377cd4-6c58-4381-af58-adc73c92d77e----SWEN 670 Spring 2022 Milestone-3_Programmers-Guides_Spring2022_v1.pdf",
+        "UsersGuide": "SWEN 670 Spring 2022 Milestone-4_Dev-User-Guides_Spring-2022-v1.pdf",
+        "UsersGuideLink": "8f23b2ae-b71f-4dc0-8890-f1c149427423----SWEN 670 Spring 2022 Milestone-4_Dev-User-Guides_Spring-2022-v1.pdf",
+        "TestReport": "SWEN 670 Spring 2022 Milestone-4_Dev-Test-Reports_Spring-2022-v1.pdf",
+        "TestReportLink": "b150b410-3ae9-400e-aeb8-dfd434b1f16e----SWEN 670 Spring 2022 Milestone-4_Dev-Test-Reports_Spring-2022-v1.pdf"
+      }
+    ],
+    "IsSponsor": true,
+    "SponsorFirstName": "Robert",
+    "SponsorLastName": "Wilson",
+    "SponsorEmail": "rwilson@umgc.dev",
+    "SponsorPhone": "19104894873",
+    "Status": "Complete",
+    "Comments": {}
+  },
+  "efe23c93-45c0-44f5-907e-b658211643a8": {
+    "ProjectID": "efe23c93-45c0-44f5-907e-b658211643a8",
+    "VideoLink": "",
+    "ProjectTitle": "Flutter Android/iOS Deployment",
+    "ProjectDescription": "Deployment work for Flutter to Play/App Stores",
+    "SemesterTerm": "Spring",
+    "SemesterYear": "2022",
+    "Url": "",
+    "Github": "https://github.com/umgc/spring2022",
+    "FirstName": "Robert",
+    "LastName": "Wilson",
+    "Email": "rwilson@umgc.dev",
+    "Phone": "19104894873",
+    "Attachments": [
+      {
+        "File_ID": "90336e58-34b5-4867-a6ac-eb118322163f",
+        "Location": "90336e58-34b5-4867-a6ac-eb118322163f----DSO_DeploymentAndOperationsRunbook_Spring2022.docx",
+        "Name": "DSO_DeploymentAndOperationsRunbook_Spring2022.docx",
+        "Size": 0
+      },
+      {
+        "File_ID": "ca328fe7-bb62-4b9a-8d2a-315a6a8cb1f0",
+        "Location": "ca328fe7-bb62-4b9a-8d2a-315a6a8cb1f0----DSO_ProjectPlan_Spring22_v3.1.docx",
+        "Name": "DSO_ProjectPlan_Spring22_v3.1.docx",
+        "Size": 0
+      },
+      {
+        "File_ID": "ee047617-9fac-427b-9ceb-345c08cee196",
+        "Location": "ee047617-9fac-427b-9ceb-345c08cee196----DSO_SRS_V1.docx",
+        "Name": "DSO_SRS_V1.docx",
+        "Size": 0
+      },
+      {
+        "File_ID": "aa6aafa6-df5f-43b5-bf44-b4a12092d02b",
+        "Location": "aa6aafa6-df5f-43b5-bf44-b4a12092d02b----DSO_TechnicalDesignDocument_Spring22_v1.1.docx",
+        "Name": "DSO_TechnicalDesignDocument_Spring22_v1.1.docx",
+        "Size": 0
+      },
+      {
+        "File_ID": "63a35afe-eeb3-4602-9652-0c81093953b2",
+        "Location": "63a35afe-eeb3-4602-9652-0c81093953b2----DSO_TestReport_Spring22_v1.0.docx",
+        "Name": "DSO_TestReport_Spring22_v1.0.docx",
+        "Size": 0
+      },
+      {
+        "File_ID": "7562a0d4-9808-4997-839c-04b8922b3fbc",
+        "Location": "7562a0d4-9808-4997-839c-04b8922b3fbc----DSO_UserGuide.docx",
+        "Name": "DSO_UserGuide.docx",
+        "Size": 0
+      }
+    ],
+    "CompletedDocuments": [
+      {
+        "WebsiteLink": "",
+        "VideoLink": "",
+        "GitHubLink": "",
+        "TeamName": "DSO",
+        "ProjectPlan": "DSO_ProjectPlan_Spring22_v3.1.docx",
+        "ProjectPlanLink": "ca328fe7-bb62-4b9a-8d2a-315a6a8cb1f0----DSO_ProjectPlan_Spring22_v3.1.docx",
+        "SRS": "DSO_SRS_V1.docx",
+        "SRSLink": "ee047617-9fac-427b-9ceb-345c08cee196----DSO_SRS_V1.docx",
+        "TDD": "DSO_TechnicalDesignDocument_Spring22_v1.1.docx",
+        "TDDLink": "aa6aafa6-df5f-43b5-bf44-b4a12092d02b----DSO_TechnicalDesignDocument_Spring22_v1.1.docx",
+        "Runbook": "DSO_DeploymentAndOperationsRunbook_Spring2022.docx",
+        "RunbookLink": "90336e58-34b5-4867-a6ac-eb118322163f----DSO_DeploymentAndOperationsRunbook_Spring2022.docx",
+        "ProgrammersGuide": "DSO_UserGuide.docx",
+        "ProgrammersGuideLink": "7562a0d4-9808-4997-839c-04b8922b3fbc----DSO_UserGuide.docx",
+        "UsersGuide": "DSO_UserGuide.docx",
+        "UsersGuideLink": "7562a0d4-9808-4997-839c-04b8922b3fbc----DSO_UserGuide.docx",
+        "TestReport": "DSO_TestReport_Spring22_v1.0.docx",
+        "TestReportLink": "63a35afe-eeb3-4602-9652-0c81093953b2----DSO_TestReport_Spring22_v1.0.docx"
+      }
+    ],
+    "IsSponsor": true,
+    "SponsorFirstName": "Robert",
+    "SponsorLastName": "Wilson",
+    "SponsorEmail": "rwilson@umgc.dev",
+    "SponsorPhone": "19104894873",
+    "Status": "Complete",
+    "Comments": {}
+  },
+  "d30172fe-e89a-4cea-beca-e6f2b29c6610": {
+    "ProjectID": "d30172fe-e89a-4cea-beca-e6f2b29c6610",
+    "VideoLink": "",
+    "ProjectTitle": "Spring 2024",
+    "ProjectDescription": "1. A rewrite of our website University of Maryland Global Campus(UMGC) SWEN 670 Capstone Project Management System - CaPPMS \n2. Using Large Language Models (LLM) in education\n3. Computer vision or artificial intelligence project\n",
+    "SemesterTerm": "",
+    "SemesterYear": "",
+    "Url": "https://umgc-cappms.azurewebsites.net/",
+    "Github": "https://github.com/umgc/DevSecOpsPlayground/tree/developer/CaPPMS",
+    "FirstName": "Robert",
+    "LastName": "Wilson",
+    "Email": "rwilson@umgc.dev",
+    "Phone": "555-555-5555",
+    "Attachments": [],
+    "CompletedDocuments": [],
+    "IsSponsor": true,
+    "SponsorFirstName": "Robert",
+    "SponsorLastName": "Wilson",
+    "SponsorEmail": "rwilson@umgc.dev",
+    "SponsorPhone": "555-555-5555",
+    "Status": "New",
+    "Comments": {
+      "44575d0c-1dd3-4aa0-a44a-444132867f4e": {
+        "CommentId": "44575d0c-1dd3-4aa0-a44a-444132867f4e",
+        "Comments": "3 teams for this class were split by 9 into the groups to cover the above.",
+        "UserEmail": "rwilson@umgc.dev",
+        "Contact": {
+          "ContactID": "a4a00cae-f0f1-43b5-ad48-8e641f7f3e87",
+          "FirstName": "",
+          "LastName": "",
+          "Email": "",
+          "Phone": ""
+        },
+        "UpdateDateTime": "2024-01-11T14:49:21.6745051+00:00",
+        "ProjectID": "d30172fe-e89a-4cea-beca-e6f2b29c6610"
+      }
+    }
+  },
+  "fec2ea66-ec65-4468-9c81-2f33c470230e": {
+    "ProjectID": "fec2ea66-ec65-4468-9c81-2f33c470230e",
+    "TeamMembers": "test",
+    "VideoLink": "https://www.youtube.com/watch?v=ZCp-iVK1704",
+    "ProjectTitle": "ADA Compatible USPS Digest",
+    "ProjectDescription": "The current digest email to customers lack ADA compatible feature that enable blind users for example to get a good sense of what to expect in their email. There should be a solution that can determine based on a picture where and in what context the mail, mailers, and other items from the digest are.",
+    "SemesterTerm": "Summer",
+    "SemesterYear": "2022",
+    "Url": "",
+    "Github": "https://github.com/umgc/summer2022",
+    "FirstName": "Bob",
+    "LastName": "Dixon",
+    "Email": "livingstonedc@yahoo.com",
+    "Phone": "555-555-5555",
+    "Attachments": [
+      {
+        "File_ID": "d809d25a-9b76-427c-9920-71560dac115b",
+        "Location": "d809d25a-9b76-427c-9920-71560dac115b----Team-A-ProjectPlan-Revised.docx",
+        "Name": "Team-A-ProjectPlan-Revised.docx",
+        "Size": 0
+      },
+      {
+        "File_ID": "250d84ad-e84c-46fa-af12-8da746a6c472",
+        "Location": "250d84ad-e84c-46fa-af12-8da746a6c472----TeamArch-Deployment-and-Operations-Guide.docx",
+        "Name": "TeamArch-Deployment-and-Operations-Guide.docx",
+        "Size": 0
+      },
+      {
+        "File_ID": "97f45131-49dd-4720-be9e-6938a69b9ad9",
+        "Location": "97f45131-49dd-4720-be9e-6938a69b9ad9----TeamArch-Programmer-Guide.docx",
+        "Name": "TeamArch-Programmer-Guide.docx",
+        "Size": 0
+      },
+      {
+        "File_ID": "7e03a8a6-9220-4d71-9a62-ecadc33afc35",
+        "Location": "7e03a8a6-9220-4d71-9a62-ecadc33afc35----TeamArch-Technical-Design-Document.docx",
+        "Name": "TeamArch-Technical-Design-Document.docx",
+        "Size": 0
+      },
+      {
+        "File_ID": "658d3133-14c3-4f37-a975-d95bbe18f027",
+        "Location": "658d3133-14c3-4f37-a975-d95bbe18f027----TeamArch-Test-Report.docx",
+        "Name": "TeamArch-Test-Report.docx",
+        "Size": 0
+      },
+      {
+        "File_ID": "399c6baf-c09e-44e0-a514-6e8f148d7252",
+        "Location": "399c6baf-c09e-44e0-a514-6e8f148d7252----TeamArch-User-Guide.docx",
+        "Name": "TeamArch-User-Guide.docx",
+        "Size": 0
+      },
+      {
+        "File_ID": "48433bae-ed2e-4593-9285-80715ad69039",
+        "Location": "48433bae-ed2e-4593-9285-80715ad69039----Team-A-SoftwareRequirementSpecification.docx",
+        "Name": "Team-A-SoftwareRequirementSpecification.docx",
+        "Size": 0
+      }
+    ],
+    "CompletedDocuments": [
+      {
+        "WebsiteLink": "",
+        "VideoLink": "https://youtu.be/ZCp-iVK1704",
+        "GitHubLink": "https://github.com/umgc/summer2022",
+        "TeamName": "Arch",
+        "ProjectPlan": "Team-A-ProjectPlan-Revised.docx",
+        "ProjectPlanLink": "d809d25a-9b76-427c-9920-71560dac115b----Team-A-ProjectPlan-Revised.docx",
+        "SRS": "Team-A-SoftwareRequirementSpecification.docx",
+        "SRSLink": "48433bae-ed2e-4593-9285-80715ad69039----Team-A-SoftwareRequirementSpecification.docx",
+        "TDD": "TeamArch-Technical-Design-Document.docx",
+        "TDDLink": "7e03a8a6-9220-4d71-9a62-ecadc33afc35----TeamArch-Technical-Design-Document.docx",
+        "Runbook": "TeamArch-Deployment-and-Operations-Guide.docx",
+        "RunbookLink": "250d84ad-e84c-46fa-af12-8da746a6c472----TeamArch-Deployment-and-Operations-Guide.docx",
+        "ProgrammersGuide": "TeamArch-Programmer-Guide.docx",
+        "ProgrammersGuideLink": "97f45131-49dd-4720-be9e-6938a69b9ad9----TeamArch-Programmer-Guide.docx",
+        "UsersGuide": "TeamArch-User-Guide.docx",
+        "UsersGuideLink": "399c6baf-c09e-44e0-a514-6e8f148d7252----TeamArch-User-Guide.docx",
+        "TestReport": "TeamArch-Test-Report.docx",
+        "TestReportLink": "658d3133-14c3-4f37-a975-d95bbe18f027----TeamArch-Test-Report.docx"
+      }
+    ],
+    "IsSponsor": true,
+    "SponsorFirstName": "Bob",
+    "SponsorLastName": "Dixon",
+    "SponsorEmail": "livingstonedc@yahoo.com",
+    "SponsorPhone": "555-555-5555",
+    "Status": "Complete",
+    "Comments": {}
+  },
+  "6b05268e-6525-4dc4-8caf-de421e0d8f0b": {
+    "ProjectID": "6b05268e-6525-4dc4-8caf-de421e0d8f0b",
+    "VideoLink": "",
+    "ProjectTitle": "Advance Development Factory V1",
+    "ProjectDescription": "As part of a diverse ecosystem of applications and technologies within software development, a need has been identified that standardizes the building, testing, and deployment of an organization's application suite. This document outlines the Advance Development Factory design and requirements specification that sets the standard for developers  to build, test, and deployment of a diverse set of applications under a common framework that mitigates clients operating environment dependencies.",
+    "SemesterTerm": "Fall",
+    "SemesterYear": "2020",
+    "Url": "",
+    "Github": "",
+    "FirstName": "Mir",
+    "LastName": "Assadullah",
+    "Email": "Mir.Assadullah@faculty.umgc.edu",
+    "Phone": "800-888-8682",
+    "Attachments": [
+      {
+        "File_ID": "f1ad241b-a7e9-43d5-a4d9-3303ae5fc53a",
+        "Location": "f1ad241b-a7e9-43d5-a4d9-3303ae5fc53a----ADF-SRS.docx",
+        "Name": "ADF-SRS.docx",
+        "Size": 553980
+      },
+      {
+        "File_ID": "cfba0210-bb34-48e9-9ca9-0269d5a46eff",
+        "Location": "cfba0210-bb34-48e9-9ca9-0269d5a46eff----Azure_Pipeline_TDD.docx",
+        "Name": "Azure_Pipeline_TDD.docx",
+        "Size": 122334
+      },
+      {
+        "File_ID": "1ef1e34c-f41f-4ab5-b156-01f6d7b15251",
+        "Location": "1ef1e34c-f41f-4ab5-b156-01f6d7b15251----DevSecOps Plan.docx",
+        "Name": "DevSecOps Plan.docx",
+        "Size": 449203
+      },
+      {
+        "File_ID": "9682ee64-22d9-4505-804a-65e06fa36e69",
+        "Location": "9682ee64-22d9-4505-804a-65e06fa36e69----Project_Plan.docx",
+        "Name": "Project_Plan.docx",
+        "Size": 496036
+      },
+      {
+        "File_ID": "56f3a263-b82d-4a68-a5a9-6509e4ab21a0",
+        "Location": "56f3a263-b82d-4a68-a5a9-6509e4ab21a0----UMGC Capstone Guidlines.docx",
+        "Name": "UMGC Capstone Guidlines.docx",
+        "Size": 1593655
+      },
+      {
+        "File_ID": "e8d9f492-8353-4da6-bd03-58da828764bc",
+        "Location": "e8d9f492-8353-4da6-bd03-58da828764bc----UMGC DevSecOps Programmers Guide.docx",
+        "Name": "UMGC DevSecOps Programmers Guide.docx",
+        "Size": 1786859
+      },
+      {
+        "File_ID": "1c03a7f7-6966-43aa-8601-ee7e35ecd962",
+        "Location": "1c03a7f7-6966-43aa-8601-ee7e35ecd962----UMGC_Capstone_DevSecOps_Runbook.docx",
+        "Name": "UMGC_Capstone_DevSecOps_Runbook.docx",
+        "Size": 867219
+      }
+    ],
+    "CompletedDocuments": [
+      {
+        "WebsiteLink": "",
+        "VideoLink": "",
+        "GitHubLink": "",
+        "TeamName": "DevSecOps",
+        "ProjectPlan": "Project_Plan.docx",
+        "ProjectPlanLink": "9682ee64-22d9-4505-804a-65e06fa36e69----Project_Plan.docx",
+        "SRS": "ADF-SRS.docx",
+        "SRSLink": "f1ad241b-a7e9-43d5-a4d9-3303ae5fc53a----ADF-SRS.docx",
+        "TDD": "Azure_Pipeline_TDD.docx",
+        "TDDLink": "cfba0210-bb34-48e9-9ca9-0269d5a46eff----Azure_Pipeline_TDD.docx",
+        "Runbook": "UMGC_Capstone_DevSecOps_Runbook.docx",
+        "RunbookLink": "1c03a7f7-6966-43aa-8601-ee7e35ecd962----UMGC_Capstone_DevSecOps_Runbook.docx",
+        "ProgrammersGuide": "UMGC DevSecOps Programmers Guide.docx",
+        "ProgrammersGuideLink": "e8d9f492-8353-4da6-bd03-58da828764bc----UMGC DevSecOps Programmers Guide.docx",
+        "UsersGuide": "DevSecOps Plan.docx",
+        "UsersGuideLink": "1ef1e34c-f41f-4ab5-b156-01f6d7b15251----DevSecOps Plan.docx",
+        "TestReport": "UMGC Capstone Guidlines.docx",
+        "TestReportLink": "56f3a263-b82d-4a68-a5a9-6509e4ab21a0----UMGC Capstone Guidlines.docx"
+      }
+    ],
+    "IsSponsor": true,
+    "SponsorFirstName": "Mir",
+    "SponsorLastName": "Assadullah",
+    "SponsorEmail": "Mir.Assadullah@faculty.umgc.edu",
+    "SponsorPhone": "800-888-8682",
+    "Status": "Complete",
+    "Comments": {
+      "05b63652-ad50-4a5a-8f75-5043c33df7b0": {
+        "CommentId": "05b63652-ad50-4a5a-8f75-5043c33df7b0",
+        "Comments": "This is a test comment for the user guide!",
+        "UserEmail": "rebeccajohnson@gmail.com",
+        "Contact": {
+          "ContactID": "d5cfbed5-48c5-45ff-9aec-24037c96bb97",
+          "FirstName": "",
+          "LastName": "",
+          "Email": "",
+          "Phone": ""
+        },
+        "UpdateDateTime": "2021-10-18T03:31:54.1973532+00:00",
+        "ProjectID": "6b05268e-6525-4dc4-8caf-de421e0d8f0b"
+      },
+      "ef11f619-923a-4fb5-8250-9e3d7ac2742c": {
+        "CommentId": "ef11f619-923a-4fb5-8250-9e3d7ac2742c",
+        "Comments": "I'm a guest user",
+        "UserEmail": "unknown@email.com",
+        "Contact": {
+          "ContactID": "74178fca-fb2e-4f1f-bb0e-52031eaa071f",
+          "FirstName": "",
+          "LastName": "",
+          "Email": "",
+          "Phone": ""
+        },
+        "UpdateDateTime": "2021-10-19T02:48:12.5973246+00:00",
+        "ProjectID": "6b05268e-6525-4dc4-8caf-de421e0d8f0b"
+      },
+      "d7b2d2c7-af79-48b6-96f4-23db2fa1e83a": {
+        "CommentId": "d7b2d2c7-af79-48b6-96f4-23db2fa1e83a",
+        "Comments": "Seems good",
+        "UserEmail": "msetiawan@student.umgc.edu",
+        "Contact": {
+          "ContactID": "a0e44004-af05-468d-8f24-2296ee6fa06c",
+          "FirstName": "",
+          "LastName": "",
+          "Email": "",
+          "Phone": ""
+        },
+        "UpdateDateTime": "2021-10-19T02:47:46.4795577+00:00",
+        "ProjectID": "6b05268e-6525-4dc4-8caf-de421e0d8f0b"
+      }
+    }
+  },
+  "71c700de-e711-4cdb-9fd2-0ec8225733b1": {
+    "ProjectID": "71c700de-e711-4cdb-9fd2-0ec8225733b1",
+    "VideoLink": "",
+    "ProjectTitle": "City Chatbot",
+    "ProjectDescription": "This project’s goal is to begin developing a permit zoning assistance application for the city of Pasadena’s zoning and planning website. The application provides site visitors the ability to locate their permits and regulations that are relevant to their specific address by interacting with a chatbot, avoiding calling a customer service representative or searching the website. The application facilitates the collection of the residents’ addresses, the comparison of those addresses to a city provided map containing permitting zones, and then providing the applicable permitting information they are looking for based off of an established permit and regulations database. The application shall provide permit and zoning information and assistance through chatbot functionality on through the city of municipality website. The application assists users by directly providing permit and zoning information based on user input. The application displays links and referential information. The application is not intended to provide all details and information regarding permits and zoning.  ",
+    "SemesterTerm": "Fall",
+    "SemesterYear": "2020",
+    "Url": "",
+    "Github": "https://github.com/umgc/umgc.chatbot",
+    "FirstName": "Mir",
+    "LastName": "Assadullah",
+    "Email": "Mir.Assadullah@faculty.umgc.edu",
+    "Phone": "800-888-8682",
+    "Attachments": [
+      {
+        "File_ID": "f13ef5e3-7830-4f3e-9c6b-fffcb0d7be66",
+        "Location": "f13ef5e3-7830-4f3e-9c6b-fffcb0d7be66----SWEN 670_Chatbot Deployment Guide_DRAFT Final Submission.docx",
+        "Name": "SWEN 670_Chatbot Deployment Guide_DRAFT Final Submission.docx",
+        "Size": 325875
+      },
+      {
+        "File_ID": "f32c86e5-91ad-48fb-81f4-c2a7cd2c0e6a",
+        "Location": "f32c86e5-91ad-48fb-81f4-c2a7cd2c0e6a----SWEN 670_Chatbot Programmers Guide_DRAFT Final Submission.docx",
+        "Name": "SWEN 670_Chatbot Programmers Guide_DRAFT Final Submission.docx",
+        "Size": 1507565
+      },
+      {
+        "File_ID": "356d1114-e097-4ea0-9973-28343f714f96",
+        "Location": "356d1114-e097-4ea0-9973-28343f714f96----SWEN 670_Chatbot Project Plan_DRAFT Final Submission.docx",
+        "Name": "SWEN 670_Chatbot Project Plan_DRAFT Final Submission.docx",
+        "Size": 1005151
+      },
+      {
+        "File_ID": "020943c6-034d-488b-9d99-b1c7cd802f59",
+        "Location": "020943c6-034d-488b-9d99-b1c7cd802f59----SWEN 670_Chatbot SRS_DRAFT Final submission.docx",
+        "Name": "SWEN 670_Chatbot SRS_DRAFT Final submission.docx",
+        "Size": 1054181
+      },
+      {
+        "File_ID": "cb6cf7e8-544d-4a06-bc76-802b6121469a",
+        "Location": "cb6cf7e8-544d-4a06-bc76-802b6121469a----SWEN 670_Chatbot TDD_DRAFT Final Submission.docx",
+        "Name": "SWEN 670_Chatbot TDD_DRAFT Final Submission.docx",
+        "Size": 405292
+      },
+      {
+        "File_ID": "dc6d5a27-ee92-47ee-924e-88c7d010f647",
+        "Location": "dc6d5a27-ee92-47ee-924e-88c7d010f647----SWEN 670_Chatbot TestReport_DRAFT Final Submission.docx",
+        "Name": "SWEN 670_Chatbot TestReport_DRAFT Final Submission.docx",
+        "Size": 816307
+      },
+      {
+        "File_ID": "9d307724-7f9e-4436-a163-3ad9dd266bb7",
+        "Location": "9d307724-7f9e-4436-a163-3ad9dd266bb7----SWEN 670_Chatbot_ManagerialUserGuide_DRAFT Final Submission.docx",
+        "Name": "SWEN 670_Chatbot_ManagerialUserGuide_DRAFT Final Submission.docx",
+        "Size": 2248840
+      }
+    ],
+    "CompletedDocuments": [
+      {
+        "WebsiteLink": "",
+        "VideoLink": "",
+        "GitHubLink": "https://github.com/umgc/umgc.chatbot",
+        "TeamName": "City Chatbot",
+        "ProjectPlan": "SWEN 670_Chatbot Project Plan_DRAFT Final Submission.docx",
+        "ProjectPlanLink": "356d1114-e097-4ea0-9973-28343f714f96----SWEN 670_Chatbot Project Plan_DRAFT Final Submission.docx",
+        "SRS": "SWEN 670_Chatbot SRS_DRAFT Final submission.docx",
+        "SRSLink": "020943c6-034d-488b-9d99-b1c7cd802f59----SWEN 670_Chatbot SRS_DRAFT Final submission.docx",
+        "TDD": "SWEN 670_Chatbot TDD_DRAFT Final Submission.docx",
+        "TDDLink": "cb6cf7e8-544d-4a06-bc76-802b6121469a----SWEN 670_Chatbot TDD_DRAFT Final Submission.docx",
+        "Runbook": "SWEN 670_Chatbot Deployment Guide_DRAFT Final Submission.docx",
+        "RunbookLink": "f13ef5e3-7830-4f3e-9c6b-fffcb0d7be66----SWEN 670_Chatbot Deployment Guide_DRAFT Final Submission.docx",
+        "ProgrammersGuide": "SWEN 670_Chatbot Programmers Guide_DRAFT Final Submission.docx",
+        "ProgrammersGuideLink": "f32c86e5-91ad-48fb-81f4-c2a7cd2c0e6a----SWEN 670_Chatbot Programmers Guide_DRAFT Final Submission.docx",
+        "UsersGuide": "SWEN 670_Chatbot_ManagerialUserGuide_DRAFT Final Submission.docx",
+        "UsersGuideLink": "9d307724-7f9e-4436-a163-3ad9dd266bb7----SWEN 670_Chatbot_ManagerialUserGuide_DRAFT Final Submission.docx",
+        "TestReport": "SWEN 670_Chatbot TestReport_DRAFT Final Submission.docx",
+        "TestReportLink": "dc6d5a27-ee92-47ee-924e-88c7d010f647----SWEN 670_Chatbot TestReport_DRAFT Final Submission.docx"
+      }
+    ],
+    "IsSponsor": true,
+    "SponsorFirstName": "Mir",
+    "SponsorLastName": "Assadullah",
+    "SponsorEmail": "Mir.Assadullah@faculty.umgc.edu",
+    "SponsorPhone": "800-888-8682",
+    "Status": "Complete",
+    "Comments": {}
+  },
+  "bd559ad2-0275-4e23-a59f-5feada62e841": {
+    "ProjectID": "bd559ad2-0275-4e23-a59f-5feada62e841",
+    "VideoLink": "",
+    "ProjectTitle": "Memory Magic",
+    "ProjectDescription": "About 14 million people in the United States have a disability that impairs their short-term memory. Short-term memory (STM) indicates different systems of memory involved in the retention of pieces of data for a relatively short time (usually up to 30 seconds). The causes of the disability range from aging to dementia to Alzheimer’s. According to the U.S. Centers for Disease Control and Prevention, noticing a decline in your mental abilities (\"cognitive decline\") is one of the earliest signs of impending Alzheimer's disease or dementia. There is a need to provide a solution to adults that assists them with the short-term memory function. To meet this need, United Global Masters Coders proposes the development of a mobile application that recognizes the speech of the user as they engage in a conversation and help them live a fuller life despite their disability. The purpose of this project is to develop the Memory Magic App for people with short-term memory disabilities. Memory Magic expands on previous capstone work. There are several ways to develop this app and this effort is to determine which way would be the most optimal. The Memory Magic App meets the business need by providing a solution for a critical and underserved market segment to have a solution with them that meets their need for memory assistance.",
+    "SemesterTerm": "Fall",
+    "SemesterYear": "2021",
+    "Url": "",
+    "Github": "",
+    "FirstName": "Mir",
+    "LastName": "Assadullah",
+    "Email": "Mir.Assadullah@faculty.umgc.edu",
+    "Phone": "8556558682",
+    "Attachments": [
+      {
+        "File_ID": "c0c9c80a-9efb-4d08-acd3-c6fbf4954721",
+        "Location": "c0c9c80a-9efb-4d08-acd3-c6fbf4954721----Memory_magic_Deployment&Operations.docx",
+        "Name": "Memory_magic_Deployment&Operations.docx",
+        "Size": 825313
+      },
+      {
+        "File_ID": "00a27e2a-82d0-4125-a6bd-bf07a6c0d8e9",
+        "Location": "00a27e2a-82d0-4125-a6bd-bf07a6c0d8e9----Memory_magic_ProgrammersGuide.docx",
+        "Name": "Memory_magic_ProgrammersGuide.docx",
+        "Size": 634866
+      },
+      {
+        "File_ID": "ef970407-6be6-4abd-929a-ae7d7c378bcd",
+        "Location": "ef970407-6be6-4abd-929a-ae7d7c378bcd----Memory_magic_project_plan_final.docx",
+        "Name": "Memory_magic_project_plan_final.docx",
+        "Size": 1183192
+      },
+      {
+        "File_ID": "91fb42f9-93d8-4435-98a0-e235d47a8229",
+        "Location": "91fb42f9-93d8-4435-98a0-e235d47a8229----Milestone2_ProjectPlan.docx",
+        "Name": "Milestone2_ProjectPlan.docx",
+        "Size": 1206407
+      },
+      {
+        "File_ID": "51a3385f-7f41-4eaf-8ec7-33f6c6ab9058",
+        "Location": "51a3385f-7f41-4eaf-8ec7-33f6c6ab9058----Milestone4_TestReport.docx",
+        "Name": "Milestone4_TestReport.docx",
+        "Size": 789093
+      },
+      {
+        "File_ID": "a5a98096-945b-455f-863c-13efd72f563a",
+        "Location": "a5a98096-945b-455f-863c-13efd72f563a----Milestone4_UserGuide.docx",
+        "Name": "Milestone4_UserGuide.docx",
+        "Size": 4609695
+      },
+      {
+        "File_ID": "844a18d1-272e-45c4-b53f-112264dc6492",
+        "Location": "844a18d1-272e-45c4-b53f-112264dc6492----SRS Memory Magic app_revision_1.2.docx",
+        "Name": "SRS Memory Magic app_revision_1.2.docx",
+        "Size": 4854337
+      },
+      {
+        "File_ID": "9cb49d52-52a9-41d0-97f4-6196237eec63",
+        "Location": "9cb49d52-52a9-41d0-97f4-6196237eec63----Technical Design Document_version_1.1.docx",
+        "Name": "Technical Design Document_version_1.1.docx",
+        "Size": 3476652
+      }
+    ],
+    "CompletedDocuments": [
+      {
+        "WebsiteLink": "",
+        "VideoLink": "",
+        "GitHubLink": "",
+        "TeamName": "Mesmerize",
+        "ProjectPlan": "Memory_magic_project_plan_final.docx",
+        "ProjectPlanLink": "ef970407-6be6-4abd-929a-ae7d7c378bcd----Memory_magic_project_plan_final.docx",
+        "SRS": "SRS Memory Magic app_revision_1.2.docx",
+        "SRSLink": "844a18d1-272e-45c4-b53f-112264dc6492----SRS Memory Magic app_revision_1.2.docx",
+        "TDD": "Technical Design Document_version_1.1.docx",
+        "TDDLink": "9cb49d52-52a9-41d0-97f4-6196237eec63----Technical Design Document_version_1.1.docx",
+        "Runbook": "Memory_magic_Deployment&Operations.docx",
+        "RunbookLink": "c0c9c80a-9efb-4d08-acd3-c6fbf4954721----Memory_magic_Deployment&Operations.docx",
+        "ProgrammersGuide": "Memory_magic_ProgrammersGuide.docx",
+        "ProgrammersGuideLink": "00a27e2a-82d0-4125-a6bd-bf07a6c0d8e9----Memory_magic_ProgrammersGuide.docx",
+        "UsersGuide": "Milestone4_UserGuide.docx",
+        "UsersGuideLink": "a5a98096-945b-455f-863c-13efd72f563a----Milestone4_UserGuide.docx",
+        "TestReport": "Milestone4_TestReport.docx",
+        "TestReportLink": "51a3385f-7f41-4eaf-8ec7-33f6c6ab9058----Milestone4_TestReport.docx"
+      }
+    ],
+    "IsSponsor": true,
+    "SponsorFirstName": "Mir",
+    "SponsorLastName": "Assadullah",
+    "SponsorEmail": "Mir.Assadullah@faculty.umgc.edu",
+    "SponsorPhone": "8556558682",
+    "Status": "Complete",
+    "Comments": {}
+  },
+  "441ae4a7-ff84-4488-a49d-ed00370408e2": {
+    "ProjectID": "441ae4a7-ff84-4488-a49d-ed00370408e2",
+    "VideoLink": "",
+    "ProjectTitle": "Short Term Memory Loss Summer 2023",
+    "ProjectDescription": "A number of prior projects try to help people suffering from Short-Term Memory Loss (STML) by listening to a conversation and then retrieving information from that conversation. Please view the associated videos from the link above. Some of them relied upon \"trigger\" phrases to start taking a note or to stop. This semester we are going to get rid of the trigger phrases, transcribe the conversation, and when asked a question about the conversation, send the transcribed conversation to ChatGPT through its API, and request it to answer the question based upon the transcribed conversation, before playing that response. I want you all to understand the nuances of ChatGPT and then pose the question in a way that best serves the needs of the user. I want you to clearly document all the different approaches you took to question ChatGPT with its responses and why was your choice the best choice among all.",
+    "SemesterTerm": "Summer",
+    "SemesterYear": "2023",
+    "Url": "",
+    "Github": "",
+    "FirstName": "Mir",
+    "LastName": "Assadullah",
+    "Email": "Mir.Assadullah@faculty.umgc.edu",
+    "Phone": "8556558682",
+    "Attachments": [
+      {
+        "File_ID": "b9ab8528-c836-4dbd-af13-e405a8ee4cfb",
+        "Location": "b9ab8528-c836-4dbd-af13-e405a8ee4cfb----AlphaSoft Deployment and Operations Guide v2.pdf",
+        "Name": "AlphaSoft Deployment and Operations Guide v2.pdf",
+        "Size": 0
+      },
+      {
+        "File_ID": "579ee68a-8bbd-4d8e-be2a-1f1dc39367d8",
+        "Location": "579ee68a-8bbd-4d8e-be2a-1f1dc39367d8----AlphaSoft Programmer Guide v2.pdf",
+        "Name": "AlphaSoft Programmer Guide v2.pdf",
+        "Size": 0
+      },
+      {
+        "File_ID": "10364d96-c438-493a-aa3e-903fdc07fad3",
+        "Location": "10364d96-c438-493a-aa3e-903fdc07fad3----AlphaSoft Project Plan v4.pdf",
+        "Name": "AlphaSoft Project Plan v4.pdf",
+        "Size": 0
+      },
+      {
+        "File_ID": "ef264fa3-74e3-4027-a415-85eec629d3f3",
+        "Location": "ef264fa3-74e3-4027-a415-85eec629d3f3----AlphaSoft Software Requirements Specification v4.pdf",
+        "Name": "AlphaSoft Software Requirements Specification v4.pdf",
+        "Size": 0
+      },
+      {
+        "File_ID": "78aa7095-b83d-4f25-95a5-d5fdbe26f492",
+        "Location": "78aa7095-b83d-4f25-95a5-d5fdbe26f492----AlphaSoft Software Test Plan v3.pdf",
+        "Name": "AlphaSoft Software Test Plan v3.pdf",
+        "Size": 0
+      },
+      {
+        "File_ID": "4ff6816d-d686-4a0e-b8c1-3f61e3d3bd46",
+        "Location": "4ff6816d-d686-4a0e-b8c1-3f61e3d3bd46----AlphaSoft Software Test Report v1.pdf",
+        "Name": "AlphaSoft Software Test Report v1.pdf",
+        "Size": 0
+      },
+      {
+        "File_ID": "ca035d14-95d1-4d4d-a8f8-6cceeffefa06",
+        "Location": "ca035d14-95d1-4d4d-a8f8-6cceeffefa06----AlphaSoft Technical Design Document v3.pdf",
+        "Name": "AlphaSoft Technical Design Document v3.pdf",
+        "Size": 0
+      },
+      {
+        "File_ID": "8618a0dd-9815-4ee9-88c5-aedbe29ca104",
+        "Location": "8618a0dd-9815-4ee9-88c5-aedbe29ca104----AlphaSoft User Guide v1.pdf",
+        "Name": "AlphaSoft User Guide v1.pdf",
+        "Size": 0
+      },
+      {
+        "File_ID": "91b7618e-62f2-4479-a057-32768e2d8539",
+        "Location": "91b7618e-62f2-4479-a057-32768e2d8539----Team B Deployment and Ops Guide.pdf",
+        "Name": "Team B Deployment and Ops Guide.pdf",
+        "Size": 0
+      },
+      {
+        "File_ID": "6bdfd26e-4ad5-45fe-b5df-540283deb55a",
+        "Location": "6bdfd26e-4ad5-45fe-b5df-540283deb55a----Team B Programmers Guide.pdf",
+        "Name": "Team B Programmers Guide.pdf",
+        "Size": 0
+      },
+      {
+        "File_ID": "f258518d-d8d5-4b7a-ae8a-524678c8d70c",
+        "Location": "f258518d-d8d5-4b7a-ae8a-524678c8d70c----Team B Project Plan.pdf",
+        "Name": "Team B Project Plan.pdf",
+        "Size": 0
+      },
+      {
+        "File_ID": "9752b3c7-9b52-4045-b648-3479c625c651",
+        "Location": "9752b3c7-9b52-4045-b648-3479c625c651----Team B SRS.pdf",
+        "Name": "Team B SRS.pdf",
+        "Size": 0
+      },
+      {
+        "File_ID": "dbb2e3ab-56c7-406e-bf82-f62889e43436",
+        "Location": "dbb2e3ab-56c7-406e-bf82-f62889e43436----Team B Technical Design Document.pdf",
+        "Name": "Team B Technical Design Document.pdf",
+        "Size": 0
+      },
+      {
+        "File_ID": "bc29ea2e-9ff7-496a-b3ec-de82db0035db",
+        "Location": "bc29ea2e-9ff7-496a-b3ec-de82db0035db----Team B Test Report.pdf",
+        "Name": "Team B Test Report.pdf",
+        "Size": 0
+      },
+      {
+        "File_ID": "212f68f4-eab9-464d-8d06-d92733842eb3",
+        "Location": "212f68f4-eab9-464d-8d06-d92733842eb3----Team B User Guide.pdf",
+        "Name": "Team B User Guide.pdf",
+        "Size": 0
+      }
+    ],
+    "CompletedDocuments": [
+      {
+        "WebsiteLink": "",
+        "VideoLink": "https://youtu.be/Kj8uj7J42JI",
+        "GitHubLink": "https://github.com/umgc/summer2023/tree/development/talker-mobile-app",
+        "TeamName": "Team A",
+        "ProjectPlan": "AlphaSoft Project Plan v4.pdf",
+        "ProjectPlanLink": "10364d96-c438-493a-aa3e-903fdc07fad3----AlphaSoft Project Plan v4.pdf",
+        "SRS": "AlphaSoft Software Requirements Specification v4.pdf",
+        "SRSLink": "ef264fa3-74e3-4027-a415-85eec629d3f3----AlphaSoft Software Requirements Specification v4.pdf",
+        "TDD": "AlphaSoft Technical Design Document v3.pdf",
+        "TDDLink": "ca035d14-95d1-4d4d-a8f8-6cceeffefa06----AlphaSoft Technical Design Document v3.pdf",
+        "Runbook": "AlphaSoft Deployment and Operations Guide v2.pdf",
+        "RunbookLink": "b9ab8528-c836-4dbd-af13-e405a8ee4cfb----AlphaSoft Deployment and Operations Guide v2.pdf",
+        "ProgrammersGuide": "AlphaSoft Programmer Guide v2.pdf",
+        "ProgrammersGuideLink": "579ee68a-8bbd-4d8e-be2a-1f1dc39367d8----AlphaSoft Programmer Guide v2.pdf",
+        "UsersGuide": "AlphaSoft User Guide v1.pdf",
+        "UsersGuideLink": "8618a0dd-9815-4ee9-88c5-aedbe29ca104----AlphaSoft User Guide v1.pdf",
+        "TestReport": "AlphaSoft Software Test Report v1.pdf",
+        "TestReportLink": "4ff6816d-d686-4a0e-b8c1-3f61e3d3bd46----AlphaSoft Software Test Report v1.pdf"
+      },
+      {
+        "WebsiteLink": "",
+        "VideoLink": "https://youtu.be/YzJOdaIFXAs",
+        "GitHubLink": "https://github.com/umgc/summer2023/tree/development/backend_services",
+        "TeamName": "Team B",
+        "ProjectPlan": "Team B Project Plan.pdf",
+        "ProjectPlanLink": "f258518d-d8d5-4b7a-ae8a-524678c8d70c----Team B Project Plan.pdf",
+        "SRS": "Team B SRS.pdf",
+        "SRSLink": "9752b3c7-9b52-4045-b648-3479c625c651----Team B SRS.pdf",
+        "TDD": "Team B Technical Design Document.pdf",
+        "TDDLink": "dbb2e3ab-56c7-406e-bf82-f62889e43436----Team B Technical Design Document.pdf",
+        "Runbook": "Team B Deployment and Ops Guide.pdf",
+        "RunbookLink": "91b7618e-62f2-4479-a057-32768e2d8539----Team B Deployment and Ops Guide.pdf",
+        "ProgrammersGuide": "Team B Programmers Guide.pdf",
+        "ProgrammersGuideLink": "6bdfd26e-4ad5-45fe-b5df-540283deb55a----Team B Programmers Guide.pdf",
+        "UsersGuide": "Team B User Guide.pdf",
+        "UsersGuideLink": "212f68f4-eab9-464d-8d06-d92733842eb3----Team B User Guide.pdf",
+        "TestReport": "Team B Test Report.pdf",
+        "TestReportLink": "bc29ea2e-9ff7-496a-b3ec-de82db0035db----Team B Test Report.pdf"
+      }
+    ],
+    "IsSponsor": true,
+    "SponsorFirstName": "Mir",
+    "SponsorLastName": "Assadullah",
+    "SponsorEmail": "Mir.Assadullah@faculty.umgc.edu",
+    "SponsorPhone": "8556558682",
+    "Status": "Complete",
+    "Comments": {}
+  },
+  "052d7137-639a-4a1a-a0ec-689fb26c4b9b": {
+    "ProjectID": "052d7137-639a-4a1a-a0ec-689fb26c4b9b",
+    "TeamMembers": "test",
+    "VideoLink": "",
+    "ProjectTitle": "ADA Compatible USPS Digest v2",
+    "ProjectDescription": "The current digest email to customers lack ADA compatible feature that enable blind users for example to get a good sense of what to expect in their email. There should be a solution that can determine based on a picture where and in what context the mail, mailers, and other items from the digest are.",
+    "SemesterTerm": "Fall",
+    "SemesterYear": "2022",
+    "Url": "",
+    "Github": "",
+    "FirstName": "Bob",
+    "LastName": "Dixon",
+    "Email": "livingstonedc@yahoo.com",
+    "Phone": "555-555-5555",
+    "Attachments": [
+      {
+        "File_ID": "e6245258-a64e-4052-b970-7acaf0406a45",
+        "Location": "e6245258-a64e-4052-b970-7acaf0406a45----DepOps - Team A (v1.1) FINAL.docx",
+        "Name": "DepOps - Team A (v1.1) FINAL.docx",
+        "Size": 0
+      },
+      {
+        "File_ID": "8ef373b1-c2e7-4743-b807-b51b5a45e128",
+        "Location": "8ef373b1-c2e7-4743-b807-b51b5a45e128----PMP - Team A (v1.2) FINAL.docx",
+        "Name": "PMP - Team A (v1.2) FINAL.docx",
+        "Size": 0
+      },
+      {
+        "File_ID": "ed77f30c-e450-4250-9743-926616016c9d",
+        "Location": "ed77f30c-e450-4250-9743-926616016c9d----SRS - Team A (v1.2) FINAL.docx",
+        "Name": "SRS - Team A (v1.2) FINAL.docx",
+        "Size": 0
+      },
+      {
+        "File_ID": "45952629-e3f6-4a42-b17d-d56f28c22b72",
+        "Location": "45952629-e3f6-4a42-b17d-d56f28c22b72----STP - Team A (v1.1) FINAL.docx",
+        "Name": "STP - Team A (v1.1) FINAL.docx",
+        "Size": 0
+      },
+      {
+        "File_ID": "9d96ebb3-2f9e-4c5d-92a7-28a3646b7809",
+        "Location": "9d96ebb3-2f9e-4c5d-92a7-28a3646b7809----TDD - Team A (v1.1) FINAL.docx",
+        "Name": "TDD - Team A (v1.1) FINAL.docx",
+        "Size": 0
+      },
+      {
+        "File_ID": "793c78f6-2e85-43e1-94d1-fb9866be2278",
+        "Location": "793c78f6-2e85-43e1-94d1-fb9866be2278----TR - Team A (v1.0) FINAL.docx",
+        "Name": "TR - Team A (v1.0) FINAL.docx",
+        "Size": 0
+      },
+      {
+        "File_ID": "fe2c5c62-94c9-4f5d-a8b3-639ca46cf083",
+        "Location": "fe2c5c62-94c9-4f5d-a8b3-639ca46cf083----UG - Team A (v1.0) FINAL.docx",
+        "Name": "UG - Team A (v1.0) FINAL.docx",
+        "Size": 0
+      },
+      {
+        "File_ID": "9712552d-a2bd-44b2-9003-a05e5dab5574",
+        "Location": "9712552d-a2bd-44b2-9003-a05e5dab5574----PMP - Team B - MSA.docx",
+        "Name": "PMP - Team B - MSA.docx",
+        "Size": 0
+      },
+      {
+        "File_ID": "12f06673-301f-4220-8dee-87eb9e25e2ae",
+        "Location": "12f06673-301f-4220-8dee-87eb9e25e2ae----SRS - Team B - MSA.docx",
+        "Name": "SRS - Team B - MSA.docx",
+        "Size": 0
+      },
+      {
+        "File_ID": "ce563e1e-94cd-4244-a171-0d5c13522a43",
+        "Location": "ce563e1e-94cd-4244-a171-0d5c13522a43----STP - Team B - MSA.docx",
+        "Name": "STP - Team B - MSA.docx",
+        "Size": 0
+      },
+      {
+        "File_ID": "dfffb56e-af45-4853-b737-1d94dc9921e5",
+        "Location": "dfffb56e-af45-4853-b737-1d94dc9921e5----TDD - Team B - MSA.docx",
+        "Name": "TDD - Team B - MSA.docx",
+        "Size": 0
+      },
+      {
+        "File_ID": "c8fd0423-2bd2-4351-865e-a81ee2f26c48",
+        "Location": "c8fd0423-2bd2-4351-865e-a81ee2f26c48----TR - Team B - MSA.docx",
+        "Name": "TR - Team B - MSA.docx",
+        "Size": 0
+      },
+      {
+        "File_ID": "d6094aa0-4c12-4061-9b49-4847feb9807e",
+        "Location": "d6094aa0-4c12-4061-9b49-4847feb9807e----UG - Team B - MSA.docx",
+        "Name": "UG - Team B - MSA.docx",
+        "Size": 0
+      },
+      {
+        "File_ID": "d43aca0c-c1ba-42df-b999-4515d10d437e",
+        "Location": "d43aca0c-c1ba-42df-b999-4515d10d437e----PG - Team A (v1.1) FINAL.docx",
+        "Name": "PG - Team A (v1.1) FINAL.docx",
+        "Size": 0
+      },
+      {
+        "File_ID": "477a9a9c-7ee2-41d0-9a65-42f53ebdc9bf",
+        "Location": "477a9a9c-7ee2-41d0-9a65-42f53ebdc9bf----DOG - Team B - MSA.docx",
+        "Name": "DOG - Team B - MSA.docx",
+        "Size": 0
+      },
+      {
+        "File_ID": "96275bef-1431-4537-9197-e159d555c945",
+        "Location": "96275bef-1431-4537-9197-e159d555c945----Programmers Guide - Team B - MSA.docx",
+        "Name": "Programmers Guide - Team B - MSA.docx",
+        "Size": 0
+      }
+    ],
+    "CompletedDocuments": [
+      {
+        "WebsiteLink": "",
+        "VideoLink": "",
+        "GitHubLink": "https://github.com/umgc/fall2022",
+        "TeamName": "Team A",
+        "ProjectPlan": "PMP - Team A (v1.2) FINAL.docx",
+        "ProjectPlanLink": "8ef373b1-c2e7-4743-b807-b51b5a45e128----PMP - Team A (v1.2) FINAL.docx",
+        "SRS": "SRS - Team A (v1.2) FINAL.docx",
+        "SRSLink": "ed77f30c-e450-4250-9743-926616016c9d----SRS - Team A (v1.2) FINAL.docx",
+        "TDD": "TDD - Team A (v1.1) FINAL.docx",
+        "TDDLink": "9d96ebb3-2f9e-4c5d-92a7-28a3646b7809----TDD - Team A (v1.1) FINAL.docx",
+        "Runbook": "DepOps - Team A (v1.1) FINAL.docx",
+        "RunbookLink": "e6245258-a64e-4052-b970-7acaf0406a45----DepOps - Team A (v1.1) FINAL.docx",
+        "ProgrammersGuide": "PG - Team A (v1.1) FINAL.docx",
+        "ProgrammersGuideLink": "d43aca0c-c1ba-42df-b999-4515d10d437e----PG - Team A (v1.1) FINAL.docx",
+        "UsersGuide": "UG - Team A (v1.0) FINAL.docx",
+        "UsersGuideLink": "fe2c5c62-94c9-4f5d-a8b3-639ca46cf083----UG - Team A (v1.0) FINAL.docx",
+        "TestReport": "TR - Team A (v1.0) FINAL.docx",
+        "TestReportLink": "793c78f6-2e85-43e1-94d1-fb9866be2278----TR - Team A (v1.0) FINAL.docx"
+      },
+      {
+        "WebsiteLink": "",
+        "VideoLink": "",
+        "GitHubLink": "https://github.com/umgc/fall2022",
+        "TeamName": "Team B",
+        "ProjectPlan": "PMP - Team B - MSA.docx",
+        "ProjectPlanLink": "9712552d-a2bd-44b2-9003-a05e5dab5574----PMP - Team B - MSA.docx",
+        "SRS": "SRS - Team B - MSA.docx",
+        "SRSLink": "12f06673-301f-4220-8dee-87eb9e25e2ae----SRS - Team B - MSA.docx",
+        "TDD": "TDD - Team B - MSA.docx",
+        "TDDLink": "dfffb56e-af45-4853-b737-1d94dc9921e5----TDD - Team B - MSA.docx",
+        "Runbook": "DOG - Team B - MSA.docx",
+        "RunbookLink": "477a9a9c-7ee2-41d0-9a65-42f53ebdc9bf----DOG - Team B - MSA.docx",
+        "ProgrammersGuide": "Programmers Guide - Team B - MSA.docx",
+        "ProgrammersGuideLink": "96275bef-1431-4537-9197-e159d555c945----Programmers Guide - Team B - MSA.docx",
+        "UsersGuide": "UG - Team B - MSA.docx",
+        "UsersGuideLink": "d6094aa0-4c12-4061-9b49-4847feb9807e----UG - Team B - MSA.docx",
+        "TestReport": "TR - Team B - MSA.docx",
+        "TestReportLink": "c8fd0423-2bd2-4351-865e-a81ee2f26c48----TR - Team B - MSA.docx"
+      }
+    ],
+    "IsSponsor": true,
+    "SponsorFirstName": "Bob",
+    "SponsorLastName": "Dixon",
+    "SponsorEmail": "livingstonedc@yahoo.com",
+    "SponsorPhone": "555-555-5555",
+    "Status": "Complete",
+    "Comments": {}
+  },
+  "fb743786-6409-462a-9063-a2b592124bee": {
+    "ProjectID": "fb743786-6409-462a-9063-a2b592124bee",
+    "VideoLink": "https://www.youtube.com/watch?v=pxt7YZfGE94",
+    "ProjectTitle": "Harkify",
+    "ProjectDescription": "Approximately 14 million people (about twice the population of Arizona)in the United States suffer from a disability that impairs their short-term memory. This ranges from mild retention issues due to aging, to advanced memory loss such as Alzheimer’s.There is a need to support those suffering from short-term memory loss or recognize cognitive decline.To meet this need, United Global Masters Coders proposes the development of a mobile application thatrecognizes the speech of the user as they engage in a conversation and help them live a fuller life despite their disability. After the completion of the project, anyone in the United States suffering from short-term memory (STM) will be able to download and use the application.",
+    "SemesterTerm": "Summer",
+    "SemesterYear": "2021",
+    "Url": "",
+    "Github": "https://github.com/umgc/summer2021.bravo",
+    "FirstName": "Mir",
+    "LastName": "Assadullah",
+    "Email": "Mir.Assadullah@faculty.umgc.edu",
+    "Phone": "800-888-8682",
+    "Attachments": [
+      {
+        "File_ID": "83a7589e-1dc5-4877-be18-8f5d808f69e6",
+        "Location": "83a7589e-1dc5-4877-be18-8f5d808f69e6----SRS Harkify_Milestone3.doc.pdf",
+        "Name": "SRS Harkify_Milestone3.doc.pdf",
+        "Size": 350110
+      },
+      {
+        "File_ID": "090792b6-c73c-4bea-9bb0-bf4ba626287f",
+        "Location": "090792b6-c73c-4bea-9bb0-bf4ba626287f----Software Test Report Harkify.pdf",
+        "Name": "Software Test Report Harkify.pdf",
+        "Size": 304392
+      },
+      {
+        "File_ID": "cbc189ba-4091-427c-90ba-80086d8d07fd",
+        "Location": "cbc189ba-4091-427c-90ba-80086d8d07fd----Research Paper - Diarization.pdf",
+        "Name": "Research Paper - Diarization.pdf",
+        "Size": 166205
+      },
+      {
+        "File_ID": "b1b29305-6635-4ca6-9cf7-491068979ad8",
+        "Location": "b1b29305-6635-4ca6-9cf7-491068979ad8----Project_Plan_Harkify.doc.pdf",
+        "Name": "Project_Plan_Harkify.doc.pdf",
+        "Size": 615963
+      },
+      {
+        "File_ID": "4e2664ce-555f-4290-8ef7-028c8e42f5bd",
+        "Location": "4e2664ce-555f-4290-8ef7-028c8e42f5bd----Programmer's Guide Milestone 3.pdf",
+        "Name": "Programmer's Guide Milestone 3.pdf",
+        "Size": 1152973
+      },
+      {
+        "File_ID": "1539aa8c-679f-4c24-9641-2efbeb0a791d",
+        "Location": "1539aa8c-679f-4c24-9641-2efbeb0a791d----Harkify Technical Design Document.pdf",
+        "Name": "Harkify Technical Design Document.pdf",
+        "Size": 2692269
+      },
+      {
+        "File_ID": "ef5af5cf-bb0d-49b4-b51a-273f27dc9741",
+        "Location": "ef5af5cf-bb0d-49b4-b51a-273f27dc9741----Harkify Software Test Plan .pdf",
+        "Name": "Harkify Software Test Plan .pdf",
+        "Size": 372136
+      },
+      {
+        "File_ID": "0a68aaf4-5dfc-48d9-88d0-9e5f3edf0e4b",
+        "Location": "0a68aaf4-5dfc-48d9-88d0-9e5f3edf0e4b----Deployment and Operations Guide Milestone 3.pdf",
+        "Name": "Deployment and Operations Guide Milestone 3.pdf",
+        "Size": 1893350
+      }
+    ],
+    "CompletedDocuments": [
+      {
+        "WebsiteLink": "",
+        "VideoLink": "https://www.youtube.com/watch?v=pxt7YZfGE94",
+        "GitHubLink": "https://github.com/umgc/summer2021.bravo",
+        "TeamName": "Bravo",
+        "ProjectPlan": "Project_Plan_Harkify.doc.pdf",
+        "ProjectPlanLink": "b1b29305-6635-4ca6-9cf7-491068979ad8----Project_Plan_Harkify.doc.pdf",
+        "SRS": "SRS Harkify_Milestone3.doc.pdf",
+        "SRSLink": "83a7589e-1dc5-4877-be18-8f5d808f69e6----SRS Harkify_Milestone3.doc.pdf",
+        "TDD": "Harkify Technical Design Document.pdf",
+        "TDDLink": "1539aa8c-679f-4c24-9641-2efbeb0a791d----Harkify Technical Design Document.pdf",
+        "Runbook": "Deployment and Operations Guide Milestone 3.pdf",
+        "RunbookLink": "0a68aaf4-5dfc-48d9-88d0-9e5f3edf0e4b----Deployment and Operations Guide Milestone 3.pdf",
+        "ProgrammersGuide": "Programmer's Guide Milestone 3.pdf",
+        "ProgrammersGuideLink": "4e2664ce-555f-4290-8ef7-028c8e42f5bd----Programmer's Guide Milestone 3.pdf",
+        "UsersGuide": "Research Paper - Diarization.pdf",
+        "UsersGuideLink": "cbc189ba-4091-427c-90ba-80086d8d07fd----Research Paper - Diarization.pdf",
+        "TestReport": "Software Test Report Harkify.pdf",
+        "TestReportLink": "090792b6-c73c-4bea-9bb0-bf4ba626287f----Software Test Report Harkify.pdf"
+      }
+    ],
+    "IsSponsor": true,
+    "SponsorFirstName": "Mir",
+    "SponsorLastName": "Assadullah",
+    "SponsorEmail": "Mir.Assadullah@faculty.umgc.edu",
+    "SponsorPhone": "800-888-8682",
+    "Status": "Complete",
+    "Comments": {}
+  },
+  "136e37b5-058c-41a9-8942-9c8480064fe2": {
+    "ProjectID": "136e37b5-058c-41a9-8942-9c8480064fe2",
+    "VideoLink": "https://www.youtube.com/watch?v=JlqBkychVWw",
+    "ProjectTitle": "Memory Enhancer Application",
+    "ProjectDescription": "About 14 million people in the United States havea disability that impairs their short-term memory.  Short-term memory (STM) indicates different systems of memory involved in the retention of pieces of data for a relatively short time (usually up to 30 seconds).  The causes of the disability range from aging to dementia to Alzheimer’s.  According to the U.S. Centers for Disease Control and Prevention, noticing a decline in your mental abilities (\"cognitive decline\") is one of the earliest signs of impending Alzheimer's disease or dementia.  There is a need to provide a solution to adults that assists them with the short-term memory function.  To meet this need, United Global Masters Coders proposes the development of a mobile application that recognizes the speech of the user as they engage in a conversation and help them live a fuller life despite their disability. The purpose of this project is to develop the Memory Enhancer Appfor people with short-term memory disabilities.  There are several ways to develop this app and this effort is to determine which way would be the mostoptimal.   The Memory Enhancer Appmeets the business need by providing a solution for a critical and underserved market segment to have a solution with them that meets their need for memory assistance.",
+    "SemesterTerm": "Summer",
+    "SemesterYear": "2021",
+    "Url": "",
+    "Github": "https://github.com/umgc/summer2021.amazing",
+    "FirstName": "Mir",
+    "LastName": "Assadullah",
+    "Email": "Mir.Assadullah@faculty.umgc.edu",
+    "Phone": "800-888-8682",
+    "Attachments": [
+      {
+        "File_ID": "4ad6de4b-f28f-4f2b-aeb1-3a4680fd0fc6",
+        "Location": "4ad6de4b-f28f-4f2b-aeb1-3a4680fd0fc6----Programmer Guide_TeamAmazing.pdf",
+        "Name": "Programmer Guide_TeamAmazing.pdf",
+        "Size": 2089345
+      },
+      {
+        "File_ID": "53068c5e-6a24-4414-90bc-16df208c6af8",
+        "Location": "53068c5e-6a24-4414-90bc-16df208c6af8----ProjectPlan_TeamAmazing_v1.2.pdf",
+        "Name": "ProjectPlan_TeamAmazing_v1.2.pdf",
+        "Size": 775580
+      },
+      {
+        "File_ID": "b1497111-ddf1-4b9a-ac5d-71d2021f811f",
+        "Location": "b1497111-ddf1-4b9a-ac5d-71d2021f811f----SoftwareRequirementsSpecification_TeamAmazing_v1_1.pdf",
+        "Name": "SoftwareRequirementsSpecification_TeamAmazing_v1_1.pdf",
+        "Size": 3439547
+      },
+      {
+        "File_ID": "c693e37a-d73d-4e5a-8005-3fa2ec2bb1c8",
+        "Location": "c693e37a-d73d-4e5a-8005-3fa2ec2bb1c8----TechnicalDesignDocument_TeamAmazing_v1_0.pdf",
+        "Name": "TechnicalDesignDocument_TeamAmazing_v1_0.pdf",
+        "Size": 1963906
+      },
+      {
+        "File_ID": "9be3a023-dbba-4eea-856d-bae99d472875",
+        "Location": "9be3a023-dbba-4eea-856d-bae99d472875----Test Report - Team Amazing.pdf",
+        "Name": "Test Report - Team Amazing.pdf",
+        "Size": 916220
+      },
+      {
+        "File_ID": "31d326a5-ae39-4ab7-b9a4-5381d5c46efd",
+        "Location": "31d326a5-ae39-4ab7-b9a4-5381d5c46efd----User Guide - Team Amazing.pdf",
+        "Name": "User Guide - Team Amazing.pdf",
+        "Size": 1827325
+      }
+    ],
+    "CompletedDocuments": [
+      {
+        "WebsiteLink": "",
+        "VideoLink": "https://www.youtube.com/watch?v=JlqBkychVWw",
+        "GitHubLink": "https://github.com/umgc/summer2021.amazing",
+        "TeamName": "Amazing",
+        "ProjectPlan": "ProjectPlan_TeamAmazing_v1.2.pdf",
+        "ProjectPlanLink": "53068c5e-6a24-4414-90bc-16df208c6af8----ProjectPlan_TeamAmazing_v1.2.pdf",
+        "SRS": "SoftwareRequirementsSpecification_TeamAmazing_v1_1.pdf",
+        "SRSLink": "b1497111-ddf1-4b9a-ac5d-71d2021f811f----SoftwareRequirementsSpecification_TeamAmazing_v1_1.pdf",
+        "TDD": "TechnicalDesignDocument_TeamAmazing_v1_0.pdf",
+        "TDDLink": "c693e37a-d73d-4e5a-8005-3fa2ec2bb1c8----TechnicalDesignDocument_TeamAmazing_v1_0.pdf",
+        "Runbook": "Programmer Guide_TeamAmazing.pdf",
+        "RunbookLink": "4ad6de4b-f28f-4f2b-aeb1-3a4680fd0fc6----Programmer Guide_TeamAmazing.pdf",
+        "ProgrammersGuide": "Programmer Guide_TeamAmazing.pdf",
+        "ProgrammersGuideLink": "4ad6de4b-f28f-4f2b-aeb1-3a4680fd0fc6----Programmer Guide_TeamAmazing.pdf",
+        "UsersGuide": "User Guide - Team Amazing.pdf",
+        "UsersGuideLink": "31d326a5-ae39-4ab7-b9a4-5381d5c46efd----User Guide - Team Amazing.pdf",
+        "TestReport": "Test Report - Team Amazing.pdf",
+        "TestReportLink": "9be3a023-dbba-4eea-856d-bae99d472875----Test Report - Team Amazing.pdf"
+      }
+    ],
+    "IsSponsor": true,
+    "SponsorFirstName": "Mir",
+    "SponsorLastName": "Assadullah",
+    "SponsorEmail": "Mir.Assadullah@faculty.umgc.edu",
+    "SponsorPhone": "800-888-8682",
+    "Status": "Complete",
+    "Comments": {}
+  },
+  "87e3fc3b-d07d-4d96-b1d6-937c5dbc1b8e": {
+    "ProjectID": "87e3fc3b-d07d-4d96-b1d6-937c5dbc1b8e",
+    "VideoLink": "",
+    "ProjectTitle": "Demo Submit Project",
+    "ProjectDescription": "This is just a test project ",
+    "SemesterTerm": "Fall",
+    "SemesterYear": "2020",
+    "Url": "https://www.test.com",
+    "Github": "https://github.com/umgc/DevSecOpsPlayground",
+    "FirstName": "Matthew",
+    "LastName": "Setiawan",
+    "Email": "test@test.com",
+    "Phone": "5559995959",
+    "Attachments": [
+      {
+        "File_ID": "dc91cf1e-be54-4a99-9591-0acfc6d210a2",
+        "Location": "dc91cf1e-be54-4a99-9591-0acfc6d210a2----TestFile1.txt",
+        "Name": "TestFile1.txt",
+        "Size": 4
+      },
+      {
+        "File_ID": "bbf81210-4c2e-4e62-9b08-0640f523bcb3",
+        "Location": "bbf81210-4c2e-4e62-9b08-0640f523bcb3----TestFile2.txt",
+        "Name": "TestFile2.txt",
+        "Size": 4
+      },
+      {
+        "File_ID": "640090bf-2dbf-40ec-862b-4f4713115ea1",
+        "Location": "640090bf-2dbf-40ec-862b-4f4713115ea1----TestFile3.txt",
+        "Name": "TestFile3.txt",
+        "Size": 4
+      },
+      {
+        "File_ID": "03a7ff1c-ccde-477e-a8a2-d64443ef8b19",
+        "Location": "03a7ff1c-ccde-477e-a8a2-d64443ef8b19----TestFile4.txt",
+        "Name": "TestFile4.txt",
+        "Size": 4
+      },
+      {
+        "File_ID": "e78ddd07-d068-4793-9780-004f7d0b9bdb",
+        "Location": "e78ddd07-d068-4793-9780-004f7d0b9bdb----TestFile5.txt",
+        "Name": "TestFile5.txt",
+        "Size": 4
+      },
+      {
+        "File_ID": "128e33ca-01ab-4f5a-ba46-1ae45320f165",
+        "Location": "128e33ca-01ab-4f5a-ba46-1ae45320f165----TestFile6.txt",
+        "Name": "TestFile6.txt",
+        "Size": 4
+      }
+    ],
+    "CompletedDocuments": [
+      {
+        "WebsiteLink": "//www.test.com",
+        "VideoLink": "//www.youtube.com",
+        "GitHubLink": "//www.github.com",
+        "TeamName": "Test Team",
+        "ProjectPlan": "TestFile1.txt",
+        "ProjectPlanLink": "dc91cf1e-be54-4a99-9591-0acfc6d210a2----TestFile1.txt",
+        "SRS": "TestFile2.txt",
+        "SRSLink": "bbf81210-4c2e-4e62-9b08-0640f523bcb3----TestFile2.txt",
+        "TDD": "TestFile3.txt",
+        "TDDLink": "640090bf-2dbf-40ec-862b-4f4713115ea1----TestFile3.txt",
+        "Runbook": "TestFile4.txt",
+        "RunbookLink": "03a7ff1c-ccde-477e-a8a2-d64443ef8b19----TestFile4.txt",
+        "ProgrammersGuide": "TestFile5.txt",
+        "ProgrammersGuideLink": "e78ddd07-d068-4793-9780-004f7d0b9bdb----TestFile5.txt",
+        "UsersGuide": "TestFile6.txt",
+        "UsersGuideLink": "128e33ca-01ab-4f5a-ba46-1ae45320f165----TestFile6.txt",
+        "TestReport": "TestFile1.txt",
+        "TestReportLink": "dc91cf1e-be54-4a99-9591-0acfc6d210a2----TestFile1.txt"
+      }
+    ],
+    "IsSponsor": true,
+    "SponsorFirstName": "Matthew",
+    "SponsorLastName": "Setiawan",
+    "SponsorEmail": "test@test.com",
+    "SponsorPhone": "5559995959",
+    "Status": "Complete",
+    "Comments": {}
+  },
+  "1a73821b-9211-45d0-9d3b-242fa4f3857a": {
+    "ProjectID": "1a73821b-9211-45d0-9d3b-242fa4f3857a",
+    "VideoLink": "",
+    "ProjectTitle": "Memory Magic NLU",
+    "ProjectDescription": "Nature Language Understanding (NLU) component for Memory Magic",
+    "SemesterTerm": "",
+    "SemesterYear": "",
+    "Url": "",
+    "Github": "",
+    "FirstName": "Mir",
+    "LastName": "Assadullah",
+    "Email": "Mir.Assadullah@faculty.umgc.edu",
+    "Phone": "8556558682",
+    "Attachments": [
+      {
+        "File_ID": "63613a82-7e02-4607-8113-00791cb82bc3",
+        "Location": "63613a82-7e02-4607-8113-00791cb82bc3----Milestone3_Deployment&OperationGuide (3).docx",
+        "Name": "Milestone3_Deployment&OperationGuide (3).docx",
+        "Size": 1141227
+      },
+      {
+        "File_ID": "180a43c5-534a-4936-9015-acf7f9735b34",
+        "Location": "180a43c5-534a-4936-9015-acf7f9735b34----NLU Module IO Integration.docx",
+        "Name": "NLU Module IO Integration.docx",
+        "Size": 29590
+      },
+      {
+        "File_ID": "4081bfbf-5a89-47c8-a2a5-9bf50c743824",
+        "Location": "4081bfbf-5a89-47c8-a2a5-9bf50c743824----NLU Module Project Plan (2.0).pdf",
+        "Name": "NLU Module Project Plan (2.0).pdf",
+        "Size": 803044
+      },
+      {
+        "File_ID": "c3e1a789-680a-4407-a60d-715a31e04f7c",
+        "Location": "c3e1a789-680a-4407-a60d-715a31e04f7c----NLU SRS-Version 1.1.docx",
+        "Name": "NLU SRS-Version 1.1.docx",
+        "Size": 61083
+      },
+      {
+        "File_ID": "b37ec1e8-838c-4573-a844-66f5d75bc880",
+        "Location": "b37ec1e8-838c-4573-a844-66f5d75bc880----Test Report.docx",
+        "Name": "Test Report.docx",
+        "Size": 1192702
+      },
+      {
+        "File_ID": "f22c90d8-a674-4454-a4b4-f9fd7ee7002f",
+        "Location": "f22c90d8-a674-4454-a4b4-f9fd7ee7002f----User Guide.docx",
+        "Name": "User Guide.docx",
+        "Size": 4613252
+      }
+    ],
+    "CompletedDocuments": [],
+    "IsSponsor": true,
+    "SponsorFirstName": "Mir",
+    "SponsorLastName": "Assadullah",
+    "SponsorEmail": "Mir.Assadullah@faculty.umgc.edu",
+    "SponsorPhone": "8556558682",
+    "Status": "Complete",
+    "Comments": {}
+  },
+  "a2fd2d56-ad33-4fee-8f7c-803a1f6c7412": {
+    "ProjectID": "a2fd2d56-ad33-4fee-8f7c-803a1f6c7412",
+    "VideoLink": "",
+    "ProjectTitle": "Municipality Permit Chatbot System (MPCS)",
+    "ProjectDescription": "The purpose of the MPCS is to design, develop, and deliver a reliable and functional software application that assists end-users in navigating the local city website (e.g., Pasadena) by answering questions and providing information when inquired. Questions provided by the end-user are administered via a popup website chatbox. The MPCS convincingly acknowledges and interfaces with the end-user comparable to a human customer representative by determining whether to provide a direct answer or reference search results from within the website. Furthermore, the MPCS is linked to other applications within the website to provide accurate information to the end-user. The MPCS will also contain options that will be customizable by its stakeholders (e.g., City Officials) through a downloadable client. Each stage of the project will require approval from key stakeholders to transition to the subsequent phase to ensure the project has adequate coverage in meeting the stakeholder's performance expectations.",
+    "SemesterTerm": "Summer",
+    "SemesterYear": "2020",
+    "Url": "",
+    "Github": "",
+    "FirstName": "Mir",
+    "LastName": "Assadullah",
+    "Email": "Mir.Assadullah@faculty.umgc.edu",
+    "Phone": "800-888-8682",
+    "Attachments": [
+      {
+        "File_ID": "4911be49-37b4-4a4b-ada1-1eacb4e0b4d0",
+        "Location": "4911be49-37b4-4a4b-ada1-1eacb4e0b4d0----Team1_Chatbot_Deployment_Runbook_Milestone4_Adjudicated.docx",
+        "Name": "Team1_Chatbot_Deployment_Runbook_Milestone4_Adjudicated.docx",
+        "Size": 0
+      },
+      {
+        "File_ID": "ce9844be-30e7-4dab-aa0d-c0b39141eeee",
+        "Location": "ce9844be-30e7-4dab-aa0d-c0b39141eeee----Team1_Chatbot_Programmers_Guide_Milestone4_Adjudicated.docx",
+        "Name": "Team1_Chatbot_Programmers_Guide_Milestone4_Adjudicated.docx",
+        "Size": 0
+      },
+      {
+        "File_ID": "a01cea46-0887-4fbb-8f3e-657e4732f593",
+        "Location": "a01cea46-0887-4fbb-8f3e-657e4732f593----Team1_Chatbot_ProjectPlan_Milestone4.docx",
+        "Name": "Team1_Chatbot_ProjectPlan_Milestone4.docx",
+        "Size": 0
+      },
+      {
+        "File_ID": "a029f41c-bfc5-412b-bf94-77446458b988",
+        "Location": "a029f41c-bfc5-412b-bf94-77446458b988----Team1_Chatbot_SRS_Milestone_4.docx",
+        "Name": "Team1_Chatbot_SRS_Milestone_4.docx",
+        "Size": 0
+      },
+      {
+        "File_ID": "5fe255ec-248d-42bd-88e0-fd412344e256",
+        "Location": "5fe255ec-248d-42bd-88e0-fd412344e256----Team1_Chatbot_TDD_Milestone4.docx",
+        "Name": "Team1_Chatbot_TDD_Milestone4.docx",
+        "Size": 0
+      },
+      {
+        "File_ID": "2a68216a-18e8-4740-8214-f7cfe25ec864",
+        "Location": "2a68216a-18e8-4740-8214-f7cfe25ec864----Team1_Chatbot_TestReport_Milestone4.docx",
+        "Name": "Team1_Chatbot_TestReport_Milestone4.docx",
+        "Size": 0
+      },
+      {
+        "File_ID": "7ca812c7-8004-47d6-afa2-8d1c91195150",
+        "Location": "7ca812c7-8004-47d6-afa2-8d1c91195150----Team1_Chatbot_User_Guide_Milestone4.docx",
+        "Name": "Team1_Chatbot_User_Guide_Milestone4.docx",
+        "Size": 0
+      }
+    ],
+    "CompletedDocuments": [
+      {
+        "WebsiteLink": "",
+        "VideoLink": "",
+        "GitHubLink": "https://github.com/umgc/umgc.city_chatbot",
+        "TeamName": "City Chatbot",
+        "ProjectPlan": "Team1_Chatbot_ProjectPlan_Milestone4.docx",
+        "ProjectPlanLink": "a01cea46-0887-4fbb-8f3e-657e4732f593----Team1_Chatbot_ProjectPlan_Milestone4.docx",
+        "SRS": "Team1_Chatbot_SRS_Milestone_4.docx",
+        "SRSLink": "a029f41c-bfc5-412b-bf94-77446458b988----Team1_Chatbot_SRS_Milestone_4.docx",
+        "TDD": "Team1_Chatbot_TDD_Milestone4.docx",
+        "TDDLink": "5fe255ec-248d-42bd-88e0-fd412344e256----Team1_Chatbot_TDD_Milestone4.docx",
+        "Runbook": "Team1_Chatbot_Deployment_Runbook_Milestone4_Adjudicated.docx",
+        "RunbookLink": "4911be49-37b4-4a4b-ada1-1eacb4e0b4d0----Team1_Chatbot_Deployment_Runbook_Milestone4_Adjudicated.docx",
+        "ProgrammersGuide": "Team1_Chatbot_Programmers_Guide_Milestone4_Adjudicated.docx",
+        "ProgrammersGuideLink": "ce9844be-30e7-4dab-aa0d-c0b39141eeee----Team1_Chatbot_Programmers_Guide_Milestone4_Adjudicated.docx",
+        "UsersGuide": "Team1_Chatbot_User_Guide_Milestone4.docx",
+        "UsersGuideLink": "7ca812c7-8004-47d6-afa2-8d1c91195150----Team1_Chatbot_User_Guide_Milestone4.docx",
+        "TestReport": "Team1_Chatbot_TestReport_Milestone4.docx",
+        "TestReportLink": "2a68216a-18e8-4740-8214-f7cfe25ec864----Team1_Chatbot_TestReport_Milestone4.docx"
+      }
+    ],
+    "IsSponsor": true,
+    "SponsorFirstName": "Mir",
+    "SponsorLastName": "Assadullah",
+    "SponsorEmail": "Mir.Assadullah@faculty.umgc.edu",
+    "SponsorPhone": "800-888-8682",
+    "Status": "Complete",
+    "Comments": {}
+  },
+  "316f6185-5761-4dcf-b56a-db3a93e490fb": {
+    "ProjectID": "316f6185-5761-4dcf-b56a-db3a93e490fb",
+    "VideoLink": "https://www.youtube.com/watch?v=iYayi_fVp84",
+    "ProjectTitle": "CaPPMSv3",
+    "ProjectDescription": "Refine CaPMMS System by adding enhanced FAQs, and rework Project list.",
+    "SemesterTerm": "Fall",
+    "SemesterYear": "2021",
+    "Url": "https://umgc-cappms.azurewebsites.net/",
+    "Github": "https://github.com/umgc/DevSecOpsPlayground/tree/developer/CaPPMS",
+    "FirstName": "Mir",
+    "LastName": "Assadullah",
+    "Email": "Mir.Assadullah@faculty.umgc.edu",
+    "Phone": "8556558682",
+    "Attachments": [],
+    "CompletedDocuments": [],
+    "IsSponsor": true,
+    "SponsorFirstName": "Mir",
+    "SponsorLastName": "Assadullah",
+    "SponsorEmail": "Mir.Assadullah@faculty.umgc.edu",
+    "SponsorPhone": "8556558682",
+    "Status": "Complete",
+    "Comments": {}
+  },
+  "c7a29428-2b86-4cd4-89b7-4f4165d216f9": {
+    "ProjectID": "c7a29428-2b86-4cd4-89b7-4f4165d216f9",
+    "VideoLink": "",
+    "ProjectTitle": "Form Scriber",
+    "ProjectDescription": "This mobile application will be the first AI Application to use chatbot and offer public service professionals an application that will listen to a conversation between an interviewer and interviewee. Then, the mobile app will capture the conversation as a recording and send the captured recording to the Dialog Flow AI for processing the voice recording. A completed form with data collected will be offered by the Dialog Flow AI. The Mobile app will generate a professional summary report based on the form template. Finally, a report is generated for the customers to view and open with the option to print.",
+    "SemesterTerm": "Spring",
+    "SemesterYear": "2021",
+    "Url": "",
+    "Github": "",
+    "FirstName": "Mir",
+    "LastName": "Assadullah",
+    "Email": "Mir.Assadullah@faculty.umgc.edu",
+    "Phone": "800-888-8682",
+    "Attachments": [
+      {
+        "File_ID": "cc5b78a1-ac31-4e6f-98fd-d958e4cc5de5",
+        "Location": "cc5b78a1-ac31-4e6f-98fd-d958e4cc5de5----Deployment and Operations Guide_Runbook_Mobile Team.docx",
+        "Name": "Deployment and Operations Guide_Runbook_Mobile Team.docx",
+        "Size": 3692442
+      },
+      {
+        "File_ID": "00e7d08f-088b-45e5-830c-5800e8460d58",
+        "Location": "00e7d08f-088b-45e5-830c-5800e8460d58----Programmer Guide_Mobile Team.docx",
+        "Name": "Programmer Guide_Mobile Team.docx",
+        "Size": 1585897
+      },
+      {
+        "File_ID": "43de69d5-ab22-43bc-9ba8-8b7c03ee8bc1",
+        "Location": "43de69d5-ab22-43bc-9ba8-8b7c03ee8bc1----Project Plan Milestone 1_Mobile Team.docx",
+        "Name": "Project Plan Milestone 1_Mobile Team.docx",
+        "Size": 739905
+      },
+      {
+        "File_ID": "07243007-7ff5-483b-9099-7a79defac753",
+        "Location": "07243007-7ff5-483b-9099-7a79defac753----Research Paper_Mobile Team.docx",
+        "Name": "Research Paper_Mobile Team.docx",
+        "Size": 291332
+      },
+      {
+        "File_ID": "34811a32-ed54-4234-ac35-a9c9ace09745",
+        "Location": "34811a32-ed54-4234-ac35-a9c9ace09745----Software Requirements Specification_Milestone 1_Mobile Team.docx",
+        "Name": "Software Requirements Specification_Milestone 1_Mobile Team.docx",
+        "Size": 2913733
+      },
+      {
+        "File_ID": "943176d4-4660-4c0a-9ddf-1c96fa8b264a",
+        "Location": "943176d4-4660-4c0a-9ddf-1c96fa8b264a----Technical Design Document_Mobile Team.docx",
+        "Name": "Technical Design Document_Mobile Team.docx",
+        "Size": 962577
+      },
+      {
+        "File_ID": "43f9a62e-afe4-4748-aba7-511583d60f11",
+        "Location": "43f9a62e-afe4-4748-aba7-511583d60f11----Test Report_Mobile Team.docx",
+        "Name": "Test Report_Mobile Team.docx",
+        "Size": 2735814
+      },
+      {
+        "File_ID": "83d686cb-e10f-44c0-88cb-8ce874966dd0",
+        "Location": "83d686cb-e10f-44c0-88cb-8ce874966dd0----User Guide_Mobile Team.docx",
+        "Name": "User Guide_Mobile Team.docx",
+        "Size": 1025613
+      },
+      {
+        "File_ID": "09512fa0-1fae-47bc-a954-f716632dba4c",
+        "Location": "09512fa0-1fae-47bc-a954-f716632dba4c----FormScriber_DSO_Programmers_Guide_V1_Final_Submit.docx",
+        "Name": "FormScriber_DSO_Programmers_Guide_V1_Final_Submit.docx",
+        "Size": 0
+      },
+      {
+        "File_ID": "4f4ca5ff-122d-498f-b25c-cc5c32853e01",
+        "Location": "4f4ca5ff-122d-498f-b25c-cc5c32853e01----FormScriber_DSO_Project_Plan_V4_Final_Submit.docx",
+        "Name": "FormScriber_DSO_Project_Plan_V4_Final_Submit.docx",
+        "Size": 0
+      },
+      {
+        "File_ID": "b6871645-d903-4110-8837-aba177916df1",
+        "Location": "b6871645-d903-4110-8837-aba177916df1----FormScriber_DSO_Runbook_V3_Final_Submit.docx",
+        "Name": "FormScriber_DSO_Runbook_V3_Final_Submit.docx",
+        "Size": 0
+      },
+      {
+        "File_ID": "37f139ca-aa32-42fb-9a5a-c1e5dd354cae",
+        "Location": "37f139ca-aa32-42fb-9a5a-c1e5dd354cae----FormScriber_DSO_SRS_V3_Final_Submit.docx",
+        "Name": "FormScriber_DSO_SRS_V3_Final_Submit.docx",
+        "Size": 0
+      },
+      {
+        "File_ID": "22fe8441-3024-43bc-a3a9-56e53be11f41",
+        "Location": "22fe8441-3024-43bc-a3a9-56e53be11f41----FormScriber_DSO_TDD_V3_Final_Submit.docx",
+        "Name": "FormScriber_DSO_TDD_V3_Final_Submit.docx",
+        "Size": 0
+      },
+      {
+        "File_ID": "04d96ea8-d9b5-4a65-94ec-b88117a1e57b",
+        "Location": "04d96ea8-d9b5-4a65-94ec-b88117a1e57b----FormScriber_DSO_Test_Report_Final_Submit.docx",
+        "Name": "FormScriber_DSO_Test_Report_Final_Submit.docx",
+        "Size": 0
+      },
+      {
+        "File_ID": "9ecddb57-63b7-4269-9d00-dafec31c0832",
+        "Location": "9ecddb57-63b7-4269-9d00-dafec31c0832----FormScriber_DSO_User_Guide_V2_Final_Submit.docx",
+        "Name": "FormScriber_DSO_User_Guide_V2_Final_Submit.docx",
+        "Size": 0
+      },
+      {
+        "File_ID": "a597d850-dd7a-49f6-84a9-dd9f818964b3",
+        "Location": "a597d850-dd7a-49f6-84a9-dd9f818964b3----DialogFlow Project Plan M3.docx",
+        "Name": "DialogFlow Project Plan M3.docx",
+        "Size": 0
+      },
+      {
+        "File_ID": "ca51ede8-a174-46ae-9f34-b04cbba9c0be",
+        "Location": "ca51ede8-a174-46ae-9f34-b04cbba9c0be----DialogFlow SRS 02.21.2021.docx",
+        "Name": "DialogFlow SRS 02.21.2021.docx",
+        "Size": 0
+      },
+      {
+        "File_ID": "385391ba-7fa9-42dd-b1cb-4fe2eb98af5a",
+        "Location": "385391ba-7fa9-42dd-b1cb-4fe2eb98af5a----DialogFlow TDD M3.docx",
+        "Name": "DialogFlow TDD M3.docx",
+        "Size": 0
+      },
+      {
+        "File_ID": "5f7bc1ee-6ea1-404b-811c-b370c15a0e91",
+        "Location": "5f7bc1ee-6ea1-404b-811c-b370c15a0e91----Formscriber Test Plan - Dialogflow Team.docx",
+        "Name": "Formscriber Test Plan - Dialogflow Team.docx",
+        "Size": 0
+      },
+      {
+        "File_ID": "e472fe03-d663-47af-90d8-146de22136a2",
+        "Location": "e472fe03-d663-47af-90d8-146de22136a2----Statement of Work.docx",
+        "Name": "Statement of Work.docx",
+        "Size": 0
+      },
+      {
+        "File_ID": "42f71b7f-051a-495c-8d1c-f25bd5a46a47",
+        "Location": "42f71b7f-051a-495c-8d1c-f25bd5a46a47----SWEN 670_FormScribe_Deployment Guide.docx",
+        "Name": "SWEN 670_FormScribe_Deployment Guide.docx",
+        "Size": 0
+      },
+      {
+        "File_ID": "4615bcf5-a496-4b49-85a9-3d2435cb5f34",
+        "Location": "4615bcf5-a496-4b49-85a9-3d2435cb5f34----SWEN 670_FormScribe_User_Guide.docx",
+        "Name": "SWEN 670_FormScribe_User_Guide.docx",
+        "Size": 0
+      },
+      {
+        "File_ID": "c2ba17c4-4ca7-4d04-a888-99abbc3fdf54",
+        "Location": "c2ba17c4-4ca7-4d04-a888-99abbc3fdf54----SWEN 670_FormScriber_Programmer_Guide.docx",
+        "Name": "SWEN 670_FormScriber_Programmer_Guide.docx",
+        "Size": 0
+      },
+      {
+        "File_ID": "4c45ff1c-bfea-42f0-89d7-071ec77e93d6",
+        "Location": "4c45ff1c-bfea-42f0-89d7-071ec77e93d6----SWEN_670_TeamDialogflow_ResearchPaper_DRAFT.docx",
+        "Name": "SWEN_670_TeamDialogflow_ResearchPaper_DRAFT.docx",
+        "Size": 0
+      },
+      {
+        "File_ID": "af5a62a7-3bf6-4fb8-9c0c-96e5c288ba67",
+        "Location": "af5a62a7-3bf6-4fb8-9c0c-96e5c288ba67----SWEN_670_TeamDialogflow_Test Report.docx",
+        "Name": "SWEN_670_TeamDialogflow_Test Report.docx",
+        "Size": 0
+      }
+    ],
+    "CompletedDocuments": [
+      {
+        "WebsiteLink": "",
+        "VideoLink": "",
+        "GitHubLink": "https://github.com/umgc/umgc.formbot.dso-adf",
+        "TeamName": "DevSecOps",
+        "ProjectPlan": "FormScriber_DSO_Project_Plan_V4_Final_Submit.docx",
+        "ProjectPlanLink": "4f4ca5ff-122d-498f-b25c-cc5c32853e01----FormScriber_DSO_Project_Plan_V4_Final_Submit.docx",
+        "SRS": "FormScriber_DSO_SRS_V3_Final_Submit.docx",
+        "SRSLink": "37f139ca-aa32-42fb-9a5a-c1e5dd354cae----FormScriber_DSO_SRS_V3_Final_Submit.docx",
+        "TDD": "FormScriber_DSO_TDD_V3_Final_Submit.docx",
+        "TDDLink": "22fe8441-3024-43bc-a3a9-56e53be11f41----FormScriber_DSO_TDD_V3_Final_Submit.docx",
+        "Runbook": "FormScriber_DSO_Runbook_V3_Final_Submit.docx",
+        "RunbookLink": "b6871645-d903-4110-8837-aba177916df1----FormScriber_DSO_Runbook_V3_Final_Submit.docx",
+        "ProgrammersGuide": "FormScriber_DSO_Programmers_Guide_V1_Final_Submit.docx",
+        "ProgrammersGuideLink": "09512fa0-1fae-47bc-a954-f716632dba4c----FormScriber_DSO_Programmers_Guide_V1_Final_Submit.docx",
+        "UsersGuide": "FormScriber_DSO_User_Guide_V2_Final_Submit.docx",
+        "UsersGuideLink": "9ecddb57-63b7-4269-9d00-dafec31c0832----FormScriber_DSO_User_Guide_V2_Final_Submit.docx",
+        "TestReport": "FormScriber_DSO_Test_Report_Final_Submit.docx",
+        "TestReportLink": "04d96ea8-d9b5-4a65-94ec-b88117a1e57b----FormScriber_DSO_Test_Report_Final_Submit.docx"
+      },
+      {
+        "WebsiteLink": "",
+        "VideoLink": "",
+        "GitHubLink": "https://github.com/umgc/umgc.formbot.dialogflow",
+        "TeamName": "DialogFlow",
+        "ProjectPlan": "DialogFlow Project Plan M3.docx",
+        "ProjectPlanLink": "a597d850-dd7a-49f6-84a9-dd9f818964b3----DialogFlow Project Plan M3.docx",
+        "SRS": "DialogFlow SRS 02.21.2021.docx",
+        "SRSLink": "ca51ede8-a174-46ae-9f34-b04cbba9c0be----DialogFlow SRS 02.21.2021.docx",
+        "TDD": "DialogFlow TDD M3.docx",
+        "TDDLink": "385391ba-7fa9-42dd-b1cb-4fe2eb98af5a----DialogFlow TDD M3.docx",
+        "Runbook": "SWEN 670_FormScribe_Deployment Guide.docx",
+        "RunbookLink": "42f71b7f-051a-495c-8d1c-f25bd5a46a47----SWEN 670_FormScribe_Deployment Guide.docx",
+        "ProgrammersGuide": "SWEN 670_FormScriber_Programmer_Guide.docx",
+        "ProgrammersGuideLink": "c2ba17c4-4ca7-4d04-a888-99abbc3fdf54----SWEN 670_FormScriber_Programmer_Guide.docx",
+        "UsersGuide": "SWEN 670_FormScribe_User_Guide.docx",
+        "UsersGuideLink": "4615bcf5-a496-4b49-85a9-3d2435cb5f34----SWEN 670_FormScribe_User_Guide.docx",
+        "TestReport": "SWEN_670_TeamDialogflow_Test Report.docx",
+        "TestReportLink": "af5a62a7-3bf6-4fb8-9c0c-96e5c288ba67----SWEN_670_TeamDialogflow_Test Report.docx"
+      },
+      {
+        "WebsiteLink": "",
+        "VideoLink": "",
+        "GitHubLink": "https://github.com/umgc/umgc.formbot.mobile",
+        "TeamName": "Mobile",
+        "ProjectPlan": "Project Plan Milestone 1_Mobile Team.docx",
+        "ProjectPlanLink": "43de69d5-ab22-43bc-9ba8-8b7c03ee8bc1----Project Plan Milestone 1_Mobile Team.docx",
+        "SRS": "Software Requirements Specification_Milestone 1_Mobile Team.docx",
+        "SRSLink": "34811a32-ed54-4234-ac35-a9c9ace09745----Software Requirements Specification_Milestone 1_Mobile Team.docx",
+        "TDD": "Technical Design Document_Mobile Team.docx",
+        "TDDLink": "943176d4-4660-4c0a-9ddf-1c96fa8b264a----Technical Design Document_Mobile Team.docx",
+        "Runbook": "Deployment and Operations Guide_Runbook_Mobile Team.docx",
+        "RunbookLink": "cc5b78a1-ac31-4e6f-98fd-d958e4cc5de5----Deployment and Operations Guide_Runbook_Mobile Team.docx",
+        "ProgrammersGuide": "Programmer Guide_Mobile Team.docx",
+        "ProgrammersGuideLink": "00e7d08f-088b-45e5-830c-5800e8460d58----Programmer Guide_Mobile Team.docx",
+        "UsersGuide": "User Guide_Mobile Team.docx",
+        "UsersGuideLink": "83d686cb-e10f-44c0-88cb-8ce874966dd0----User Guide_Mobile Team.docx",
+        "TestReport": "Test Report_Mobile Team.docx",
+        "TestReportLink": "43f9a62e-afe4-4748-aba7-511583d60f11----Test Report_Mobile Team.docx"
+      }
+    ],
+    "IsSponsor": true,
+    "SponsorFirstName": "Mir",
+    "SponsorLastName": "Assadullah",
+    "SponsorEmail": "Mir.Assadullah@faculty.umgc.edu",
+    "SponsorPhone": "800-888-8682",
+    "Status": "Complete",
+    "Comments": {}
+  },
+  "df58b89c-8924-43d8-9e86-b7e26b64aca6": {
+    "ProjectID": "df58b89c-8924-43d8-9e86-b7e26b64aca6",
+    "VideoLink": "",
+    "ProjectTitle": "Panoramic Stitching",
+    "ProjectDescription": "Enable a deeper connection between the user and the facility by providing a virtual tour experience that enables text searchable elements.",
+    "SemesterTerm": "Spring",
+    "SemesterYear": "2023",
+    "Url": "",
+    "Github": "https://github.com/umgc/spring2023",
+    "FirstName": "Mir",
+    "LastName": "Assadullah",
+    "Email": "Mir.Assadullah@faculty.umgc.edu",
+    "Phone": "8556558682",
+    "Attachments": [
+      {
+        "File_ID": "a1453ea9-d283-4b90-a7e1-3dfa96975f5c",
+        "Location": "a1453ea9-d283-4b90-a7e1-3dfa96975f5c----Deployment and Operations Guide_Team B.docx",
+        "Name": "Deployment and Operations Guide_Team B.docx",
+        "Size": 0
+      },
+      {
+        "File_ID": "a3cc1840-916c-4ef5-99f0-ca041270579f",
+        "Location": "a3cc1840-916c-4ef5-99f0-ca041270579f----Project Plan - Team B.docx",
+        "Name": "Project Plan - Team B.docx",
+        "Size": 0
+      },
+      {
+        "File_ID": "275b85d0-0e91-4682-a7bc-ebd4e07dc73e",
+        "Location": "275b85d0-0e91-4682-a7bc-ebd4e07dc73e----User Guide_TeamB.docx",
+        "Name": "User Guide_TeamB.docx",
+        "Size": 0
+      },
+      {
+        "File_ID": "e92e51fc-6ccc-40e4-9627-6aa7e95912bd",
+        "Location": "e92e51fc-6ccc-40e4-9627-6aa7e95912bd----Technical Design Doc - Team B.docx",
+        "Name": "Technical Design Doc - Team B.docx",
+        "Size": 0
+      },
+      {
+        "File_ID": "e2cc89c6-dd9a-4d2b-ac04-92a3bb6a1a3e",
+        "Location": "e2cc89c6-dd9a-4d2b-ac04-92a3bb6a1a3e----SRS - Team B.pdf",
+        "Name": "SRS - Team B.pdf",
+        "Size": 0
+      },
+      {
+        "File_ID": "10ffdfff-3882-450b-9e50-a330e09d3a24",
+        "Location": "10ffdfff-3882-450b-9e50-a330e09d3a24----Test Report_Team B.pdf",
+        "Name": "Test Report_Team B.pdf",
+        "Size": 0
+      },
+      {
+        "File_ID": "1b530777-63b0-45ba-9286-f800240295e5",
+        "Location": "1b530777-63b0-45ba-9286-f800240295e5----ViroTour_DepOps_Team_A.pdf",
+        "Name": "ViroTour_DepOps_Team_A.pdf",
+        "Size": 0
+      },
+      {
+        "File_ID": "b3629115-5704-41d0-a153-4da956c4bb74",
+        "Location": "b3629115-5704-41d0-a153-4da956c4bb74----ViroTour_PG_Team_A.pdf",
+        "Name": "ViroTour_PG_Team_A.pdf",
+        "Size": 0
+      },
+      {
+        "File_ID": "cc3beec1-49b0-420e-a73c-d7ba4cc13862",
+        "Location": "cc3beec1-49b0-420e-a73c-d7ba4cc13862----ViroTour_PMP_Team_A.pdf",
+        "Name": "ViroTour_PMP_Team_A.pdf",
+        "Size": 0
+      },
+      {
+        "File_ID": "c4a0f918-8912-415e-a87e-104dbbac9801",
+        "Location": "c4a0f918-8912-415e-a87e-104dbbac9801----ViroTour_SRS_Team_A.pdf",
+        "Name": "ViroTour_SRS_Team_A.pdf",
+        "Size": 0
+      },
+      {
+        "File_ID": "4d529528-eeab-4974-933f-078111d34171",
+        "Location": "4d529528-eeab-4974-933f-078111d34171----ViroTour_STP_Team_A.docx",
+        "Name": "ViroTour_STP_Team_A.docx",
+        "Size": 0
+      },
+      {
+        "File_ID": "b4c95fe0-5b87-4f51-a1c4-284f44dff994",
+        "Location": "b4c95fe0-5b87-4f51-a1c4-284f44dff994----ViroTour_TDD_Team_A.docx",
+        "Name": "ViroTour_TDD_Team_A.docx",
+        "Size": 0
+      },
+      {
+        "File_ID": "a1b96a1e-8305-46dc-958c-43108526f0b3",
+        "Location": "a1b96a1e-8305-46dc-958c-43108526f0b3----ViroTour_TR_Team_A.docx",
+        "Name": "ViroTour_TR_Team_A.docx",
+        "Size": 0
+      },
+      {
+        "File_ID": "af363ff6-d5b8-4f2e-a228-1e92000c48fa",
+        "Location": "af363ff6-d5b8-4f2e-a228-1e92000c48fa----ViroTour_UG_Team_A.docx",
+        "Name": "ViroTour_UG_Team_A.docx",
+        "Size": 0
+      },
+      {
+        "File_ID": "7863c414-e07c-47ab-9097-9e3e61bd0702",
+        "Location": "7863c414-e07c-47ab-9097-9e3e61bd0702----Programmers Guide_Team B.pdf",
+        "Name": "Programmers Guide_Team B.pdf",
+        "Size": 0
+      }
+    ],
+    "CompletedDocuments": [
+      {
+        "WebsiteLink": "",
+        "VideoLink": "https://youtu.be/3Bu-TNs2lqA",
+        "GitHubLink": "https://github.com/umgc/spring2023/tree/development/virotour",
+        "TeamName": "Team A",
+        "ProjectPlan": "ViroTour_PMP_Team_A.pdf",
+        "ProjectPlanLink": "cc3beec1-49b0-420e-a73c-d7ba4cc13862----ViroTour_PMP_Team_A.pdf",
+        "SRS": "ViroTour_SRS_Team_A.pdf",
+        "SRSLink": "c4a0f918-8912-415e-a87e-104dbbac9801----ViroTour_SRS_Team_A.pdf",
+        "TDD": "ViroTour_TDD_Team_A.docx",
+        "TDDLink": "b4c95fe0-5b87-4f51-a1c4-284f44dff994----ViroTour_TDD_Team_A.docx",
+        "Runbook": "ViroTour_DepOps_Team_A.pdf",
+        "RunbookLink": "1b530777-63b0-45ba-9286-f800240295e5----ViroTour_DepOps_Team_A.pdf",
+        "ProgrammersGuide": "ViroTour_PG_Team_A.pdf",
+        "ProgrammersGuideLink": "b3629115-5704-41d0-a153-4da956c4bb74----ViroTour_PG_Team_A.pdf",
+        "UsersGuide": "ViroTour_UG_Team_A.docx",
+        "UsersGuideLink": "af363ff6-d5b8-4f2e-a228-1e92000c48fa----ViroTour_UG_Team_A.docx",
+        "TestReport": "ViroTour_TR_Team_A.docx",
+        "TestReportLink": "a1b96a1e-8305-46dc-958c-43108526f0b3----ViroTour_TR_Team_A.docx"
+      },
+      {
+        "WebsiteLink": "",
+        "VideoLink": "https://youtu.be/3Bu-TNs2lqA",
+        "GitHubLink": "https://github.com/umgc/spring2023/tree/development/virotour_local",
+        "TeamName": "Team B",
+        "ProjectPlan": "Project Plan - Team B.docx",
+        "ProjectPlanLink": "a3cc1840-916c-4ef5-99f0-ca041270579f----Project Plan - Team B.docx",
+        "SRS": "SRS - Team B.pdf",
+        "SRSLink": "e2cc89c6-dd9a-4d2b-ac04-92a3bb6a1a3e----SRS - Team B.pdf",
+        "TDD": "Technical Design Doc - Team B.docx",
+        "TDDLink": "e92e51fc-6ccc-40e4-9627-6aa7e95912bd----Technical Design Doc - Team B.docx",
+        "Runbook": "Deployment and Operations Guide_Team B.docx",
+        "RunbookLink": "a1453ea9-d283-4b90-a7e1-3dfa96975f5c----Deployment and Operations Guide_Team B.docx",
+        "ProgrammersGuide": "Programmers Guide_Team B.pdf",
+        "ProgrammersGuideLink": "7863c414-e07c-47ab-9097-9e3e61bd0702----Programmers Guide_Team B.pdf",
+        "UsersGuide": "User Guide_TeamB.docx",
+        "UsersGuideLink": "275b85d0-0e91-4682-a7bc-ebd4e07dc73e----User Guide_TeamB.docx",
+        "TestReport": "Test Report_Team B.pdf",
+        "TestReportLink": "10ffdfff-3882-450b-9e50-a330e09d3a24----Test Report_Team B.pdf"
+      }
+    ],
+    "IsSponsor": true,
+    "SponsorFirstName": "Mir",
+    "SponsorLastName": "Assadullah",
+    "SponsorEmail": "Mir.Assadullah@faculty.umgc.edu",
+    "SponsorPhone": "8556558682",
+    "Status": "Complete",
+    "Comments": {
+      "1681d5a4-f902-4a9b-aff6-d013db5ff66c": {
+        "CommentId": "1681d5a4-f902-4a9b-aff6-d013db5ff66c",
+        "Comments": "Example provided: https://matterport.com/discover/space/PiwF9JXNsrJ",
+        "UserEmail": "robert.wilson2530@yahoo.com",
+        "Contact": {
+          "ContactID": "1381d196-910b-4a56-b43c-452d4bad3d7e",
+          "FirstName": "",
+          "LastName": "",
+          "Email": "",
+          "Phone": ""
+        },
+        "UpdateDateTime": "2023-01-07T19:17:39.0354048+00:00",
+        "ProjectID": "df58b89c-8924-43d8-9e86-b7e26b64aca6"
+      }
+    }
+  },
+  "cd20858a-4ee6-4048-ada2-0d13d0f87105": {
+    "ProjectID": "cd20858a-4ee6-4048-ada2-0d13d0f87105",
+    "VideoLink": "",
+    "ProjectTitle": "NASA Maestro",
+    "ProjectDescription": "The customer, National Aeronautics and Space Administration (NASA), needs some updates to the Maestro software suite, which is a tool used at NASA to create procedures for spacewalks known as Extra-Vehicular Activities (EVAs) or spacewalks undertaken outside of the host vehicle. In general, these procedures include two astronauts working outside the space station, a robotics operator inside, and other actions taken by Mission Control on the ground. Maestro currently takes the procedure data and can render it in many file types (HTML, DOCX, specific XML types) as well as different formats (EVA format, IVA format, etc.). The software facilitates basic uses, but NASA wants to extend the software’s use cases. Before that, NASA needs additional testing and format functionality.",
+    "SemesterTerm": "Spring",
+    "SemesterYear": "2020",
+    "Url": "",
+    "Github": "",
+    "FirstName": "Mir",
+    "LastName": "Assadullah",
+    "Email": "Mir.Assadullah@faculty.umgc.edu",
+    "Phone": "800-888-8682",
+    "Attachments": [
+      {
+        "File_ID": "2fbaf708-4f1b-4347-ae9c-2b70de10bfbe",
+        "Location": "2fbaf708-4f1b-4347-ae9c-2b70de10bfbe----NASA Team 1_NASA FTT System Request_v1.docx",
+        "Name": "NASA Team 1_NASA FTT System Request_v1.docx",
+        "Size": 19500
+      },
+      {
+        "File_ID": "df1ebf5c-d776-452b-a63c-010fb95254a6",
+        "Location": "df1ebf5c-d776-452b-a63c-010fb95254a6----NASA Team 1_Project Plan_v3.docx",
+        "Name": "NASA Team 1_Project Plan_v3.docx",
+        "Size": 610003
+      },
+      {
+        "File_ID": "e8fc7c70-4cfa-4f26-9e17-00fa28aeb384",
+        "Location": "e8fc7c70-4cfa-4f26-9e17-00fa28aeb384----NASA Team 1_ProjectClosureReport_v2.docx",
+        "Name": "NASA Team 1_ProjectClosureReport_v2.docx",
+        "Size": 33096
+      },
+      {
+        "File_ID": "40e52aa8-87c3-4b16-8b4e-05399d28c5b0",
+        "Location": "40e52aa8-87c3-4b16-8b4e-05399d28c5b0----NASA Team 1_REST API Specification_v5.docx",
+        "Name": "NASA Team 1_REST API Specification_v5.docx",
+        "Size": 341003
+      },
+      {
+        "File_ID": "c2a0288f-87cd-48a4-9f90-d7750cd69dab",
+        "Location": "c2a0288f-87cd-48a4-9f90-d7750cd69dab----NASA Team 1_Runbook_v1.docx",
+        "Name": "NASA Team 1_Runbook_v1.docx",
+        "Size": 31522
+      },
+      {
+        "File_ID": "f27714ae-4287-4e44-9d16-4e5c19fed595",
+        "Location": "f27714ae-4287-4e44-9d16-4e5c19fed595----NASA Team 1_SRS_v4.docx",
+        "Name": "NASA Team 1_SRS_v4.docx",
+        "Size": 94195
+      },
+      {
+        "File_ID": "2c4453ca-80bb-4242-9cde-da1d2163434a",
+        "Location": "2c4453ca-80bb-4242-9cde-da1d2163434a----NASA Team 1_TestPlan_v1.docx",
+        "Name": "NASA Team 1_TestPlan_v1.docx",
+        "Size": 38022
+      },
+      {
+        "File_ID": "755e01e7-61d3-4803-a5ff-b9544de8f40b",
+        "Location": "755e01e7-61d3-4803-a5ff-b9544de8f40b----NASA Team 1_User Interface (UI)_v2.docx",
+        "Name": "NASA Team 1_User Interface (UI)_v2.docx",
+        "Size": 320995
+      },
+      {
+        "File_ID": "2cef1abc-0fe9-40b1-a861-57e3c4270e2f",
+        "Location": "2cef1abc-0fe9-40b1-a861-57e3c4270e2f----NASA Team 1_UserGuide_V2.docx",
+        "Name": "NASA Team 1_UserGuide_V2.docx",
+        "Size": 791332
+      },
+      {
+        "File_ID": "9d8175fb-cb61-44c7-b0f9-0a78ce28cf6c",
+        "Location": "9d8175fb-cb61-44c7-b0f9-0a78ce28cf6c----MaestroHUD_ProjectPlan_V4.docx",
+        "Name": "MaestroHUD_ProjectPlan_V4.docx",
+        "Size": 0
+      },
+      {
+        "File_ID": "3f6ad512-2273-4b12-8b46-b868f5bb82a5",
+        "Location": "3f6ad512-2273-4b12-8b46-b868f5bb82a5----MaestroHUD_Runbook_V4.docx",
+        "Name": "MaestroHUD_Runbook_V4.docx",
+        "Size": 0
+      },
+      {
+        "File_ID": "4f36be84-afe1-4331-aaf2-9340715a6254",
+        "Location": "4f36be84-afe1-4331-aaf2-9340715a6254----MaestroHUD_SDD_V4.docx",
+        "Name": "MaestroHUD_SDD_V4.docx",
+        "Size": 0
+      },
+      {
+        "File_ID": "e4b75c60-501f-481f-8fb9-2ee681131d12",
+        "Location": "e4b75c60-501f-481f-8fb9-2ee681131d12----MaestroHUD_SRS_V4.doc",
+        "Name": "MaestroHUD_SRS_V4.doc",
+        "Size": 0
+      },
+      {
+        "File_ID": "e2e55c45-3c43-48c2-9611-2afcc4d9f554",
+        "Location": "e2e55c45-3c43-48c2-9611-2afcc4d9f554----MaestroHUD_TestPlan_V4.docx",
+        "Name": "MaestroHUD_TestPlan_V4.docx",
+        "Size": 0
+      },
+      {
+        "File_ID": "0139d6b8-c539-4a7d-bca9-bf27fd680ff8",
+        "Location": "0139d6b8-c539-4a7d-bca9-bf27fd680ff8----MaestroHUD_TestReport_V4.docx",
+        "Name": "MaestroHUD_TestReport_V4.docx",
+        "Size": 0
+      },
+      {
+        "File_ID": "4303145f-062c-41e0-b519-3c7b817538ff",
+        "Location": "4303145f-062c-41e0-b519-3c7b817538ff----MaestroHUD_UserManual_V4.docx",
+        "Name": "MaestroHUD_UserManual_V4.docx",
+        "Size": 0
+      }
+    ],
+    "CompletedDocuments": [
+      {
+        "WebsiteLink": "",
+        "VideoLink": "",
+        "GitHubLink": "https://github.com/umgc/nasa.maestro.verifer",
+        "TeamName": "Team 1 - Verifier",
+        "ProjectPlan": "NASA Team 1_Project Plan_v3.docx",
+        "ProjectPlanLink": "df1ebf5c-d776-452b-a63c-010fb95254a6----NASA Team 1_Project Plan_v3.docx",
+        "SRS": "NASA Team 1_SRS_v4.docx",
+        "SRSLink": "f27714ae-4287-4e44-9d16-4e5c19fed595----NASA Team 1_SRS_v4.docx",
+        "TDD": "NASA Team 1_User Interface (UI)_v2.docx",
+        "TDDLink": "755e01e7-61d3-4803-a5ff-b9544de8f40b----NASA Team 1_User Interface (UI)_v2.docx",
+        "Runbook": "NASA Team 1_Runbook_v1.docx",
+        "RunbookLink": "c2a0288f-87cd-48a4-9f90-d7750cd69dab----NASA Team 1_Runbook_v1.docx",
+        "ProgrammersGuide": "NASA Team 1_REST API Specification_v5.docx",
+        "ProgrammersGuideLink": "40e52aa8-87c3-4b16-8b4e-05399d28c5b0----NASA Team 1_REST API Specification_v5.docx",
+        "UsersGuide": "NASA Team 1_UserGuide_V2.docx",
+        "UsersGuideLink": "2cef1abc-0fe9-40b1-a861-57e3c4270e2f----NASA Team 1_UserGuide_V2.docx",
+        "TestReport": "NASA Team 1_TestPlan_v1.docx",
+        "TestReportLink": "2c4453ca-80bb-4242-9cde-da1d2163434a----NASA Team 1_TestPlan_v1.docx"
+      },
+      {
+        "WebsiteLink": "",
+        "VideoLink": "",
+        "GitHubLink": "https://github.com/umgc/nasa.hud",
+        "TeamName": "Team 2 - HUD",
+        "ProjectPlan": "MaestroHUD_ProjectPlan_V4.docx",
+        "ProjectPlanLink": "9d8175fb-cb61-44c7-b0f9-0a78ce28cf6c----MaestroHUD_ProjectPlan_V4.docx",
+        "SRS": "MaestroHUD_SRS_V4.doc",
+        "SRSLink": "e4b75c60-501f-481f-8fb9-2ee681131d12----MaestroHUD_SRS_V4.doc",
+        "TDD": "MaestroHUD_TestPlan_V4.docx",
+        "TDDLink": "e2e55c45-3c43-48c2-9611-2afcc4d9f554----MaestroHUD_TestPlan_V4.docx",
+        "Runbook": "MaestroHUD_Runbook_V4.docx",
+        "RunbookLink": "3f6ad512-2273-4b12-8b46-b868f5bb82a5----MaestroHUD_Runbook_V4.docx",
+        "ProgrammersGuide": "MaestroHUD_SRS_V4.doc",
+        "ProgrammersGuideLink": "e4b75c60-501f-481f-8fb9-2ee681131d12----MaestroHUD_SRS_V4.doc",
+        "UsersGuide": "MaestroHUD_UserManual_V4.docx",
+        "UsersGuideLink": "4303145f-062c-41e0-b519-3c7b817538ff----MaestroHUD_UserManual_V4.docx",
+        "TestReport": "MaestroHUD_TestReport_V4.docx",
+        "TestReportLink": "0139d6b8-c539-4a7d-bca9-bf27fd680ff8----MaestroHUD_TestReport_V4.docx"
+      }
+    ],
+    "IsSponsor": true,
+    "SponsorFirstName": "Mir",
+    "SponsorLastName": "Assadullah",
+    "SponsorEmail": "Mir.Assadullah@faculty.umgc.edu",
+    "SponsorPhone": "800-888-8682",
+    "Status": "Complete",
+    "Comments": {}
+  },
+  "b32edac0-accc-4ba8-9ce9-6e09c98e91dc": {
+    "ProjectID": "b32edac0-accc-4ba8-9ce9-6e09c98e91dc",
+    "VideoLink": "",
+    "ProjectTitle": "Virtual Letter of Life V2",
+    "ProjectDescription": "The “Letter of Life” is a document used by emergency services in Salisbury and Montgomery County Maryland. Patients enter their medical information to include items such as chronic conditions, medications, allergies, primary care doctors, insurance, and emergency contact. Emergency Medical Services (EMS) encourage all residents to complete this form and place it either on their front door or refrigerator to enable EMS staff to provide better care to patients in the event of an emergency. ",
+    "SemesterTerm": "Fall",
+    "SemesterYear": "2020",
+    "Url": "",
+    "Github": "",
+    "FirstName": "Mir",
+    "LastName": "Assadullah",
+    "Email": "Mir.Assadullah@faculty.umgc.edu",
+    "Phone": "800-888-8682",
+    "Attachments": [
+      {
+        "File_ID": "7093d616-e79c-429a-804f-e0351d9b1932",
+        "Location": "7093d616-e79c-429a-804f-e0351d9b1932----Team 3 - Programmer Guide V2.docx",
+        "Name": "Team 3 - Programmer Guide V2.docx",
+        "Size": 292153
+      },
+      {
+        "File_ID": "517cb6fc-0067-4360-912f-57fca374359b",
+        "Location": "517cb6fc-0067-4360-912f-57fca374359b----VLOL  Test Report .docx",
+        "Name": "VLOL  Test Report .docx",
+        "Size": 1710897
+      },
+      {
+        "File_ID": "528d1bfa-7519-45d8-85ac-263ece2af1b4",
+        "Location": "528d1bfa-7519-45d8-85ac-263ece2af1b4----VLOL Project Plan V1.5.docx",
+        "Name": "VLOL Project Plan V1.5.docx",
+        "Size": 1668831
+      },
+      {
+        "File_ID": "8b51da6e-369b-49d2-a503-3f105b864b81",
+        "Location": "8b51da6e-369b-49d2-a503-3f105b864b81----VLOL Runbook V1.3.docx",
+        "Name": "VLOL Runbook V1.3.docx",
+        "Size": 160883
+      },
+      {
+        "File_ID": "5a8fd3c2-77e8-413f-9bb9-7fd5f67424f4",
+        "Location": "5a8fd3c2-77e8-413f-9bb9-7fd5f67424f4----VLOL Software Requirement Specification V3.0.docx",
+        "Name": "VLOL Software Requirement Specification V3.0.docx",
+        "Size": 3171693
+      },
+      {
+        "File_ID": "b2ff637e-7d04-4834-b89a-6aa35639b281",
+        "Location": "b2ff637e-7d04-4834-b89a-6aa35639b281----VLOL_TDD_V2.0.docx",
+        "Name": "VLOL_TDD_V2.0.docx",
+        "Size": 420050
+      },
+      {
+        "File_ID": "8381edd7-9a01-4f4a-b31f-07f2fbe3c6b4",
+        "Location": "8381edd7-9a01-4f4a-b31f-07f2fbe3c6b4----User Guide_.docx",
+        "Name": "User Guide_.docx",
+        "Size": 0
+      }
+    ],
+    "CompletedDocuments": [
+      {
+        "WebsiteLink": "",
+        "VideoLink": "",
+        "GitHubLink": "https://github.com/umgc/umgc.vlol.2",
+        "TeamName": "Virtual Letter of Life",
+        "ProjectPlan": "VLOL Project Plan V1.5.docx",
+        "ProjectPlanLink": "528d1bfa-7519-45d8-85ac-263ece2af1b4----VLOL Project Plan V1.5.docx",
+        "SRS": "VLOL Software Requirement Specification V3.0.docx",
+        "SRSLink": "5a8fd3c2-77e8-413f-9bb9-7fd5f67424f4----VLOL Software Requirement Specification V3.0.docx",
+        "TDD": "VLOL_TDD_V2.0.docx",
+        "TDDLink": "b2ff637e-7d04-4834-b89a-6aa35639b281----VLOL_TDD_V2.0.docx",
+        "Runbook": "VLOL Runbook V1.3.docx",
+        "RunbookLink": "8b51da6e-369b-49d2-a503-3f105b864b81----VLOL Runbook V1.3.docx",
+        "ProgrammersGuide": "Team 3 - Programmer Guide V2.docx",
+        "ProgrammersGuideLink": "7093d616-e79c-429a-804f-e0351d9b1932----Team 3 - Programmer Guide V2.docx",
+        "UsersGuide": "User Guide_.docx",
+        "UsersGuideLink": "8381edd7-9a01-4f4a-b31f-07f2fbe3c6b4----User Guide_.docx",
+        "TestReport": "VLOL Test Report .docx",
+        "TestReportLink": ""
+      }
+    ],
+    "IsSponsor": true,
+    "SponsorFirstName": "Mir",
+    "SponsorLastName": "Assadullah",
+    "SponsorEmail": "Mir.Assadullah@faculty.umgc.edu",
+    "SponsorPhone": "800-888-8682",
+    "Status": "Complete",
+    "Comments": {}
+  },
+  "702c7911-caa2-4724-bc3d-f61de41174da": {
+    "ProjectID": "702c7911-caa2-4724-bc3d-f61de41174da",
+    "VideoLink": "",
+    "ProjectTitle": "Advance Development Factory V2",
+    "ProjectDescription": "University of Maryland Global Campus (UMGC) has been looking to solve a problem that spans between classes as more and more students move to remote learning. The resources that they have access to do not always permit a fully established development environment. For these reasons theyarelooking for a means to bring the fully established development environment to the student with minimal impact on the environment used by the student. The advanced development factory (ADF) will servethis purpose.The Advanced Development Factory will give the student access to the development tools they need in order to provide a code, build, and test experience that any developer would expect to have.This means that ADF needs to be operating system agnostic and support a wide array of projects, frameworks, and languages. ADF will provide this flexibility to students and remove the barriers currently placed on them by their environments. ",
+    "SemesterTerm": "Summer",
+    "SemesterYear": "2021",
+    "Url": "https://github.com/umgc/umgc.advance.development.factory",
+    "Github": "https://github.com/umgc/umgc.advance.development.factory",
+    "FirstName": "Mir",
+    "LastName": "Assadullah",
+    "Email": "Mir.Assadullah@faculty.umgc.edu",
+    "Phone": "800-888-8682",
+    "Attachments": [
+      {
+        "File_ID": "75a1d3e8-c8ff-4265-8c54-a8baac5e41ed",
+        "Location": "75a1d3e8-c8ff-4265-8c54-a8baac5e41ed----SRS Resubmit - IEEE 830.pdf",
+        "Name": "SRS Resubmit - IEEE 830.pdf",
+        "Size": 754215
+      },
+      {
+        "File_ID": "80f9ed83-c84f-41f9-a4fb-2371a1538f5f",
+        "Location": "80f9ed83-c84f-41f9-a4fb-2371a1538f5f----SWEN 670 Summer 2021 DevSecOps Programmer's Guide.pdf",
+        "Name": "SWEN 670 Summer 2021 DevSecOps Programmer's Guide.pdf",
+        "Size": 3067015
+      },
+      {
+        "File_ID": "60cf6412-32d4-47d0-858e-819913c39dd9",
+        "Location": "60cf6412-32d4-47d0-858e-819913c39dd9----SWEN 670 Summer 2021 DevSecOps Project Plan with Test Plan.pdf",
+        "Name": "SWEN 670 Summer 2021 DevSecOps Project Plan with Test Plan.pdf",
+        "Size": 772765
+      },
+      {
+        "File_ID": "4f6d4384-4d18-4b1c-be72-4da2cdc979c9",
+        "Location": "4f6d4384-4d18-4b1c-be72-4da2cdc979c9----SWEN 670 Summer 2021 DevSecOps Runbook.pdf",
+        "Name": "SWEN 670 Summer 2021 DevSecOps Runbook.pdf",
+        "Size": 3006621
+      },
+      {
+        "File_ID": "3eb1b8af-0244-43cf-91e8-3578f03a76db",
+        "Location": "3eb1b8af-0244-43cf-91e8-3578f03a76db----SWEN 670 Summer 2021 DevSecOps TDD added Test Plan.pdf",
+        "Name": "SWEN 670 Summer 2021 DevSecOps TDD added Test Plan.pdf",
+        "Size": 3217050
+      },
+      {
+        "File_ID": "d33204c0-9204-44cb-b07a-818a94ffa8c4",
+        "Location": "d33204c0-9204-44cb-b07a-818a94ffa8c4----SWEN 670 Summer 2021 DevSecOps Test Report.pdf",
+        "Name": "SWEN 670 Summer 2021 DevSecOps Test Report.pdf",
+        "Size": 527953
+      },
+      {
+        "File_ID": "e3e3a6e2-e273-4ad0-9481-f778c1941a6d",
+        "Location": "e3e3a6e2-e273-4ad0-9481-f778c1941a6d----SWEN 670 Summer 2021 DevSecOps User Guide.pdf",
+        "Name": "SWEN 670 Summer 2021 DevSecOps User Guide.pdf",
+        "Size": 4946495
+      }
+    ],
+    "CompletedDocuments": [
+      {
+        "WebsiteLink": "",
+        "VideoLink": "",
+        "GitHubLink": "https://github.com/umgc/umgc.advance.development.factory",
+        "TeamName": "DSO",
+        "ProjectPlan": "SWEN 670 Summer 2021 DevSecOps Project Plan with Test Plan.pdf",
+        "ProjectPlanLink": "60cf6412-32d4-47d0-858e-819913c39dd9----SWEN 670 Summer 2021 DevSecOps Project Plan with Test Plan.pdf",
+        "SRS": "SRS Resubmit - IEEE 830.pdf",
+        "SRSLink": "75a1d3e8-c8ff-4265-8c54-a8baac5e41ed----SRS Resubmit - IEEE 830.pdf",
+        "TDD": "SWEN 670 Summer 2021 DevSecOps TDD added Test Plan.pdf",
+        "TDDLink": "3eb1b8af-0244-43cf-91e8-3578f03a76db----SWEN 670 Summer 2021 DevSecOps TDD added Test Plan.pdf",
+        "Runbook": "SWEN 670 Summer 2021 DevSecOps Runbook.pdf",
+        "RunbookLink": "4f6d4384-4d18-4b1c-be72-4da2cdc979c9----SWEN 670 Summer 2021 DevSecOps Runbook.pdf",
+        "ProgrammersGuide": "SWEN 670 Summer 2021 DevSecOps Programmer's Guide.pdf",
+        "ProgrammersGuideLink": "80f9ed83-c84f-41f9-a4fb-2371a1538f5f----SWEN 670 Summer 2021 DevSecOps Programmer's Guide.pdf",
+        "UsersGuide": "SWEN 670 Summer 2021 DevSecOps User Guide.pdf",
+        "UsersGuideLink": "e3e3a6e2-e273-4ad0-9481-f778c1941a6d----SWEN 670 Summer 2021 DevSecOps User Guide.pdf",
+        "TestReport": "SWEN 670 Summer 2021 DevSecOps Test Report.pdf",
+        "TestReportLink": "d33204c0-9204-44cb-b07a-818a94ffa8c4----SWEN 670 Summer 2021 DevSecOps Test Report.pdf"
+      }
+    ],
+    "IsSponsor": true,
+    "SponsorFirstName": "Mir",
+    "SponsorLastName": "Assadullah",
+    "SponsorEmail": "Mir.Assadullah@faculty.umgc.edu",
+    "SponsorPhone": "800-888-8682",
+    "Status": "Complete",
+    "Comments": {}
+  },
+  "4d10fb6d-c7fc-4a5a-8ecc-d4baa13ee48e": {
+    "ProjectID": "4d10fb6d-c7fc-4a5a-8ecc-d4baa13ee48e",
+    "VideoLink": "",
+    "ProjectTitle": "UMGC City",
+    "ProjectDescription": "The scope of the UMGC City project is to build a free, open-source application that can be used by city officials to improve the usability of existing city web portals for their targeted audiences. The objective of the application is to enhance the user experience by helping them easily and intuitively locate applicable city ordinances for a predetermined list of frequently requested user inquiries (as determined by the city officials). In order to accomplish this goal, the application shall present the city officials with an interface to accept input of various use cases along with all the pertinent information that they think will benefit their intended audiences. The application shall process that data into appropriate tables that comprise a database. When the users visit the city web portal to search for specific ordinances, the database shall be called upon to produce appropriate output that is tailored to them in a tabular format. This generic, build-to-suit database infrastructure allows the application to be reused by any city. The UMGC City teams, along with the DevOps team, will work closely with the customer, Israel Del Toro, to implement the database setup. In addition, the development teams shall tailor the application to deliver new pages and functionalities that are customized for the website of the City of Pasadena, California. Specifically, the UMGC City project teams will be delivering two interfaces: an interactive map/web-based interface (Team 1) and a ChatBot interface (Team 2). This project plan presents information applicable to the database setup and the map/web-based interface, whose tasks fall under UMGC City Team 1. UMGC City Team 2 shall use the same database setup that Team 1 built for the application.",
+    "SemesterTerm": "Spring",
+    "SemesterYear": "2020",
+    "Url": "",
+    "Github": "",
+    "FirstName": "Mir",
+    "LastName": "Assadullah",
+    "Email": "Mir.Assadullah@faculty.umgc.edu",
+    "Phone": "800-888-8682",
+    "Attachments": [
+      {
+        "File_ID": "8e570f3b-be7e-4bc1-ad23-05e683de7322",
+        "Location": "8e570f3b-be7e-4bc1-ad23-05e683de7322----Project Plan UMGC Team 2 V3+.docx",
+        "Name": "Project Plan UMGC Team 2 V3+.docx",
+        "Size": 1047261
+      },
+      {
+        "File_ID": "f2c5c056-5156-4460-81e8-ac29f34d9c7a",
+        "Location": "f2c5c056-5156-4460-81e8-ac29f34d9c7a----Runbook UMGC Team 2 Chatbot Pasadena ver_1.0.docx",
+        "Name": "Runbook UMGC Team 2 Chatbot Pasadena ver_1.0.docx",
+        "Size": 725758
+      },
+      {
+        "File_ID": "734c9ef9-cf69-4543-8f05-9f8e7794589b",
+        "Location": "734c9ef9-cf69-4543-8f05-9f8e7794589b----SRS UMGC City Team 2 Chatbot.docx",
+        "Name": "SRS UMGC City Team 2 Chatbot.docx",
+        "Size": 652146
+      },
+      {
+        "File_ID": "c619509b-3f5d-4948-8922-963a783accdb",
+        "Location": "c619509b-3f5d-4948-8922-963a783accdb----Test Plan UMGC Team 2 Chatbot.docx",
+        "Name": "Test Plan UMGC Team 2 Chatbot.docx",
+        "Size": 106006
+      },
+      {
+        "File_ID": "a68032f6-399c-4177-9cb5-f869db188bb4",
+        "Location": "a68032f6-399c-4177-9cb5-f869db188bb4----SDD UMGC City Team2 Chatbot.docx",
+        "Name": "SDD UMGC City Team2 Chatbot.docx",
+        "Size": 0
+      },
+      {
+        "File_ID": "29a3b4e1-87df-4d5a-81e2-01f9ddbf38a5",
+        "Location": "29a3b4e1-87df-4d5a-81e2-01f9ddbf38a5----User Guide UMGC Team 2 Chatbot V1.docx",
+        "Name": "User Guide UMGC Team 2 Chatbot V1.docx",
+        "Size": 0
+      },
+      {
+        "File_ID": "b1f1f63b-4a38-421b-9971-6048d64c2677",
+        "Location": "b1f1f63b-4a38-421b-9971-6048d64c2677----SDD UMGC City Team 1.docx",
+        "Name": "SDD UMGC City Team 1.docx",
+        "Size": 0
+      },
+      {
+        "File_ID": "849109bb-9353-48a2-93cd-9a7f903c34df",
+        "Location": "849109bb-9353-48a2-93cd-9a7f903c34df----SRS UMGC City Team 1.docx",
+        "Name": "SRS UMGC City Team 1.docx",
+        "Size": 0
+      },
+      {
+        "File_ID": "8bedccd6-2e7f-4954-99a6-3a9d421a17f5",
+        "Location": "8bedccd6-2e7f-4954-99a6-3a9d421a17f5----UMGC City Team 1 Client Project Requirements.docx",
+        "Name": "UMGC City Team 1 Client Project Requirements.docx",
+        "Size": 0
+      },
+      {
+        "File_ID": "241a06c5-803d-4be1-a940-5d6d2f2b841c",
+        "Location": "241a06c5-803d-4be1-a940-5d6d2f2b841c----UMGC City Team 1 Final Project Report.docx",
+        "Name": "UMGC City Team 1 Final Project Report.docx",
+        "Size": 0
+      },
+      {
+        "File_ID": "8e8a2bc6-ee27-4315-9347-226aeb983482",
+        "Location": "8e8a2bc6-ee27-4315-9347-226aeb983482----UMGC City Team 1 Project Plan-1.docx",
+        "Name": "UMGC City Team 1 Project Plan-1.docx",
+        "Size": 0
+      },
+      {
+        "File_ID": "7e90c0e3-06d9-4411-a2ef-f27a5462e936",
+        "Location": "7e90c0e3-06d9-4411-a2ef-f27a5462e936----UMGC City Team 1 Software Test Plan_V-2.0.docx",
+        "Name": "UMGC City Team 1 Software Test Plan_V-2.0.docx",
+        "Size": 0
+      },
+      {
+        "File_ID": "af86de97-d036-4558-b0cc-8ce53a3b998a",
+        "Location": "af86de97-d036-4558-b0cc-8ce53a3b998a----UMGC CIty Team 1 Test Report .docx",
+        "Name": "UMGC CIty Team 1 Test Report .docx",
+        "Size": 0
+      }
+    ],
+    "CompletedDocuments": [
+      {
+        "WebsiteLink": "",
+        "VideoLink": "",
+        "GitHubLink": "https://github.com/umgc/umgc.city.backend.web",
+        "TeamName": "Webapp",
+        "ProjectPlan": "UMGC City Team 1 Project Plan-1.docx",
+        "ProjectPlanLink": "8e8a2bc6-ee27-4315-9347-226aeb983482----UMGC City Team 1 Project Plan-1.docx",
+        "SRS": "SRS UMGC City Team 1.docx",
+        "SRSLink": "849109bb-9353-48a2-93cd-9a7f903c34df----SRS UMGC City Team 1.docx",
+        "TDD": "SDD UMGC City Team 1.docx",
+        "TDDLink": "b1f1f63b-4a38-421b-9971-6048d64c2677----SDD UMGC City Team 1.docx",
+        "Runbook": "UMGC City Team 1 Client Project Requirements.docx",
+        "RunbookLink": "8bedccd6-2e7f-4954-99a6-3a9d421a17f5----UMGC City Team 1 Client Project Requirements.docx",
+        "ProgrammersGuide": "UMGC City Team 1 Final Project Report.docx",
+        "ProgrammersGuideLink": "241a06c5-803d-4be1-a940-5d6d2f2b841c----UMGC City Team 1 Final Project Report.docx",
+        "UsersGuide": "UMGC City Team 1 Software Test Plan_V-2.0.docx",
+        "UsersGuideLink": "7e90c0e3-06d9-4411-a2ef-f27a5462e936----UMGC City Team 1 Software Test Plan_V-2.0.docx",
+        "TestReport": "UMGC CIty Team 1 Test Report .docx",
+        "TestReportLink": "af86de97-d036-4558-b0cc-8ce53a3b998a----UMGC CIty Team 1 Test Report .docx"
+      },
+      {
+        "WebsiteLink": "",
+        "VideoLink": "",
+        "GitHubLink": "https://github.com/umgc/umgc.city.frontend",
+        "TeamName": "Chatbox",
+        "ProjectPlan": "Project Plan UMGC Team 2 V3+.docx",
+        "ProjectPlanLink": "8e570f3b-be7e-4bc1-ad23-05e683de7322----Project Plan UMGC Team 2 V3+.docx",
+        "SRS": "SRS UMGC City Team 2 Chatbot.docx",
+        "SRSLink": "734c9ef9-cf69-4543-8f05-9f8e7794589b----SRS UMGC City Team 2 Chatbot.docx",
+        "TDD": "SDD UMGC City Team2 Chatbot.docx",
+        "TDDLink": "a68032f6-399c-4177-9cb5-f869db188bb4----SDD UMGC City Team2 Chatbot.docx",
+        "Runbook": "Runbook UMGC Team 2 Chatbot Pasadena ver_1.0.docx",
+        "RunbookLink": "f2c5c056-5156-4460-81e8-ac29f34d9c7a----Runbook UMGC Team 2 Chatbot Pasadena ver_1.0.docx",
+        "ProgrammersGuide": "Runbook UMGC Team 2 Chatbot Pasadena ver_1.0.docx",
+        "ProgrammersGuideLink": "f2c5c056-5156-4460-81e8-ac29f34d9c7a----Runbook UMGC Team 2 Chatbot Pasadena ver_1.0.docx",
+        "UsersGuide": "User Guide UMGC Team 2 Chatbot V1.docx",
+        "UsersGuideLink": "29a3b4e1-87df-4d5a-81e2-01f9ddbf38a5----User Guide UMGC Team 2 Chatbot V1.docx",
+        "TestReport": "Test Plan UMGC Team 2 Chatbot.docx",
+        "TestReportLink": "c619509b-3f5d-4948-8922-963a783accdb----Test Plan UMGC Team 2 Chatbot.docx"
+      }
+    ],
+    "IsSponsor": true,
+    "SponsorFirstName": "Mir",
+    "SponsorLastName": "Assadullah",
+    "SponsorEmail": "Mir.Assadullah@faculty.umgc.edu",
+    "SponsorPhone": "800-888-8682",
+    "Status": "Complete",
+    "Comments": {}
+  },
+  "70ceda28-1bc3-4253-9133-fdc30d4eadcb": {
+    "ProjectID": "70ceda28-1bc3-4253-9133-fdc30d4eadcb",
+    "VideoLink": "",
+    "ProjectTitle": "Fall 2023 STML",
+    "ProjectDescription": "About 14 million people in the United States havea disability that impairs their short-term memory. Using AI, we can help make these lives better.",
+    "SemesterTerm": "Fall",
+    "SemesterYear": "2023",
+    "Url": "",
+    "Github": "https://github.com/umgc/fall2023",
+    "FirstName": "Mir",
+    "LastName": "Assadullah",
+    "Email": "Mir.Assadullah@faculty.umgc.edu",
+    "Phone": "8556558682",
+    "Attachments": [
+      {
+        "File_ID": "d4ad833f-65ab-4648-88bd-960af5826c01",
+        "Location": "d4ad833f-65ab-4648-88bd-960af5826c01----Deployment-and-Operations-Guide_Team-A_Final.pdf",
+        "Name": "Deployment-and-Operations-Guide_Team-A_Final.pdf",
+        "Size": 0
+      },
+      {
+        "File_ID": "ddef0eef-dda5-4347-8475-5b1fdbe51007",
+        "Location": "ddef0eef-dda5-4347-8475-5b1fdbe51007----Programmer-Guide_Team-A_Final.pdf",
+        "Name": "Programmer-Guide_Team-A_Final.pdf",
+        "Size": 0
+      },
+      {
+        "File_ID": "41200215-ff90-4c08-900a-95a6c53e7e2d",
+        "Location": "41200215-ff90-4c08-900a-95a6c53e7e2d----Project-Plan_Team-A_Final.pdf",
+        "Name": "Project-Plan_Team-A_Final.pdf",
+        "Size": 0
+      },
+      {
+        "File_ID": "de13fb2e-768e-414e-99c2-144a553795c9",
+        "Location": "de13fb2e-768e-414e-99c2-144a553795c9----Software-Requirements-Specification_Team-A_Final.pdf",
+        "Name": "Software-Requirements-Specification_Team-A_Final.pdf",
+        "Size": 0
+      },
+      {
+        "File_ID": "75a3d2b6-c103-4559-bc7a-92d164d1d3d3",
+        "Location": "75a3d2b6-c103-4559-bc7a-92d164d1d3d3----Technical-Design-Document_Team-A_Final.pdf",
+        "Name": "Technical-Design-Document_Team-A_Final.pdf",
+        "Size": 0
+      },
+      {
+        "File_ID": "4d644a05-efb2-49cc-b50b-395ea527acd9",
+        "Location": "4d644a05-efb2-49cc-b50b-395ea527acd9----Test-Plan_Team-A_Final.pdf",
+        "Name": "Test-Plan_Team-A_Final.pdf",
+        "Size": 0
+      },
+      {
+        "File_ID": "4019bb89-fb59-439a-960e-8a24ab5a10be",
+        "Location": "4019bb89-fb59-439a-960e-8a24ab5a10be----Test-Report_Team-A_Final.pdf",
+        "Name": "Test-Report_Team-A_Final.pdf",
+        "Size": 0
+      },
+      {
+        "File_ID": "1121ef37-de8e-4b41-8e69-e2bd247088a5",
+        "Location": "1121ef37-de8e-4b41-8e69-e2bd247088a5----User-Guide_Team-A_Final.pdf",
+        "Name": "User-Guide_Team-A_Final.pdf",
+        "Size": 0
+      },
+      {
+        "File_ID": "b51f87d0-7d79-43e8-a004-4eb69ba0e732",
+        "Location": "b51f87d0-7d79-43e8-a004-4eb69ba0e732----Team B Deployment and Operations Guide M4.docx",
+        "Name": "Team B Deployment and Operations Guide M4.docx",
+        "Size": 0
+      },
+      {
+        "File_ID": "b04eb9fc-1ca5-407a-b475-974d639abfb4",
+        "Location": "b04eb9fc-1ca5-407a-b475-974d639abfb4----Team B PG M4.docx",
+        "Name": "Team B PG M4.docx",
+        "Size": 0
+      },
+      {
+        "File_ID": "61433bb9-3653-4412-af21-fde0993b5350",
+        "Location": "61433bb9-3653-4412-af21-fde0993b5350----Team B Project Plan M4.docx",
+        "Name": "Team B Project Plan M4.docx",
+        "Size": 0
+      },
+      {
+        "File_ID": "56398add-90fe-4e68-b5b0-74a7a2410069",
+        "Location": "56398add-90fe-4e68-b5b0-74a7a2410069----Team B SRS M4.docx",
+        "Name": "Team B SRS M4.docx",
+        "Size": 0
+      },
+      {
+        "File_ID": "ae6f48c7-2152-4ec8-83e9-ac8a4e39ab4b",
+        "Location": "ae6f48c7-2152-4ec8-83e9-ac8a4e39ab4b----Team B TDD M4.docx",
+        "Name": "Team B TDD M4.docx",
+        "Size": 0
+      },
+      {
+        "File_ID": "4c5557b8-ea18-4164-befd-fdbc00f5c2db",
+        "Location": "4c5557b8-ea18-4164-befd-fdbc00f5c2db----Team B Test Plan Draft M4.docx",
+        "Name": "Team B Test Plan Draft M4.docx",
+        "Size": 0
+      },
+      {
+        "File_ID": "1c530f1f-a930-45cf-804c-51185b064e24",
+        "Location": "1c530f1f-a930-45cf-804c-51185b064e24----Team B Test Report M4.docx",
+        "Name": "Team B Test Report M4.docx",
+        "Size": 0
+      },
+      {
+        "File_ID": "211f5bda-bcd9-4056-ad0e-d36a5231fd1d",
+        "Location": "211f5bda-bcd9-4056-ad0e-d36a5231fd1d----Team B User Guide M4.docx",
+        "Name": "Team B User Guide M4.docx",
+        "Size": 0
+      }
+    ],
+    "CompletedDocuments": [
+      {
+        "WebsiteLink": "",
+        "VideoLink": "https://youtu.be/ac_WM-jaxYg",
+        "GitHubLink": "https://github.com/umgc/fall2023",
+        "TeamName": "Dream Team",
+        "ProjectPlan": "Project-Plan_Team-A_Final.pdf",
+        "ProjectPlanLink": "41200215-ff90-4c08-900a-95a6c53e7e2d----Project-Plan_Team-A_Final.pdf",
+        "SRS": "Software-Requirements-Specification_Team-A_Final.pdf",
+        "SRSLink": "de13fb2e-768e-414e-99c2-144a553795c9----Software-Requirements-Specification_Team-A_Final.pdf",
+        "TDD": "Technical-Design-Document_Team-A_Final.pdf",
+        "TDDLink": "75a3d2b6-c103-4559-bc7a-92d164d1d3d3----Technical-Design-Document_Team-A_Final.pdf",
+        "Runbook": "Deployment-and-Operations-Guide_Team-A_Final.pdf",
+        "RunbookLink": "d4ad833f-65ab-4648-88bd-960af5826c01----Deployment-and-Operations-Guide_Team-A_Final.pdf",
+        "ProgrammersGuide": "Project-Plan_Team-A_Final.pdf",
+        "ProgrammersGuideLink": "41200215-ff90-4c08-900a-95a6c53e7e2d----Project-Plan_Team-A_Final.pdf",
+        "UsersGuide": "User-Guide_Team-A_Final.pdf",
+        "UsersGuideLink": "1121ef37-de8e-4b41-8e69-e2bd247088a5----User-Guide_Team-A_Final.pdf",
+        "TestReport": "Test-Report_Team-A_Final.pdf",
+        "TestReportLink": "4019bb89-fb59-439a-960e-8a24ab5a10be----Test-Report_Team-A_Final.pdf"
+      },
+      {
+        "WebsiteLink": "",
+        "VideoLink": "https://youtu.be/ac_WM-jaxYg",
+        "GitHubLink": "https://github.com/umgc/fall2023",
+        "TeamName": "Team B",
+        "ProjectPlan": "Team B Project Plan M4.docx",
+        "ProjectPlanLink": "61433bb9-3653-4412-af21-fde0993b5350----Team B Project Plan M4.docx",
+        "SRS": "Team B SRS M4.docx",
+        "SRSLink": "56398add-90fe-4e68-b5b0-74a7a2410069----Team B SRS M4.docx",
+        "TDD": "Team B TDD M4.docx",
+        "TDDLink": "ae6f48c7-2152-4ec8-83e9-ac8a4e39ab4b----Team B TDD M4.docx",
+        "Runbook": "Team B Deployment and Operations Guide M4.docx",
+        "RunbookLink": "b51f87d0-7d79-43e8-a004-4eb69ba0e732----Team B Deployment and Operations Guide M4.docx",
+        "ProgrammersGuide": "Team B PG M4.docx",
+        "ProgrammersGuideLink": "b04eb9fc-1ca5-407a-b475-974d639abfb4----Team B PG M4.docx",
+        "UsersGuide": "Team B User Guide M4.docx",
+        "UsersGuideLink": "211f5bda-bcd9-4056-ad0e-d36a5231fd1d----Team B User Guide M4.docx",
+        "TestReport": "Team B Test Report M4.docx",
+        "TestReportLink": "1c530f1f-a930-45cf-804c-51185b064e24----Team B Test Report M4.docx"
+      }
+    ],
+    "IsSponsor": true,
+    "SponsorFirstName": "Mir",
+    "SponsorLastName": "Assadullah",
+    "SponsorEmail": "Mir.Assadullah@faculty.umgc.edu",
+    "SponsorPhone": "8556558682",
+    "Status": "Complete",
+    "Comments": {
+      "57db1cc4-a71d-474d-a482-7b2dc7827cc1": {
+        "CommentId": "57db1cc4-a71d-474d-a482-7b2dc7827cc1",
+        "Comments": "Two teams. Features are split between the two teams. Lead PM are responsible for coordination.",
+        "UserEmail": "robert.wilson2530@yahoo.com",
+        "Contact": {
+          "ContactID": "522c64ca-6527-4ed4-854c-49f59f6b4706",
+          "FirstName": "",
+          "LastName": "",
+          "Email": "",
+          "Phone": ""
+        },
+        "UpdateDateTime": "2023-09-02T16:11:24.6276275+00:00",
+        "ProjectID": "70ceda28-1bc3-4253-9133-fdc30d4eadcb"
+      }
+    }
+  },
+  "e6bbe8de-1022-48b8-a85d-55c8ce409a69": {
+    "ProjectID": "e6bbe8de-1022-48b8-a85d-55c8ce409a69",
+    "VideoLink": "https://www.youtube.com/watch?v=Z7juO6O-yCQ",
+    "ProjectTitle": "Mnemosyne",
+    "ProjectDescription": "This short-term memory assistant mobile application might be the first Artificial Intelligent Application to make the best personal speech recognition application for the memory impaired. It will offer public service professionals an application to listen to a conversation between an interviewer and interviewee(short-term memory disability).After that, the mobile app will capture the conversation as a recording, translate it into text, and stored the text data on the user’s local device. A completed functional application will showcase at the end of the term semester. The Short-Term memory assistant Mobile app will fulfill all the high-level requirements. Finally, all the documentation such as Software Requirement Specification (SRS), technical design, software test plan, programmer guide, deployment operation guide will generate for the customers to view and print as necessary.",
+    "SemesterTerm": "Summer",
+    "SemesterYear": "2021",
+    "Url": "",
+    "Github": "https://github.com/umgc/summer2021.charlie",
+    "FirstName": "Mir",
+    "LastName": "Assadullah",
+    "Email": "Mir.Assadullah@faculty.umgc.edu",
+    "Phone": "800-888-8682",
+    "Attachments": [
+      {
+        "File_ID": "26ab865a-6af8-4c61-8b39-40948df9c49c",
+        "Location": "26ab865a-6af8-4c61-8b39-40948df9c49c----Deployment and Operation Guide Runbook_Version 2.0.pdf",
+        "Name": "Deployment and Operation Guide Runbook_Version 2.0.pdf",
+        "Size": 3205948
+      },
+      {
+        "File_ID": "24ca7270-d934-468a-a556-bc625847bfec",
+        "Location": "24ca7270-d934-468a-a556-bc625847bfec----Programer Guide_Version 2.0.pdf",
+        "Name": "Programer Guide_Version 2.0.pdf",
+        "Size": 4404884
+      },
+      {
+        "File_ID": "6b790236-f1b0-4f64-bf0c-1d89ad2a543a",
+        "Location": "6b790236-f1b0-4f64-bf0c-1d89ad2a543a----Project Plan_Version_4.0.pdf",
+        "Name": "Project Plan_Version_4.0.pdf",
+        "Size": 1352046
+      },
+      {
+        "File_ID": "14331877-1b73-4575-8690-f60724b7962e",
+        "Location": "14331877-1b73-4575-8690-f60724b7962e----SRS_IEEE830_Version_2.0.pdf",
+        "Name": "SRS_IEEE830_Version_2.0.pdf",
+        "Size": 442343
+      },
+      {
+        "File_ID": "82c15fbd-e994-49e1-acf2-cacc950dc63e",
+        "Location": "82c15fbd-e994-49e1-acf2-cacc950dc63e----Technical Design Document_Version_2.0.pdf",
+        "Name": "Technical Design Document_Version_2.0.pdf",
+        "Size": 1094185
+      },
+      {
+        "File_ID": "f554f377-6da7-477c-9154-2be5bf40b427",
+        "Location": "f554f377-6da7-477c-9154-2be5bf40b427----Test Plan Document_Version_2.0.pdf",
+        "Name": "Test Plan Document_Version_2.0.pdf",
+        "Size": 216969
+      },
+      {
+        "File_ID": "13ad3d58-7420-49fd-a626-0f4c797023c5",
+        "Location": "13ad3d58-7420-49fd-a626-0f4c797023c5----Test Report_Milestone 4_Charlie Team.pdf",
+        "Name": "Test Report_Milestone 4_Charlie Team.pdf",
+        "Size": 866003
+      },
+      {
+        "File_ID": "33a797b3-fdc0-4557-92b0-8d83bdb670d5",
+        "Location": "33a797b3-fdc0-4557-92b0-8d83bdb670d5----User Guide_Milestone 4_Charlie Team.pdf",
+        "Name": "User Guide_Milestone 4_Charlie Team.pdf",
+        "Size": 1894980
+      }
+    ],
+    "CompletedDocuments": [
+      {
+        "WebsiteLink": "",
+        "VideoLink": "https://www.youtube.com/watch?v=Z7juO6O-yCQ",
+        "GitHubLink": "https://github.com/umgc/summer2021.charlie",
+        "TeamName": "Charlie",
+        "ProjectPlan": "Project Plan_Version_4.0.pdf",
+        "ProjectPlanLink": "6b790236-f1b0-4f64-bf0c-1d89ad2a543a----Project Plan_Version_4.0.pdf",
+        "SRS": "SRS_IEEE830_Version_2.0.pdf",
+        "SRSLink": "14331877-1b73-4575-8690-f60724b7962e----SRS_IEEE830_Version_2.0.pdf",
+        "TDD": "Technical Design Document_Version_2.0.pdf",
+        "TDDLink": "82c15fbd-e994-49e1-acf2-cacc950dc63e----Technical Design Document_Version_2.0.pdf",
+        "Runbook": "Deployment and Operation Guide Runbook_Version 2.0.pdf",
+        "RunbookLink": "26ab865a-6af8-4c61-8b39-40948df9c49c----Deployment and Operation Guide Runbook_Version 2.0.pdf",
+        "ProgrammersGuide": "Programer Guide_Version 2.0.pdf",
+        "ProgrammersGuideLink": "24ca7270-d934-468a-a556-bc625847bfec----Programer Guide_Version 2.0.pdf",
+        "UsersGuide": "User Guide_Milestone 4_Charlie Team.pdf",
+        "UsersGuideLink": "33a797b3-fdc0-4557-92b0-8d83bdb670d5----User Guide_Milestone 4_Charlie Team.pdf",
+        "TestReport": "Test Report_Milestone 4_Charlie Team.pdf",
+        "TestReportLink": "13ad3d58-7420-49fd-a626-0f4c797023c5----Test Report_Milestone 4_Charlie Team.pdf"
+      }
+    ],
+    "IsSponsor": true,
+    "SponsorFirstName": "Mir",
+    "SponsorLastName": "Assadullah",
+    "SponsorEmail": "Mir.Assadullah@faculty.umgc.edu",
+    "SponsorPhone": "800-888-8682",
+    "Status": "Complete",
+    "Comments": {}
+  },
+  "e69c6d31-172c-44d6-8730-74741956cfd3": {
+    "ProjectID": "e69c6d31-172c-44d6-8730-74741956cfd3",
+    "VideoLink": "",
+    "ProjectTitle": "Virtual Letter of Life V1",
+    "ProjectDescription": "The Letter of Life is a paper form that provides responders with a list of important medical information regarding the patient in need. This form should be completed by patient and placed inside the residence at a location easily accessible by EMS personnel. The scope of the project is to develop an interoperable electronic Letter of Life system that will exchange information through the interdisciplinary Emergency Medical Services (EMS), allowing information to be updated and viewed simultaneously by various authorized end users. Additionally, it will provide flexible accessibility to patients to continually update their medical information.",
+    "SemesterTerm": "Summer",
+    "SemesterYear": "2020",
+    "Url": "",
+    "Github": "https://github.com/umgc/fire.department",
+    "FirstName": "Mir",
+    "LastName": "Assadullah",
+    "Email": "Mir.Assadullah@faculty.umgc.edu",
+    "Phone": "800-888-8682",
+    "Attachments": [
+      {
+        "File_ID": "f45dfbb9-820f-41ca-bd83-e7c0326d4df5",
+        "Location": "f45dfbb9-820f-41ca-bd83-e7c0326d4df5----EMSPlus Team - EVM-v2 (1).docx",
+        "Name": "EMSPlus Team - EVM-v2 (1).docx",
+        "Size": 2372050
+      },
+      {
+        "File_ID": "0d0c3b5e-761d-4f62-a371-4cbc309dd31b",
+        "Location": "0d0c3b5e-761d-4f62-a371-4cbc309dd31b----Team 3 - Master Test Plan V2.docx",
+        "Name": "Team 3 - Master Test Plan V2.docx",
+        "Size": 86106
+      },
+      {
+        "File_ID": "ce4a5d0c-20f6-49a7-bf98-a2bc0c2b5f0d",
+        "Location": "ce4a5d0c-20f6-49a7-bf98-a2bc0c2b5f0d----Team 3 - Programmer Guide V1.docx",
+        "Name": "Team 3 - Programmer Guide V1.docx",
+        "Size": 0
+      },
+      {
+        "File_ID": "e12b9d30-ebd8-4b8d-95cf-f6ef2db2a6b2",
+        "Location": "e12b9d30-ebd8-4b8d-95cf-f6ef2db2a6b2----Team 3 - Project Plan V3.docx",
+        "Name": "Team 3 - Project Plan V3.docx",
+        "Size": 0
+      },
+      {
+        "File_ID": "36570d55-69c8-4d81-92b8-e9c81ca66642",
+        "Location": "36570d55-69c8-4d81-92b8-e9c81ca66642----Team 3 - Runbook V1.docx",
+        "Name": "Team 3 - Runbook V1.docx",
+        "Size": 0
+      },
+      {
+        "File_ID": "16f19f19-e9eb-402a-bf7f-69932c4172b9",
+        "Location": "16f19f19-e9eb-402a-bf7f-69932c4172b9----Team 3 - SDD - V2.docx",
+        "Name": "Team 3 - SDD - V2.docx",
+        "Size": 0
+      },
+      {
+        "File_ID": "3c30d80b-8544-4988-8d8f-a4c10272f407",
+        "Location": "3c30d80b-8544-4988-8d8f-a4c10272f407----Team 3 - SRS - V3.docx",
+        "Name": "Team 3 - SRS - V3.docx",
+        "Size": 0
+      },
+      {
+        "File_ID": "6e60856e-0811-40c9-9430-cb4a5f64e4ac",
+        "Location": "6e60856e-0811-40c9-9430-cb4a5f64e4ac----Team 3 - Test Report V1.docx",
+        "Name": "Team 3 - Test Report V1.docx",
+        "Size": 0
+      },
+      {
+        "File_ID": "fed74d2a-681c-42e6-8ff5-c53a7b517709",
+        "Location": "fed74d2a-681c-42e6-8ff5-c53a7b517709----VLOL Application Development Turnover.docx",
+        "Name": "VLOL Application Development Turnover.docx",
+        "Size": 0
+      }
+    ],
+    "CompletedDocuments": [
+      {
+        "WebsiteLink": "",
+        "VideoLink": "",
+        "GitHubLink": "https://github.com/umgc/fire.department",
+        "TeamName": "EMSPlus",
+        "ProjectPlan": "Team 3 - Project Plan V3.docx",
+        "ProjectPlanLink": "e12b9d30-ebd8-4b8d-95cf-f6ef2db2a6b2----Team 3 - Project Plan V3.docx",
+        "SRS": "Team 3 - SRS - V3.docx",
+        "SRSLink": "3c30d80b-8544-4988-8d8f-a4c10272f407----Team 3 - SRS - V3.docx",
+        "TDD": "VLOL Application Development Turnover.docx",
+        "TDDLink": "fed74d2a-681c-42e6-8ff5-c53a7b517709----VLOL Application Development Turnover.docx",
+        "Runbook": "Team 3 - Runbook V1.docx",
+        "RunbookLink": "36570d55-69c8-4d81-92b8-e9c81ca66642----Team 3 - Runbook V1.docx",
+        "ProgrammersGuide": "Team 3 - Programmer Guide V1.docx",
+        "ProgrammersGuideLink": "ce4a5d0c-20f6-49a7-bf98-a2bc0c2b5f0d----Team 3 - Programmer Guide V1.docx",
+        "UsersGuide": "Team 3 - Programmer Guide V1.docx",
+        "UsersGuideLink": "ce4a5d0c-20f6-49a7-bf98-a2bc0c2b5f0d----Team 3 - Programmer Guide V1.docx",
+        "TestReport": "Team 3 - Test Report V1.docx",
+        "TestReportLink": "6e60856e-0811-40c9-9430-cb4a5f64e4ac----Team 3 - Test Report V1.docx"
+      }
+    ],
+    "IsSponsor": true,
+    "SponsorFirstName": "Mir",
+    "SponsorLastName": "Assadullah",
+    "SponsorEmail": "Mir.Assadullah@faculty.umgc.edu",
+    "SponsorPhone": "800-888-8682",
+    "Status": "Complete",
+    "Comments": {}
+  }
+}

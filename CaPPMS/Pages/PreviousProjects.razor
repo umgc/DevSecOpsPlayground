@@ -1,11 +1,17 @@
 @page "/previousprojects"
 
-<h2>Previous Projects</h2>
+<br>
+<h1>Manage Projects</h1>
 
 <p>
-    The documents and products created by students from each semester can be found here.
+    The Master of Information Systems with a Specialization in Software 
+    Engineering program at the University of Maryland Global Campus ends 
+    with a capstone course. This webpage allows authorized users to manage 
+    projects by editing data, uploading/deleting files, and making comments.
 </p>
-<hr />
+
+
+@* <hr />
 
 @inject ProjectManagerService ProjectManager
 @foreach (ProjectInformation idea in sortedProjects)
@@ -110,4 +116,21 @@
             .ThenBy(o => o.SemesterTerm == "Summer")
             .ThenBy(o => o.SemesterTerm == "Fall");
     }
+} *@
+
+@using CaPPMS.Data
+@using CaPPMS.Model
+@inject ProjectManagerService ProjectManager
+
+
+
+    @* <CascadingAuthenticationState>
+        <ManageProjectTable DataSource="new List<ProjectInformation>(ProjectManager.ProjectIdeas.Values.OrderBy(i => i.Status).ToList())" CssClass="table border p-2" />
+    </CascadingAuthenticationState> *@
+
+    <CascadingAuthenticationState>
+        <ManageProjectTable DataSource="new List<ProjectInformation>(ProjectManager.ProjectIdeas.Values.OrderBy(i => i.Status).ToList())" CssClass="table border p-2" />
+    </CascadingAuthenticationState>
+
+@code {
 }
