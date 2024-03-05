@@ -80,7 +80,7 @@ CREATE TABLE [dbo].[Link]
 CREATE TABLE [dbo].[Team_Members]
 (
     [TM_Id] BIGINT NOT NULL PRIMARY KEY, 
-    [Name] NVARCHAR(50) NUL,  
+    [Name] NVARCHAR(50) NULL,  
     [P_ID] BIGINT NOT NULL,
     CONSTRAINT [FK_Team_members_Project_Information] FOREIGN KEY ([P_ID]) REFERENCES [Project_Information]([P_ID])
 )
