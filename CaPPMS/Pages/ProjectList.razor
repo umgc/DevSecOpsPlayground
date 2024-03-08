@@ -3,9 +3,17 @@
 @inject ProjectManagerService ProjectManager
 
 @page "/projectlist"
+<br>
+<h1>Projects</h1>
+<p>
+    The Master of Information Systems with a Specialization in Software 
+    Engineering program at the University of Maryland Global Campus ends 
+    with a capstone course. This website allows users to view past projects. 
+    The information available on this website is public domain.
+</p>
 
     <CascadingAuthenticationState>
-        <ProjectTable DataSource="new List<ProjectInformation>(ProjectManager.ProjectIdeas.Values.OrderBy(i => i.Status).ToList())" CssClass="table border p-2" />
+        <ProjectsTable DataSource="new List<ProjectInformation>(ProjectManager.ProjectIdeas.Values.OrderBy(i => i.Status).ToList())" CssClass="table border p-2" />
     </CascadingAuthenticationState>
 
 @code {

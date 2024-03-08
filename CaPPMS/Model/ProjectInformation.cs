@@ -16,6 +16,24 @@ namespace CaPPMS.Model
 
         private string projectTitle = string.Empty;
 
+        private string teamMembers = string.Empty;
+
+        [Export(true)]
+        [DisplayName("Team Members")]
+        [Browsable(true)]
+        public string TeamMembers
+        {
+            get
+            {
+                return this.teamMembers;
+            }
+            set
+            {
+                this.teamMembers = value;
+                this.IsDirty = true;
+            }
+        }
+
         private string videoLink = string.Empty;
 
         [Export(true)]
@@ -109,6 +127,42 @@ namespace CaPPMS.Model
             }
         }
       
+        private string teamMember = string.Empty;
+
+        [Export(true)]
+        [DisplayName("Team Member")]
+        [Browsable(true)]
+        public string TeamMember
+        {
+            get
+            {
+                return this.teamMember;
+            }
+            set
+            {
+                this.teamMember = value;
+                this.IsDirty = true;
+            }
+        }
+
+        private string linkName = string.Empty;
+
+        [Export(true)]
+        [DisplayName("Link Name")]
+        [Browsable(true)]
+        public string LinkName
+        {
+            get
+            {
+                return this.linkName;
+            }
+            set
+            {
+                this.linkName = value;
+                this.IsDirty = true;
+            }
+        }
+
         private string url = string.Empty;
 
         [Export(true)]
@@ -191,6 +245,7 @@ namespace CaPPMS.Model
         }
 
         [Export(true)]
+        [Required]
         [EmailAddress]
         [Browsable(true)]
         public string Email
@@ -207,7 +262,6 @@ namespace CaPPMS.Model
         }
 
         [Export(true)]
-        [Phone]
         [Browsable(true)]
         public string Phone
         {
@@ -238,7 +292,6 @@ namespace CaPPMS.Model
         public bool IsSponsor { get; set; } = true;
 
         [Export(true)]
-        [Required]
         [StringLength(255, ErrorMessage = "Sponsor first name is too long.")]
         [DisplayName("Sponsor First Name")]
         [Browsable(true)]
@@ -256,7 +309,6 @@ namespace CaPPMS.Model
         }
 
         [Export(true)]
-        [Required]
         [StringLength(255, ErrorMessage = "Sponsor last name is too long.")]
         [DisplayName("Sponsor Last Name")]
         [Browsable(true)]
@@ -274,7 +326,6 @@ namespace CaPPMS.Model
         }
 
         [Export(true)]
-        [EmailAddress]
         [DisplayName("Sponsor Email")]
         [Browsable(true)]
         public string SponsorEmail
@@ -291,7 +342,6 @@ namespace CaPPMS.Model
         }
 
         [Export(true)]
-        [Phone]
         [DisplayName("Sponsor Phone")]
         [Browsable(true)]
         public string SponsorPhone

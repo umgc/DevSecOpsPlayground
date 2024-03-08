@@ -57,6 +57,14 @@ a,
     top: 0.5rem;
 }
 
+table {
+    border-collapse: collapse;
+}
+
+table.borderless td {
+    border: none;
+}
+
 tr th {
     background-color : black;
     color: yellow;
@@ -64,7 +72,21 @@ tr th {
 
 tr {
     padding: 2px;
-    text-align:center;
+    text-align:left;
+}
+
+#submitAttachments {
+    text-align: center;
+    height:10em;
+    background-color:#EEEEEE;
+    border-radius: 25px;
+    padding: 2em;
+    align-items: center;
+}
+
+#attachment {
+    opacity: 0;
+    width: 400px;
 }
 
 .odd {
@@ -94,8 +116,6 @@ navLink-active {
     margin-right: auto;
     margin-bottom: 5px;
     padding: 3px;
-    border-radius: 5px;
-    border: 2px solid darkred;
     overflow: auto;
 }
 

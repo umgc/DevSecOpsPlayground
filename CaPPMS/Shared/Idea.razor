@@ -1,64 +1,144 @@
 ﻿@inject ProjectManagerService ProjectManager
 @inject NavigationManager NavigationManager
 
-<div class="p-5" style="display:@tableState">
+<div style="display:@tableState">
     <EditForm Model="@idea" OnValidSubmit="@HandleValidSubmit">
         <DataAnnotationsValidator />
         <ValidationSummary />
-        <table class="table w-50 p-5">
-            <tr class="row w-25">
-                <td class="d-xl-table-cell">
-                    <label>
-                        First Name:
-                        <InputText id="firstName" @bind-Value="idea.FirstName" />
-                    </label>
+                
+        <table class="table borderless">
+            <tr class="row">
+                <td class="col-6">
+                    <label>First Name<span style="color: #FF0000;">*</span></label>
+                    <InputText class="form-control" id="firstName" placeholder="John" @bind-Value="idea.FirstName" />
+                </td>
+                <td class="col-6">
+                    <label>Last Name<span style="color: #FF0000;">*</span></label>
+                    <InputText class="form-control" id="lastName" placeholder="Doe" @bind-Value="idea.LastName" />
                 </td>
             </tr>
-            <tr class="row w-25">
-                <td class="d-xl-table-cell">
-                    <label>
-                        Last Name:
-                        <InputText id="lastName" @bind-Value="idea.LastName" />
-                    </label>
+            <tr class="row">
+                <td class="col-6">
+                    <label>Email<span style="color: #FF0000;">*</span></label>
+                    <InputText class="form-control" id="email" placeholder="sample@student.umgc.edu" @bind-Value="idea.Email" />
+                </td>
+                <td class="col-6">
+                    <label>Phone</label>
+                    <InputText class="form-control" id="phone" placeholder="301-123-4567" @bind-Value="idea.Phone" />
                 </td>
             </tr>
-            <tr class="row w-25">
-                <td class="d-xl-table-cell">
-                    <label>
-                        Email:
-                        <InputText id="email" @bind-Value="idea.Email" />
-                    </label>
+            <tr class="row">
+                <td class="col-6">
+                    <label>Project Title<span style="color: #FF0000;">*</span></label>
+                    <InputText class="form-control" id="projectTitle" placeholder="My Project" @bind-Value="idea.ProjectTitle" />
+                </td>
+                <td class="col-6">
+                    <label>Project Description<span style="color: #FF0000;">*</span></label>
+                    <InputTextArea class="form-control" id="projectDescription" rows="5" placeholder="The interesting and detailed description of my project idea" @bind-Value="idea.ProjectDescription" />
                 </td>
             </tr>
-            <tr class="row w-25">
-                <td class="d-xl-table-cell">
-                    <label>
-                        Phone:
-                        <InputText id="phone" @bind-Value="idea.Phone" />
-                    </label>
+            
+            <tr class="row">
+                <td class="col-6">
+                    <label for="teamMembers">Team Member(s)</label>
+                    <tr class="row">
+                        <td class="col-10">
+                            <InputText class="form-control" id="teamMember" placeholder="Team Member" @bind-Value="idea.TeamMember" />
+                        </td>
+                        <td class="col-2">
+                            <button type="button" class="btn btn-primary" @onclick="AddTeamMember">+</button>
+
+                        </td>
+                        
+                        @foreach (var member in teamMembers)
+                        {
+                            <tr class="row">
+                                <td class = "col-10">
+                                   <InputText class="form-control" id="teamMember" placeholder="Team Member" 
+                                   style ="width:460px;" @bind-Value="idea.TeamMember" />
+                                    
+                                </td>
+                        
+                            </tr>
+                        }
+                    </tr>
+                </td>
+                <td class="col-6">
+                    <label for="linkName">Links</label>
+                    <tr class="row">
+                        <td class="col-5">
+                            <InputText class="form-control" id="linkName" placeholder="Link Name" @bind-Value="idea.LinkName" />
+                        </td>
+                        <td class="col-5">
+                            <InputText class="form-control" id="url" placeholder="Link URL" @bind-Value="idea.Url" />
+                        </td>
+                        <td class="col-2">
+                            <button type="button" class = "btn btn-primary" @onclick="AddLink">+</button>
+                        </td>
+        
+                             <!-- Additional link name and URL input fields -->
+                            @foreach (var link in links)
+                            {
+                               <tr class="row">
+                                   <td class="col-5">
+                                        <InputText class="form-control" id="linkName" placeholder="Link Name" @bind-Value="idea.LinkName" />
+                                    </td>
+                                    <td class="col-5">
+                                        <InputText class="form-control" id="url" placeholder="Link URL" @bind-Value="idea.Url" />
+                                    </td>
+                                </tr>
+                            }
+
+                    </tr>
                 </td>
             </tr>
-            <tr class="row w-25">
-                <td class="d-xl-table-cell">
-                    <label>
-                        Project Title:
-                        <InputText id="projectTitle" @bind-Value="idea.ProjectTitle" />
-                    </label>
-                </td>
-            </tr>
-            <tr class="row w-25">
-                <td class="d-xl-table-cell">
-                    <label>
-                        Project Description:
-                        <InputTextArea id="projectDescription" @bind-Value="idea.ProjectDescription" />
-                    </label>
-                </td>
-            </tr>
-            <tr class="row w-25">
-                <td class="d-xl-table-cell">
+
+            @if (this.ShowFormButton == FormButtons.Submit)
+            {
+                <tr class="row">
+                    <td class="col-6">
+                        <label>
+                            <InputCheckbox id="isSponsor" @bind-Value="idea.IsSponsor" @onclick="SponsorCheckBox_Changed" />
+                            Self Sponsored
+                        </label>
+                    </td>
+                    <td class="col-6"></td>
+                </tr>
+            }
+        </table>
+                
+        @if (!idea.IsSponsor)
+        {
+            <h4>Sponsor Information</h4>
+            <table class="table borderless">
+                <tr class="row">
+                    <td class="col-6">
+                        <label>Sponsor First Name</label>
+                            <InputText class="form-control" id="firstName" placeholder="Jane" @bind-Value="idea.SponsorFirstName" />
+                    </td>
+                    <td class="col-6">
+                        <label>Sponsor Last Name</label>
+                            <InputText class="form-control" id="lastName" placeholder="Doe" @bind-Value="idea.SponsorLastName" />
+                    </td>
+                </tr>
+                <tr class="row">
+                    <td class="col-6">
+                        <label>Sponsor Email</label>
+                            <InputText class="form-control" id="email" placeholder="sponsor@faculty.umgc.edu" @bind-Value="idea.SponsorEmail" />
+                    </td>
+                    <td class="col-6">
+                        <label>Sponsor Phone</label>
+                            <InputText class="form-control" id="phone" placeholder="301-555-9999" @bind-Value="idea.SponsorPhone" />
+                    </td>
+                </tr>
+            </table>
+}
+            <tr class="row">
+                <td class="col-3"></td>
+                <td class="col-6" id="submitAttachments">
                     @if (this.ShowFileAttachments)
                     {
-                        <span class="card-header" style="width:300px">Attachments:</span>
+                        <span class="card-header" style="width:300px">Attachments</span>
                         @foreach (var file in this.idea.Attachments)
                         {
                             <div class="card">
@@ -68,84 +148,22 @@
                     }
                     else
                     {
-                        <label>
-                            Attachment(s):
-                            <InputFile id="attachment" OnChange="LoadFiles" multiple accept=".doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,.ppt,.pptx,.pdf" />
-                        </label>
+                        <p>Drag and drop documents here</p>
+                        <InputFile id="attachment" style="width: 400px;" draggable="true" OnChange="LoadFiles" multiple accept=".doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,.ppt,.pptx,.pdf" />
+                        <label class="btn btn-primary" for="attachment">Choose Files</label>
                     }
                 </td>
+                <td class="col-3"></td>
             </tr>
-            <tr class="row w-25">
-                <td class="d-xl-table-cell">
-                    <label>
-                        Website:
-                        <InputText id="url" @bind-Value="idea.Url" />
-                    </label>
-                </td>
-            </tr>
-            <tr class="row w-25">
-                <td class="d-xl-table-cell">
-                    <label>
-                        GitHub:
-                        <InputText id="gitHubUrl" @bind-Value="idea.Github" />
-                    </label>
-                </td>
-            </tr>
-            @if (this.ShowFormButton == FormButtons.Submit)
-            {
-                <tr class="row w-25">
-                    <td class="d-xl-table-cell">
-                        <label>
-                            Self Sponsored:
-                            <InputCheckbox id="isSponsor" @bind-Value="idea.IsSponsor" @onclick="SponsorCheckBox_Changed" />
-                        </label>
-                    </td>
-                </tr>
-            }
-        </table>
-
-        @if (!idea.IsSponsor)
-        {
-            <h4>Sponsor Information...</h4>
-            <table class="table w-50">
-                <tr class="row w-25">
-                    <td class="d-xl-table-cell">
-                        <label>
-                            Sponsor First Name:
-                            <InputText id="firstName" @bind-Value="idea.SponsorFirstName" />
-                        </label>
-                    </td>
-                </tr>
-                <tr class="row w-25">
-                    <td class="d-xl-table-cell">
-                        <label>
-                            Sponsor Last Name:
-                            <InputText id="lastName" @bind-Value="idea.SponsorLastName" />
-                        </label>
-                    </td>
-                </tr>
-                <tr class="row w-25">
-                    <td class="d-xl-table-cell">
-                        <label>
-                            Sponsor Email:
-                            <InputText id="email" @bind-Value="idea.SponsorEmail" />
-                        </label>
-                    </td>
-                </tr>
-                <tr class="row w-25">
-                    <td class="d-xl-table-cell">
-                        <label>
-                            Sponsor Phone:
-                            <InputText id="phone" @bind-Value="idea.SponsorPhone" />
-                        </label>
-                    </td>
-                </tr>
-            </table>
-        }
 
         @if (this.ShowFormButton == FormButtons.Submit)
         {
-            <button id="btnSubmit" type="submit" @onclick="SponsorCheck" class="btn btn-primary">Submit</button> <button type="reset" class="btn btn-danger">Reset</button>
+            <tr class="row">
+                <td class="col-12 text center">
+                    <button id="btnSubmit" type="submit" @onclick="SponsorCheck" class="btn btn-primary">Submit</button> 
+                    <button type="reset" class="btn btn-warning">Reset</button>
+                </td>
+            </tr>
         }
         else if (this.ShowFormButton == FormButtons.Approver)
         {
@@ -170,6 +188,7 @@
             <button type="button" class="btn btn-danger" @onclick="DeleteIdea">Delete</button><span>&nbsp;</span>
         }
 
+
     </EditForm>
 </div>
 
@@ -177,7 +196,7 @@
     Uploading ...
     <div>
         <Wander Center="true" />
-    </div>    
+    </div>
 
     Thank you for the project idea!
 </div>
@@ -237,7 +256,7 @@
 
     private string tableState = "block";
 
-    private string waitBar => tableState.Equals("none") ? "visible" : "hidden";
+    private string waitBar => tableState.Equals("none") ? "visible" : "hidden" ;
 
     protected override void OnInitialized()
     {
@@ -394,4 +413,32 @@
     {
         NavigationManager.NavigateTo($"/download/{file.Location}", true);
     }
+
+            // Define a list to store team members
+        List<string> teamMembers = new List<string>();
+
+        List<string> links = new List<string>();
+
+      
+    // Function to add a new team member input field
+    private void AddTeamMember()
+    {
+
+        // Add an empty string to the list
+        teamMembers.Add("");
+    }
+
+    // Function to add a new link input field
+    private void AddLink()
+    {
+
+        // Add an empty string to the list
+        links.Add("");
+    }
+
+
+    
+}
+
+
 }

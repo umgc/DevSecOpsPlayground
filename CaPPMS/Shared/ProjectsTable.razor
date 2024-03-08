@@ -1,0 +1,288 @@
+﻿@using CaPPMS.Data
+@using CaPPMS.Model
+@using CaPPMS.Model.Table
+@namespace CaPPMS.Shared
+@inherits CaPPMS.Model.Table.Table
+@implements IIdea
+
+@* <br>
+<h1>Projects</h1>
+<p>
+    The Master of Information Systems with a Specialization in Software 
+    Engineering program at the University of Maryland Global Campus ends 
+    with a capstone course. This website allows users to view past projects. 
+    The information available on this website is public domain.
+</p> *@
+
+
+@if(this.HeaderRow.Count == 0)
+{
+    <pre>Loading ...</pre>
+}
+else
+{
+<div>
+    <div>
+        @* <label>
+            <input id="filter" 
+                   class="input-group-text p-2 mb-lg-3" 
+                   type="text" 
+                   placeholder="Filter the data here" 
+                   @bind="Filter" 
+                   @bind:event="oninput" />
+        </label> *@
+        <style>
+            #projectEntriesTable th {
+                text-align: left;
+            }
+        </style>
+        @* <table id="projectEntriesTable" text-align: left class="@string.Join(" ", TableCssClasses)"> *@
+        <table id="projectEntriesTable" style="text-align: left;" class="@string.Join(" ", TableCssClasses) table-striped table-hover">
+            <thead class="thead-light">
+                <tr>
+                    @foreach (var header in this.HeaderRow)
+                    {
+                        <th @onclick="e => SortByColumn(header.ColumnId)">
+                            @header.Value
+                        </th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var row in this.GetRows())
+                {
+                    <tr>
+                        @* <td>
+                            <button @onclick="e => projectListCollapseMap[row.DataBoundItem as ProjectInformation] = !projectListCollapseMap[row.DataBoundItem as ProjectInformation]"
+                                    class="btn btn-primary">
+                                @(projectListCollapseMap[row.DataBoundItem as ProjectInformation] ? "+" : "-")
+                            </button>
+                        </td> *@
+
+                        @* @foreach (var cell in row.Select((value, index) => new { value, index }))
+                        {
+                            if (cell.index == 0)
+                            {
+                                var ProjectID = (row.DataBoundItem as ProjectInformation).ProjectID;
+
+                                <td style="text-align: left;">
+                                    <a href="/individualProject/@ProjectTitle">@((MarkupString)cell.value.ToString())</a>
+                                    <a href="/individualProject">@((MarkupString)cell.value.ToString())</a>
+                                    <a href="/individualProject">@((MarkupString)cell.value.ToString())</a>
+                                    <a href="/individualProject" target="_blank" style="color: #A30606; font-weight: bold;">@((MarkupString)cell.value.ToString())</a>
+                                </td>
+                            }
+                            else
+                            {
+                                <td style="text-align: left;">
+                                    @((MarkupString)cell.value.ToString())
+                                </td>
+                            }
+                        } *@
+
+
+                        @foreach (var cell in row.Select((value, index) => new { value, index }))
+                        {
+                            if (cell.index == 0)
+                            {
+                                var ProjectID = (row.DataBoundItem as ProjectInformation).ProjectID;
+
+                                <td style="text-align: left;">
+                                    <a href="/individualProject/@ProjectID" target="" style="color: #A30606; font-weight: bold;">@((MarkupString)cell.value.ToString())</a>
+                                </td>
+                            }
+                            else
+                            {
+                                <td style="text-align: left;">
+                                    @((MarkupString)cell.value.ToString())
+                                </td>
+                            }
+                        }
+
+                        @* @foreach (var cell in row)
+                        {
+                            <td style="text-align: left;">
+                                @((MarkupString)cell.ToString())
+                            </td>
+                            @((MarkupString)cell.ToString()) 
+                        } *@
+                        
+                    </tr>
+
+
+
+                    @if (!projectListCollapseMap[row.DataBoundItem as ProjectInformation])
+                    {
+                        <tr>
+                            <td colspan="100">
+                                @if (isAuthenticated)
+                                {
+                                    <CascadingAuthenticationState>
+                                        <ProjectEntryAuthorizedDropdown 
+                                            CollapseEntry="@(projectListCollapseMap[row.DataBoundItem as ProjectInformation] ? "collapse" : "")"
+                                            ProjectInformation="row.DataBoundItem as ProjectInformation">
+                                        </ProjectEntryAuthorizedDropdown>
+                                    </CascadingAuthenticationState>                                    
+                                }
+                                else
+                                {
+                                    <ProjectEntryDropdown CollapseEntry="@(projectListCollapseMap[row.DataBoundItem as ProjectInformation] ? "collapse" : "")"
+                                                          ProjectInformation="row.DataBoundItem as ProjectInformation">
+                                    </ProjectEntryDropdown>
+                                }
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="@this.ColumnCount + 1">
+                        <Paginate Parent="@this"
+                                  PageChanged="InitializeCollapseMap"/>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+
+
+        
+    </div>
+    
+    @if (idea != null)
+    {
+        <div class="popOver">
+            <CascadingAuthenticationState>
+                <Idea ShowComments="true" ShowFileAttachments="true" ShowFormButton="Idea.FormButtons.Approver" ProjectIdea="idea" Parent="this" />
+            </CascadingAuthenticationState>
+        </div>
+    }
+    <br />
+    <br />
+</div>
+}
+
+@code{
+    [CascadingParameter]
+    private Task<AuthenticationState> authenticationState { get; set; }
+
+    [Parameter]
+    public string CssClass
+    {
+        get
+        {
+            return string.Join(" ", this.CssClass);
+        }
+        set
+        {
+            this.TableCssClasses.Clear();
+            this.TableCssClasses.AddRange(value.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries));
+        }
+    }
+
+    private List<string> TableCssClasses = new List<string>();
+
+    private ProjectInformation idea { get; set; }
+    
+
+    private bool isAuthenticated;
+
+    private Dictionary<ProjectInformation, bool> projectListCollapseMap = new Dictionary<ProjectInformation, bool>();
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        var authState = await authenticationState;
+
+        this.isAuthenticated = authState.User?.Identity.IsAuthenticated ?? false;
+        InitializeCollapseMap();
+
+        this.DataSourceChanged += (o, e) =>
+        {
+            if (idea != null && !this.DataSource.Contains(idea))
+            {
+                idea = null;
+            }
+
+            this.ShouldProcessStateChange();
+            InitializeCollapseMap();
+        };
+
+        this.FilterChanged += (o, e) =>
+        {
+            this.SetPageNumber(1);
+            this.ShouldProcessStateChange();
+            InitializeCollapseMap();
+        };
+
+        ProjectManagerService.ProjectIdeasChanged += (o, e) =>
+        {
+            var ideas = o as ICollection<ProjectInformation>;
+
+            this.DataSource = ideas;
+        };
+
+        await base.OnInitializedAsync();
+    }
+
+    public void CloseIdea(Idea idea)
+    {
+        this.idea = null;
+        ShouldProcessStateChange();
+    }
+
+    private void PageRight(MouseEventArgs e)
+    {
+        this.SetPageNumber(this.CurrentPage + 1);
+    }
+
+    private void ShowView(ProjectInformation idea)
+    {
+        this.idea = idea;
+    }
+
+    private void ShouldProcessStateChange()
+    {
+        this.InvokeAsync(() =>
+        {
+            this.StateHasChanged();
+        });
+    }
+
+    private void InitializeCollapseMap()
+    {
+        Dictionary<Guid, bool> oldCollapseMap = new Dictionary<Guid, bool>();
+        foreach (ProjectInformation info in projectListCollapseMap.Keys)
+        {
+            oldCollapseMap.Add(info.ProjectID, projectListCollapseMap[info]);
+        }
+
+        projectListCollapseMap.Clear();
+        foreach (Row row in this.GetRows())
+        {
+            if (!projectListCollapseMap.ContainsKey(row.DataBoundItem as ProjectInformation))
+            {
+                ProjectInformation newInfo = row.DataBoundItem as ProjectInformation;
+                projectListCollapseMap.Add(newInfo, true);
+                if (oldCollapseMap.ContainsKey(newInfo.ProjectID))
+                {
+                    projectListCollapseMap[newInfo] = oldCollapseMap[newInfo.ProjectID];
+                }
+            }
+        }
+    }
+
+    private void SortByColumn(int column)
+    {
+        Console.Error.WriteLine(column + " clicked");
+        if (SortColumnIndex == column)
+        {
+            IsColumnSortAscending = !IsColumnSortAscending;
+        } else
+        {
+            IsColumnSortAscending = true;
+            SortColumnIndex = column;
+        }
+        InitializeCollapseMap();
+    }
+}
