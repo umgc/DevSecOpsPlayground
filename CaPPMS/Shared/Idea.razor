@@ -47,8 +47,21 @@
                             <InputText class="form-control" id="teamMember" placeholder="Team Member" @bind-Value="idea.TeamMember" />
                         </td>
                         <td class="col-2">
-                            <button type="button" class="btn btn-primary">+</button>
+                            <button type="button" class="btn btn-primary" @onclick="AddTeamMember">+</button>
+
                         </td>
+                        
+                        @foreach (var member in teamMembers)
+                        {
+                            <tr class="row">
+                                <td class = "col-10">
+                                   <InputText class="form-control" id="teamMember" placeholder="Team Member" 
+                                   style ="width:460px;" @bind-Value="idea.TeamMember" />
+                                    
+                                </td>
+                        
+                            </tr>
+                        }
                     </tr>
                 </td>
                 <td class="col-6">
@@ -61,8 +74,22 @@
                             <InputText class="form-control" id="url" placeholder="Link URL" @bind-Value="idea.Url" />
                         </td>
                         <td class="col-2">
-                            <button type="button" class="btn btn-primary">+</button>
+                            <button type="button" class = "btn btn-primary" @onclick="AddLink">+</button>
                         </td>
+        
+                             <!-- Additional link name and URL input fields -->
+                            @foreach (var link in links)
+                            {
+                               <tr class="row">
+                                   <td class="col-5">
+                                        <InputText class="form-control" id="linkName" placeholder="Link Name" @bind-Value="idea.LinkName" />
+                                    </td>
+                                    <td class="col-5">
+                                        <InputText class="form-control" id="url" placeholder="Link URL" @bind-Value="idea.Url" />
+                                    </td>
+                                </tr>
+                            }
+
                     </tr>
                 </td>
             </tr>
@@ -161,6 +188,7 @@
 
             <button type="button" class="btn btn-danger" @onclick="DeleteIdea">Delete</button><span>&nbsp;</span>
         }
+
 
     </EditForm>
 </div>
@@ -401,4 +429,32 @@
     {
         NavigationManager.NavigateTo($"/download/{file.Location}", true);
     }
+
+            // Define a list to store team members
+        List<string> teamMembers = new List<string>();
+
+        List<string> links = new List<string>();
+
+      
+    // Function to add a new team member input field
+    private void AddTeamMember()
+    {
+
+        // Add an empty string to the list
+        teamMembers.Add("");
+    }
+
+    // Function to add a new link input field
+    private void AddLink()
+    {
+
+        // Add an empty string to the list
+        links.Add("");
+    }
+
+
+    
+}
+
+
 }
