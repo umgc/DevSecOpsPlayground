@@ -1,5 +1,6 @@
 ﻿@inject ProjectManagerService ProjectManager
 @inject NavigationManager NavigationManager
+@inject IMailService MailService
 
 <div style="display:@tableState">
     <EditForm Model="@idea" OnValidSubmit="@HandleValidSubmit">
@@ -278,6 +279,21 @@
         });
 
         this.tableState = "block";
+        Email("mazero789@gmail.com", "New Project Idea submitted", "A new Project Idea has been submitted. Please visit the CaPPMS website to approve or reject the idea.");
+
+    }
+
+    private async Task Email(string email, string body, string html)
+    {
+        Console.WriteLine("REACHED SENDING EMAIL");
+        try
+        {
+            await MailService.SendEmailAsync(email, body, html);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error sending email: {ex.Message}");
+        }
     }
 
     private void LoadFiles(InputFileChangeEventArgs inputFile)
