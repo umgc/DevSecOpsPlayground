@@ -1,6 +1,5 @@
 ﻿@inject ProjectManagerService ProjectManager
 @inject NavigationManager NavigationManager
-@inject IMailService MailService
 
 <div style="display:@tableState">
     <EditForm Model="@idea" OnValidSubmit="@HandleValidSubmit">
@@ -44,24 +43,22 @@
                     <label for="teamMembers">Team Member(s)</label>
                     <tr class="row">
                         <td class="col-10">
-                            <InputText class="form-control" id="teamMember" placeholder="Team Member" @bind-Value="idea.TeamMember" />
+                            <InputText class="form-control" id="teamMember" placeholder="Team Member" @bind-Value="idea.TeamMembers" /> 
+    
                         </td>
                         <td class="col-2">
                             <button type="button" class="btn btn-primary" @onclick="AddTeamMember">+</button>
 
                         </td>
                         
-                        @foreach (var member in teamMembers)
+                         @foreach (var member in teamMembers)
                         {
-                            <tr class="row">
                                 <td class = "col-10">
-                                   <InputText class="form-control" id="teamMember" placeholder="Team Member" 
-                                   style ="width:460px;" @bind-Value="idea.TeamMember" />
-                                    
+                                    <InputText  class = "form-control" id="teamMember" placeholder="Team Member"  @bind-Value="idea.TeamMembers" />
                                 </td>
                         
-                            </tr>
-                        }
+                        } 
+                        
                     </tr>
                 </td>
                 <td class="col-6">
@@ -80,14 +77,14 @@
                              <!-- Additional link name and URL input fields -->
                             @foreach (var link in links)
                             {
-                               <tr class="row">
+                               
                                    <td class="col-5">
                                         <InputText class="form-control" id="linkName" placeholder="Link Name" @bind-Value="idea.LinkName" />
                                     </td>
                                     <td class="col-5">
                                         <InputText class="form-control" id="url" placeholder="Link URL" @bind-Value="idea.Url" />
                                     </td>
-                                </tr>
+                                
                             }
 
                     </tr>
@@ -150,8 +147,7 @@
                     else
                     {
                         <p>Drag and drop documents here</p>
-                        <InputFile id="attachment" style="width: 400px;" draggable="true" OnChange="LoadFiles" multiple accept=".doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,.ppt,.pptx,.pdf" />
-                        <label class="btn btn-primary" for="attachment">Choose Files</label>
+                            <InputFile class="btn btn-primary" id="attachment" draggable="true" OnChange="LoadFiles" multiple accept=".doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,.ppt,.pptx,.pdf" />
                     }
                 </td>
                 <td class="col-3"></td>
@@ -161,8 +157,8 @@
         {
             <tr class="row">
                 <td class="col-12 text center">
-                    <button id="btnSubmit" type="submit" @onclick="SponsorCheck" class="btn btn-primary">Submit</button> 
-                    <button type="reset" class="btn btn-warning">Reset</button>
+                    <button id="btnSubmit" type="submit" @onclick="SponsorCheck" class="btn btn-primary">Submit</button>
+                    <button type="reset" class="btn btn-warning">Reset</button> 
                 </td>
             </tr>
         }
@@ -194,13 +190,15 @@
 </div>
 
 <div style="visibility:@waitBar">
-    Uploading ...
+    Uploading...
     <div>
-        <Wander Center="true" />
+        <Wander Center="true" />       
+
     </div>
 
-    Thank you for the project idea!
+    <p>Thank you for the project idea!</p>
 </div>
+
 
 @code{
     public enum FormButtons
@@ -259,6 +257,8 @@
 
     private string waitBar => tableState.Equals("none") ? "visible" : "hidden" ;
 
+
+
     protected override void OnInitialized()
     {
         base.OnInitialized();
@@ -307,21 +307,6 @@
         });
 
         this.tableState = "block";
-        Email("mazero789@gmail.com", "New Project Idea submitted", "A new Project Idea has been submitted. Please visit the CaPPMS website to approve or reject the idea.");
-
-    }
-
-    private async Task Email(string email, string body, string html)
-    {
-        Console.WriteLine("REACHED SENDING EMAIL");
-        try
-        {
-            await MailService.SendEmailAsync(email, body, html);
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Error sending email: {ex.Message}");
-        }
     }
 
     private void LoadFiles(InputFileChangeEventArgs inputFile)
