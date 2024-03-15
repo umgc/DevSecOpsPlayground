@@ -17,11 +17,11 @@
     </style>
     <nav class="navbar navbar-expand-md navbar-dark navbar-static-top bg-dark">
         <div class="container">
-            <button class="navbar-toggler" type="button" onclick="toggleNavMenu()">
+            <button class="navbar-toggler" type="button" @onclick="ToggleNavMenu">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <div class="collapse navbar-collapse" id="navbarsExampleDefault2">
+            <div class="@(isNavMenuVisible ? "collapse show" : "collapse") navbar-collapse" id="navbarsExampleDefault2">
                 <ul class="nav navbar-nav">
                     <a class="navbar-brand" href="">CaPPMS</a>
                 </ul>
