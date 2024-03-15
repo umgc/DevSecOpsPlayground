@@ -14,14 +14,6 @@
         .navbar-dark {
             background-color: #A30606 !important;
         }
-
-        .show-menu {
-            display: block !important;
-        }
-
-        .hide-menu {
-            display: none !important;
-        }
     </style>
     <nav class="navbar navbar-expand-md navbar-dark navbar-static-top bg-dark">
         <div class="container">
@@ -29,13 +21,13 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <div class="@(isNavMenuVisible ? "show-menu" : "hide-menu")" id="navbarsExampleDefault2">
-                <ul class="nav navbar-nav">
-                    <a class="navbar-brand" href="">CaPPMS</a>
-                </ul>
+            <div class="collapse navbar-collapse" id="navbarsExampleDefault2" @onclick="() => isNavMenuVisible = false">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="">Submit Project</a>
+                        <a class="nav-link" href="">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="submitproject">Submit Project</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="projectlist">Projects</a>
