@@ -1,5 +1,7 @@
 ﻿@inject ProjectManagerService ProjectManager
 @inject NavigationManager NavigationManager
+@inject IJSRuntime JSRuntime
+
 
 <div style="display:@tableState">
     <EditForm Model="@idea" OnValidSubmit="@HandleValidSubmit">
@@ -43,24 +45,22 @@
                     <label for="teamMembers">Team Member(s)</label>
                     <tr class="row">
                         <td class="col-10">
-                            <InputText class="form-control" id="teamMember" placeholder="Team Member" @bind-Value="idea.TeamMember" />
+                            <InputText class="form-control" id="teamMember" placeholder="Team Member" @bind-Value="idea.TeamMembers" /> 
+    
                         </td>
                         <td class="col-2">
                             <button type="button" class="btn btn-primary" @onclick="AddTeamMember">+</button>
 
                         </td>
                         
-                        @foreach (var member in teamMembers)
+                         @foreach (var member in teamMembers)
                         {
-                            <tr class="row">
                                 <td class = "col-10">
-                                   <InputText class="form-control" id="teamMember" placeholder="Team Member" 
-                                   style ="width:460px;" @bind-Value="idea.TeamMember" />
-                                    
+                                    <InputText  class = "form-control" id="teamMember" placeholder="Team Member"  @bind-Value="idea.TeamMembers" />
                                 </td>
                         
-                            </tr>
-                        }
+                        } 
+                        
                     </tr>
                 </td>
                 <td class="col-6">
@@ -79,19 +79,22 @@
                              <!-- Additional link name and URL input fields -->
                             @foreach (var link in links)
                             {
-                               <tr class="row">
+                               
                                    <td class="col-5">
                                         <InputText class="form-control" id="linkName" placeholder="Link Name" @bind-Value="idea.LinkName" />
                                     </td>
                                     <td class="col-5">
                                         <InputText class="form-control" id="url" placeholder="Link URL" @bind-Value="idea.Url" />
                                     </td>
-                                </tr>
+                                
                             }
 
                     </tr>
                 </td>
             </tr>
+
+           
+
 
             @if (this.ShowFormButton == FormButtons.Submit)
             {
@@ -132,36 +135,58 @@
                     </td>
                 </tr>
             </table>
-}
-            <tr class="row">
-                <td class="col-3"></td>
-                <td class="col-6" id="submitAttachments">
-                    @if (this.ShowFileAttachments)
-                    {
-                        <span class="card-header" style="width:300px">Attachments</span>
-                        @foreach (var file in this.idea.Attachments)
-                        {
-                            <div class="card">
-                                <span class="card-body" style="width:300px"><a href="/download/@file.Location" download="@file.Name" target="_top">@file.Name</a></span><br />
-                            </div>
-                        }
-                    }
-                    else
-                    {
-                        <p>Drag and drop documents here</p>
-                        <InputFile id="attachment" style="width: 400px;" draggable="true" OnChange="LoadFiles" multiple accept=".doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,.ppt,.pptx,.pdf" />
-                        <label class="btn btn-primary" for="attachment">Choose Files</label>
-                    }
-                </td>
-                <td class="col-3"></td>
-            </tr>
+        }
+        <tr class="row">
+            <td class="col-6">
+                <label  style="color: #212529" >
+                    <InputCheckbox id="notRobotCheckbox" @bind-Value="IsNotRobotChecked" />
+                    <span style="margin-left: 5px;">I'm not a robot</span>
+                </label>
+            </td>
+        </tr>
+
+        <td class="col-6" id="submitAttachments">
+            @if (this.ShowFileAttachments)
+            {
+                <span class="card-header" style="width:300px">Attachments</span>
+                @foreach (var file in this.idea.Attachments)
+                {
+                    <div class="card">
+                        <span class="card-body" style="width:300px"><a href="/download/@file.Location" download="@file.Name" target="_top">@file.Name</a></span><br />
+                    </div>
+                }
+            }
+            else
+            {
+                <p>Drag and drop documents here</p>
+                <InputFile class="btn btn-primary" id="attachment" draggable="true" OnChange="LoadFiles" multiple accept=".doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,.ppt,.pptx,.pdf" />
+                @if (uploadProgress > 0 )
+                {
+                    <div class="progress" style="margin-top: 10px; box-sizing: border-box;">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated"
+                             role="progressbar"
+                             aria-valuenow="@uploadProgress"
+                             aria-valuemin="0"
+                             aria-valuemax="100"
+                             style="width: @uploadProgress%">
+                            @uploadProgress%
+                        </div>
+                    </div>
+
+
+
+
+                }
+            }
+        </td>
+
 
         @if (this.ShowFormButton == FormButtons.Submit)
         {
             <tr class="row">
                 <td class="col-12 text center">
-                    <button id="btnSubmit" type="submit" @onclick="SponsorCheck" class="btn btn-primary">Submit</button> 
-                    <button type="reset" class="btn btn-warning">Reset</button>
+                    <button id="btnSubmit" type="submit" @onclick="SponsorCheck" class="btn btn-primary">Submit</button>
+                    <button type="reset" class="btn btn-warning">Reset</button> 
                 </td>
             </tr>
         }
@@ -193,13 +218,15 @@
 </div>
 
 <div style="visibility:@waitBar">
-    Uploading ...
+    Uploading...
     <div>
-        <Wander Center="true" />
+        <Wander Center="true" />       
+
     </div>
 
-    Thank you for the project idea!
+    <p>Thank you for the project idea!</p>
 </div>
+
 
 @code{
     public enum FormButtons
@@ -215,6 +242,8 @@
             return isUploading;
         }
     }
+
+    private bool IsNotRobotChecked { get; set; } = false;
 
     [Parameter]
     public bool ShowFileAttachments { get; set; } = false;
@@ -258,6 +287,8 @@
 
     private string waitBar => tableState.Equals("none") ? "visible" : "hidden" ;
 
+
+
     protected override void OnInitialized()
     {
         base.OnInitialized();
@@ -270,6 +301,12 @@
 
     private async Task HandleValidSubmit()
     {
+
+        if (!IsNotRobotChecked)
+        {
+            await JSRuntime.InvokeVoidAsync("alert", "Please confirm that you're not a robot.");
+            return;
+        }
         string link = "";
         if (!idea.Url.StartsWith("http://") && !idea.Url.StartsWith("https://") && idea.Url.Length != 0)
         {
@@ -308,23 +345,36 @@
         this.tableState = "block";
     }
 
-    private void LoadFiles(InputFileChangeEventArgs inputFile)
+   private int uploadProgress = 0;
+
+    private async void LoadFiles(InputFileChangeEventArgs inputFile)
     {
-        this.loadedFiles.Clear();
-        foreach (var file in inputFile.GetMultipleFiles().Take(ProjectManager.MaxNumberOfFiles))
+        var newFiles = inputFile.GetMultipleFiles()
+            .Take(ProjectManager.MaxNumberOfFiles)
+            .Where(file => file.Size <= ProjectManager.MaxMBSizePerFile)
+            .Select(file => new ProjectFile(file));
+
+        this.loadedFiles = this.loadedFiles.Concat(newFiles).ToList();
+
+        var totalFiles = loadedFiles.Count;
+        var iterations = 10; 
+
+        for (var i = 0; i < iterations; i++)
         {
-            if (file.Size > ProjectManager.MaxMBSizePerFile)
-            {
-                continue;
-            }
+            var progress = (int)(((float)i / (iterations - 1)) * 100);
+            uploadProgress = progress;
+            StateHasChanged();
 
-            var projectFile = new ProjectFile(file);
-
-            this.loadedFiles.Add(projectFile);
+            await Task.Delay(500); 
         }
 
         idea.SetAttachments(loadedFiles);
+
+        uploadProgress = 0;
+        await Task.Yield();
+        StateHasChanged();
     }
+
 
     private void SponsorCheckBox_Changed(EventArgs e)
     {

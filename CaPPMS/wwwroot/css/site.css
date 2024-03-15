@@ -85,7 +85,7 @@ tr {
 }
 
 #attachment {
-    opacity: 0;
+    /* opacity: 0; */
     width: 400px;
 }
 
@@ -183,3 +183,31 @@ navLink-active {
     text-align: center;
     padding:10px 0;
 }
+
+ .progress {
+    width: 100%;
+    height: 20px;
+    background-color: #f0f0f0;
+    border-radius: 10px;
+    margin-top: 10px;
+    position: relative;
+    overflow: hidden;
+  }
+  .progress-bar {
+    width: 0%;
+    height: 100%;
+    background-color: #007bff;
+    border-radius: 10px;
+    animation: progressBarAnimation 5s linear forwards; /* Adjust animation duration as needed */
+  }
+  @keyframes progressBarAnimation {
+    from {
+      width: 0%;
+    }
+    to {
+      width: 100%;
+    }
+  }
+  .complete {
+    background-color: #28a745 !important;
+  }
