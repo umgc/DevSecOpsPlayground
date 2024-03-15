@@ -1,5 +1,7 @@
 ﻿@inject ProjectManagerService ProjectManager
 @inject NavigationManager NavigationManager
+@inject IJSRuntime JSRuntime
+
 
 <div style="display:@tableState">
     <EditForm Model="@idea" OnValidSubmit="@HandleValidSubmit">
@@ -91,6 +93,9 @@
                 </td>
             </tr>
 
+           
+
+
             @if (this.ShowFormButton == FormButtons.Submit)
             {
                 <tr class="row">
@@ -130,7 +135,16 @@
                     </td>
                 </tr>
             </table>
-}
+        }
+        <tr class="row">
+            <td class="col-6">
+                <label  style="color: #212529" >
+                    <InputCheckbox id="notRobotCheckbox" @bind-Value="IsNotRobotChecked" />
+                    <span style="margin-left: 5px;">I'm not a robot</span>
+                </label>
+            </td>
+        </tr>
+
         <td class="col-6" id="submitAttachments">
             @if (this.ShowFileAttachments)
             {
@@ -229,6 +243,8 @@
         }
     }
 
+    private bool IsNotRobotChecked { get; set; } = false;
+
     [Parameter]
     public bool ShowFileAttachments { get; set; } = false;
 
@@ -285,6 +301,12 @@
 
     private async Task HandleValidSubmit()
     {
+
+        if (!IsNotRobotChecked)
+        {
+            await JSRuntime.InvokeVoidAsync("alert", "Please confirm that you're not a robot.");
+            return;
+        }
         string link = "";
         if (!idea.Url.StartsWith("http://") && !idea.Url.StartsWith("https://") && idea.Url.Length != 0)
         {
