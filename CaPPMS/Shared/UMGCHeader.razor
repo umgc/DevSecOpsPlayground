@@ -10,7 +10,8 @@
         <div class="container">
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault2"
                 aria-controls="navbarsExampleDefault2" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
+                @* <span class="navbar-toggler-icon"></span> *@
+                <span class="navbar @NavMenuCssClass" @onclick="ToggleNavMenu"></span>
             </button>
 
             <div class="collapse navbar-collapse" id="navbarsExampleDefault2">
@@ -52,3 +53,14 @@
         </div>
     </nav>
 </header>
+
+@code {
+    private bool collapseNavMenu = true;
+
+    private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+    private void ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
+    }
+}
