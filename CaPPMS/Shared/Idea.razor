@@ -44,22 +44,28 @@
                 <td class="col-6">
                     <label for="teamMembers">Team Member(s)</label>
                     <tr class="row">
-                        <td class="col-10">
-                            <InputText class="form-control" id="teamMember" placeholder="Team Member" @bind-Value="idea.TeamMembers" /> 
-    
+                         <td class="col-10">
+                              <InputText  class = "form-control" id="teamMember" placeholder="Team Member" @bind-Value="idea.TeamMember" />
                         </td>
-                        <td class="col-2">
-                            <button type="button" class="btn btn-primary" @onclick="AddTeamMember">+</button>
-
-                        </td>
+                    <td class="col-2">
                         
-                         @foreach (var member in teamMembers)
+                        <button type="button" class="btn btn-primary" @onclick="AddTeamMember">+</button>
+                    </td>
+                           
+                          @foreach (var index in Enumerable.Range(0, teamMembers.Count))
+
                         {
                                 <td class = "col-10">
-                                    <InputText  class = "form-control" id="teamMember" placeholder="Team Member"  @bind-Value="idea.TeamMembers" />
-                                </td>
-                        
-                        } 
+                                    <InputText  class = "form-control" id="teamMember" placeholder="Team Member"@bind-Value="teamMembers[index]" 
+                                                   @oninput="@(e => UpdateIdeaTeamMembers(index, e.Value.ToString()))" />
+                                </td>                             
+
+                               
+                                 <td class="col-2">
+                             <button type="button" class="btn btn-primary" @onclick="RemoveLastTeamMember">-</button> 
+                        </td>
+                        }                           
+
                         
                     </tr>
                 </td>
@@ -69,25 +75,48 @@
                         <td class="col-5">
                             <InputText class="form-control" id="linkName" placeholder="Link Name" @bind-Value="idea.LinkName" />
                         </td>
+                       
                         <td class="col-5">
                             <InputText class="form-control" id="url" placeholder="Link URL" @bind-Value="idea.Url" />
                         </td>
+                        
                         <td class="col-2">
-                            <button type="button" class = "btn btn-primary" @onclick="AddLink">+</button>
+                            <button type="button" class = "btn btn-primary" @onclick="AddLink">+</button><br>     
+                            <br> 
+                            <button type="button" class = "btn btn-primary" @onclick="AddUrlLink">+</button>
+
                         </td>
+                        
         
                              <!-- Additional link name and URL input fields -->
-                            @foreach (var link in links)
+                             @foreach (var index in Enumerable.Range(0, links.Count))
+                            {
+                                <td class="col-10">
+                                        <InputText class="form-control" id="linkName" placeholder="Link Name" @bind-Value="links[index]"
+                                        @oninput="@(e => UpdateIdeaLinkName(index, e.Value.ToString()))" />
+                                    </td>
+
+                                    <td class="col-2">
+                                    <button type="button" class = "btn btn-primary" @onclick="RemoveLastLink">-</button>
+                                    </td>
+                                                              
+                            }
+                        
+    
+                             @foreach (var index in Enumerable.Range(0, linkUrl.Count))
                             {
                                
-                                   <td class="col-5">
-                                        <InputText class="form-control" id="linkName" placeholder="Link Name" @bind-Value="idea.LinkName" />
+                                    <td class="col-10">
+                                        <InputText class="form-control" id="url" placeholder="Link URL" @bind-Value="linkUrl[index]"
+                                        @oninput="@(e => UpdateIdeaUrl(index, e.Value.ToString()))" />
                                     </td>
-                                    <td class="col-5">
-                                        <InputText class="form-control" id="url" placeholder="Link URL" @bind-Value="idea.Url" />
+
+                                    <td class="col-2">
+                                    <button type="button" class = "btn btn-primary" @onclick="RemoveLastUrlLink">-</button>
                                     </td>
                                 
                             }
+
 
                     </tr>
                 </td>
@@ -464,31 +493,104 @@
         NavigationManager.NavigateTo($"/download/{file.Location}", true);
     }
 
-            // Define a list to store team members
-        List<string> teamMembers = new List<string>();
+        
+    // Define a list to store team members
+    List<string> teamMembers = new List<string>();
 
-        List<string> links = new List<string>();
-
-      
     // Function to add a new team member input field
     private void AddTeamMember()
     {
-
-        // Add an empty string to the list
-        teamMembers.Add("");
+            // Add an empty string to the list
+         teamMembers.Add("");
+       
     }
 
+
+private void UpdateIdeaTeamMembers(int index, string value)
+    {
+        teamMembers[index] = value; // Update the teamMembers array
+
+        // Update idea's TeamMembers property
+        idea.TeamMembers = string.Join(", ", teamMembers.Where(tm => !string.IsNullOrWhiteSpace(tm)));
+    }
+
+   // Function to remove the last added team member input field
+private void RemoveLastTeamMember()
+{
+    // Check if there are any team members in the list
+    if (teamMembers.Count > 0)
+    {
+        // Remove the last added team member (which is at the end of the list)
+        teamMembers.RemoveAt(teamMembers.Count - 1);
+
+        // Update idea's TeamMembers property
+        idea.TeamMembers = string.Join(", ", teamMembers.Where(tm => !string.IsNullOrWhiteSpace(tm)));
+    }
+}
+
+ 
+
+     List<string> links = new List<string>();
     // Function to add a new link input field
     private void AddLink()
     {
-
         // Add an empty string to the list
         links.Add("");
     }
+
+     private void UpdateIdeaLinkName(int index, string value)
+    {
+        links[index] = value; // Update the teamMembers array
+
+        // Update idea's TeamMembers property
+        idea.LinkNames = string.Join(", ", links.Where(tm => !string.IsNullOrWhiteSpace(tm)));
+    } 
+
+    List <string> linkUrl = new List<string>();
+    private void AddUrlLink()
+    {
+        linkUrl.Add("");
+    }
+
+
+    private void UpdateIdeaUrl(int index, string value)
+    {
+        linkUrl[index] = value; // Update the teamMembers array
+
+        // Update idea's TeamMembers property
+        idea.Urls = string.Join(", ", linkUrl.Where(tm => !string.IsNullOrWhiteSpace(tm)));
+    } 
+
+
+     // Function to remove the last added link input field
+private void RemoveLastLink()
+{
+    // Check if there are any links in the list
+    if (links.Count > 0)
+    {
+        // Remove the last added link (which is at the end of the list)
+        links.RemoveAt(links.Count - 1);
+
+        idea.LinkNames = string.Join(", ", links.Where(tm => !string.IsNullOrWhiteSpace(tm)));
+    }
+}
+
+// Function to remove the last added URL link input field
+private void RemoveLastUrlLink()
+{
+    // Check if there are any URL links in the list
+    if (linkUrl.Count > 0)
+    {
+        // Remove the last added URL link (which is at the end of the list)
+        linkUrl.RemoveAt(linkUrl.Count - 1);
+
+        idea.Url = string.Join(", ", linkUrl.Where(tm => !string.IsNullOrWhiteSpace(tm)));
+    }
+}
+
 
 
     
 }
 
 
-}

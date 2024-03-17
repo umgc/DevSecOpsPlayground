@@ -16,24 +16,6 @@ namespace CaPPMS.Model
 
         private string projectTitle = string.Empty;
 
-        // private string teamMembers = string.Empty;
-
-        // [Export(true)]
-        // [DisplayName("Team Members")]
-        // [Browsable(true)]
-        // public string TeamMembers
-        // {
-        //     get
-        //     {
-        //         return this.teamMembers;
-        //     }
-        //     set
-        //     {
-        //         this.teamMembers = value;
-        //         this.IsDirty = true;
-        //     }
-        // }
-
 private string teamMembers = string.Empty;
 
 [Export(true)]
@@ -54,6 +36,24 @@ public string TeamMembers
         }
     }
 }
+
+
+// // [Export(true)]
+// // [DisplayName("Team Members")]
+// // [Browsable(true)]
+  private string teamMember = string.Empty;
+
+public string TeamMember { 
+    get 
+    {
+        return this.teamMember;
+    }
+    set{
+        this.teamMember = value;
+        this.IsDirty = true;
+    }
+  }
+
 private string videoLink = string.Empty;
 
         [Export(true)]
@@ -147,24 +147,7 @@ private string videoLink = string.Empty;
             }
         }
       
-        private string teamMember = string.Empty;
-
-        [Export(true)]
-        [DisplayName("Team Member")]
-        [Browsable(true)]
-        public string TeamMember
-        {
-            get
-            {
-                return this.teamMember;
-            }
-            set
-            {
-                this.teamMember = value;
-                this.IsDirty = true;
-            }
-        }
-
+    
         private string linkName = string.Empty;
 
         [Export(true)]
@@ -179,6 +162,24 @@ private string videoLink = string.Empty;
             set
             {
                 this.linkName = value;
+                this.IsDirty = true;
+            }
+        }
+
+        private string linkNames = string.Empty;
+
+        [Export(true)]
+        [DisplayName("Link Name")]
+        [Browsable(true)]
+        public string LinkNames
+        {
+            get
+            {
+                return this.linkNames;
+            }
+            set
+            {
+                this.linkNames = value;
                 this.IsDirty = true;
             }
         }
@@ -200,6 +201,25 @@ private string videoLink = string.Empty;
                 this.IsDirty = true;
             }
         }
+
+        private string urls = string.Empty;
+
+        [Export(true)]
+        [DisplayName("Project Website")]
+        [Browsable(true)]
+        public string Urls
+        {
+            get
+            {
+                return this.urls;
+            }
+            set
+            {
+                this.urls = value;
+                this.IsDirty = true;
+            }
+        }
+
 
         private string gitUrl = string.Empty;
 
@@ -451,5 +471,6 @@ private string videoLink = string.Empty;
                 }
             }
         }
+        }
     }
-}
+
