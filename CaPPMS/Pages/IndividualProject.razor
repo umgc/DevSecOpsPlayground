@@ -120,7 +120,7 @@
 @inject ProjectManagerService ProjectManager
 @foreach (ProjectInformation idea in sortedProjects)
 {
-    <hr />
+    <br>
     <b><h1>@idea.ProjectTitle</h1></b>
     <br>
     <div style="text-align: center;">
@@ -130,7 +130,7 @@
         }
         else
         {
-            <p style="text-align: left; color: red;">*** No Project Video ***</p>
+            <p style="margin: 0; padding: 0; text-align: left; color: red;"></p>
  
         }
     </div>
@@ -146,25 +146,6 @@
                 @* <p>@proj.TeamName</p> *@
                 <br>
                 <br>
-                @* if (proj.GitHubLink.Length > 0)
-                {
-                    <b>Team GitHub Link: </b>
-                    <a href="@proj.GitHubLink" target="_blank" rel="noopener noreferrer">@proj.GitHubLink</a>
-                    <br />
-                } *@
-                @* if (proj.VideoLink.Length > 0)
-                {
-                    <b>Team Video Link: </b>
-                    <a href="@proj.VideoLink" target="_blank" rel="noopener noreferrer">@proj.VideoLink</a>
-                    <br />
-                } *@
-                @* if (proj.WebsiteLink.Length > 0)
-                {
-                    <b> Team Website Link: </b>
-                    <a href="@proj.WebsiteLink" target="_blank" rel="noopener noreferrer">@proj.WebsiteLink</a>
-                    <br />
-                } *@
-
                 <b> Documents for Team @proj.TeamName: </b>
                 <br>
                 <br>
@@ -189,20 +170,27 @@
         <br>
         <br>
         <b>Semester Year: </b> @idea.SemesterYear *@
-        <b>Links:</b>
+        @* <b>Links:</b>
         <br>
-        <br>
-            <ul>
-                @if (!string.IsNullOrWhiteSpace(idea.Github))
-                {
-                    <li><a href="@idea.Github" target="_blank" style="color: #A30606; font-weight: bold;">GitHub</a></li>
-                }
-                else
-                {
-                    <li><span style="color: red;">*** No Link ***</span></li>
+        <br> *@
+      
+        @if (!string.IsNullOrWhiteSpace(idea.Github))
+        {
+            @* <li><a href="@idea.Github" target="_blank" style="color: #A30606; font-weight: bold;">GitHub</a></li> *@
 
-                }
+            <b>Links:</b>
+            <br>
+            <br>
+            <ul>
+                <li><a href="@idea.Github" target="_blank" style="color: #A30606; font-weight: bold;">GitHub</a></li>
             </ul>
+        }
+        else
+        {
+            <span style="color: red;"></span>
+
+        }
+            
         @* <b>Team Name:</b>  *@
         <b>Team Members:</b> 
         <br>
@@ -214,12 +202,10 @@
         <br>
         <br> 
         <br>
-        <hr />         
+           
 }
-<br>
-<br>
-<br>
-<hr />
+
+
 
 @code {
     [Parameter]

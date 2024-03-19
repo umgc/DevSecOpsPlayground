@@ -1,18 +1,15 @@
+@page "/individualManageProject/{ProjectID}"
 @using CaPPMS.Model
-
-
-@page "/individualManageProject"
-
-<h1>Test002</h1>
-<br>
-<h1>Individual Manage Project</h1>
-
-@* 
-@using CaPPMS.Model
-@namespace CaPPMS.Shared
-@inject ProjectManagerService ProjectManager
+@namespace CaPPMS.Shared 
+@inject ProjectManagerService ProjectManager 
 @inject NavigationManager NavigationManager
-@inject GitHubService GitHub
+@* @inject GitHubService GitHub   *@
+@using Microsoft.AspNetCore.WebUtilities 
+@using Microsoft.AspNetCore.Components.Forms 
+@using System.Collections.Generic
+@inject IJSRuntime JSRuntime
+
+
 
 <style>
     table {
@@ -30,468 +27,549 @@
         margin-top: 0;
         padding-top: 0;
     }
+    .file-input {
+        display: none;
+    }
+    .file-input-button {
+        display: inline-block;
+        background-color: #A30606;
+        color: #FFFFFF;
+        padding: 10px 20px;
+        text-align: center;
+        cursor: pointer;
+        border-radius: 5px;
+    }
 </style>
 
-<div class="panel panel-default border @CollapseEntry" style="display:@tableState">
-    <EditForm Model="@ProjectInformation">
-        <DataAnnotationsValidator />
-        <ValidationSummary />
-        <table>
-            <tr>
-                <td>
-                    <h6><b>Submitter Information</b></h6>
-                    <table>
-                        <tr>
-                            <td style="padding-top:0px;">First Name:</td>
-                            <td style="padding-top:0px;">Last Name:</td>
-                            <td style="padding-top:0px;">Email:</td>
-                            <td style="padding-top:0px;">Phone:</td>
-                        </tr>
-                        <tr>
-                            <td style="padding-top:0px;"><InputText @bind-Value="_infoPlaceholder.FirstName" /></td>
-                            <td style="padding-top:0px;"><InputText @bind-Value="_infoPlaceholder.LastName" /></td>
-                            <td style="padding-top:0px;"><InputText @bind-Value="_infoPlaceholder.Email" /></td>
-                            <td style="padding-top:0px;"><InputText @bind-Value="_infoPlaceholder.Phone" /></td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <h6><b>Sponsor Information</b></h6>
-                    <table>
-                        <tr>
-                            <td style="padding-top:0px;">First Name:</td>
-                            <td style="padding-top:0px;">Last Name:</td>
-                            <td style="padding-top:0px;">Email:</td>
-                            <td style="padding-top:0px;">Phone:</td>
-                        </tr>
-                        <tr>
-                            <td style="padding-top:0px;"><InputText @bind-Value="_infoPlaceholder.SponsorFirstName" /></td>
-                            <td style="padding-top:0px;"><InputText @bind-Value="_infoPlaceholder.SponsorLastName" /></td>
-                            <td style="padding-top:0px;"><InputText @bind-Value="_infoPlaceholder.SponsorEmail" /></td>
-                            <td style="padding-top:0px;"><InputText @bind-Value="_infoPlaceholder.SponsorPhone" /></td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <h6><b>Project Information</b></h6>
-                    <table>
-                        <tr>
-                            <td style="padding-top:0px;">Project Title:</td>
-                            <td style="padding-top:0px;">Project Description:</td>
+@foreach (ProjectInformation idea in sortedProjects)
+{
+    <br>
+    <h1>@idea.ProjectTitle</h1>
+    <br>
+    <table>
+        <h5>Submitter Information</h5>
+            <div class="row">
+                <div class="col-6" >
+                    <label>First Name</label>
+                    @* <input type="text" class="form-control" value="@idea.FirstName">  *@
+                    @* <input type="text" class="form-control" bind="@idea.FirstName" @onchange="(() => MarkAsDirty(idea))"> *@
+                    <input type="text" class="form-control" @bind="@idea.FirstName">
+                </div>
+                <div class="col-6" >
+                    <label>Last Name</label>
+                    <input type="text" class="form-control" @bind="@idea.LastName" >
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-6" >
+                    <label>Email</label>
+                    <input type="text" class="form-control" @bind="@idea.Email" >
+                </div>
+                <div class="col-6" >
+                    <label>Phone</label>
+                    <input type="text" class="form-control" @bind="@idea.Phone">
+                </div>
+            </div>
+            <br>
+            <br>
+        <h5>Sponsor Information</h5>
+            <div class="row">
+                <div class="col-6" >
+                    <label>First Name</label>
+                    @* <input type="text" class="form-control" value="@idea.SponsorFirstName"> *@
+                    <input type="text" class="form-control" @bind="@idea.SponsorFirstName">
+                </div>
+                <div class="col-6" >
+                    <label>Last Name</label>
+                    <input type="text" class="form-control" @bind="@idea.SponsorLastName" >
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-6" >
+                    <label>Email</label>
+                    <input type="text" class="form-control" @bind="@idea.SponsorEmail" >
+                </div>
+                <div class="col-6" >
+                    <label>Phone</label>
+                    <input type="text" class="form-control" @bind="@idea.SponsorPhone">
+                </div>
+            </div>
+            <br>
+            <br>  
+        <h5>Project Information</h5>
+            <div class="row">
+                <div class="col-6" >
+                    <label>Project Title</label>
+                    <input type="text" class="form-control" @bind="@idea.ProjectTitle">
+                </div>
+                <div class="col-6" >
+                    <label>Project Description</label>
+                    <textarea class="form-control" id="mpProjectDescription" rows="5" style="height: 269px;" @bind="@idea.ProjectDescription">
+                        
+                    </textarea>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+		
+				<div class="col-6">
+                    <label for="mpTeamMember">Team Member(s)</label>
+                    <div>
+                        @foreach (var member in teamMembers)
+                        {
+                            <div class="row mb-2"> 
+                                <div class="col-10">
+                                    <input type="text" class="form-control" @bind="@idea.TeamMember" @oninput="(ChangeEventArgs e) => UpdateTeamMember(e, member)">
+                                </div>
+                                <div class="col-2">
+                                    <button type="button" class="btn btn-danger" @onclick="() => RemoveTeamMember(member)">-</button>
+                                </div>
+                            </div>
+                        }
+                        <div class="row">
+                            <div class="col-10">
+                                <input type="text" class="form-control" @bind="@idea.TeamMember">
+                            </div>
+                            <div class="col-2">
+                                <button type="button" class="btn" style="background-color:#A30606; color:#FFFFFF;" @onclick="AddTeamMember">+</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-6" >
+                    <label for="mpVideoLink">Links</label>
 
-                        </tr>
-                        <tr>
-                            <td style="padding-top:0px;"><InputText @bind-Value="_infoPlaceholder.ProjectTitle" /></td>
-                            <td style="padding-top:0px;"><InputText @bind-Value="_infoPlaceholder.ProjectDescription" /></td>
-                        </tr>
 
-                    </table>
+                    @* @if (currentInputLinks == "VideoLink")
+                    {
+                         <div class="row">
+                            <div class="col-5" >
+                                <input type="text" class="form-control" id="mpVideoLinkLabel" disabled value="Video Link" >
+                            </div>
+                            <div class="col-5" >
+                                <input type="text" class="form-control" id="mpVideoLink" placeholder="Link URL" @bind="@idea.VideoLink">
+                            </div>
+                            <div class="col-2" >
+						        <button @onclick="NextInput" class="btn" style="background-color:#A30606;color:#FFFFFF;">+</button>
+                            </div>
+                            <br>
+					    </div>
+                    }
+                    else if (currentInputLinks == "Github")
+                    {
+                        <div class="row">
+                            <div class="col-5" >
+                                <input type="text" class="form-control" id="mpVideoLinkLabel2" placeholder="Link Name" disabled value="GitHub" >
+                            </div>
+                            <div class="col-5" >
+                                <input type="text" class="form-control" id="mpVideoLink2" placeholder="Link URL" @bind="@idea.Github" >
+                            </div>
+                            <div class="col-2" >
+						        <button @onclick="NextInput" class="btn" style="background-color:#A30606;color:#FFFFFF;">+</button>
+                            </div>
+                            <br>
+                        </div>
+                    }
+                    else if (currentInputLinks == "Url")
+                    {
+                         <div class="row">
+                            <div class="col-5" >
+                                <input type="text" class="form-control" id="mpVideoLinkLabel2" placeholder="Link Name" disabled value="Url" >
+                            </div>
+                            <div class="col-5" >
+                                <input type="text" class="form-control" id="mpVideoLink2" placeholder="Link URL" @bind="@idea.Url" >
+                            </div>
+                            <div class="col-2" >
+						        <button @onclick="NextInput" class="btn" style="background-color:#A30606;color:#FFFFFF;">+</button>
+                            </div>
+                            <br>
+					    </div>
+                    }  *@
 
-                </td>
-            </tr>
-            @if (ProjectInformation.CompletedDocuments.Count > 0)
+
+                    <div class="row">
+						<div class="col-5" >
+							<input type="text" class="form-control" id="mpVideoLinkLabel" disabled value="Video Link" >
+						</div>
+						<div class="col-5" >
+							<input type="text" class="form-control" id="mpVideoLink" placeholder="Link URL" @bind="@idea.VideoLink">
+						</div>
+						<div class="col-2" >
+							<button type="button" class="btn" style="background-color:#A30606;color:#FFFFFF;" >-</button>
+						</div>
+					</div>
+                    <br>
+                    <div class="row">
+						<div class="col-5" >
+							<input type="text" class="form-control" id="mpVideoLinkLabel2" placeholder="Link Name" disabled value="GitHub" >
+						</div>
+						<div class="col-5" >
+							<input type="text" class="form-control" id="mpVideoLink2" placeholder="Link URL" @bind="@idea.Github" >
+						</div>
+						<div class="col-2" >
+							<button type="button" class="btn" style="background-color:#A30606;color:#FFFFFF;" >+</button>
+						</div> 
+					</div>
+                    <br>
+                    <div class="row">
+						<div class="col-5" >
+							<input type="text" class="form-control" id="mpVideoLinkLabel2" placeholder="Link Name" disabled value="Url" >
+						</div>
+						<div class="col-5" >
+							<input type="text" class="form-control" id="mpVideoLink2" placeholder="Link URL" @bind="@idea.Url" >
+						</div>
+						<div class="col-2" >
+							<button type="button" class="btn" style="background-color:#A30606;color:#FFFFFF;" >+</button>
+						</div> 
+					</div> 
+				
+                
+                
+                </div>
+
+			</div>
+			<div class="row">
+				<div class="col-8" >
+                    <br><br>
+                    @foreach (CompletedProjectDocumentation proj in idea.CompletedDocuments)
+                    {
+                        <input type="checkbox" class="form-check-input" id="selectAll" @onclick="ToggleSelectAll" checked="@selectAllChecked">
+			            <label class="form-check-label" for="selectAll"><h5>Attachments for Team: @proj.TeamName</h5></label>
+                        <br>
+                        
+                        @* <input type="checkbox" class="form-check-input" id="doc1" checked="@selectAllChecked">
+                        <label class="form-check-label" for="doc1"><a href="/download/@proj.ProjectPlanLink" download="@proj.ProjectPlan" target="_top" style="color: #A30606; font-weight: bold;">Project Plan</a></label><br> *@
+                        
+                        
+                        <input type="checkbox" class="form-check-input" @bind="isDoc1Selected">
+                        <label class="form-check-label" for="doc1"><a href="/download/@proj.ProjectPlanLink" download="@proj.ProjectPlan" target="_top" style="color: #A30606; font-weight: bold;">Project Plan</a></label><br>
+                        
+                        
+                        <input type="checkbox" class="form-check-input" id="doc2" checked="@selectAllChecked">
+                        <label class="form-check-label" for="doc2" ><a href="/download/@proj.SRSLink" download="@proj.SRS" target="_top" style="color: #A30606; font-weight: bold;">Software Requirements Specification (SRS)</a></label><br>
+                        <input type="checkbox" class="form-check-input" id="doc3" checked="@selectAllChecked">
+                        <label class="form-check-label" for="doc3" ><a href="/download/@proj.TDDLink" download="@proj.TDD" target="_top" style="color: #A30606; font-weight: bold;">Technical Design Document (TDD)</a></label><br>
+                        <input type="checkbox" class="form-check-input" id="doc4" checked="@selectAllChecked">
+                        <label class="form-check-label" for="doc4" ><a href="/download/@proj.RunbookLink" download="@proj.Runbook" target="_top" style="color: #A30606; font-weight: bold;">Deployment and Operations Guide (Runbook)</a></label><br>
+                        <input type="checkbox" class="form-check-input" id="doc5" checked="@selectAllChecked">
+                        <label class="form-check-label" for="doc5" ><a href="/download/@proj.ProgrammersGuideLink" download="@proj.ProgrammersGuide" target="_top" style="color: #A30606; font-weight: bold;">Programmer Guide</a></label><br>
+                        <input type="checkbox" class="form-check-input" id="doc6" checked="@selectAllChecked">
+                        <label class="form-check-label" for="doc6" ><a href="/download/@proj.UsersGuideLink" download="@proj.UsersGuide" target="_top" style="color: #A30606; font-weight: bold;">User Guide</a></label><br>
+                        <input type="checkbox" class="form-check-input" id="doc7" checked="@selectAllChecked">
+                        <label class="form-check-label" for="doc7" ><a href="/download/@proj.TestReportLink" download="@proj.TestReport" target="_top" style="color: #A30606; font-weight: bold;">Test Report</a></label> 
+                        <br><br> 
+                    } 					
+				</div>
+				<div class="col-4" >
+                    <br>
+                    <br>
+                    <div style="height:15em;background-color:#EEEEEE;border-radius: 25px;" @ondragover="OnDragOver" @ondrop="OnDrop">
+                        <p style="text-align:center; padding-top:2em;">Drag and drop documents here</p>
+                        <div style="text-align:center;">
+                            <InputFile id="fileInput" class="file-input" OnChange="HandleSelectedFiles" multiple />
+                            <label for="fileInput" class="file-input-button">Choose Files</label>
+                        </div>
+                        @if (selectedFiles.Count > 0)
+                        {
+                            <div style="text-align:center; padding-top: 1em;">
+                                <p>Selected File(s):</p>
+                                @foreach (var file in selectedFiles)
+                                {
+                                    <b>@file.Name</b>
+                                }
+                            </div>
+                        }
+                    </div>
+					<br>
+					<div style="text-align:center;" >
+						@* <button type="button" class="btn" style="background-color:#A30606;color:#FFFFFF;" >Download Selected</button>  *@
+                        <button type="button" class="btn" style="background-color:#A30606;color:#FFFFFF;" @onclick="DownloadSelected">Download Selected</button>
+
+						<button type="button" class="btn" style="background-color:#FDBF38;color:#000000;" >Delete Selected</button>
+					</div>
+				</div>
+			</div>
+			<br>
+
+            <h5>Comments</h5>
+            @if (Comments.Any())
             {
-                @foreach (CompletedProjectDocumentation proj in ProjectInformation.CompletedDocuments)
+                foreach (var comment in Comments)
                 {
-                    <tr>
-                        <td>
-                            <h6><b>Team @proj.TeamName:</b></h6>
-                            <table>
-                                <tr>
-                                    <td style="padding-top:0px;">Website Link:</td>
-                                    <td style="padding-top:0px;">GitHub Link:</td>
-                                    <td style="padding-top:0px;">Video Link:</td>
-                                </tr>
-                                <tr>
-                                    <td style="padding-top:0px;"><InputText @bind-Value="@proj.WebsiteLink" /></td>
-                                    <td style="padding-top:0px;"><InputText @bind-Value="@proj.GitHubLink" /></td>
-                                    <td style="padding-top:0px;"><InputText @bind-Value="@proj.VideoLink" /></td>
-                                </tr>
-
-                            </table>
-
-                        </td>
-                    </tr>
+                    <div>
+                        <p>@comment.Text</p>
+                        <small>@comment.Timestamp.ToString("g")</small>
+                    </div>
                 }
-
             }
             else
             {
-                <tr>
-                    <td>
-                        <h6><b>Project Links</b></h6>
-                        <table>
-                            <tr>
-                                <td style="padding-top:0px;">Website Link:</td>
-                                <td style="padding-top:0px;">GitHub Link:</td>
-                                <td style="padding-top:0px;">Video Link:</td>
-                            </tr>
-                            <tr>
-                                <td style="padding-top:0px;"><InputText @bind-Value="_infoPlaceholder.Url" /></td>
-                                <td style="padding-top:0px;"><InputText @bind-Value="_infoPlaceholder.Github" /></td>
-                                <td style="padding-top:0px;"><InputText @bind-Value="_infoPlaceholder.VideoLink" /></td>
-                            </tr>
-
-                        </table>
-
-                    </td>
-                </tr>
-            }
-            <tr>
-                <td>
-                    <h6><b>Attachments:</b></h6>
-                    <div class="row">
-                        <div class="col-9">
-                            <table>
-                                @foreach (ProjectFile file in attachmentSelection.Keys)
-                                {
-                                    <tr>
-                                        <td>
-                                            <input type="checkbox" @bind-value="attachmentSelection[file]" />
-                                        </td>
-                                        <td>
-                                            @if (attachmentSelection[file])
-                                            {
-                                                <a href="/download/@file.Location"
-                                                   download="@file.Name"
-                                                   target="_top">
-                                                    <b>@file.Name </b>
-                                                </a>
-                                            }
-                                            else
-                                            {
-                                                <a href="/download/@file.Location"
-                                                   download="@file.Name"
-                                                   target="_top">
-                                                    @file.Name
-                                                </a>
-                                            }
-                                        </td>
-                                    </tr>
-                                }
-                            </table>
-                        </div>
-                        <div class="col-3">
-                            <label>
-                                Attachment(s):
-                                <InputFile id="attachment"
-                                           OnChange="LoadFiles"
-                                           multiple accept=".doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,.ppt,.pptx,.pdf,.txt" />
-                            </label>
-                            <ConfirmationDialogBox Command="Delete Selected"
-                                                   Prompt="Are you sure you want to delete selected attachment(s)?"
-                                                   ButtonClass="btn btn-danger"
-                                                   ConfirmedChanged="DeleteSelectedAttachments" />
-                        </div>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <CascadingAuthenticationState>
-                        <CommentsComponent ProjectGuid="ProjectInformation.ProjectID" />
-                    </CascadingAuthenticationState>
-                </td>
-            </tr>
-            @if (ProjectInformation.Status.Equals("Approved"))
-            {
-                <tr>
-                    <td>
-                        <button class="btn btn-primary" type="button" @onclick="e => completeClicked = !completeClicked">Complete Project</button>
-                        @if (completeClicked)
-                        {
-                            <TeamSelection @bind-ProjectInformation="projectInformation" />
-                        }
-                    </td>
-                </tr>
-            }
-            <tr>
-                <td>
-                    @if (ProjectInformation.Status.Equals("Complete"))
-                    {
-                        <b>Project Completed @projectInformation.SemesterTerm @projectInformation.SemesterYear </b>
-                    }
-                    <hr />
-                </td>
-            </tr>
-
-            <div style="visibility:@gitHubErrorBar">
-                <p style="color:red">
-                    <b>Could not create GitHub Repo...</b><br />
-                    @gitHubError
-                </p>
-
-            </div>
-            <div style="visibility:@gitHubSuccessBar">
-                <b>Successfully Created Repository!</b>
-            </div>
-        </table>
-        @if (!ProjectInformation.IsDirty && ProjectInformation.Status.Equals("New"))
-        {
-            <p>
-                Create GitHub Repository:&nbsp;&emsp;<InputCheckbox @bind-Value="createGitHubRepository" class="form-check-input" />
-            </p>
-            if (createGitHubRepository)
-            {
-                <p>Repository Name:&nbsp;<InputText @bind-Value="gitHubRepositoryName" class="form-text" /></p>
+                <p>This project has no comments</p>
             }
 
-            <button type="button" class="btn btn-success" @onclick="ApproveIdea">Approve</button><span>&nbsp;</span>
-        }
+            <label for="mpComment">Comment</label>
+            <textarea class="form-control" id="mpComment" @bind="NewCommentText"></textarea>
+            <br>
+            <button type="button" class="btn" style="background-color:#A30606;color:#FFFFFF;" @onclick="AddComment" value="@idea.Comments">Add Comment</button>
+
+			
 
 
 
 
-        <ConfirmationDialogBox Command="Update"
-                               Prompt="Confirm changes?"
-                               ButtonClass="btn btn-secondary"
-                               ConfirmedChanged="UpdateRecord" />
-        <button type="button" class="btn btn-secondary" @onclick="ExportEntry">Export</button>
-        <ConfirmationDialogBox Command="Delete"
-                               Prompt="Are you sure you want to delete this entry?"
-                               ButtonClass="btn btn-danger"
-                               ConfirmedChanged="DeleteRecord" />
-    </EditForm>
-</div>
-
+            <br><br>
+			<h5>Actions</h5>
+			<br>
+            <button type="button" class="btn btn-success" style="margin-right: 10px;">Approve</button>
+            <button type="button" class="btn btn-warning" style="margin-right: 10px;" @onclick="UpdateInfo">Update</button>
+            <button type="button" class="btn btn-warning" style="margin-right: 10px;">Export</button>
+            <button type="button" class="btn btn-danger">Delete</button>
+		<br><br><br><br><br>
+    </table> 
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <hr />
+    <hr />         
+}
 
 @code {
 
     [Parameter]
-    public ProjectInformation ProjectInformation
+    public string ProjectID { get; set; } 
+
+    IEnumerable<ProjectInformation> sortedProjects;
+    public bool IsDirty { get; set; } = false;    
+    
+
+    @* protected override void OnInitialized()
+    {
+        SetCompletedProjectsList();
+        base.OnInitialized();
+    } *@
+
+    private void SetCompletedProjectsList()
+    {
+        Guid parsedProjectId;
+        bool isValidGuid = Guid.TryParse(ProjectID, out parsedProjectId);
+
+        if (!isValidGuid)
+        {
+            sortedProjects = Enumerable.Empty<ProjectInformation>();
+            return;
+        }
+
+        List<ProjectInformation> completedProjects = new List<ProjectInformation>();
+        foreach (ProjectInformation projectInformation in ProjectManager.ProjectIdeas.Values)
+        {
+            if (projectInformation.Status.Equals("Complete") && projectInformation.ProjectID == parsedProjectId)
+            {
+                completedProjects.Add(projectInformation);
+            }
+        }
+        sortedProjects = completedProjects;
+    }
+
+    private void MarkAsDirty(ProjectInformation project)
+    {
+        project.IsDirty = true;
+    }
+
+    public string GetVideoEmbedUrl(string videoLink)
+    {
+        if (string.IsNullOrWhiteSpace(videoLink))
+        {
+            return null; 
+        }
+
+        try
+        {
+            var uri = new Uri(videoLink);
+            var query = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query);
+            var videoId = query["v"].ToString();
+            return $"https://www.youtube.com/embed/{videoId}";
+        }
+        catch
+        {
+            return null; 
+        }
+    }
+
+    private bool selectAllChecked = false;
+
+    private void ToggleSelectAll()
+    {
+        selectAllChecked = !selectAllChecked;
+    }
+
+
+    public void UpdateProject(ProjectInformation updatedProject)
+    {
+        if (ProjectManager.ProjectIdeas.TryGetValue(updatedProject.ProjectID, out ProjectInformation project))
+        {
+            project.FirstName = updatedProject.FirstName;
+            StateHasChanged();
+        }
+    }
+
+    private void OnDragOver(DragEventArgs e)
+    {
+
+    }
+
+    private void OnDrop(DragEventArgs e)
+    {
+        // Handle the drop event. Note that you might not be able to access the dropped files here directly in Blazor. This event is mainly for UI feedback, like changing the drop area's appearance.
+    }
+
+
+    private List<IBrowserFile> selectedFiles = new List<IBrowserFile>();
+
+    private void HandleSelectedFiles(InputFileChangeEventArgs e)
+    {
+        selectedFiles.Clear();
+        foreach (var file in e.GetMultipleFiles())
+        {
+            selectedFiles.Add(file);
+        }
+        StateHasChanged(); // This may not be necessary depending on your Blazor app type and setup
+    }
+
+
+
+
+    
+    
+    private ProjectInformation idea = new ProjectInformation();
+    @* private async Task UpdateRecordAsync(EventArgs e)
+    {
+        if (!idea.IsDirty)
+        {
+            return;
+        }
+
+        idea.IsDirty = !await ProjectManager.UpdateAsync(idea);
+    }
+    private async Task ApproveIdea(MouseEventArgs e)
+    {
+        this.idea.Status = "Approved";
+        await UpdateRecordAsync(e);
+    } *@
+
+    public enum FormButtons
+    {
+        Submit,
+        Approver
+    }
+
+    public static bool IsUploading
     {
         get
         {
-            return projectInformation;
+            return isUploading;
+        }
+    }
+
+    [Parameter]
+    public bool ShowFileAttachments { get; set; } = false;
+
+    [Parameter]
+    public bool ShowComments { get; set; } = false;
+
+    [Parameter]
+    public FormButtons ShowFormButton { get; set; } = FormButtons.Submit;
+
+    [Parameter]
+    public IIdea Parent { get; set; } = null;
+
+    [Parameter]
+    public ProjectInformation ProjectIdea
+    {
+        get
+        {
+            return idea;
         }
         set
         {
-            projectInformation = value;
-            SetupPlaceholder();
-            attachmentSelection.Clear();
-            foreach (ProjectFile file in projectInformation.Attachments)
-            {
-                attachmentSelection.Add(file, false);
-            }
-
+            idea = value;
         }
     }
 
-    [CascadingParameter] private Task<AuthenticationState> authenticationState { get; set; }
-    [Parameter] public string CollapseEntry { get; set; } = "collapse";
-    private ProjectInformation projectInformation;
-    private ProjectInformation _infoPlaceholder;
-    private bool completeClicked = false;
+    [CascadingParameter]
+    private Task<AuthenticationState> authenticationState { get; set; }
 
-    private Dictionary<ProjectFile, bool> attachmentSelection = new Dictionary<ProjectFile, bool>();
+    private string DownloadFileName => $"{idea.ProjectTitle}-Export.pdf";
 
-    // This is for the update block
+    private string Error { get; set; }
+
+    private List<IProjectFile> loadedFiles = new();
+
+    private static bool isUploading = false;
+
     private string tableState = "block";
-    private string waitBar => tableState.Equals("none") ? "visible" : "hidden";
 
-    // This is for the Confirmation of Approval GitHub Block
-    private string gitHubState = "block";
-    private string gitHubWaitBar => gitHubState.Equals("none") ? "visible" : "hidden";
-
-    // This is for the Error State
-    private string gitHubErrorState = "block";
-    private string gitHubErrorBar => gitHubErrorState.Equals("none") ? "visible" : "hidden";
-
-    // This is for the Successful State
-    private string gitHubSuccessState = "block";
-    private string gitHubSuccessBar => gitHubSuccessState.Equals("none") ? "visible" : "hidden";
-
-    // Should create GitHub Repository
-    private bool createGitHubRepository = false;
-    private string gitHubRepositoryName;
-    private string gitHubError = string.Empty;
+    private string waitBar => tableState.Equals("none") ? "visible" : "hidden" ;
 
     protected override void OnInitialized()
     {
-        this.gitHubRepositoryName = this.GetSuggestedName();
-
+        SetCompletedProjectsList();
         base.OnInitialized();
-    }
 
-    private void SetupPlaceholder()
-    {
-        if (projectInformation == null)
+        if (this.ShowFormButton == FormButtons.Approver)
         {
-            return;
+            this.idea.IsDirty = false;
         }
-
-        _infoPlaceholder = new ProjectInformation();
-        _infoPlaceholder.VideoLink = projectInformation.VideoLink;
-        _infoPlaceholder.ProjectTitle = projectInformation.ProjectTitle;
-        _infoPlaceholder.ProjectDescription = projectInformation.ProjectDescription;
-        _infoPlaceholder.Url = projectInformation.Url;
-        _infoPlaceholder.Github = projectInformation.Github;
-        _infoPlaceholder.FirstName = projectInformation.FirstName;
-        _infoPlaceholder.LastName = projectInformation.LastName;
-        _infoPlaceholder.Email = projectInformation.Email;
-        _infoPlaceholder.Phone = projectInformation.Phone;
-        _infoPlaceholder.SponsorFirstName = projectInformation.SponsorFirstName;
-        _infoPlaceholder.SponsorLastName = projectInformation.SponsorLastName;
-        _infoPlaceholder.SponsorEmail = projectInformation.SponsorEmail;
-        _infoPlaceholder.SponsorPhone = projectInformation.SponsorPhone;
     }
 
-    private async Task DeleteRecord(bool confirmed)
+    private async Task HandleValidSubmit()
     {
-        if (!confirmed)
-        {
-            return;
-        }
-
-        var authState = await authenticationState;
-        string error = await ProjectManager.DeleteAsync(projectInformation, authState.User);
-    }
-
-    private async Task ExportEntry()
-    {
-        var location = await this.ProjectManager.ExportAsync(projectInformation);
-
-        NavigationManager.NavigateTo($"{ProjectManager.FileManager.DownloadPath}{location}", true);
-
-    }
-
-    private async Task ApproveIdea(MouseEventArgs e)
-    {
-        if (createGitHubRepository)
-        {
-            var gitHubOrganization = "umgc";
-            var formattedRepoName = this.gitHubRepositoryName.Replace(' ', '-').ToLower();
-            try
-            {
-                this.gitHubState = "none";
-                gitHubError = await GitHub.DoAllTasks(gitHubOrganization, formattedRepoName, projectInformation.ProjectDescription);
-                this.gitHubState = "block";
-                if (!string.IsNullOrEmpty(gitHubError))
-                {
-                    this.gitHubErrorState = "none";
-                    return;
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error Message - {0}", ex.Message);
-                this.gitHubState = "block";
-                await Task.Delay(TimeSpan.FromSeconds(5)).ConfigureAwait(false);
-                this.gitHubErrorState = "none";
-                return;
-            }
-
-            this.gitHubSuccessState = "none";
-        }
-
-
-        ProjectInformation.Status = "Approved";
-        await ProjectManager.UpdateAsync(ProjectInformation).ConfigureAwait(false);
-        this.gitHubSuccessState = "block";
-    }
-
-    private async Task UpdateRecord(bool confirmed)
-    {
-        this.tableState = "none";
-        if (!confirmed)
-        {
-            return;
-        }
-
-        projectInformation.VideoLink = _infoPlaceholder.VideoLink;
-        projectInformation.ProjectTitle = _infoPlaceholder.ProjectTitle;
-        projectInformation.ProjectDescription = _infoPlaceholder.ProjectDescription;
-        projectInformation.Url = _infoPlaceholder.Url;
-        projectInformation.Github = _infoPlaceholder.Github;
-        projectInformation.FirstName = _infoPlaceholder.FirstName;
-        projectInformation.LastName = _infoPlaceholder.LastName;
-        projectInformation.Email = _infoPlaceholder.Email;
-        projectInformation.Phone = _infoPlaceholder.Phone;
-        projectInformation.SponsorFirstName = _infoPlaceholder.SponsorFirstName;
-        projectInformation.SponsorLastName = _infoPlaceholder.SponsorLastName;
-        projectInformation.SponsorEmail = _infoPlaceholder.SponsorEmail;
-        projectInformation.SponsorPhone = _infoPlaceholder.SponsorPhone;
-
         string link = "";
-        if ((!ProjectInformation.Url.StartsWith("http://") && !ProjectInformation.Url.StartsWith("https://")) && ProjectInformation.Url.Length != 0)
+        if (!idea.Url.StartsWith("http://") && !idea.Url.StartsWith("https://") && idea.Url.Length != 0)
         {
-            link = "https://" + ProjectInformation.Url;
-            ProjectInformation.Url = "";
-            ProjectInformation.Url = link;
+            link = "https://" + idea.Url;
+            idea.Url = link;
         }
 
-        if ((!ProjectInformation.Github.StartsWith("http://") && !ProjectInformation.Github.StartsWith("https://")) && ProjectInformation.Github.Length != 0)
+        if (!idea.Github.StartsWith("http://") && !idea.Github.StartsWith("https://") && idea.Github.Length != 0)
         {
-            link = "https://" + ProjectInformation.Github;
-            ProjectInformation.Github = link;
+            link = "https://" + idea.Github;
+            idea.Github = link;
         }
 
-        if ((!ProjectInformation.VideoLink.StartsWith("http://") && !ProjectInformation.VideoLink.StartsWith("https://")) && ProjectInformation.VideoLink.Length != 0)
+        if (!idea.VideoLink.StartsWith("http://") && !idea.VideoLink.StartsWith("https://") && idea.VideoLink.Length != 0)
         {
-            link = "https://" + ProjectInformation.VideoLink;
-            ProjectInformation.VideoLink = link;
+            link = "https://" + idea.VideoLink;
+            idea.VideoLink = link;
         }
 
-        foreach (CompletedProjectDocumentation proj in ProjectInformation.CompletedDocuments)
+        this.tableState = "none";
+
+        await Task.Run( async () =>
         {
-            if ((!proj.WebsiteLink.StartsWith("http://") && !proj.WebsiteLink.StartsWith("https://")) && proj.WebsiteLink.Length != 0)
-            {
-                link = "https://" + proj.WebsiteLink;
-                proj.WebsiteLink = link;
-            }
-
-            if ((!proj.GitHubLink.StartsWith("http://") && !proj.GitHubLink.StartsWith("https://")) && proj.GitHubLink.Length != 0)
-            {
-                link = "https://" + proj.GitHubLink;
-                proj.GitHubLink = link;
-            }
-
-            if ((!proj.VideoLink.StartsWith("http://") && !proj.VideoLink.StartsWith("https://")) && proj.VideoLink.Length != 0)
-            {
-                link = "https://" + proj.VideoLink;
-                proj.VideoLink = link;
-            }
-
-        }
-
-        await Task.Run(async () =>
-        {
-            var uploaded = await ProjectManager.UpdateAsync(projectInformation);
+            var uploaded = await ProjectManager.AddAsync(idea);
 
             if (uploaded)
             {
-                projectInformation.IsDirty = false;
+                idea.IsDirty = false;
+                loadedFiles.Clear();
+                idea = new ProjectInformation();
             }
+
+            await Task.Delay(2000);
         });
 
         this.tableState = "block";
     }
 
-    private async Task DeleteSelectedAttachments(bool confirmed)
-    {
-        if (!confirmed)
-        {
-            return;
-        }
-
-        var authState = await authenticationState;
-        foreach (ProjectFile file in attachmentSelection.Keys)
-        {
-            if (attachmentSelection[file])
-            {
-                await ProjectManager.RemoveFileAsync(projectInformation, file, authState.User);
-            }
-        }
-    }
-
     private void LoadFiles(InputFileChangeEventArgs inputFile)
     {
-        List<IProjectFile> loadedFiles = new();
-
+        this.loadedFiles.Clear();
         foreach (var file in inputFile.GetMultipleFiles().Take(ProjectManager.MaxNumberOfFiles))
         {
             if (file.Size > ProjectManager.MaxMBSizePerFile)
@@ -501,33 +579,208 @@
 
             var projectFile = new ProjectFile(file);
 
-            loadedFiles.Add(projectFile);
+            this.loadedFiles.Add(projectFile);
         }
 
-        projectInformation.AddAttachments(loadedFiles);
+        idea.SetAttachments(loadedFiles);
     }
 
-    private string GetSuggestedName()
+    private void SponsorCheckBox_Changed(EventArgs e)
     {
-        string[] semesters = new[] { "Summer", "Fall", "Spring" };
-        string year = DateTime.Now.Year.ToString();
-        int month = DateTime.Now.Month;
+        this.idea.IsSponsor = !this.idea.IsSponsor;
 
-        // Check for Summer Condition
-        if (month >= 3 && month <= 6)
+        if (!this.idea.IsSponsor)
         {
-            return $"{semesters[0]}{year}";
+            ResetSponsor();
         }
-        // Check for fall condition
-        else if (month >= 7 && month <= 10)
+    }
+
+    private void SponsorCheck(EventArgs e)
+    {
+        if (idea.IsSponsor)
         {
-            return $"{semesters[1]}{year}";
+            idea.SponsorFirstName = idea.FirstName;
+            idea.SponsorLastName = idea.LastName;
+            idea.SponsorEmail = idea.Email;
+            idea.SponsorPhone = idea.Phone;
+        }
+    }
+
+    private void ResetSponsor()
+    {
+        idea.SponsorFirstName = string.Empty;
+        idea.SponsorLastName = string.Empty;
+        idea.SponsorEmail = string.Empty;
+        idea.SponsorPhone = string.Empty;
+    }
+
+    private async Task UpdateInfo()
+    {
+        bool anyUpdates = false;
+
+        foreach (var updatedProject in sortedProjects)
+        {
+            if (updatedProject.IsDirty)
+            {
+                if (ProjectManager.ProjectIdeas.TryGetValue(updatedProject.ProjectID, out ProjectInformation existingProject))
+                {
+                    anyUpdates = true;
+                    updatedProject.IsDirty = false; 
+                }
+            }
+        }
+        if (anyUpdates)
+        {
+            ProjectManager.NotifyProjectIdeasChanged();
+        }
+        StateHasChanged(); 
+    }
+
+    private async Task ApproveIdea(MouseEventArgs e)
+    {
+        this.idea.Status = "Approved";
+        @* await UpdateRecordAsync(e); *@
+    }
+
+    private async Task ExportIdea(MouseEventArgs e)
+    {
+        var location = await this.ProjectManager.ExportAsync(idea);
+
+        NavigationManager.NavigateTo($"{ProjectManager.FileManager.DownloadPath}{location}", true);
+
+        @* this.CloseForm(EventArgs.Empty); *@
+    }
+
+    private async Task DeleteIdea(MouseEventArgs e)
+    {
+        var authState = await authenticationState;
+        string error = await this.ProjectManager.DeleteAsync(idea, authState.User);
+
+        if (string.IsNullOrEmpty(error))
+        {
+            @* this.CloseForm(EventArgs.Empty); *@
         }
         else
         {
-            return $"{semesters[2]}{year}";
+            this.Error = error;
         }
     }
-} *@
+
+    private void DownloadFile(IProjectFile file)
+    {
+        NavigationManager.NavigateTo($"/download/{file.Location}", true);
+    }
+
+    private bool IsExpanded { get; set; } = false; // False means collapsed, "+" is shown
+    private void ToggleExpandCollapse()
+    {
+        IsExpanded = !IsExpanded;
+    }
+
+    List<string> teamMembers = new List<string>();
+    List<string> links = new List<string>();
+
+    private void AddTeamMember()
+    {
+        teamMembers.Add("");
+    }
+
+    void UpdateTeamMember(ChangeEventArgs e, string member)
+    {
+        var index = teamMembers.IndexOf(member);
+        if(index != -1)
+        {
+            teamMembers[index] = e.Value.ToString();
+        }
+    }
+
+    void RemoveTeamMember(string member)
+    {
+        teamMembers.Remove(member);
+    }
+
+
+    // Function to add a new link input field
+    private void AddLink()
+    {
+
+        // Add an empty string to the list
+        links.Add("");
+    }
+   
+
+    string NewCommentText { get; set; }
+    List<Comment> Comments = new List<Comment>();
+
+    void AddComment()
+    {
+        if (!string.IsNullOrWhiteSpace(NewCommentText))
+        {
+            var newComment = new Comment
+            {
+                Text = NewCommentText,
+                Timestamp = DateTime.Now
+            };
+            Comments.Add(newComment);
+            NewCommentText = string.Empty; // Clear the input field
+        }
+    }
+
+    public class Comment
+    {
+        public string Text { get; set; }
+        public DateTime Timestamp { get; set; }
+    }
+
+    
+    private string GenerateDownloadLinkForDoc1()
+    {
+        // Example static link
+        return "/download/document1.pdf";
+
+        // If dynamic, you might need to construct this URL based on some logic
+    }
+
+    private bool isDoc1Selected;
+
+    private void DownloadSelected()
+    {
+        if (isDoc1Selected)
+        {
+            // Assuming you have a method to generate the correct download link
+            var downloadLink = GenerateDownloadLinkForDoc1();
+            DownloadFile(downloadLink);
+        }
+    }
+
+    private async Task DownloadFile(string url)
+    {
+        await JSRuntime.InvokeVoidAsync("downloadFile", url);
+    }
+
+    private string currentInput = "VideoLink";
+    private List<string> inputs = new List<string> { "VideoLink", "Github", "Url" };
+
+    
+    @* private void NextInput()
+    {
+        int currentIndex = inputs.IndexOf(currentInput);
+        currentIndex = (currentIndex + 1) % inputs.Count; // Cycle through the inputs
+        currentInput = inputs[currentIndex];
+    } *@
+
+
+    private string currentInputLinks = "VideoLink";
+    private List<string> inputSequence = new List<string> { "VideoLink", "Github", "Url" };
+
+    private void NextInput()
+    {
+        int currentIndex = inputSequence.IndexOf(currentInputLinks);
+        int nextIndex = (currentIndex + 1) % inputSequence.Count; // Use modulo to cycle back to 0
+        currentInputLinks = inputSequence[nextIndex];
+    } 
+   
+
+} 
 
 

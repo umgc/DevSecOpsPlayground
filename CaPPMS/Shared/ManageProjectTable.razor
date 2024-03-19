@@ -35,6 +35,9 @@ else
             #projectEntriesTable th {
                 text-align: left;
             }
+            #projectEntriesTable td {
+                border-top: none; 
+            }
         </style>
         @* <table id="projectEntriesTable" text-align: left class="@string.Join(" ", TableCssClasses)"> *@
         <table id="projectEntriesTable" style="text-align: left;" class="@string.Join(" ", TableCssClasses) table-striped table-hover">
@@ -63,13 +66,13 @@ else
                         {
                             if (cell.index == 0)
                             {
-                                var ProjectTitle = (row.DataBoundItem as ProjectInformation).ProjectTitle;
+                                var ProjectID = (row.DataBoundItem as ProjectInformation).ProjectID;
 
                                 <td style="text-align: left;">
                                     @* <a href="/individualProject/@ProjectTitle">@((MarkupString)cell.value.ToString())</a> *@
                                     @* <a href="/individualProject">@((MarkupString)cell.value.ToString())</a> *@
                                     @* <a href="/individualProject">@((MarkupString)cell.value.ToString())</a> *@
-                                    <a href="/individualManageProject" target="" style="color: #A30606; font-weight: bold;">@((MarkupString)cell.value.ToString())</a>
+                                    <a href="/individualManageProject/@ProjectID" target="" style="color: #A30606; font-weight: bold;">@((MarkupString)cell.value.ToString())</a>
                                 </td>
                             }
                             else

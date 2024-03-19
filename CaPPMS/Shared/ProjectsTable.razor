@@ -35,6 +35,9 @@ else
             #projectEntriesTable th {
                 text-align: left;
             }
+            #projectEntriesTable td {
+                border-top: none; 
+            }
         </style>
         @* <table id="projectEntriesTable" text-align: left class="@string.Join(" ", TableCssClasses)"> *@
         <table id="projectEntriesTable" style="text-align: left;" class="@string.Join(" ", TableCssClasses) table-striped table-hover">
@@ -57,7 +60,7 @@ else
                                     class="btn btn-primary">
                                 @(projectListCollapseMap[row.DataBoundItem as ProjectInformation] ? "+" : "-")
                             </button>
-                        </td> *@
+                        </td>  *@
 
                         @* @foreach (var cell in row.Select((value, index) => new { value, index }))
                         {

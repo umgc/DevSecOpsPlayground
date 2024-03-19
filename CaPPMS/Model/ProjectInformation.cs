@@ -16,23 +16,23 @@ namespace CaPPMS.Model
 
         private string projectTitle = string.Empty;
 
-        private string teamMembers = string.Empty;
+        // private string teamMembers = string.Empty;
 
-        [Export(true)]
-        [DisplayName("Team Members")]
-        [Browsable(true)]
-        public string TeamMembers
-        {
-            get
-            {
-                return this.teamMembers;
-            }
-            set
-            {
-                this.teamMembers = value;
-                this.IsDirty = true;
-            }
-        }
+        // [Export(true)]
+        // [DisplayName("Team Members")]
+        // [Browsable(true)]
+        // public string TeamMember
+        // {
+        //     get
+        //     {
+        //         return this.teamMembers;
+        //     }
+        //     set
+        //     {
+        //         this.teamMembers = value;
+        //         this.IsDirty = true;
+        //     }
+        // }
 
         private string videoLink = string.Empty;
 

@@ -1,6 +1,7 @@
 {
   "9abf0431-e318-4fbb-be85-505b011757e8": {
     "ProjectID": "9abf0431-e318-4fbb-be85-505b011757e8",
+    "TeamMember": "test03-18-24",
     "VideoLink": "",
     "ProjectTitle": "CaPPMS",
     "ProjectDescription": "A platform is needed where clients and customers can submit capstone project proposals for \nfuture University of Maryland Global Campus (UMGC) Software Engineering (SWEN) 670 \nstudents. Those projects would then go through an approval process involving UMGC professors \nand stakeholders who would review and determine which project could be completed by the \nstudents. \nThe UMGC Capstone Project Proposal Management System (CaPPMS) is a web-based \napplication which allows customer, clients, and former students to submit detailed proposals of \nprojects to be designed and implemented by UMGC SWEN 670 students as well as track the \nstages during the approval process.",
@@ -88,6 +89,7 @@
   },
   "e2c4ab22-9d63-4d65-9f69-ec3b51244299": {
     "ProjectID": "e2c4ab22-9d63-4d65-9f69-ec3b51244299",
+    "TeamMember": "test03-18-24",
     "VideoLink": "",
     "ProjectTitle": "MemorEz",
     "ProjectDescription": "About 14 million people in the United States have a disability that impairs their short-term memory. Short-term memory (STM) indicates different systems of memory involved in the retention of pieces of data for a relatively short time (usually up to 30 seconds). The causes of the disability range from aging to dementia to Alzheimer’s. According to the U.S. Centers for Disease Control and Prevention, noticing a decline in your mental abilities (\"cognitive decline\") is one of the earliest signs of impending Alzheimer's disease or dementia. There is a need to provide a solution to adults that assists them with the short-term memory function. To meet this need, United Global Masters Coders proposes the development of a mobile application that recognizes the speech of the user as they engage in a conversation and help them live a fuller life despite their disability. The purpose of this project is to develop the Memory Magic App for people with short-term memory disabilities. Memory Magic expands on previous capstone work. There are several ways to develop this app and this effort is to determine which way would be the most optimal. The Memory Magic App meets the business need by providing a solution for a critical and underserved market segment to have a solution with them that meets their need for memory assistance.",
@@ -175,6 +177,7 @@
   },
   "efe23c93-45c0-44f5-907e-b658211643a8": {
     "ProjectID": "efe23c93-45c0-44f5-907e-b658211643a8",
+    "TeamMember": "test03-18-24",
     "VideoLink": "",
     "ProjectTitle": "Flutter Android/iOS Deployment",
     "ProjectDescription": "Deployment work for Flutter to Play/App Stores",
@@ -256,6 +259,7 @@
   },
   "d30172fe-e89a-4cea-beca-e6f2b29c6610": {
     "ProjectID": "d30172fe-e89a-4cea-beca-e6f2b29c6610",
+    "TeamMember": "test03-18-24",
     "VideoLink": "",
     "ProjectTitle": "Spring 2024",
     "ProjectDescription": "1. A rewrite of our website University of Maryland Global Campus(UMGC) SWEN 670 Capstone Project Management System - CaPPMS \n2. Using Large Language Models (LLM) in education\n3. Computer vision or artificial intelligence project\n",
@@ -294,7 +298,7 @@
   },
   "fec2ea66-ec65-4468-9c81-2f33c470230e": {
     "ProjectID": "fec2ea66-ec65-4468-9c81-2f33c470230e",
-    "TeamMember": "test",
+    "TeamMember": "test03-18-24",
     "VideoLink": "https://www.youtube.com/watch?v=ZCp-iVK1704",
     "ProjectTitle": "ADA Compatible USPS Digest",
     "ProjectDescription": "The current digest email to customers lack ADA compatible feature that enable blind users for example to get a good sense of what to expect in their email. There should be a solution that can determine based on a picture where and in what context the mail, mailers, and other items from the digest are.",
@@ -382,6 +386,7 @@
   },
   "6b05268e-6525-4dc4-8caf-de421e0d8f0b": {
     "ProjectID": "6b05268e-6525-4dc4-8caf-de421e0d8f0b",
+    "TeamMember": "test03-18-24",
     "VideoLink": "",
     "ProjectTitle": "Advance Development Factory V1",
     "ProjectDescription": "As part of a diverse ecosystem of applications and technologies within software development, a need has been identified that standardizes the building, testing, and deployment of an organization's application suite. This document outlines the Advance Development Factory design and requirements specification that sets the standard for developers  to build, test, and deployment of a diverse set of applications under a common framework that mitigates clients operating environment dependencies.",
@@ -512,6 +517,7 @@
   },
   "71c700de-e711-4cdb-9fd2-0ec8225733b1": {
     "ProjectID": "71c700de-e711-4cdb-9fd2-0ec8225733b1",
+    "TeamMember": "test03-18-24",
     "VideoLink": "",
     "ProjectTitle": "City Chatbot",
     "ProjectDescription": "This project’s goal is to begin developing a permit zoning assistance application for the city of Pasadena’s zoning and planning website. The application provides site visitors the ability to locate their permits and regulations that are relevant to their specific address by interacting with a chatbot, avoiding calling a customer service representative or searching the website. The application facilitates the collection of the residents’ addresses, the comparison of those addresses to a city provided map containing permitting zones, and then providing the applicable permitting information they are looking for based off of an established permit and regulations database. The application shall provide permit and zoning information and assistance through chatbot functionality on through the city of municipality website. The application assists users by directly providing permit and zoning information based on user input. The application displays links and referential information. The application is not intended to provide all details and information regarding permits and zoning.  ",
@@ -599,6 +605,7 @@
   },
   "bd559ad2-0275-4e23-a59f-5feada62e841": {
     "ProjectID": "bd559ad2-0275-4e23-a59f-5feada62e841",
+    "TeamMember": "test03-18-24",
     "VideoLink": "",
     "ProjectTitle": "Memory Magic",
     "ProjectDescription": "About 14 million people in the United States have a disability that impairs their short-term memory. Short-term memory (STM) indicates different systems of memory involved in the retention of pieces of data for a relatively short time (usually up to 30 seconds). The causes of the disability range from aging to dementia to Alzheimer’s. According to the U.S. Centers for Disease Control and Prevention, noticing a decline in your mental abilities (\"cognitive decline\") is one of the earliest signs of impending Alzheimer's disease or dementia. There is a need to provide a solution to adults that assists them with the short-term memory function. To meet this need, United Global Masters Coders proposes the development of a mobile application that recognizes the speech of the user as they engage in a conversation and help them live a fuller life despite their disability. The purpose of this project is to develop the Memory Magic App for people with short-term memory disabilities. Memory Magic expands on previous capstone work. There are several ways to develop this app and this effort is to determine which way would be the most optimal. The Memory Magic App meets the business need by providing a solution for a critical and underserved market segment to have a solution with them that meets their need for memory assistance.",
@@ -692,6 +699,7 @@
   },
   "441ae4a7-ff84-4488-a49d-ed00370408e2": {
     "ProjectID": "441ae4a7-ff84-4488-a49d-ed00370408e2",
+    "TeamMember": "test03-18-24",
     "VideoLink": "",
     "ProjectTitle": "Short Term Memory Loss Summer 2023",
     "ProjectDescription": "A number of prior projects try to help people suffering from Short-Term Memory Loss (STML) by listening to a conversation and then retrieving information from that conversation. Please view the associated videos from the link above. Some of them relied upon \"trigger\" phrases to start taking a note or to stop. This semester we are going to get rid of the trigger phrases, transcribe the conversation, and when asked a question about the conversation, send the transcribed conversation to ChatGPT through its API, and request it to answer the question based upon the transcribed conversation, before playing that response. I want you all to understand the nuances of ChatGPT and then pose the question in a way that best serves the needs of the user. I want you to clearly document all the different approaches you took to question ChatGPT with its responses and why was your choice the best choice among all.",
@@ -848,13 +856,13 @@
   "052d7137-639a-4a1a-a0ec-689fb26c4b9b": {
     "ProjectID": "052d7137-639a-4a1a-a0ec-689fb26c4b9b",
     "TeamMember": "test",
-    "VideoLink": "",
+    "VideoLink": "//www.youtube.com",
     "ProjectTitle": "ADA Compatible USPS Digest v2",
     "ProjectDescription": "The current digest email to customers lack ADA compatible feature that enable blind users for example to get a good sense of what to expect in their email. There should be a solution that can determine based on a picture where and in what context the mail, mailers, and other items from the digest are.",
     "SemesterTerm": "Fall",
     "SemesterYear": "2022",
-    "Url": "",
-    "Github": "",
+    "Url": "www.TestLink.com",
+    "Github": "https://github.com/umgc/fall2022",
     "FirstName": "Bob",
     "LastName": "Dixon",
     "Email": "livingstonedc@yahoo.com",
@@ -1009,6 +1017,7 @@
   },
   "fb743786-6409-462a-9063-a2b592124bee": {
     "ProjectID": "fb743786-6409-462a-9063-a2b592124bee",
+    "TeamMember": "test",
     "VideoLink": "https://www.youtube.com/watch?v=pxt7YZfGE94",
     "ProjectTitle": "Harkify",
     "ProjectDescription": "Approximately 14 million people (about twice the population of Arizona)in the United States suffer from a disability that impairs their short-term memory. This ranges from mild retention issues due to aging, to advanced memory loss such as Alzheimer’s.There is a need to support those suffering from short-term memory loss or recognize cognitive decline.To meet this need, United Global Masters Coders proposes the development of a mobile application thatrecognizes the speech of the user as they engage in a conversation and help them live a fuller life despite their disability. After the completion of the project, anyone in the United States suffering from short-term memory (STM) will be able to download and use the application.",
@@ -1102,6 +1111,7 @@
   },
   "136e37b5-058c-41a9-8942-9c8480064fe2": {
     "ProjectID": "136e37b5-058c-41a9-8942-9c8480064fe2",
+    "TeamMember": "test",
     "VideoLink": "https://www.youtube.com/watch?v=JlqBkychVWw",
     "ProjectTitle": "Memory Enhancer Application",
     "ProjectDescription": "About 14 million people in the United States havea disability that impairs their short-term memory.  Short-term memory (STM) indicates different systems of memory involved in the retention of pieces of data for a relatively short time (usually up to 30 seconds).  The causes of the disability range from aging to dementia to Alzheimer’s.  According to the U.S. Centers for Disease Control and Prevention, noticing a decline in your mental abilities (\"cognitive decline\") is one of the earliest signs of impending Alzheimer's disease or dementia.  There is a need to provide a solution to adults that assists them with the short-term memory function.  To meet this need, United Global Masters Coders proposes the development of a mobile application that recognizes the speech of the user as they engage in a conversation and help them live a fuller life despite their disability. The purpose of this project is to develop the Memory Enhancer Appfor people with short-term memory disabilities.  There are several ways to develop this app and this effort is to determine which way would be the mostoptimal.   The Memory Enhancer Appmeets the business need by providing a solution for a critical and underserved market segment to have a solution with them that meets their need for memory assistance.",
@@ -1183,6 +1193,7 @@
   },
   "87e3fc3b-d07d-4d96-b1d6-937c5dbc1b8e": {
     "ProjectID": "87e3fc3b-d07d-4d96-b1d6-937c5dbc1b8e",
+    "TeamMember": "test",
     "VideoLink": "",
     "ProjectTitle": "Demo Submit Project",
     "ProjectDescription": "This is just a test project ",
@@ -1264,13 +1275,14 @@
   },
   "1a73821b-9211-45d0-9d3b-242fa4f3857a": {
     "ProjectID": "1a73821b-9211-45d0-9d3b-242fa4f3857a",
+    "TeamMember": "test",
     "VideoLink": "",
     "ProjectTitle": "Memory Magic NLU",
     "ProjectDescription": "Nature Language Understanding (NLU) component for Memory Magic",
     "SemesterTerm": "",
     "SemesterYear": "",
-    "Url": "",
-    "Github": "",
+    "Url": "www.TestLink.com",
+    "Github": "www.TestLink.com",
     "FirstName": "Mir",
     "LastName": "Assadullah",
     "Email": "Mir.Assadullah@faculty.umgc.edu",
@@ -1324,6 +1336,7 @@
   },
   "a2fd2d56-ad33-4fee-8f7c-803a1f6c7412": {
     "ProjectID": "a2fd2d56-ad33-4fee-8f7c-803a1f6c7412",
+    "TeamMember": "test",
     "VideoLink": "",
     "ProjectTitle": "Municipality Permit Chatbot System (MPCS)",
     "ProjectDescription": "The purpose of the MPCS is to design, develop, and deliver a reliable and functional software application that assists end-users in navigating the local city website (e.g., Pasadena) by answering questions and providing information when inquired. Questions provided by the end-user are administered via a popup website chatbox. The MPCS convincingly acknowledges and interfaces with the end-user comparable to a human customer representative by determining whether to provide a direct answer or reference search results from within the website. Furthermore, the MPCS is linked to other applications within the website to provide accurate information to the end-user. The MPCS will also contain options that will be customizable by its stakeholders (e.g., City Officials) through a downloadable client. Each stage of the project will require approval from key stakeholders to transition to the subsequent phase to ensure the project has adequate coverage in meeting the stakeholder's performance expectations.",
@@ -1411,6 +1424,7 @@
   },
   "316f6185-5761-4dcf-b56a-db3a93e490fb": {
     "ProjectID": "316f6185-5761-4dcf-b56a-db3a93e490fb",
+    "TeamMember": "test",
     "VideoLink": "https://www.youtube.com/watch?v=iYayi_fVp84",
     "ProjectTitle": "CaPPMSv3",
     "ProjectDescription": "Refine CaPMMS System by adding enhanced FAQs, and rework Project list.",
@@ -1434,6 +1448,7 @@
   },
   "c7a29428-2b86-4cd4-89b7-4f4165d216f9": {
     "ProjectID": "c7a29428-2b86-4cd4-89b7-4f4165d216f9",
+    "TeamMember": "test",
     "VideoLink": "",
     "ProjectTitle": "Form Scriber",
     "ProjectDescription": "This mobile application will be the first AI Application to use chatbot and offer public service professionals an application that will listen to a conversation between an interviewer and interviewee. Then, the mobile app will capture the conversation as a recording and send the captured recording to the Dialog Flow AI for processing the voice recording. A completed form with data collected will be offered by the Dialog Flow AI. The Mobile app will generate a professional summary report based on the form template. Finally, a report is generated for the customers to view and open with the option to print.",
@@ -1669,6 +1684,7 @@
   },
   "df58b89c-8924-43d8-9e86-b7e26b64aca6": {
     "ProjectID": "df58b89c-8924-43d8-9e86-b7e26b64aca6",
+    "TeamMember": "test",
     "VideoLink": "",
     "ProjectTitle": "Panoramic Stitching",
     "ProjectDescription": "Enable a deeper connection between the user and the facility by providing a virtual tour experience that enables text searchable elements.",
@@ -1839,6 +1855,7 @@
   },
   "cd20858a-4ee6-4048-ada2-0d13d0f87105": {
     "ProjectID": "cd20858a-4ee6-4048-ada2-0d13d0f87105",
+    "TeamMember": "test",
     "VideoLink": "",
     "ProjectTitle": "NASA Maestro",
     "ProjectDescription": "The customer, National Aeronautics and Space Administration (NASA), needs some updates to the Maestro software suite, which is a tool used at NASA to create procedures for spacewalks known as Extra-Vehicular Activities (EVAs) or spacewalks undertaken outside of the host vehicle. In general, these procedures include two astronauts working outside the space station, a robotics operator inside, and other actions taken by Mission Control on the ground. Maestro currently takes the procedure data and can render it in many file types (HTML, DOCX, specific XML types) as well as different formats (EVA format, IVA format, etc.). The software facilitates basic uses, but NASA wants to extend the software’s use cases. Before that, NASA needs additional testing and format functionality.",
@@ -2000,6 +2017,7 @@
   },
   "b32edac0-accc-4ba8-9ce9-6e09c98e91dc": {
     "ProjectID": "b32edac0-accc-4ba8-9ce9-6e09c98e91dc",
+    "TeamMember": "test",
     "VideoLink": "",
     "ProjectTitle": "Virtual Letter of Life V2",
     "ProjectDescription": "The “Letter of Life” is a document used by emergency services in Salisbury and Montgomery County Maryland. Patients enter their medical information to include items such as chronic conditions, medications, allergies, primary care doctors, insurance, and emergency contact. Emergency Medical Services (EMS) encourage all residents to complete this form and place it either on their front door or refrigerator to enable EMS staff to provide better care to patients in the event of an emergency. ",
@@ -2087,6 +2105,7 @@
   },
   "702c7911-caa2-4724-bc3d-f61de41174da": {
     "ProjectID": "702c7911-caa2-4724-bc3d-f61de41174da",
+    "TeamMember": "test",
     "VideoLink": "",
     "ProjectTitle": "Advance Development Factory V2",
     "ProjectDescription": "University of Maryland Global Campus (UMGC) has been looking to solve a problem that spans between classes as more and more students move to remote learning. The resources that they have access to do not always permit a fully established development environment. For these reasons theyarelooking for a means to bring the fully established development environment to the student with minimal impact on the environment used by the student. The advanced development factory (ADF) will servethis purpose.The Advanced Development Factory will give the student access to the development tools they need in order to provide a code, build, and test experience that any developer would expect to have.This means that ADF needs to be operating system agnostic and support a wide array of projects, frameworks, and languages. ADF will provide this flexibility to students and remove the barriers currently placed on them by their environments. ",
@@ -2174,6 +2193,7 @@
   },
   "4d10fb6d-c7fc-4a5a-8ecc-d4baa13ee48e": {
     "ProjectID": "4d10fb6d-c7fc-4a5a-8ecc-d4baa13ee48e",
+    "TeamMember": "test",
     "VideoLink": "",
     "ProjectTitle": "UMGC City",
     "ProjectDescription": "The scope of the UMGC City project is to build a free, open-source application that can be used by city officials to improve the usability of existing city web portals for their targeted audiences. The objective of the application is to enhance the user experience by helping them easily and intuitively locate applicable city ordinances for a predetermined list of frequently requested user inquiries (as determined by the city officials). In order to accomplish this goal, the application shall present the city officials with an interface to accept input of various use cases along with all the pertinent information that they think will benefit their intended audiences. The application shall process that data into appropriate tables that comprise a database. When the users visit the city web portal to search for specific ordinances, the database shall be called upon to produce appropriate output that is tailored to them in a tabular format. This generic, build-to-suit database infrastructure allows the application to be reused by any city. The UMGC City teams, along with the DevOps team, will work closely with the customer, Israel Del Toro, to implement the database setup. In addition, the development teams shall tailor the application to deliver new pages and functionalities that are customized for the website of the City of Pasadena, California. Specifically, the UMGC City project teams will be delivering two interfaces: an interactive map/web-based interface (Team 1) and a ChatBot interface (Team 2). This project plan presents information applicable to the database setup and the map/web-based interface, whose tasks fall under UMGC City Team 1. UMGC City Team 2 shall use the same database setup that Team 1 built for the application.",
@@ -2317,6 +2337,7 @@
   },
   "70ceda28-1bc3-4253-9133-fdc30d4eadcb": {
     "ProjectID": "70ceda28-1bc3-4253-9133-fdc30d4eadcb",
+    "TeamMember": "test",
     "VideoLink": "",
     "ProjectTitle": "Fall 2023 STML",
     "ProjectDescription": "About 14 million people in the United States havea disability that impairs their short-term memory. Using AI, we can help make these lives better.",
@@ -2493,6 +2514,7 @@
   },
   "e6bbe8de-1022-48b8-a85d-55c8ce409a69": {
     "ProjectID": "e6bbe8de-1022-48b8-a85d-55c8ce409a69",
+    "TeamMember": "test",
     "VideoLink": "https://www.youtube.com/watch?v=Z7juO6O-yCQ",
     "ProjectTitle": "Mnemosyne",
     "ProjectDescription": "This short-term memory assistant mobile application might be the first Artificial Intelligent Application to make the best personal speech recognition application for the memory impaired. It will offer public service professionals an application to listen to a conversation between an interviewer and interviewee(short-term memory disability).After that, the mobile app will capture the conversation as a recording, translate it into text, and stored the text data on the user’s local device. A completed functional application will showcase at the end of the term semester. The Short-Term memory assistant Mobile app will fulfill all the high-level requirements. Finally, all the documentation such as Software Requirement Specification (SRS), technical design, software test plan, programmer guide, deployment operation guide will generate for the customers to view and print as necessary.",
@@ -2586,6 +2608,7 @@
   },
   "e69c6d31-172c-44d6-8730-74741956cfd3": {
     "ProjectID": "e69c6d31-172c-44d6-8730-74741956cfd3",
+    "TeamMember": "test",
     "VideoLink": "",
     "ProjectTitle": "Virtual Letter of Life V1",
     "ProjectDescription": "The Letter of Life is a paper form that provides responders with a list of important medical information regarding the patient in need. This form should be completed by patient and placed inside the residence at a location easily accessible by EMS personnel. The scope of the project is to develop an interoperable electronic Letter of Life system that will exchange information through the interdisciplinary Emergency Medical Services (EMS), allowing information to be updated and viewed simultaneously by various authorized end users. Additionally, it will provide flexible accessibility to patients to continually update their medical information.",
