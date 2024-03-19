@@ -12,7 +12,7 @@
         }
     </style>
     <nav class="navbar navbar-expand-lg navbar-dark navbar-static-top bg-dark">
-
+    <div class="container">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
             aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation"
             @onclick="ToggleNavbar">
@@ -36,9 +36,6 @@
                         <li class="nav-item">
                             <a class="nav-link" href="/previousprojects">Manage Projects</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/users">Users</a>
-                        </li>
                     </Authorized>
                 </AuthorizeView>
                 <li class="nav-item">
@@ -50,7 +47,7 @@
                 <AuthorizeView>
                     <Authorized>
                         <li class="nav-item">
-                            <a class="nav-link login-link" href="/login">Login</a>
+                            <a class="nav-link" href="/users">Users</a>
                         </li>
                     </Authorized>
                 </AuthorizeView>
@@ -58,6 +55,7 @@
             <ul class="nav navbar-nav navbar-right login-link">
                 <LoginDisplay />
             </ul>
+        </div>
         </div>
     </nav>
 </header>
