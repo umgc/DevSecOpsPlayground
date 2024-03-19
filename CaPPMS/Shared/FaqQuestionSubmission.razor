@@ -1,5 +1,5 @@
 ﻿@inject FaqManagerService FaqManager
-
+@inject IMailService MailService
 @if (!isAuthenticated)
 {
     <h4>
@@ -63,7 +63,22 @@
 
         NewFaq = new();
         isValidQuestion = false;
+        Email("mazero789@gmail.com", "New Question submitted", "A new Question has been submitted. Please visit the CaPPMS website to approve or reject the Question.");
     }
+
+    private async Task Email(string email, string body, string html)
+    {
+        Console.WriteLine("REACHED SENDING EMAIL");
+        try
+        {
+            await MailService.SendEmailAsync(email, body, html);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error sending email: {ex.Message}");
+        }
+    }
+    
     private void AssignNewFaqQuestion(string value)
     {
         NewFaq.Question = value;
