@@ -10,9 +10,9 @@ a,
     color: #0366d6;
 }
 
-.btn-primary {
+button.btn-primary {
     color: #fff;
-    background-color: #da1a32;
+    background-color: #a30606;
     border-color: #a30606;
 }
 
@@ -87,6 +87,8 @@ tr {
 #attachment {
     /* opacity: 0; */
     width: 400px;
+    background-color: #a30606;
+    border-color: #a30606;
 }
 
 .odd {
