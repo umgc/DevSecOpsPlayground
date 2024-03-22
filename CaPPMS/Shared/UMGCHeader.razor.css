@@ -1,9 +1,6 @@
 /* Inside your custom CSS file */
 
 /* Navbar styles */
-.navbar {
-    z-index: 1000; /* Ensure navbar appears on top */
-}
 
 /* For desktop view (viewport width >= 992px) */
 @media (min-width: 992px) {
@@ -19,6 +16,7 @@
 /* For mobile view (viewport width <= 991px) */
 @media (max-width: 991px) {
     .navbar-nav .nav-link {
-        color: black !important;
+        color: black !important;   
     }
+
 }
