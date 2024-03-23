@@ -38,7 +38,7 @@ namespace CaPPMS.Model
 // // [Export(true)]
 // // [DisplayName("Team Members")]
 // // [Browsable(true)]
-  private string teamMember = string.Empty;
+private string teamMember = string.Empty;
 
 public string TeamMember { 
     get 

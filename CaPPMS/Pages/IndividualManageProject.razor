@@ -117,17 +117,19 @@
 				<div class="col-6">
                     <label for="mpTeamMember">Team Member(s)</label>
                     <div>
-                        @foreach (var member in teamMembers)
-                        {
-                            <div class="row mb-2"> 
-                                <div class="col-10">
-                                    <input type="text" class="form-control" @bind="@idea.TeamMember" @oninput="(ChangeEventArgs e) => UpdateTeamMember(e, member)">
+                        <div>
+                            @foreach (var member in teamMembers)
+                            {
+                                <div class="row mb-2"> 
+                                    <div class="col-10">
+                                        <input type="text" class="form-control" @bind="@idea.TeamMember" @oninput="(ChangeEventArgs e) => UpdateTeamMember(e, member)">
+                                    </div>
+                                    <div class="col-2">
+                                        <button type="button" class="btn btn-danger" @onclick="() => RemoveTeamMember(member)">-</button>
+                                    </div>
                                 </div>
-                                <div class="col-2">
-                                    <button type="button" class="btn btn-danger" @onclick="() => RemoveTeamMember(member)">-</button>
-                                </div>
-                            </div>
-                        }
+                            }
+                        </div>
                         <div class="row">
                             <div class="col-10">
                                 <input type="text" class="form-control" @bind="@idea.TeamMember">
@@ -136,15 +138,20 @@
                                 <button type="button" class="btn" style="background-color:#A30606; color:#FFFFFF;" @onclick="AddTeamMember">+</button>
                             </div>
                         </div>
+                        <br>
+                        <div>
+                            @if (errorMessage)
+                            {
+                                <div class="alert alert-danger" role="alert">
+                                    Cannot add more than 8 team members.
+                                </div>
+                            }
+                        </div>
                     </div>
                 </div>
                 
                 <div class="col-6" >
                     <label for="mpVideoLink">Links</label>
-
-
-                    @* @if (currentInputLinks == "VideoLink")
-                    {
                          <div class="row">
                             <div class="col-5" >
                                 <input type="text" class="form-control" id="mpVideoLinkLabel" disabled value="Video Link" >
@@ -153,13 +160,11 @@
                                 <input type="text" class="form-control" id="mpVideoLink" placeholder="Link URL" @bind="@idea.VideoLink">
                             </div>
                             <div class="col-2" >
-						        <button @onclick="NextInput" class="btn" style="background-color:#A30606;color:#FFFFFF;">+</button>
+						        @* <button @onclick="NextInput" class="btn" style="background-color:#A30606;color:#FFFFFF;">+</button> *@
                             </div>
                             <br>
 					    </div>
-                    }
-                    else if (currentInputLinks == "Github")
-                    {
+                        <br>
                         <div class="row">
                             <div class="col-5" >
                                 <input type="text" class="form-control" id="mpVideoLinkLabel2" placeholder="Link Name" disabled value="GitHub" >
@@ -168,14 +173,55 @@
                                 <input type="text" class="form-control" id="mpVideoLink2" placeholder="Link URL" @bind="@idea.Github" >
                             </div>
                             <div class="col-2" >
-						        <button @onclick="NextInput" class="btn" style="background-color:#A30606;color:#FFFFFF;">+</button>
+						        @* <button @onclick="NextInput" class="btn" style="background-color:#A30606;color:#FFFFFF;">+</button> *@
                             </div>
-                            <br>
                         </div>
-                    }
-                    else if (currentInputLinks == "Url")
-                    {
-                         <div class="row">
+                        <div>
+                            @foreach (var newUrl in newLinks.Select((value, index) => new { value, index }))
+                            {   
+                                <br>
+                                <div class="row"> 
+                                    <div class="col-5">
+                                        <input type="text" class="form-control" @bind="newLinks[newUrl.index]" @bind:event="oninput" placeholder="Link Name">
+                                    </div>
+                                    <div class="col-5">
+                                        <input type="text" class="form-control" placeholder="Link URL" @bind="newLinks[newUrl.index]">
+                                    </div>
+                                    <div class="col-2">
+                                        <button type="button" class="btn btn-danger" @onclick="() => RemoveLink(newUrl.index)">-</button>
+                                    </div>
+                                </div>
+                                
+                            }
+                        </div>
+                        @if (displayErrorMessage)
+                        {
+                            <div class="alert alert-danger" role="alert">
+                                Cannot add more than 3 links.
+                            </div>
+                        }
+                        <br>
+                        <button type="button" class="btn btn-danger" @onclick="AddNewLink">+</button>
+
+                        @* <div>
+                         @foreach (var newUrl in newLinks)
+                        {
+                            <div class="row"> 
+                                <div class="col-5">
+                                    <input type="text" class="form-control" id="mpVideoLinkLabel2" @bind="@idea.Url" @oninput="(ChangeEventArgs e) => UpdateLink(e, newUrl)">
+                                    TEST5
+                                </div>
+                                <div class="col-5">
+                                    <input type="text" class="form-control" id="mpVideoLink2" placeholder="Link URL" @bind="@idea.Url">
+                                </div>
+                                <div class="col-2">
+                                    <button type="button" class="btn btn-danger" @onclick="() => RemoveLink(newUrl)">-</button>
+                                </div>
+                            </div>
+                        }
+                        </div> *@
+
+                         @* <div class="row">
                             <div class="col-5" >
                                 <input type="text" class="form-control" id="mpVideoLinkLabel2" placeholder="Link Name" disabled value="Url" >
                             </div>
@@ -183,14 +229,30 @@
                                 <input type="text" class="form-control" id="mpVideoLink2" placeholder="Link URL" @bind="@idea.Url" >
                             </div>
                             <div class="col-2" >
-						        <button @onclick="NextInput" class="btn" style="background-color:#A30606;color:#FFFFFF;">+</button>
-                            </div>
-                            <br>
-					    </div>
-                    }  *@
+                                <button type="button" class="btn" style="background-color:#A30606;color:#FFFFFF;" >+</button>
+                            </div> 
+                        </div> *@
+                        
+                        @* <div>
+                            @foreach (var newUrl in newLinks)
+                            {
+                                <div class="row">
+                                    <div class="col-5">
+                                        <input type="text" class="form-control" placeholder="Link Name" @bind="@idea.Url" @oninput="(ChangeEventArgs e) => UpdateLink(e, newUrl)">
+                                    </div>
+                                    <div class="col-5">
+                                        <input type="text" class="form-control" placeholder="Link URL" @bind="idea.Url">
+                                    </div>
+                                    <div class="col-2">
+                                        <button @onclick="() => RemoveLink(newUrl)" class="btn" style="background-color:#A30606;color:#FFFFFF;">-</button>
+                                    </div>
+                                </div>
+                            }
+                            <button @onclick="() => RemoveLink(newUrl)" class="btn btn-success">-</button>
+                        </div> 
 
 
-                    <div class="row">
+                    @* <div class="row">
 						<div class="col-5" >
 							<input type="text" class="form-control" id="mpVideoLinkLabel" disabled value="Video Link" >
 						</div>
@@ -225,7 +287,7 @@
 							<button type="button" class="btn" style="background-color:#A30606;color:#FFFFFF;" >+</button>
 						</div> 
 					</div> 
-				
+				 *@
                 
                 
                 </div>
@@ -346,13 +408,6 @@
 
     IEnumerable<ProjectInformation> sortedProjects;
     public bool IsDirty { get; set; } = false;    
-    
-
-    @* protected override void OnInitialized()
-    {
-        SetCompletedProjectsList();
-        base.OnInitialized();
-    } *@
 
     private void SetCompletedProjectsList()
     {
@@ -388,7 +443,7 @@
             return null; 
         }
 
-        try
+        try 
         {
             var uri = new Uri(videoLink);
             var query = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query);
@@ -438,29 +493,10 @@
         {
             selectedFiles.Add(file);
         }
-        StateHasChanged(); // This may not be necessary depending on your Blazor app type and setup
+        StateHasChanged(); 
     }
-
-
-
-
-    
     
     private ProjectInformation idea = new ProjectInformation();
-    @* private async Task UpdateRecordAsync(EventArgs e)
-    {
-        if (!idea.IsDirty)
-        {
-            return;
-        }
-
-        idea.IsDirty = !await ProjectManager.UpdateAsync(idea);
-    }
-    private async Task ApproveIdea(MouseEventArgs e)
-    {
-        this.idea.Status = "Approved";
-        await UpdateRecordAsync(e);
-    } *@
 
     public enum FormButtons
     {
@@ -671,7 +707,7 @@
         NavigationManager.NavigateTo($"/download/{file.Location}", true);
     }
 
-    private bool IsExpanded { get; set; } = false; // False means collapsed, "+" is shown
+    private bool IsExpanded { get; set; } = false; 
     private void ToggleExpandCollapse()
     {
         IsExpanded = !IsExpanded;
@@ -679,10 +715,20 @@
 
     List<string> teamMembers = new List<string>();
     List<string> links = new List<string>();
+    bool errorMessage = false;   
 
+    //AddTeamMember limit set to 8
     private void AddTeamMember()
     {
-        teamMembers.Add("");
+        if (teamMembers.Count < 7)
+        {
+            teamMembers.Add("");
+            errorMessage = false;
+        }
+        else
+        {
+            errorMessage = true;
+        }
     }
 
     void UpdateTeamMember(ChangeEventArgs e, string member)
@@ -699,12 +745,9 @@
         teamMembers.Remove(member);
     }
 
-
     // Function to add a new link input field
     private void AddLink()
     {
-
-        // Add an empty string to the list
         links.Add("");
     }
    
@@ -722,7 +765,7 @@
                 Timestamp = DateTime.Now
             };
             Comments.Add(newComment);
-            NewCommentText = string.Empty; // Clear the input field
+            NewCommentText = string.Empty; 
         }
     }
 
@@ -732,13 +775,9 @@
         public DateTime Timestamp { get; set; }
     }
 
-    
     private string GenerateDownloadLinkForDoc1()
     {
-        // Example static link
         return "/download/document1.pdf";
-
-        // If dynamic, you might need to construct this URL based on some logic
     }
 
     private bool isDoc1Selected;
@@ -747,7 +786,6 @@
     {
         if (isDoc1Selected)
         {
-            // Assuming you have a method to generate the correct download link
             var downloadLink = GenerateDownloadLinkForDoc1();
             DownloadFile(downloadLink);
         }
@@ -758,17 +796,8 @@
         await JSRuntime.InvokeVoidAsync("downloadFile", url);
     }
 
-    private string currentInput = "VideoLink";
+    @* private string currentInput = "VideoLink";
     private List<string> inputs = new List<string> { "VideoLink", "Github", "Url" };
-
-    
-    @* private void NextInput()
-    {
-        int currentIndex = inputs.IndexOf(currentInput);
-        currentIndex = (currentIndex + 1) % inputs.Count; // Cycle through the inputs
-        currentInput = inputs[currentIndex];
-    } *@
-
 
     private string currentInputLinks = "VideoLink";
     private List<string> inputSequence = new List<string> { "VideoLink", "Github", "Url" };
@@ -778,8 +807,81 @@
         int currentIndex = inputSequence.IndexOf(currentInputLinks);
         int nextIndex = (currentIndex + 1) % inputSequence.Count; // Use modulo to cycle back to 0
         currentInputLinks = inputSequence[nextIndex];
-    } 
-   
+    }  *@
+
+    //private List<LinkInputModel> linkInputs = new();
+    private List<string> LinkInputModel = new List<string>();
+
+    @* private void AddInput()
+    {
+        // Add two new instances of LinkInputModel to the list
+        linkInputs.Add(new LinkInputModel());
+        linkInputs.Add(new LinkInputModel());
+    }
+
+    private void RemoveInput(LinkInputModel linkInput)
+    {
+        // Remove the specified LinkInputModel instance from the list
+        if (linkInputs.Count > 1) // Prevent removing all input fields
+        {
+            linkInputs.Remove(linkInput);
+        }
+    }
+    *@
+
+
+    List<string> newLinks = new List<string>();
+    bool displayErrorMessage = false;
+
+    private void AddNewLink()
+    {
+        if (newLinks.Count < 3)
+        {
+            newLinks.Add("");
+            displayErrorMessage = false;
+        }
+        else
+        {
+            displayErrorMessage = true;
+        }
+    }
+
+    void RemoveLink(int index)
+    {
+        if (index >= 0 && index < newLinks.Count)
+        {
+            newLinks.RemoveAt(index);
+        }
+    }
+
+    @* List<string> newLinks = new List<string>();
+
+    //Adding new links limit set to 3
+    private void AddNewLink()
+    {
+        if (newLinks.Count < 3)
+        {
+            newLinks.Add("");
+        }
+        else
+        {
+            Console.WriteLine("Cannot add more than 3 links.");
+        }
+    }
+
+    void UpdateLink(ChangeEventArgs e, string newUrl)
+    {
+        var index = newLinks.IndexOf(newUrl);
+        if(index != -1)
+        {
+            newLinks[index] = e.Value.ToString();
+        }
+    }
+
+    void RemoveLink(string newUrl)
+    {
+        newLinks.Remove(newUrl);
+    } *@
 
 } 
 

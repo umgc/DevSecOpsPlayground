@@ -1,7 +1,7 @@
 {
   "9abf0431-e318-4fbb-be85-505b011757e8": {
     "ProjectID": "9abf0431-e318-4fbb-be85-505b011757e8",
-    "TeamMember": "test03-18-24",
+    "TeamMember": "test",
     "VideoLink": "",
     "ProjectTitle": "CaPPMS",
     "ProjectDescription": "A platform is needed where clients and customers can submit capstone project proposals for \nfuture University of Maryland Global Campus (UMGC) Software Engineering (SWEN) 670 \nstudents. Those projects would then go through an approval process involving UMGC professors \nand stakeholders who would review and determine which project could be completed by the \nstudents. \nThe UMGC Capstone Project Proposal Management System (CaPPMS) is a web-based \napplication which allows customer, clients, and former students to submit detailed proposals of \nprojects to be designed and implemented by UMGC SWEN 670 students as well as track the \nstages during the approval process.",
@@ -89,7 +89,7 @@
   },
   "e2c4ab22-9d63-4d65-9f69-ec3b51244299": {
     "ProjectID": "e2c4ab22-9d63-4d65-9f69-ec3b51244299",
-    "TeamMember": "test03-18-24",
+    "TeamMember": "test",
     "VideoLink": "",
     "ProjectTitle": "MemorEz",
     "ProjectDescription": "About 14 million people in the United States have a disability that impairs their short-term memory. Short-term memory (STM) indicates different systems of memory involved in the retention of pieces of data for a relatively short time (usually up to 30 seconds). The causes of the disability range from aging to dementia to Alzheimer’s. According to the U.S. Centers for Disease Control and Prevention, noticing a decline in your mental abilities (\"cognitive decline\") is one of the earliest signs of impending Alzheimer's disease or dementia. There is a need to provide a solution to adults that assists them with the short-term memory function. To meet this need, United Global Masters Coders proposes the development of a mobile application that recognizes the speech of the user as they engage in a conversation and help them live a fuller life despite their disability. The purpose of this project is to develop the Memory Magic App for people with short-term memory disabilities. Memory Magic expands on previous capstone work. There are several ways to develop this app and this effort is to determine which way would be the most optimal. The Memory Magic App meets the business need by providing a solution for a critical and underserved market segment to have a solution with them that meets their need for memory assistance.",
@@ -177,7 +177,7 @@
   },
   "efe23c93-45c0-44f5-907e-b658211643a8": {
     "ProjectID": "efe23c93-45c0-44f5-907e-b658211643a8",
-    "TeamMember": "test03-18-24",
+    "TeamMember": "test",
     "VideoLink": "",
     "ProjectTitle": "Flutter Android/iOS Deployment",
     "ProjectDescription": "Deployment work for Flutter to Play/App Stores",
@@ -259,7 +259,7 @@
   },
   "d30172fe-e89a-4cea-beca-e6f2b29c6610": {
     "ProjectID": "d30172fe-e89a-4cea-beca-e6f2b29c6610",
-    "TeamMember": "test03-18-24",
+    "TeamMember": "test",
     "VideoLink": "",
     "ProjectTitle": "Spring 2024",
     "ProjectDescription": "1. A rewrite of our website University of Maryland Global Campus(UMGC) SWEN 670 Capstone Project Management System - CaPPMS \n2. Using Large Language Models (LLM) in education\n3. Computer vision or artificial intelligence project\n",
@@ -298,7 +298,7 @@
   },
   "fec2ea66-ec65-4468-9c81-2f33c470230e": {
     "ProjectID": "fec2ea66-ec65-4468-9c81-2f33c470230e",
-    "TeamMember": "test03-18-24",
+    "TeamMember": "test",
     "VideoLink": "https://www.youtube.com/watch?v=ZCp-iVK1704",
     "ProjectTitle": "ADA Compatible USPS Digest",
     "ProjectDescription": "The current digest email to customers lack ADA compatible feature that enable blind users for example to get a good sense of what to expect in their email. There should be a solution that can determine based on a picture where and in what context the mail, mailers, and other items from the digest are.",
@@ -386,7 +386,7 @@
   },
   "6b05268e-6525-4dc4-8caf-de421e0d8f0b": {
     "ProjectID": "6b05268e-6525-4dc4-8caf-de421e0d8f0b",
-    "TeamMember": "test03-18-24",
+    "TeamMember": "test",
     "VideoLink": "",
     "ProjectTitle": "Advance Development Factory V1",
     "ProjectDescription": "As part of a diverse ecosystem of applications and technologies within software development, a need has been identified that standardizes the building, testing, and deployment of an organization's application suite. This document outlines the Advance Development Factory design and requirements specification that sets the standard for developers  to build, test, and deployment of a diverse set of applications under a common framework that mitigates clients operating environment dependencies.",
@@ -517,7 +517,7 @@
   },
   "71c700de-e711-4cdb-9fd2-0ec8225733b1": {
     "ProjectID": "71c700de-e711-4cdb-9fd2-0ec8225733b1",
-    "TeamMember": "test03-18-24",
+    "TeamMember": "test",
     "VideoLink": "",
     "ProjectTitle": "City Chatbot",
     "ProjectDescription": "This project’s goal is to begin developing a permit zoning assistance application for the city of Pasadena’s zoning and planning website. The application provides site visitors the ability to locate their permits and regulations that are relevant to their specific address by interacting with a chatbot, avoiding calling a customer service representative or searching the website. The application facilitates the collection of the residents’ addresses, the comparison of those addresses to a city provided map containing permitting zones, and then providing the applicable permitting information they are looking for based off of an established permit and regulations database. The application shall provide permit and zoning information and assistance through chatbot functionality on through the city of municipality website. The application assists users by directly providing permit and zoning information based on user input. The application displays links and referential information. The application is not intended to provide all details and information regarding permits and zoning.  ",
@@ -605,7 +605,7 @@
   },
   "bd559ad2-0275-4e23-a59f-5feada62e841": {
     "ProjectID": "bd559ad2-0275-4e23-a59f-5feada62e841",
-    "TeamMember": "test03-18-24",
+    "TeamMember": "test",
     "VideoLink": "",
     "ProjectTitle": "Memory Magic",
     "ProjectDescription": "About 14 million people in the United States have a disability that impairs their short-term memory. Short-term memory (STM) indicates different systems of memory involved in the retention of pieces of data for a relatively short time (usually up to 30 seconds). The causes of the disability range from aging to dementia to Alzheimer’s. According to the U.S. Centers for Disease Control and Prevention, noticing a decline in your mental abilities (\"cognitive decline\") is one of the earliest signs of impending Alzheimer's disease or dementia. There is a need to provide a solution to adults that assists them with the short-term memory function. To meet this need, United Global Masters Coders proposes the development of a mobile application that recognizes the speech of the user as they engage in a conversation and help them live a fuller life despite their disability. The purpose of this project is to develop the Memory Magic App for people with short-term memory disabilities. Memory Magic expands on previous capstone work. There are several ways to develop this app and this effort is to determine which way would be the most optimal. The Memory Magic App meets the business need by providing a solution for a critical and underserved market segment to have a solution with them that meets their need for memory assistance.",
@@ -699,7 +699,7 @@
   },
   "441ae4a7-ff84-4488-a49d-ed00370408e2": {
     "ProjectID": "441ae4a7-ff84-4488-a49d-ed00370408e2",
-    "TeamMember": "test03-18-24",
+    "TeamMember": "test",
     "VideoLink": "",
     "ProjectTitle": "Short Term Memory Loss Summer 2023",
     "ProjectDescription": "A number of prior projects try to help people suffering from Short-Term Memory Loss (STML) by listening to a conversation and then retrieving information from that conversation. Please view the associated videos from the link above. Some of them relied upon \"trigger\" phrases to start taking a note or to stop. This semester we are going to get rid of the trigger phrases, transcribe the conversation, and when asked a question about the conversation, send the transcribed conversation to ChatGPT through its API, and request it to answer the question based upon the transcribed conversation, before playing that response. I want you all to understand the nuances of ChatGPT and then pose the question in a way that best serves the needs of the user. I want you to clearly document all the different approaches you took to question ChatGPT with its responses and why was your choice the best choice among all.",
