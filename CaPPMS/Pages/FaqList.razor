@@ -1,43 +1,62 @@
 @using CaPPMS.Data
-
 @inject FaqManagerService FaqManager
-
+ 
 @page "/faqList"
-
-<h3>Questions</h3>
-<label>
-    <input id="filter"
-           class="input-group-text p-2 mb-lg-3"
-           type="text"
-           placeholder="Search for a question..."
-           @bind="_filter"
-           @bind:event="oninput"/>
-
-</label>
-<div class="sidebar" style="width:25%">
-    <FaqQuestionSubmission></FaqQuestionSubmission>
-    <CascadingAuthenticationState>
-        <FaqReplySubmission @bind-SelectedFaq="_selectedFaq"
-                            @bind-Title="_popOverTitle" />
-    </CascadingAuthenticationState>
+ 
+<style>
+    .sidebar-2 {
+    width: 20%;
+    margin-top: 35px;
+    flex: 0 1 20%;
+    margin-left: auto;
+    }
+    .body-text-2{
+    flex: 1;
+    margin-top: 35px;
+    padding-right: 70px;
+    }
+    .flex-container {
+    display: flex;
+    margin-top: 35px;
+    width: 100%;
+    flex-wrap: nowrap;
+</style>
+ 
+<div class="flex-container">
+    <div class="body-text-2">
+        <h3>Questions</h3>
+        <label>
+            <input id="filter"
+                class="input-group-text p-2 mb-lg-3"
+                type="text"
+                placeholder="Search for a question..."
+                @bind="_filter"
+                @bind:event="oninput"/>
+        </label>
+            <FaqTopics FaqKeys="new List<FaqInformation>(FaqManager.GetFaqs)"
+                        Filter="@_filter"
+                        @bind-SelectedFaq="_selectedFaq"
+                        @bind-Title="_popOverTitle"/>
+    </div>
+    <div class="sidebar-2" style="width:25%">
+        <FaqQuestionSubmission></FaqQuestionSubmission>
+        <CascadingAuthenticationState>
+            <FaqReplySubmission @bind-SelectedFaq="_selectedFaq"
+                                @bind-Title="_popOverTitle" />
+        </CascadingAuthenticationState>
+    </div>
 </div>
-<div class="body-text">
-        <FaqTopics FaqKeys="new List<FaqInformation>(FaqManager.GetFaqs)"
-                    Filter="@_filter"
-                   @bind-SelectedFaq="_selectedFaq"
-                   @bind-Title="_popOverTitle"/>
-</div>
-
+ 
 @if (_selectedFaq != null)
 {
     <div class="popOver">
-        <FaqModify 
+        <FaqModify
             Title=@_popOverTitle
-            @bind-SelectedFaq="_selectedFaq" 
+            @bind-SelectedFaq="_selectedFaq"
         />
     </div>
-} 
-
+}
+ 
 @code {
     private FaqInformation _selectedFaq;
     private string _popOverTitle;

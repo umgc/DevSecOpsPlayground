@@ -125,7 +125,7 @@
                                         <input type="text" class="form-control" @bind="@idea.TeamMember" @oninput="(ChangeEventArgs e) => UpdateTeamMember(e, member)">
                                     </div>
                                     <div class="col-2">
-                                        <button type="button" class="btn btn-danger" @onclick="() => RemoveTeamMember(member)">-</button>
+                                        <button type="button" class="btn" style="background-color:#A30606;color:#FFFFFF;"  @onclick="() => RemoveTeamMember(member)">-</button>
                                     </div>
                                 </div>
                             }
@@ -176,6 +176,7 @@
 						        @* <button @onclick="NextInput" class="btn" style="background-color:#A30606;color:#FFFFFF;">+</button> *@
                             </div>
                         </div>
+                        
                         <div>
                             @foreach (var newUrl in newLinks.Select((value, index) => new { value, index }))
                             {   
@@ -185,23 +186,28 @@
                                         <input type="text" class="form-control" @bind="newLinks[newUrl.index]" @bind:event="oninput" placeholder="Link Name">
                                     </div>
                                     <div class="col-5">
-                                        <input type="text" class="form-control" placeholder="Link URL" @bind="newLinks[newUrl.index]">
+                                        <input type="text" class="form-control" placeholder="Link URL" @bind="@idea.Url">
                                     </div>
-                                    <div class="col-2">
-                                        <button type="button" class="btn btn-danger" @onclick="() => RemoveLink(newUrl.index)">-</button>
+                                    <div class="">
+                                        <button type="button" class="btn" style="background-color:#A30606;color:#FFFFFF;"  @onclick="() => RemoveLink(newUrl.index)">-</button>
                                     </div>
                                 </div>
                                 
                             }
+                            <br>
+                            <div class="">
+                                <button type="button" class="btn" style="background-color:#A30606;color:#FFFFFF;"  @onclick="AddNewLink">Add Link</button>
+                            </div>    
                         </div>
+                        <br>
                         @if (displayErrorMessage)
                         {
                             <div class="alert alert-danger" role="alert">
                                 Cannot add more than 3 links.
                             </div>
                         }
-                        <br>
-                        <button type="button" class="btn btn-danger" @onclick="AddNewLink">+</button>
+                        
+                        
 
                         @* <div>
                          @foreach (var newUrl in newLinks)
@@ -853,35 +859,6 @@
             newLinks.RemoveAt(index);
         }
     }
-
-    @* List<string> newLinks = new List<string>();
-
-    //Adding new links limit set to 3
-    private void AddNewLink()
-    {
-        if (newLinks.Count < 3)
-        {
-            newLinks.Add("");
-        }
-        else
-        {
-            Console.WriteLine("Cannot add more than 3 links.");
-        }
-    }
-
-    void UpdateLink(ChangeEventArgs e, string newUrl)
-    {
-        var index = newLinks.IndexOf(newUrl);
-        if(index != -1)
-        {
-            newLinks[index] = e.Value.ToString();
-        }
-    }
-
-    void RemoveLink(string newUrl)
-    {
-        newLinks.Remove(newUrl);
-    } *@
 
 } 
 

@@ -1,5 +1,6 @@
 ﻿@inject ProjectManagerService ProjectManager
 @inject NavigationManager NavigationManager
+@inject IMailService MailService
 @inject IJSRuntime JSRuntime
 
 
@@ -44,79 +45,64 @@
                 <td class="col-6">
                     <label for="teamMembers">Team Member(s)</label>
                     <tr class="row">
-                         <td class="col-10">
-                              <InputText  class = "form-control" id="teamMember" placeholder="Team Member" @bind-Value="idea.TeamMember" />
+                        <td class="col-10">
+                            <InputText  class = "form-control" id="teamMember" placeholder="Team Member" @bind-Value="idea.TeamMember" />
                         </td>
-                    <td class="col-2">
-                        
-                        <button type="button" class="btn btn-primary" @onclick="AddTeamMember">+</button>
-                    </td>
+                        <td class="col-2">
+                            <button type="button" class="btn btn-primary" @onclick="AddTeamMember">+</button>
+                        </td>
                            
-                          @foreach (var index in Enumerable.Range(0, teamMembers.Count))
-
+                        @foreach (var index in Enumerable.Range(0, teamMembers.Count))
                         {
-                                <td class = "col-10">
-                                    <InputText  class = "form-control" id="teamMember" placeholder="Team Member"@bind-Value="teamMembers[index]" 
+                            <td class = "col-10">
+                                <InputText  class = "form-control" id="teamMember" placeholder="Team Member"@bind-Value="teamMembers[index]" 
                                                    @oninput="@(e => UpdateIdeaTeamMembers(index, e.Value.ToString()))" />
-                                </td>                             
-
-                               
-                                 <td class="col-2">
-                             <button type="button" class="btn btn-primary" @onclick="RemoveLastTeamMember">-</button> 
-                        </td>
-                        }                           
-
-                        
+                            </td>                             
+                            <td class="col-2">
+                                <button type="button" class="btn btn-primary" @onclick="RemoveLastTeamMember">-</button> 
+                            </td>
+                        }
                     </tr>
                 </td>
+                
                 <td class="col-6">
                     <label for="linkName">Links</label>
                     <tr class="row">
-                        <td class="col-5">
+                        <td class="col-4">
                             <InputText class="form-control" id="linkName" placeholder="Link Name" @bind-Value="idea.LinkName" />
                         </td>
-                       
-                        <td class="col-5">
+                        <td class="col-2">
+                            <button type="button" class = "btn btn-primary" @onclick="AddLink">+</button>
+                        </td>
+                        <td class="col-4">
                             <InputText class="form-control" id="url" placeholder="Link URL" @bind-Value="idea.Url" />
                         </td>
-                        
                         <td class="col-2">
-                            <button type="button" class = "btn btn-primary" @onclick="AddLink">+</button><br>     
-                            <br> 
                             <button type="button" class = "btn btn-primary" @onclick="AddUrlLink">+</button>
-
                         </td>
-                        
         
-                             <!-- Additional link name and URL input fields -->
-                             @foreach (var index in Enumerable.Range(0, links.Count))
-                            {
-                                <td class="col-10">
-                                        <InputText class="form-control" id="linkName" placeholder="Link Name" @bind-Value="links[index]"
-                                        @oninput="@(e => UpdateIdeaLinkName(index, e.Value.ToString()))" />
-                                    </td>
-
-                                    <td class="col-2">
-                                    <button type="button" class = "btn btn-primary" @onclick="RemoveLastLink">-</button>
-                                    </td>
-                                                              
-                            }
-                        
+                        <!-- Additional link name and URL input fields -->
+                        @foreach (var index in Enumerable.Range(0, links.Count))
+                        {
+                            <td class="col-10">
+                                <InputText class="form-control" id="linkName" placeholder="Link Name" @bind-Value="links[index]"
+                                    @oninput="@(e => UpdateIdeaLinkName(index, e.Value.ToString()))" />
+                            </td>
+                            <td class="col-2">
+                                <button type="button" class = "btn btn-primary" @onclick="RemoveLastLink">-</button>
+                            </td>                           
+                        }
     
-                             @foreach (var index in Enumerable.Range(0, linkUrl.Count))
-                            {
-                               
-                                    <td class="col-10">
-                                        <InputText class="form-control" id="url" placeholder="Link URL" @bind-Value="linkUrl[index]"
-                                        @oninput="@(e => UpdateIdeaUrl(index, e.Value.ToString()))" />
-                                    </td>
-
-                                    <td class="col-2">
-                                    <button type="button" class = "btn btn-primary" @onclick="RemoveLastUrlLink">-</button>
-                                    </td>
-                                
-                            }
-
+                        @foreach (var index in Enumerable.Range(0, linkUrl.Count))
+                        {
+                            <td class="col-10">
+                                <InputText class="form-control" id="url" placeholder="Link URL" @bind-Value="linkUrl[index]"
+                                    @oninput="@(e => UpdateIdeaUrl(index, e.Value.ToString()))" />
+                            </td>
+                            <td class="col-2">
+                                <button type="button" class = "btn btn-primary" @onclick="RemoveLastUrlLink">-</button>
+                            </td>
+                        }
 
                     </tr>
                 </td>
@@ -174,7 +160,7 @@
             </td>
         </tr>
 
-        <td class="col-6" id="submitAttachments">
+        <div id="submitAttachments">
             @if (this.ShowFileAttachments)
             {
                 <span class="card-header" style="width:300px">Attachments</span>
@@ -207,7 +193,7 @@
 
                 }
             }
-        </td>
+        </div>
 
 
         @if (this.ShowFormButton == FormButtons.Submit)
@@ -372,7 +358,24 @@
         });
 
         this.tableState = "block";
+
+        Email("mazero789@gmail.com", "New Project Idea submitted", "A new Project Idea has been submitted. Please visit the CaPPMS website to approve or reject the idea.");
+
     }
+
+    private async Task Email(string email, string body, string html)
+    {
+        Console.WriteLine("REACHED SENDING EMAIL");
+        try
+        {
+            await MailService.SendEmailAsync(email, body, html);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error sending email: {ex.Message}");
+        }
+    }
+
 
    private int uploadProgress = 0;
 
