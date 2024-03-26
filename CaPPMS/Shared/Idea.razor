@@ -1,5 +1,6 @@
 ﻿@inject ProjectManagerService ProjectManager
 @inject NavigationManager NavigationManager
+@inject IMailService MailService
 @inject IJSRuntime JSRuntime
 
 <style>
@@ -333,6 +334,7 @@
 
     private async Task HandleValidSubmit()
     {
+        Console.WriteLine("SUBMITTING A VALID PROJECT");
         var reCaptchaResponse = await JSRuntime.InvokeAsync<string>("grecaptcha.getResponse");
 
         if (string.IsNullOrEmpty(reCaptchaResponse))
@@ -384,6 +386,22 @@
         @* await JSRuntime.InvokeVoidAsync("grecaptcha.reset"); *@
         StateHasChanged();
 
+        Email("mazero789@gmail.com", "New Project Idea submitted", "A new Project Idea has been submitted. Please visit the CaPPMS website to approve or reject the idea.");
+
+
+    }
+
+    private async Task Email(string email, string body, string html)
+    {
+        Console.WriteLine("REACHED SENDING EMAIL");
+        try
+        {
+            await MailService.SendEmailAsync(email, body, html);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error sending email: {ex.Message}");
+        }
     }
 
 
