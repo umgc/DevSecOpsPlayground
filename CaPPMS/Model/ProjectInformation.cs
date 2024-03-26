@@ -163,23 +163,23 @@ private string videoLink = string.Empty;
             }
         }
 
-        private string linkNames = string.Empty;
+        // private string linkNames = string.Empty;
 
-        [Export(true)]
-        [DisplayName("Link Name")]
-        [Browsable(true)]
-        public string LinkNames
-        {
-            get
-            {
-                return this.linkNames;
-            }
-            set
-            {
-                this.linkNames = value;
-                this.IsDirty = true;
-            }
-        }
+        // [Export(true)]
+        // [DisplayName("Link Name")]
+        // [Browsable(true)]
+        // public string LinkNames
+        // {
+        //     get
+        //     {
+        //         return this.linkNames;
+        //     }
+        //     set
+        //     {
+        //         this.linkNames = value;
+        //         this.IsDirty = true;
+        //     }
+        // }
 
         private string url = string.Empty;
 

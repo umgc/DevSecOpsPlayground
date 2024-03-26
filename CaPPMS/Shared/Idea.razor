@@ -61,9 +61,9 @@
                         <td class="col-10">
                     <InputText class="form-control" id="teamMember" placeholder="Team Member" @oninput="@(e => setInitialTeamMemberValue(e.Value.ToString()))" @bind-Value="idea.TeamMember" />
                         </td>
-                        <td class="col-2">
+                        @* <td class="col-2">
                             <button type="button" class="btn btn-primary" @onclick="AddTeamMember">+</button>
-                        </td>
+                        </td> *@
                            
                         @foreach (var index in Enumerable.Range(0, teamMembers.Count))
                         {
@@ -75,7 +75,11 @@
                                 <button type="button" class="btn btn-primary" @onclick="RemoveLastTeamMember">-</button> 
                             </td>
                         }
+                                 
                     </tr>
+                    <div class="">
+                                <button type="button" class="btn btn-primary" style="background-color:#A30606;color:#FFFFFF;"  @onclick="AddTeamMember">Add Team Member</button>
+                             </div>
                 </td>
                 
                 <td class="col-6">
@@ -84,15 +88,15 @@
                         <td class="col-4">
                             <InputText class="form-control" id="linkName" placeholder="Link Name" @bind-Value="idea.LinkName" />
                         </td>
-                        <td class="col-2">
+                         <td class="col-2">
                             <button type="button" class = "btn btn-primary" @onclick="AddLink">+</button>
-                        </td>
+                        </td> 
                         <td class="col-4">
                             <InputText class="form-control" id="url" placeholder="Link URL" @bind-Value="idea.Url" />
                         </td>
-                        <td class="col-2">
+                         <td class="col-2">
                             <button type="button" class = "btn btn-primary" @onclick="AddUrlLink">+</button>
-                        </td>
+                        </td> 
         
                         <!-- Additional link name and URL input fields -->
                         @foreach (var index in Enumerable.Range(0, links.Count))
@@ -115,7 +119,7 @@
                             <td class="col-2">
                                 <button type="button" class = "btn btn-primary" @onclick="RemoveLastUrlLink">-</button>
                             </td>
-                        }
+                        } 
 
                     </tr>
                 </td>
@@ -172,9 +176,9 @@
                 </label>
             </td>
         </tr> *@
-        <form id="myForm">
+        @* <form id="myForm">
                 <div class="g-recaptcha" data-sitekey="6LeYi6MpAAAAAB3KwooqxWH_ZzC9NeKBgOsytBXs"></div>
-        </form>
+        </form> *@
        
          
 
@@ -192,8 +196,14 @@
             }
             else
             {
-                <p>Drag and drop documents here</p>
-                <InputFile class="btn btn-primary" id="attachment" draggable="true" OnChange="LoadFiles" multiple accept=".doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,.ppt,.pptx,.pdf" />
+                 <p>Drag and drop documents here</p>
+                    <InputFile class="btn btn-primary" id="attachment" draggable="true"
+                     OnChange="LoadFiles" style="display:none;"
+                     multiple accept=".doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,.ppt,.pptx,.pdf" />
+                
+                <label class="btn btn-primary" style = "background-color:#A30606;color:#FFFFFF;" for="attachment">Choose Files</label>
+
+                    
                 @if (uploadProgress > 0 )
                 {
                     <div class="progress" style="margin-top: 10px; box-sizing: border-box;">
@@ -207,18 +217,37 @@
                         </div>
                     </div>
 
-
-
-
                 }
             }
-        </div>
+        </div>    
 
 
         @if (this.ShowFormButton == FormButtons.Submit)
         {
             <tr class="row">
                 <td class="col-12 text center">
+            @if(loadedFiles.Any())  
+            {      
+            <div style="margin-top: 10px;">
+                <div style="border: 1px solid #ccc; padding: 10px; border-radius: 5px; background-color:#CC3333;color:#FFF">
+                    Attached Files:
+                    <ul style="list-style-type: none; padding: 0; margin: 0;">
+                        @foreach (var file in loadedFiles)
+                        {
+                            <li style="margin-bottom: 5px;">@file.Name
+                                <button class="btn btn-primary" style="margin-left: 10px;"  @onclick="() => RemoveFileByName(file.Name)">X</button>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div> 
+            }
+
+            <br>
+                    <form id="myForm">
+                <div class="g-recaptcha" data-sitekey="6LeYi6MpAAAAAB3KwooqxWH_ZzC9NeKBgOsytBXs"></div>
+        </form>
+                    
                     <button id="btnSubmit" type="submit" @onclick="SponsorCheck" class="btn btn-primary">Submit</button>
                     <button type="reset" class="btn btn-warning">Reset</button> 
                 </td>
@@ -365,6 +394,9 @@
         }
 
         idea.TeamMember = initialValue + " , " + string.Join(", ", teamMembers.Where(tm => !string.IsNullOrWhiteSpace(tm)));
+        
+        idea.LinkName = string.Join(", ", links.Where(tm => !string.IsNullOrWhiteSpace(tm))); 
+
         tableState = "none";
         StateHasChanged();
 
@@ -417,6 +449,9 @@
 
         this.loadedFiles = this.loadedFiles.Concat(newFiles).ToList();
 
+        @* this.loadedFiles = this.loadedFiles.Where(file => !ShouldRemoveFile(file)).ToList(); *@
+
+
         var totalFiles = loadedFiles.Count;
         var iterations = 10; 
 
@@ -429,11 +464,26 @@
             await Task.Delay(500); 
         }
 
+        
+
         idea.SetAttachments(loadedFiles);
+        
+
 
         uploadProgress = 0;
         await Task.Yield();
         StateHasChanged();
+
+       
+
+    }
+
+     // Add this method to remove files based on their filenames
+    private void RemoveFileByName(string fileName)
+    {
+        this.loadedFiles = this.loadedFiles.Where(file => file.Name != fileName).ToList();
+        // Update attachments after removing the file
+        idea.SetAttachments(loadedFiles);
     }
 
 
@@ -562,7 +612,6 @@ private void RemoveLastTeamMember()
        // idea.TeamMember = string.Join(", ", teamMembers.Where(tm => !string.IsNullOrWhiteSpace(tm)));
     }
 }
-
  
 
      List<string> links = new List<string>();
@@ -578,7 +627,7 @@ private void RemoveLastTeamMember()
         links[index] = value; // Update the teamMembers array
 
         // Update idea's TeamMembers property
-        idea.LinkNames = string.Join(", ", links.Where(tm => !string.IsNullOrWhiteSpace(tm)));
+        @* idea.LinkName = string.Join(", ", links.Where(tm => !string.IsNullOrWhiteSpace(tm))); *@
     } 
 
     List <string> linkUrl = new List<string>();
@@ -606,7 +655,7 @@ private void RemoveLastLink()
         // Remove the last added link (which is at the end of the list)
         links.RemoveAt(links.Count - 1);
 
-        idea.LinkNames = string.Join(", ", links.Where(tm => !string.IsNullOrWhiteSpace(tm)));
+        @* idea.LinkNames = string.Join(", ", links.Where(tm => !string.IsNullOrWhiteSpace(tm))); *@
     }
 }
 
@@ -622,7 +671,6 @@ private void RemoveLastUrlLink()
         idea.Url = string.Join(", ", linkUrl.Where(tm => !string.IsNullOrWhiteSpace(tm)));
     }
 }
-
 
 
     
