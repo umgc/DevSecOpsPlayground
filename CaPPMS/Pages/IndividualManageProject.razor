@@ -429,7 +429,7 @@
         List<ProjectInformation> completedProjects = new List<ProjectInformation>();
         foreach (ProjectInformation projectInformation in ProjectManager.ProjectIdeas.Values)
         {
-            if (projectInformation.Status.Equals("Complete") && projectInformation.ProjectID == parsedProjectId)
+            if (projectInformation.ProjectID == parsedProjectId)
             {
                 completedProjects.Add(projectInformation);
             }
