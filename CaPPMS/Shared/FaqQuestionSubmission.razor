@@ -9,17 +9,18 @@
     <EditForm Model="NewFaq">
         <div class="card" id="@NewFaq.Guid">
 
-            <span class="fas" style="color:black;font-weight:bold"> Add Topic: </span>
+            <span class="fas" style="color:black;font-weight:bold">Topic: </span>
             <InputText Value="@NewFaq.Topic"
                        ValueChanged="AssignNewFaqTopic"
                        ValueExpression="() => NewFaq.Topic"/><br />
 
-            <span class="fas" style="color:black;font-weight:bold"> Add Question: </span>
-            <InputText Value="@NewFaq.Question"
+            <span class="fas" style="color:black;font-weight:bold">Question: </span>
+            <InputTextArea Value="@NewFaq.Question"
+                       rows="5"
                        ValueChanged="AssignNewFaqQuestion"
                        ValueExpression="() => NewFaq.Question"/><br />
 
-            <span class="fas" style="color:black;font-weight:bold"> Add Email: </span>
+            <span class="fas" style="color:black;font-weight:bold">Email: </span>
             <InputText Value="@NewFaq.Author"
                        ValueChanged="AssignNewFaqAuthor"
                        ValueExpression="() => NewFaq.Author"/><br />

@@ -1,5 +1,6 @@
 ﻿@inject FaqManagerService FaqManager
 
+
 <div>
     <EditForm Model="@this.SelectedFaq">
         <DataAnnotationsValidator />
@@ -26,7 +27,7 @@
                     <td class="d-xl-table-cell">
                         <label>
                             Question:
-                            <InputText id="question" @bind-Value="_faqPlaceholder.Question" />
+                            <InputTextArea id="question" rows="5" @bind-Value="_faqPlaceholder.Question" />
                         </label>
                     </td>
                 </tr>
@@ -34,19 +35,21 @@
                     <td class="d-xl-table-cell">
                         <label>
                             Reply:
-                            <InputText id="reply" @bind-Value="_faqPlaceholder.Reply" />
+                            <InputTextArea id="reply" rows="5" @bind-Value="_faqPlaceholder.Reply" />
                         </label>
                     </td>
                 </tr>
             </table>
-            <button @onclick="e => this.CancelModify()" style="background-color:#A30606; color:#FFFFFF;">
+            <button @onclick="e => this.CancelModify()" class="btn btn-danger">
                 Cancel
             </button>
             <ConfirmationDialogBox Command="Delete"
                                    Prompt="Are you sure you want to delete?"
+                                   ButtonClass="btn btn-danger"
                                    ConfirmedChanged="DeleteRecord" />
             <ConfirmationDialogBox Command="Update"
                                    Prompt="Confirm changes?"
+                                   ButtonClass="btn btn-warning"
                                    ConfirmedChanged="UpdateRecord" />
         </div>
     </EditForm>
