@@ -113,32 +113,71 @@
             </div>
             <br>
             <div class="row">
+                @* <td class="col-6">
+                    <label for="teamMembers">Team Member(s)</label>
+                    <tr class="row">
+                        <td class="col-10">
+                         <InputText class="form-control" id="teamMember" placeholder="Team Member" @oninput="@(e => setInitialTeamMemberValue(e.Value.ToString()))" @bind-Value="idea.TeamMember" />
+                        </td>
+                           
+                        @foreach (var index in Enumerable.Range(0, teamMembers.Count))
+                        {
+                            <td class = "col-10">
+                                <InputText  class = "form-control" id="teamMember" placeholder="Team Member"@bind-Value="teamMembers[index]" 
+                                                   @oninput="@(e => UpdateIdeaTeamMembers(index, e.Value.ToString()))" />
+                            </td>                             
+                            <td class="col-2">
+                                <button type="button" class="btn btn-primary" @onclick="RemoveLastTeamMember">-</button> 
+                            </td>
+                        }
+                                 
+                    </tr>
+                    <br>
+                    <div class="">
+                                <button type="button" class="btn btn-primary" style="background-color:#A30606;color:#FFFFFF;"  @onclick="AddTeamMember">Add Team Member</button>
+                     </div>
+                </td> *@
+            
+
 		
 				<div class="col-6">
                     <label for="mpTeamMember">Team Member(s)</label>
+                    <br>
                     <div>
+
+                        <div class="row">
+                            <div class="col-10">
+                                @* <input type="text" class="form-control" @bind="@idea.TeamMember"> *@
+                               <InputText class="form-control" id="teamMember" placeholder="Team Member" @oninput="@(e => setInitialTeamMemberValue(e.Value.ToString()))" @bind-Value="idea.TeamMember" />
+
+                            </div>
+                        </div> 
+                        <br>
                         <div>
-                            @foreach (var member in teamMembers)
+                            @* @foreach (var member in teamMembers) *@
+                            @foreach (var index in Enumerable.Range(0, teamMembers.Count))
+
                             {
                                 <div class="row mb-2"> 
                                     <div class="col-10">
-                                        <input type="text" class="form-control" @bind="@idea.TeamMember" @oninput="(ChangeEventArgs e) => UpdateTeamMember(e, member)">
+                                        @* <input type="text" class="form-control" @bind="@idea.TeamMember" @oninput="(ChangeEventArgs e) => UpdateTeamMember(e, member)"> *@
+                                        <InputText  class = "form-control" id="teamMember" placeholder="Team Member"@bind-Value="teamMembers[index]" 
+                                                   @oninput="@(e => UpdateIdeaTeamMembers(index, e.Value.ToString()))" />
                                     </div>
                                     <div class="col-2">
-                                        <button type="button" class="btn" style="background-color:#A30606;color:#FFFFFF;"  @onclick="() => RemoveTeamMember(member)">-</button>
+                                        @* <button type="button" class="btn" style="background-color:#A30606;color:#FFFFFF;"  @onclick="() => RemoveTeamMember(member)">-</button> *@
+                                        <button type="button" class="btn btn-primary" @onclick="RemoveLastTeamMember">-</button> 
+
                                     </div>
                                 </div>
                             }
                         </div>
-                        <div class="row">
-                            <div class="col-10">
-                                <input type="text" class="form-control" @bind="@idea.TeamMember">
-                            </div>
-                            <div class="col-2">
-                                <button type="button" class="btn" style="background-color:#A30606; color:#FFFFFF;" @onclick="AddTeamMember">+</button>
-                            </div>
-                        </div>
                         <br>
+                    <div class="">
+                                <button type="button" class="btn btn-primary" style="background-color:#A30606;color:#FFFFFF;"  @onclick="AddTeamMember">Add Team Member</button>
+                     </div>
+
+                        @* <br>
                         <div>
                             @if (errorMessage)
                             {
@@ -147,8 +186,9 @@
                                 </div>
                             }
                         </div>
+                    </div> *@
                     </div>
-                </div>
+                </div> 
                 
                 <div class="col-6" >
                     <label for="mpVideoLink">Links</label>
@@ -337,10 +377,31 @@
                     <div style="height:15em;background-color:#EEEEEE;border-radius: 25px;" @ondragover="OnDragOver" @ondrop="OnDrop">
                         <p style="text-align:center; padding-top:2em;">Drag and drop documents here</p>
                         <div style="text-align:center;">
-                            <InputFile id="fileInput" class="file-input" OnChange="HandleSelectedFiles" multiple />
-                            <label for="fileInput" class="file-input-button">Choose Files</label>
+                            @* <InputFile id="fileInput" class="file-input" OnChange="HandleSelectedFiles" multiple />
+                            <label for="fileInput" class="file-input-button">Choose Files</label> *@
+                            <InputFile class="btn btn-primary" id="attachment" draggable="true"
+                     OnChange="LoadFiles" style="display:none;"
+                     multiple accept=".doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,.ppt,.pptx,.pdf" />
+                
+                <label class="btn btn-primary" style = "background-color:#A30606;color:#FFFFFF;" for="attachment">Choose Files</label>
+
+                    
+                @if (uploadProgress > 0 )
+                {
+                    <div class="progress" style="margin-top: 10px; box-sizing: border-box;">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated"
+                             role="progressbar"
+                             aria-valuenow="@uploadProgress"
+                             aria-valuemin="0"
+                             aria-valuemax="100"
+                             style="width: @uploadProgress%">
+                            @uploadProgress%
                         </div>
-                        @if (selectedFiles.Count > 0)
+                    </div>
+
+                }
+                        </div>
+                        @* @if (selectedFiles.Count > 0)
                         {
                             <div style="text-align:center; padding-top: 1em;">
                                 <p>Selected File(s):</p>
@@ -349,11 +410,30 @@
                                     <b>@file.Name</b>
                                 }
                             </div>
-                        }
+                        } *@
+                        
                     </div>
-					<br>
+
 					<div style="text-align:center;" >
 						@* <button type="button" class="btn" style="background-color:#A30606;color:#FFFFFF;" >Download Selected</button>  *@
+                         @if(loadedFiles.Any())  
+                        {      
+                        <div style="margin-top: 10px;">
+                            <div style="border: 1px solid #ccc; padding: 10px; border-radius: 5px; background-color:#CC3333;color:#FFF;text-align:center;">
+                                Attached Files:
+                                <ul style="list-style-type: none; padding: 0; margin: 0;">
+                                    @foreach (var file in loadedFiles)
+                                    {
+                                        <li style="margin-bottom: 5px;">@file.Name
+                                            <button class="btn btn-primary" style="margin-left: 10px;"  @onclick="() => RemoveFileByName(file.Name)">X</button>
+                                        </li>
+                                    }
+                                </ul>
+                            </div>
+                        </div> 
+                        }
+
+                        
                         <button type="button" class="btn" style="background-color:#A30606;color:#FFFFFF;" @onclick="DownloadSelected">Download Selected</button>
 
 						<button type="button" class="btn" style="background-color:#FDBF38;color:#000000;" >Delete Selected</button>
@@ -590,6 +670,8 @@
             idea.VideoLink = link;
         }
 
+        idea.TeamMember = initialValue + " , " + string.Join(", ", teamMembers.Where(tm => !string.IsNullOrWhiteSpace(tm)));
+
         this.tableState = "none";
 
         await Task.Run( async () =>
@@ -599,6 +681,7 @@
             if (uploaded)
             {
                 idea.IsDirty = false;
+                teamMembers.Clear();            
                 loadedFiles.Clear();
                 idea = new ProjectInformation();
             }
@@ -609,7 +692,7 @@
         this.tableState = "block";
     }
 
-    private void LoadFiles(InputFileChangeEventArgs inputFile)
+    @* private void LoadFiles(InputFileChangeEventArgs inputFile)
     {
         this.loadedFiles.Clear();
         foreach (var file in inputFile.GetMultipleFiles().Take(ProjectManager.MaxNumberOfFiles))
@@ -624,6 +707,55 @@
             this.loadedFiles.Add(projectFile);
         }
 
+        idea.SetAttachments(loadedFiles);
+    } *@
+
+        private int uploadProgress = 0;
+
+
+    private async void LoadFiles(InputFileChangeEventArgs inputFile)
+    {
+        var newFiles = inputFile.GetMultipleFiles()
+            .Take(ProjectManager.MaxNumberOfFiles)
+            .Where(file => file.Size <= ProjectManager.MaxMBSizePerFile)
+            .Select(file => new ProjectFile(file));
+
+        this.loadedFiles = this.loadedFiles.Concat(newFiles).ToList();
+
+        @* this.loadedFiles = this.loadedFiles.Where(file => !ShouldRemoveFile(file)).ToList(); *@
+
+
+        var totalFiles = loadedFiles.Count;
+        var iterations = 10; 
+
+        for (var i = 0; i < iterations; i++)
+        {
+            var progress = (int)(((float)i / (iterations - 1)) * 100);
+            uploadProgress = progress;
+            StateHasChanged();
+
+            await Task.Delay(500); 
+        }
+
+        
+
+        idea.SetAttachments(loadedFiles);
+        
+
+
+        uploadProgress = 0;
+        await Task.Yield();
+        StateHasChanged();
+
+       
+
+    }
+
+     // Add this method to remove files based on their filenames
+    private void RemoveFileByName(string fileName)
+    {
+        this.loadedFiles = this.loadedFiles.Where(file => file.Name != fileName).ToList();
+        // Update attachments after removing the file
         idea.SetAttachments(loadedFiles);
     }
 
@@ -719,7 +851,44 @@
         IsExpanded = !IsExpanded;
     }
 
+       // Define a list to store team members
     List<string> teamMembers = new List<string>();
+
+    // Function to add a new team member input field
+    private void AddTeamMember()
+    {
+        // Add an empty string to the list
+        teamMembers.Add("");
+
+    }
+    String initialValue = "";
+    private void setInitialTeamMemberValue(string value)
+    {
+        initialValue = value;
+    }
+    private void UpdateIdeaTeamMembers(int index, string value)
+    {
+        teamMembers[index] = value; // Update the teamMembers array
+
+        // Update idea's TeamMembers property
+     //   idea.TeamMember = initialValue + " , " + string.Join(", ", teamMembers.Where(tm => !string.IsNullOrWhiteSpace(tm)));
+    }
+
+   // Function to remove the last added team member input field
+private void RemoveLastTeamMember()
+{
+    // Check if there are any team members in the list
+    if (teamMembers.Count > 0)
+    {
+        // Remove the last added team member (which is at the end of the list)
+        teamMembers.RemoveAt(teamMembers.Count - 1);
+
+        // Update idea's TeamMembers property
+       // idea.TeamMember = string.Join(", ", teamMembers.Where(tm => !string.IsNullOrWhiteSpace(tm)));
+    }
+}
+
+    @* List<string> teamMembers = new List<string>();
     List<string> links = new List<string>();
     bool errorMessage = false;   
 
@@ -749,14 +918,14 @@
     void RemoveTeamMember(string member)
     {
         teamMembers.Remove(member);
-    }
+    } *@
 
-    // Function to add a new link input field
+    @* // Function to add a new link input field
     private void AddLink()
     {
         links.Add("");
     }
-   
+    *@
 
     string NewCommentText { get; set; }
     List<Comment> Comments = new List<Comment>();
