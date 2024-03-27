@@ -17,11 +17,10 @@
 <div style="display:@tableState">
     <EditForm Model="@idea" OnValidSubmit="@HandleValidSubmit">
     <head>
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+     <script src="https://www.google.com/recaptcha/api.js" async defer></script>ß
     </head>
         <DataAnnotationsValidator />
         <ValidationSummary />
-              
         <table class="table borderless">
             <tr class="row">
                 <td class="col-6">
@@ -85,23 +84,29 @@
                 <td class="col-6">
                     <label for="linkName">Links</label>
                     <tr class="row">
-                        <td class="col-4">
-                            <InputText class="form-control" id="linkName" placeholder="Link Name" @bind-Value="idea.LinkName" />
-                        </td>
-                         <td class="col-2">
-                            <button type="button" class = "btn btn-primary" @onclick="AddLink">+</button>
-                        </td> 
-                        <td class="col-4">
-                            <InputText class="form-control" id="url" placeholder="Link URL" @bind-Value="idea.Url" />
-                        </td>
-                         <td class="col-2">
+                        <div>
+                            <td class="col-4">
+                                <InputText class="form-control" id="linkName" placeholder="Link Name"@oninput="@(e => setInitialLinkNameValue(e.Value.ToString()))" 
+                                @bind-Value="idea.LinkName" />
+                            </td>
+                            @* <td class="col-2">
+                                <button type="button" class = "btn btn-primary" @onclick="AddLink">+</button>
+                            </td>   *@
+                        
+                            <td class="col-4">
+                                <InputText class="form-control" id="url" placeholder="Link URL" @oninput="@(e => setInitialUrlValue(e.Value.ToString()))" @bind-Value="idea.Url" />
+                            </td>
+                        </div>
+                         @* <td class="col-2">
                             <button type="button" class = "btn btn-primary" @onclick="AddUrlLink">+</button>
-                        </td> 
+                        </td>  *@
+
+             
         
-                        <!-- Additional link name and URL input fields -->
+                        @* <!-- Additional link name and URL input fields -->
                         @foreach (var index in Enumerable.Range(0, links.Count))
                         {
-                            <td class="col-10">
+                            <td class="col-4">
                                 <InputText class="form-control" id="linkName" placeholder="Link Name" @bind-Value="links[index]"
                                     @oninput="@(e => UpdateIdeaLinkName(index, e.Value.ToString()))" />
                             </td>
@@ -112,17 +117,47 @@
     
                         @foreach (var index in Enumerable.Range(0, linkUrl.Count))
                         {
-                            <td class="col-10">
+                            <td class="col-4">
                                 <InputText class="form-control" id="url" placeholder="Link URL" @bind-Value="linkUrl[index]"
                                     @oninput="@(e => UpdateIdeaUrl(index, e.Value.ToString()))" />
                             </td>
                             <td class="col-2">
                                 <button type="button" class = "btn btn-primary" @onclick="RemoveLastUrlLink">-</button>
                             </td>
-                        } 
+                        } *@
+
+                         @foreach (var index in Enumerable.Range(0, Math.Max(links.Count, linkUrl.Count)))
+                        {
+                            <tr>
+                                <div>
+                                <td class="col-4">
+                                    @if (index < links.Count)
+                                    {
+                                        <InputText class="form-control" id="linkName" placeholder="Link Name" @bind-Value="links[index]"
+                                            @oninput="@(e => UpdateIdeaLinkName(index, e.Value.ToString()))" />
+                                    }
+                                </td>
+                                <td class="col-4">
+                                    @if (index < linkUrl.Count)
+                                    {
+                                        <InputText class="form-control" id="url" placeholder="Link URL" @bind-Value="linkUrl[index]"
+                                            @oninput="@(e => UpdateIdeaUrl(index, e.Value.ToString()))" />
+                                    }
+                                </td>
+                                <td class="col-2">
+                                    <button type="button" class="btn btn-primary" @onclick="RemoveLinkandURL">-</button>
+                                </td>
+                                </div>
+                            </tr>
+                        }
 
                     </tr>
+                    <div class="">
+                        <button type="button" class="btn btn-primary" style="background-color:#A30606;color:#FFFFFF;"  @onclick="AddLinkandUrl">Add Links</button>
+                     </div>
                 </td>
+                 
+
             </tr>
 
            
@@ -395,7 +430,9 @@
 
         idea.TeamMember = initialValue + " , " + string.Join(", ", teamMembers.Where(tm => !string.IsNullOrWhiteSpace(tm)));
         
-        idea.LinkName = string.Join(", ", links.Where(tm => !string.IsNullOrWhiteSpace(tm))); 
+        idea.LinkName = initialValueLinkName + " , "+ string.Join(", ", links.Where(tm => !string.IsNullOrWhiteSpace(tm))); 
+
+        idea.Url = initialValueUrl + " , " + string.Join(", ", linkUrl.Where(tm => !string.IsNullOrWhiteSpace(tm)));
 
         tableState = "none";
         StateHasChanged();
@@ -410,6 +447,8 @@
             idea.IsDirty = false;
             teamMembers.Clear();
             loadedFiles.Clear();
+            links.Clear();
+            linkUrl.Clear();
             idea = new ProjectInformation();
         }
        // await Task.Delay(2000);
@@ -591,6 +630,18 @@
     {
         initialValue = value;
     }
+
+    String initialValueLinkName = "";
+    private void setInitialLinkNameValue(string value)
+    {
+        initialValueLinkName = value;
+    }
+
+    String initialValueUrl = "";
+    private void setInitialUrlValue(string value)
+    {
+        initialValueUrl = value;
+    }
     private void UpdateIdeaTeamMembers(int index, string value)
     {
         teamMembers[index] = value; // Update the teamMembers array
@@ -636,13 +687,27 @@ private void RemoveLastTeamMember()
         linkUrl.Add("");
     }
 
+    public void AddLinkandUrl()
+{
+    // Add a new link and URL entry
+    links.Add(""); // Add an empty string for the new link name
+    linkUrl.Add(""); // Add an empty string for the new link URL
+}
+
+public void RemoveLinkandURL() 
+{
+    RemoveLastLink();
+    RemoveLastUrlLink();
+}
+
+
 
     private void UpdateIdeaUrl(int index, string value)
     {
         linkUrl[index] = value; // Update the teamMembers array
 
         // Update idea's TeamMembers property
-        idea.Urls = string.Join(", ", linkUrl.Where(tm => !string.IsNullOrWhiteSpace(tm)));
+        @* idea.Url = string.Join(", ", linkUrl.Where(tm => !string.IsNullOrWhiteSpace(tm))); *@
     } 
 
 
@@ -668,7 +733,7 @@ private void RemoveLastUrlLink()
         // Remove the last added URL link (which is at the end of the list)
         linkUrl.RemoveAt(linkUrl.Count - 1);
 
-        idea.Url = string.Join(", ", linkUrl.Where(tm => !string.IsNullOrWhiteSpace(tm)));
+        @* idea.Url = string.Join(", ", linkUrl.Where(tm => !string.IsNullOrWhiteSpace(tm))); *@
     }
 }
 

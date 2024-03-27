@@ -41,6 +41,7 @@ else
         </style>
         @* <table id="projectEntriesTable" text-align: left class="@string.Join(" ", TableCssClasses)"> *@
         <table id="projectEntriesTable" style="text-align: left;" class="@string.Join(" ", TableCssClasses) table-striped table-hover">
+            
             <thead class="thead-light">
                 <tr>
                     @foreach (var header in this.HeaderRow)
@@ -50,69 +51,41 @@ else
                         </th>
                     }
                 </tr>
-            </thead>
+            </thead> 
+
             <tbody>
                 @foreach (var row in this.GetRows())
                 {
-                    <tr>
-                        @* <td>
-                            <button @onclick="e => projectListCollapseMap[row.DataBoundItem as ProjectInformation] = !projectListCollapseMap[row.DataBoundItem as ProjectInformation]"
-                                    class="btn btn-primary">
-                                @(projectListCollapseMap[row.DataBoundItem as ProjectInformation] ? "+" : "-")
-                            </button>
-                        </td>  *@
-
-                        @* @foreach (var cell in row.Select((value, index) => new { value, index }))
-                        {
-                            if (cell.index == 0)
-                            {
-                                var ProjectID = (row.DataBoundItem as ProjectInformation).ProjectID;
-
-                                <td style="text-align: left;">
-                                    <a href="/individualProject/@ProjectTitle">@((MarkupString)cell.value.ToString())</a>
-                                    <a href="/individualProject">@((MarkupString)cell.value.ToString())</a>
-                                    <a href="/individualProject">@((MarkupString)cell.value.ToString())</a>
-                                    <a href="/individualProject" target="_blank" style="color: #A30606; font-weight: bold;">@((MarkupString)cell.value.ToString())</a>
-                                </td>
-                            }
-                            else
-                            {
-                                <td style="text-align: left;">
-                                    @((MarkupString)cell.value.ToString())
-                                </td>
-                            }
-                        } *@
-
-
-                        @foreach (var cell in row.Select((value, index) => new { value, index }))
-                        {
-                            if (cell.index == 0)
-                            {
-                                var ProjectID = (row.DataBoundItem as ProjectInformation).ProjectID;
-
-                                <td style="text-align: left;">
-                                    <a href="/individualProject/@ProjectID" target="" style="color: #A30606; font-weight: bold;">@((MarkupString)cell.value.ToString())</a>
-                                </td>
-                            }
-                            else
-                            {
-                                <td style="text-align: left;">
-                                    @((MarkupString)cell.value.ToString())
-                                </td>
-                            }
-                        }
-
-                        @* @foreach (var cell in row)
-                        {
-                            <td style="text-align: left;">
-                                @((MarkupString)cell.ToString())
-                            </td>
-                            @((MarkupString)cell.ToString()) 
-                        } *@
-                        
+                    <tr>    
+        
                     </tr>
 
+                    @foreach (var cell in row.Select((value, index) => new { value, index }))
+                    {
+                        bool isLastCell = cell.index == row.Count() - 1; 
 
+                        if (cell.index == 0)
+                        {
+                            var ProjectID = (row.DataBoundItem as ProjectInformation).ProjectID;
+
+                            <td style="text-align: left;">
+                                <a href="/individualProject/@ProjectID" target="" style="color: #A30606; font-weight: bold;">@((MarkupString)cell.value.ToString())</a>
+                            </td>
+                        }
+                        else
+                        {
+                            var ProjectID = (row.DataBoundItem as ProjectInformation).ProjectID;
+                            <td style="text-align: left;">
+                                @((MarkupString)cell.value.ToString())
+                                @if (isLastCell)
+                                {                        
+                                    <button type="button" class="btn" style="background-color:#A30606;color:#FFFFFF; margin-left: 10px;">
+                                        <a href="/individualManageProject/@ProjectID" target="" style="color: #FFFFFF; ">Edit</a>
+                                    </button>
+                                }
+                            </td>
+                        }
+                    }
 
                     @if (!projectListCollapseMap[row.DataBoundItem as ProjectInformation])
                     {
@@ -147,9 +120,6 @@ else
                 </tr>
             </tfoot>
         </table>
-
-
-        
     </div>
     
     @if (idea != null)

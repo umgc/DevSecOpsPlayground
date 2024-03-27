@@ -51,7 +51,7 @@ public string TeamMember {
     }
   }
 
-private string videoLink = string.Empty;
+        private string videoLink = string.Empty;
 
         [Export(true)]
         [DisplayName("Video Link")]
@@ -88,6 +88,7 @@ private string videoLink = string.Empty;
             }
         }
 
+
         private string projectDescription = string.Empty;
 
         [Export(true)]
@@ -107,6 +108,9 @@ private string videoLink = string.Empty;
                 this.IsDirty = true;
             }
         }
+
+
+
 
         private string semesterTerm = string.Empty;
 
@@ -199,23 +203,23 @@ private string videoLink = string.Empty;
             }
         }
 
-        private string urls = string.Empty;
+        // private string urls = string.Empty;
 
-        [Export(true)]
-        [DisplayName("Project Website")]
-        [Browsable(true)]
-        public string Urls
-        {
-            get
-            {
-                return this.urls;
-            }
-            set
-            {
-                this.urls = value;
-                this.IsDirty = true;
-            }
-        }
+        // [Export(true)]
+        // [DisplayName("Project Website")]
+        // [Browsable(true)]
+        // public string Urls
+        // {
+        //     get
+        //     {
+        //         return this.urls;
+        //     }
+        //     set
+        //     {
+        //         this.urls = value;
+        //         this.IsDirty = true;
+        //     }
+        // }
 
 
         private string gitUrl = string.Empty;
@@ -410,6 +414,26 @@ private string videoLink = string.Empty;
                 this.IsDirty = true;
             }
         }
+
+        private string editProject = string.Empty;
+        
+        [Export(true)]
+        [DisplayName("Edit Project")]
+        // [Browsable(true)]
+        [ColumnHeader]
+        public string EditProject 
+        {
+            get
+            {
+                return this.editProject;
+            }
+            set
+            {
+                this.editProject = value;
+                this.IsDirty = true;
+            }
+        }
+
 
         [Export(false)]
         [DisplayName("Comments:")]
