@@ -199,23 +199,23 @@ private string videoLink = string.Empty;
             }
         }
 
-        private string urls = string.Empty;
+        // private string urls = string.Empty;
 
-        [Export(true)]
-        [DisplayName("Project Website")]
-        [Browsable(true)]
-        public string Urls
-        {
-            get
-            {
-                return this.urls;
-            }
-            set
-            {
-                this.urls = value;
-                this.IsDirty = true;
-            }
-        }
+        // [Export(true)]
+        // [DisplayName("Project Website")]
+        // [Browsable(true)]
+        // public string Urls
+        // {
+        //     get
+        //     {
+        //         return this.urls;
+        //     }
+        //     set
+        //     {
+        //         this.urls = value;
+        //         this.IsDirty = true;
+        //     }
+        // }
 
 
         private string gitUrl = string.Empty;
