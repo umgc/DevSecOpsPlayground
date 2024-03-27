@@ -167,12 +167,11 @@
                                     <div class="col-2">
                                         @* <button type="button" class="btn" style="background-color:#A30606;color:#FFFFFF;"  @onclick="() => RemoveTeamMember(member)">-</button> *@
                                         <button type="button" class="btn btn-primary" @onclick="RemoveLastTeamMember">-</button> 
-
                                     </div>
                                 </div>
+                                <br>
                             }
                         </div>
-                        <br>
                     <div class="">
                                 <button type="button" class="btn btn-primary" style="background-color:#A30606;color:#FFFFFF;"  @onclick="AddTeamMember">Add Team Member</button>
                      </div>
@@ -895,7 +894,7 @@ private void RemoveLastTeamMember()
     //AddTeamMember limit set to 8
     private void AddTeamMember()
     {
-        if (teamMembers.Count < 7)
+        if (teamMembers.Count < 100)
         {
             teamMembers.Add("");
             errorMessage = false;
@@ -1010,7 +1009,7 @@ private void RemoveLastTeamMember()
 
     private void AddNewLink()
     {
-        if (newLinks.Count < 3)
+        if (newLinks.Count < 100)
         {
             newLinks.Add("");
             displayErrorMessage = false;
