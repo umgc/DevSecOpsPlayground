@@ -391,11 +391,22 @@
             <br><br>
 			<h5>Actions</h5>
 			<br>
-            <button type="button" class="btn btn-success" style="margin-right: 10px;">Approve</button>
-            <button type="button" class="btn btn-warning" style="margin-right: 10px;" @onclick="UpdateInfo">Update</button>
-            <button type="button" class="btn btn-warning" style="margin-right: 10px;">Export</button>
-            <button type="button" class="btn btn-danger">Delete</button>
-		<br><br><br><br><br>
+             <button type="button" class="btn btn-success" style="margin-right: 10px;" @onclick="ApproveIdea">Approve</button>
+             <ConfirmationDialogBox Command="Update"
+                               Prompt="Confirm Changes?"
+                               ButtonClass="btn btn-warning"
+                               ConfirmedChanged="UpdateInfo" />
+
+            <button type="button" class="btn btn-warning" style="margin-right: 10px;" @onclick="ExportIdea">Export</button>
+            <ConfirmationDialogBox Command="Delete"
+                               Prompt="Are you sure you want to delete this entry?"
+                               ButtonClass="btn btn-danger"
+                               ConfirmedChanged="DeleteIdea" />
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
     </table> 
     <br>
     <br>
@@ -656,8 +667,15 @@
         idea.SponsorPhone = string.Empty;
     }
 
-    private async Task UpdateInfo()
+    private async Task UpdateInfo(bool confirmed)
     {
+        Console.WriteLine("WAS CONFIRMED HIT: " + confirmed);
+
+        if (!confirmed)
+        {
+            return;
+        }
+
         bool anyUpdates = false;
 
         foreach (var updatedProject in sortedProjects)
@@ -678,34 +696,78 @@
         StateHasChanged(); 
     }
 
+    private async Task UpdateRecordAsync(EventArgs e, ProjectInformation approvedProject)
+    {
+        if (!approvedProject.IsDirty)
+        {
+            return;
+        }
+
+        approvedProject.IsDirty = !await ProjectManager.UpdateAsync(approvedProject);
+    }
+
+
+
     private async Task ApproveIdea(MouseEventArgs e)
     {
-        this.idea.Status = "Approved";
-        @* await UpdateRecordAsync(e); *@
+        foreach (var updatedProject in sortedProjects)
+        {
+            if (ProjectManager.ProjectIdeas.TryGetValue(updatedProject.ProjectID, out ProjectInformation existingProject))
+            {
+
+                updatedProject.Status = "Approved";
+
+                await UpdateRecordAsync(e, updatedProject);
+            }
+        }
+
     }
 
     private async Task ExportIdea(MouseEventArgs e)
     {
-        var location = await this.ProjectManager.ExportAsync(idea);
+        foreach (var updatedProject in sortedProjects)
+        {
+                if (ProjectManager.ProjectIdeas.TryGetValue(updatedProject.ProjectID, out ProjectInformation existingProject))
+                {
 
-        NavigationManager.NavigateTo($"{ProjectManager.FileManager.DownloadPath}{location}", true);
+                    var location = await this.ProjectManager.ExportAsync(updatedProject);
+
+                    NavigationManager.NavigateTo($"{ProjectManager.FileManager.DownloadPath}{location}", true);
+
+                }
+        }
+
 
         @* this.CloseForm(EventArgs.Empty); *@
     }
 
-    private async Task DeleteIdea(MouseEventArgs e)
+    private async Task DeleteIdea(bool confirmed)
     {
-        var authState = await authenticationState;
-        string error = await this.ProjectManager.DeleteAsync(idea, authState.User);
 
-        if (string.IsNullOrEmpty(error))
+        if (!confirmed)
         {
-            @* this.CloseForm(EventArgs.Empty); *@
+            return;
         }
-        else
+
+        foreach (var updatedProject in sortedProjects)
         {
-            this.Error = error;
+            if (ProjectManager.ProjectIdeas.TryGetValue(updatedProject.ProjectID, out ProjectInformation existingProject))
+            {
+                var authState = await authenticationState;
+                string error = await this.ProjectManager.DeleteAsync(updatedProject, authState.User);
+
+                if (string.IsNullOrEmpty(error))
+                {
+                    @* this.CloseForm(EventArgs.Empty); *@
+                }
+                else
+                {
+                    this.Error = error;
+                }
+
+            }
         }
+        
     }
 
     private void DownloadFile(IProjectFile file)
