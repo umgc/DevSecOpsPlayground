@@ -53,22 +53,22 @@
                     <label>First Name</label>
                     @* <input type="text" class="form-control" value="@idea.FirstName">  *@
                     @* <input type="text" class="form-control" bind="@idea.FirstName" @onchange="(() => MarkAsDirty(idea))"> *@
-                    <input type="text" class="form-control" @bind="@idea.FirstName">
+                <input type="text" class="form-control" @bind="@_infoPlaceholder.FirstName">
                 </div>
                 <div class="col-6" >
                     <label>Last Name</label>
-                    <input type="text" class="form-control" @bind="@idea.LastName" >
+                <input type="text" class="form-control" @bind="@_infoPlaceholder.LastName">
                 </div>
             </div>
             <br>
             <div class="row">
                 <div class="col-6" >
                     <label>Email</label>
-                    <input type="text" class="form-control" @bind="@idea.Email" >
+                <input type="text" class="form-control" @bind="@_infoPlaceholder.Email">
                 </div>
                 <div class="col-6" >
                     <label>Phone</label>
-                    <input type="text" class="form-control" @bind="@idea.Phone">
+                <input type="text" class="form-control" @bind="@_infoPlaceholder.Phone">
                 </div>
             </div>
             <br>
@@ -78,22 +78,22 @@
                 <div class="col-6" >
                     <label>First Name</label>
                     @* <input type="text" class="form-control" value="@idea.SponsorFirstName"> *@
-                    <input type="text" class="form-control" @bind="@idea.SponsorFirstName">
+                <input type="text" class="form-control" @bind="@_infoPlaceholder.SponsorFirstName">
                 </div>
                 <div class="col-6" >
                     <label>Last Name</label>
-                    <input type="text" class="form-control" @bind="@idea.SponsorLastName" >
+                <input type="text" class="form-control" @bind="@_infoPlaceholder.SponsorLastName">
                 </div>
             </div>
             <br>
             <div class="row">
                 <div class="col-6" >
                     <label>Email</label>
-                    <input type="text" class="form-control" @bind="@idea.SponsorEmail" >
+                <input type="text" class="form-control" @bind="@_infoPlaceholder.SponsorEmail">
                 </div>
                 <div class="col-6" >
                     <label>Phone</label>
-                    <input type="text" class="form-control" @bind="@idea.SponsorPhone">
+                <input type="text" class="form-control" @bind="@_infoPlaceholder.SponsorPhone">
                 </div>
             </div>
             <br>
@@ -102,11 +102,11 @@
             <div class="row">
                 <div class="col-6" >
                     <label>Project Title</label>
-                    <input type="text" class="form-control" @bind="@idea.ProjectTitle">
+                <input type="text" class="form-control" @bind="@_infoPlaceholder.ProjectTitle">
                 </div>
                 <div class="col-6" >
                     <label>Project Description</label>
-                    <textarea class="form-control" id="mpProjectDescription" rows="5" style="height: 269px;" @bind="@idea.ProjectDescription">
+                <textarea class="form-control" id="mpProjectDescription" rows="5" style="height: 269px;" @bind="@_infoPlaceholder.ProjectDescription">
                         
                     </textarea>
                 </div>
@@ -157,7 +157,7 @@
                                 <input type="text" class="form-control" id="mpVideoLinkLabel" disabled value="Video Link" >
                             </div>
                             <div class="col-5" >
-                                <input type="text" class="form-control" id="mpVideoLink" placeholder="Link URL" @bind="@idea.VideoLink">
+                        <input type="text" class="form-control" id="mpVideoLink" placeholder="Link URL" @bind="@_infoPlaceholder.VideoLink">
                             </div>
                             <div class="col-2" >
 						        @* <button @onclick="NextInput" class="btn" style="background-color:#A30606;color:#FFFFFF;">+</button> *@
@@ -170,7 +170,7 @@
                                 <input type="text" class="form-control" id="mpVideoLinkLabel2" placeholder="Link Name" disabled value="GitHub" >
                             </div>
                             <div class="col-5" >
-                                <input type="text" class="form-control" id="mpVideoLink2" placeholder="Link URL" @bind="@idea.Github" >
+                        <input type="text" class="form-control" id="mpVideoLink2" placeholder="Link URL" @bind="@_infoPlaceholder.Github">
                             </div>
                             <div class="col-2" >
 						        @* <button @onclick="NextInput" class="btn" style="background-color:#A30606;color:#FFFFFF;">+</button> *@
@@ -443,10 +443,32 @@
             if (projectInformation.ProjectID == parsedProjectId)
             {
                 completedProjects.Add(projectInformation);
+
+                _infoPlaceholder = new ProjectInformation();
+                _infoPlaceholder.VideoLink = projectInformation.VideoLink;
+                _infoPlaceholder.ProjectTitle = projectInformation.ProjectTitle;
+                _infoPlaceholder.ProjectDescription = projectInformation.ProjectDescription;
+                _infoPlaceholder.TeamMember = projectInformation.TeamMember;
+                _infoPlaceholder.LinkName = projectInformation.LinkName;
+                _infoPlaceholder.Url = projectInformation.Url;
+                _infoPlaceholder.Github = projectInformation.Github;
+                _infoPlaceholder.FirstName = projectInformation.FirstName;
+                _infoPlaceholder.LastName = projectInformation.LastName;
+                _infoPlaceholder.Email = projectInformation.Email;
+                _infoPlaceholder.Phone = projectInformation.Phone;
+                _infoPlaceholder.SponsorFirstName = projectInformation.SponsorFirstName;
+                _infoPlaceholder.SponsorLastName = projectInformation.SponsorLastName;
+                _infoPlaceholder.SponsorEmail = projectInformation.SponsorEmail;
+                _infoPlaceholder.SponsorPhone = projectInformation.SponsorPhone;
+                _infoPlaceholder.teamMembersInfo = projectInformation.teamMembersInfo;
+
             }
         }
         sortedProjects = completedProjects;
     }
+
+    private ProjectInformation _infoPlaceholder;
+
 
     private void MarkAsDirty(ProjectInformation project)
     {
@@ -512,7 +534,7 @@
         }
         StateHasChanged(); 
     }
-    
+
     private ProjectInformation idea = new ProjectInformation();
 
     public enum FormButtons
@@ -669,7 +691,6 @@
 
     private async Task UpdateInfo(bool confirmed)
     {
-        Console.WriteLine("WAS CONFIRMED HIT: " + confirmed);
 
         if (!confirmed)
         {
@@ -680,14 +701,30 @@
 
         foreach (var updatedProject in sortedProjects)
         {
-            if (updatedProject.IsDirty)
-            {
+            //if (updatedProject.IsDirty)
+            //{
                 if (ProjectManager.ProjectIdeas.TryGetValue(updatedProject.ProjectID, out ProjectInformation existingProject))
                 {
                     anyUpdates = true;
+                    updatedProject.ProjectDescription = _infoPlaceholder.ProjectDescription;
+                    updatedProject.ProjectTitle = _infoPlaceholder.ProjectTitle;
+                    updatedProject.FirstName = _infoPlaceholder.FirstName;
+                    updatedProject.LastName = _infoPlaceholder.LastName;
+                    updatedProject.Email = _infoPlaceholder.Email;
+                    updatedProject.Phone = _infoPlaceholder.Phone;
+                    updatedProject.SponsorFirstName = _infoPlaceholder.SponsorFirstName;
+                    updatedProject.SponsorLastName = _infoPlaceholder.SponsorLastName;
+                    updatedProject.SponsorEmail = _infoPlaceholder.SponsorEmail;
+                    updatedProject.SponsorPhone = _infoPlaceholder.SponsorPhone;
+                    updatedProject.Github = _infoPlaceholder.Github;
+                    updatedProject.VideoLink = _infoPlaceholder.VideoLink;
+                    updatedProject.SetMembers(teamMembers);
+                    updatedProject.SetLinks(newLinks);
+
+
                     updatedProject.IsDirty = false; 
                 }
-            }
+            //}
         }
         if (anyUpdates)
         {
