@@ -77,12 +77,42 @@ else
                             var ProjectID = (row.DataBoundItem as ProjectInformation).ProjectID;
                             <td style="text-align: left;">
                                 @((MarkupString)cell.value.ToString())
-                                @if (isLastCell)
-                                {                        
-                                    <button type="button" class="btn" style="background-color:#A30606;color:#FFFFFF; margin-left: 10px;">
-                                        <a href="/individualManageProject/@ProjectID" target="" style="color: #FFFFFF; ">Edit</a>
-                                    </button>
-                                }
+                                @* @if (isLastCell)
+                                {   
+                                    <div style="display: flex; align-items: center;"> 
+                                        <span style="margin-right: 10px; visibility: hidden;">s</span>
+                                        <button type="button" class="btn" style="background-color:#A30606; color:#FFFFFF;">
+                                            <a href="/individualManageProject/@ProjectID" target="" style="color: #FFFFFF;">Edit</a>
+                                        </button>
+                                        <span style="margin-right: 10px; visibility: hidden;">s</span>
+                                    </div>
+                                } *@
+                                <AuthorizeView>
+                                    <Authorized>
+                                        @if (isLastCell)
+                                        {
+                                            <div style="display: flex; align-items: center;"> 
+                                                <span style="margin-right: 10px; visibility: hidden;">s</span>
+                                                <button type="button" class="btn" style="background-color:#A30606; color:#FFFFFF;">
+                                                    <a href="/individualManageProject/@ProjectID" target="" style="color: #FFFFFF;">Edit</a>
+                                                </button>
+                                                <span style="margin-right: 10px; visibility: hidden;">s</span>
+                                            </div>
+                                        }
+                                    </Authorized>
+                                    <NotAuthorized>
+                                        @if (isLastCell)
+                                        {
+                                            <div style="display: flex; align-items: center;"> 
+                                                <span style="margin-right: 10px; visibility: hidden;">s</span>
+                                                <button type="button" class="btn" style="background-color:#A30606; color:#FFFFFF;">
+                                                    <a href="/MicrosoftIdentity/Account/SignIn" target="" style="color: #FFFFFF;">Log In to Edit</a>
+                                                </button>
+                                                <span style="margin-right: 10px; visibility: hidden;">s</span>
+                                            </div>
+                                        }
+                                    </NotAuthorized>
+                                </AuthorizeView>
                             </td>
                         }
                     }
