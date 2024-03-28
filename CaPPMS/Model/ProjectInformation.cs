@@ -326,7 +326,11 @@ public string TeamMember {
         public IList<ProjectFile> Attachments { get; private set; } = new List<ProjectFile>();
 
         public List<CompletedProjectDocumentation> CompletedDocuments { get; set; } = new List<CompletedProjectDocumentation>();
-        
+
+        public List<string> teamMembersInfo = new List<string>();
+        public List<string> linksInfo = new List<string>();
+
+
 
         [DisplayName("Are you the sponsor")]
         [Browsable(true)]
@@ -460,6 +464,44 @@ public string TeamMember {
 
             this.IsDirty = true;
         }
+
+        public void SetLinks(List<String> linksToAdd)
+        {
+            if (linksToAdd.Count == 0)
+            {
+                this.IsDirty = false;
+                return;
+            }
+
+            this.linksInfo.Clear();
+
+            foreach (var link in linksToAdd)
+            {
+                this.linksInfo.Add(link as String);
+            }
+
+            this.IsDirty = true;
+        }
+
+        public void SetMembers(List<String> membersToAdd)
+        {
+            if (membersToAdd.Count == 0)
+            {
+                this.IsDirty = false;
+                return;
+            }
+
+            this.teamMembersInfo.Clear();
+
+            foreach (var member in membersToAdd)
+            {
+                this.teamMembersInfo.Add(member as String);
+            }
+
+            this.IsDirty = true;
+        }
+
+
 
         public void AddAttachments(IList<IProjectFile> files)
         {
