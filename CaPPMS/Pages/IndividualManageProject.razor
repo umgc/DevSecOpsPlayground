@@ -549,8 +549,27 @@
             <button type="button" class="btn" style="background-color:#A30606;color:#FFFFFF;" @onclick="AddComment" value="@idea.Comments">Add Comment</button>*@
             <CommentsComponent ProjectGuid="idea.ProjectID" />
 
+            <br />
+            <br />
 
-			
+            @if (idea.Status.Equals("Approved"))
+            {
+                <tr>
+                    <td>
+                        <button class="btn btn-primary" type="button" @onclick="e => completeClicked = !completeClicked">Complete Project</button>
+                        @if (completeClicked)
+                        {
+                        populateCompletedProject(idea);
+                        <TeamSelection @bind-ProjectInformation="completedProject" />
+                        }
+                    </td>
+                </tr>
+            }
+
+            @if (idea.Status.Equals("Complete"))
+            {
+                <b>Project Completed @idea.SemesterTerm @idea.SemesterYear </b>
+            }
 
 
 
@@ -558,7 +577,11 @@
             <br><br>
 			<h5>Actions</h5>
 			<br>
-             <button type="button" class="btn btn-success" style="margin-right: 10px;" @onclick="ApproveIdea">Approve</button>
+             @if(idea.Status.Equals("New"))
+             {
+                <button type="button" class="btn btn-success" style="margin-right: 10px;" @onclick="ApproveIdea">Approve</button>
+
+             }
              <ConfirmationDialogBox Command="Update"
                                Prompt="Confirm Changes?"
                                ButtonClass="btn btn-warning"
@@ -640,7 +663,36 @@
         sortedProjects = completedProjects;
     }
 
+    private void populateCompletedProject(ProjectInformation submittedProject)
+    {
+        completedProject = new ProjectInformation();
+        completedProject.ProjectID = submittedProject.ProjectID;
+        completedProject.VideoLink = submittedProject.VideoLink;
+        completedProject.ProjectTitle = submittedProject.ProjectTitle;
+        completedProject.ProjectDescription = submittedProject.ProjectDescription;
+        completedProject.TeamMember = submittedProject.TeamMember;
+        completedProject.LinkName = submittedProject.LinkName;
+        completedProject.Url = submittedProject.Url;
+        completedProject.Github = submittedProject.Github;
+        completedProject.FirstName = submittedProject.FirstName;
+        completedProject.LastName = submittedProject.LastName;
+        completedProject.Email = submittedProject.Email;
+        completedProject.Phone = submittedProject.Phone;
+        completedProject.SponsorFirstName = submittedProject.SponsorFirstName;
+        completedProject.SponsorLastName = submittedProject.SponsorLastName;
+        completedProject.SponsorEmail = submittedProject.SponsorEmail;
+        completedProject.SponsorPhone = submittedProject.SponsorPhone;
+        completedProject.teamMembersInfo = submittedProject.teamMembersInfo;
+
+
+    foreach (ProjectFile file in submittedProject.Attachments)
+        {
+            completedProject.Attachments.Add(file);
+        }
+
+    }
     private ProjectInformation _infoPlaceholder;
+    private ProjectInformation completedProject;
 
 
     private void MarkAsDirty(ProjectInformation project)
@@ -776,6 +828,8 @@
     private Dictionary<ProjectFile, bool> attachmentSelection = new Dictionary<ProjectFile, bool>();
 
     private static bool isUploading = false;
+
+    private bool completeClicked = false;
 
     private string tableState = "block";
 
