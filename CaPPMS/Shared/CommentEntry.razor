@@ -5,19 +5,23 @@
 <div>
     <div class="card m-2 p-2">
         <div class="card-title p-2">
-            <div class="row">Author:@(this.IsAuthenticated ? comment.UserEmail : new String('*', 10))</div>
+            <div class="row">Author: @(this.IsAuthenticated ? comment.UserEmail : new String('*', 10))</div>
+
+        </div>
+        <div class="card-body">
+            @comment.Comments
             <div class="row">
                 @if (this.IsAuthenticated)
                 {
                     <ConfirmationDialogBox Command="Delete"
+                                           ButtonClass="btn btn-danger"
                                            Prompt="Are you sure you want to delete?"
                                            ConfirmedChanged="DeleteComment" />
                 }
             </div>
+
         </div>
-        <div class="card-body">
-            @comment.Comments
-        </div>
+
     </div>
 </div>
 

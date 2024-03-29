@@ -527,7 +527,7 @@
 			</div>
 			<br>
 
-            <h5>Comments</h5>
+            @*<h5>Comments</h5>
             @if (Comments.Any())
             {
                 foreach (var comment in Comments)
@@ -546,7 +546,9 @@
             <label for="mpComment">Comment</label>
             <textarea class="form-control" id="mpComment" @bind="NewCommentText"></textarea>
             <br>
-            <button type="button" class="btn" style="background-color:#A30606;color:#FFFFFF;" @onclick="AddComment" value="@idea.Comments">Add Comment</button>
+            <button type="button" class="btn" style="background-color:#A30606;color:#FFFFFF;" @onclick="AddComment" value="@idea.Comments">Add Comment</button>*@
+            <CommentsComponent ProjectGuid="idea.ProjectID" />
+
 
 			
 
