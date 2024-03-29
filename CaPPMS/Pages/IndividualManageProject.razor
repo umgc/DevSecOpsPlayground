@@ -399,14 +399,35 @@
 			<div class="row">
 				<div class="col-8" >
                     <br><br>
-                    @foreach (CompletedProjectDocumentation proj in idea.CompletedDocuments)
+                <input type="checkbox" class="form-check-input" id="selectAll" @onclick="ToggleSelectAll" checked="@selectAllChecked">
+                <label class="form-check-label" for="selectAll"><h5>Attachments</h5></label>
+                <br />
+                @foreach (ProjectFile file in attachmentSelection.Keys)
+                {
+                    <input type="checkbox" checked="@selectAllChecked"  @bind-value="attachmentSelection[file]" />
+                    @if (attachmentSelection[file])
                     {
-                        <input type="checkbox" class="form-check-input" id="selectAll" @onclick="ToggleSelectAll" checked="@selectAllChecked">
+                        <a href="/download/@file.Location"
+                           download="@file.Name"
+                           target="_top">
+                            <b>@file.Name </b>
+                        </a>
+                    }
+                    else
+                    {
+                        <a href="/download/@file.Location"
+                           download="@file.Name"
+                           target="_top">
+                                    @file.Name
+                        </a>
+                    }
+
+                    @*<input type="checkbox" class="form-check-input" id="selectAll" @onclick="ToggleSelectAll" checked="@selectAllChecked">
 			            <label class="form-check-label" for="selectAll"><h5>Attachments for Team: @proj.TeamName</h5></label>
                         <br>
                         
-                        @* <input type="checkbox" class="form-check-input" id="doc1" checked="@selectAllChecked">
-                        <label class="form-check-label" for="doc1"><a href="/download/@proj.ProjectPlanLink" download="@proj.ProjectPlan" target="_top" style="color: #A30606; font-weight: bold;">Project Plan</a></label><br> *@
+                         <input type="checkbox" class="form-check-input" id="doc1" checked="@selectAllChecked">
+                        <label class="form-check-label" for="doc1"><a href="/download/@proj.ProjectPlanLink" download="@proj.ProjectPlan" target="_top" style="color: #A30606; font-weight: bold;">Project Plan</a></label><br> 
                         
                         
                         <input type="checkbox" class="form-check-input" @bind="isDoc1Selected">
@@ -424,7 +445,8 @@
                         <input type="checkbox" class="form-check-input" id="doc6" checked="@selectAllChecked">
                         <label class="form-check-label" for="doc6" ><a href="/download/@proj.UsersGuideLink" download="@proj.UsersGuide" target="_top" style="color: #A30606; font-weight: bold;">User Guide</a></label><br>
                         <input type="checkbox" class="form-check-input" id="doc7" checked="@selectAllChecked">
-                        <label class="form-check-label" for="doc7" ><a href="/download/@proj.TestReportLink" download="@proj.TestReport" target="_top" style="color: #A30606; font-weight: bold;">Test Report</a></label> 
+            <label class="form-check-label" for="doc7"><a href="/download/@proj.TestReportLink" download="@proj.TestReport" target="_top" style="color: #A30606; font-weight: bold;">Test Report</a></label>
+                    *@
                         <br><br> 
                     } 					
 				</div>
@@ -493,7 +515,13 @@
                         
                         <button type="button" class="btn" style="background-color:#A30606;color:#FFFFFF;" @onclick="DownloadSelected">Download Selected</button>
 
-						<button type="button" class="btn" style="background-color:#FDBF38;color:#000000;" >Delete Selected</button>
+                    <ConfirmationDialogBox Command="Delete Selected"
+                                           Prompt="Are you sure you want to delete selected attachment(s)?"
+                                           ButtonClass="btn btn-danger"
+                                           ConfirmedChanged="DeleteSelectedAttachments" />
+
+
+						@*<button type="button" class="btn" style="background-color:#FDBF38;color:#000000;" >Delete Selected</button>*@
 					</div>
 				</div>
 			</div>
@@ -599,6 +627,12 @@
                 _infoPlaceholder.SponsorPhone = projectInformation.SponsorPhone;
                 _infoPlaceholder.teamMembersInfo = projectInformation.teamMembersInfo;
 
+                foreach (ProjectFile file in projectInformation.Attachments)
+                {
+                    attachmentSelection.Add(file, false);
+                }
+
+
             }
         }
         sortedProjects = completedProjects;
@@ -637,6 +671,21 @@
     private void ToggleSelectAll()
     {
         selectAllChecked = !selectAllChecked;
+        @foreach (ProjectFile file in attachmentSelection.Keys)
+        {
+            if (selectAllChecked)
+            {
+                attachmentSelection[file] = true;
+
+            }
+            else
+            {
+                attachmentSelection[file] = false;
+            }
+
+        }
+
+
     }
 
 
@@ -721,6 +770,8 @@
     private string Error { get; set; }
 
     private List<IProjectFile> loadedFiles = new();
+
+    private Dictionary<ProjectFile, bool> attachmentSelection = new Dictionary<ProjectFile, bool>();
 
     private static bool isUploading = false;
 
@@ -1000,8 +1051,37 @@
 
             }
         }
-        
+
     }
+
+
+    private async Task DeleteSelectedAttachments(bool confirmed)
+    {
+        if (!confirmed)
+        {
+            return;
+        }
+
+        var authState = await authenticationState;
+
+        foreach (var updatedProject in sortedProjects)
+        {
+            if (ProjectManager.ProjectIdeas.TryGetValue(updatedProject.ProjectID, out ProjectInformation existingProject))
+            {
+                foreach (ProjectFile file in attachmentSelection.Keys)
+                {
+                    Console.WriteLine("IS THE FILE SELECTED: " + attachmentSelection[file]);
+                    if (attachmentSelection[file])
+                    {
+                        await ProjectManager.RemoveFileAsync(updatedProject, file, authState.User);
+                    }
+                }
+
+            }
+        }
+
+    }
+
 
     private void DownloadFile(IProjectFile file)
     {
