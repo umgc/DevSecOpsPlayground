@@ -10,7 +10,7 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/CaPPMS/bin/Debug/net5.0/CaPPMS.dll",
+            "program": "${workspaceFolder}/CaPPMS/bin/Debug/net8.0/CaPPMS.dll",
             "args": [],
             "cwd": "${workspaceFolder}/CaPPMS",
             "stopAtEntry": false,
