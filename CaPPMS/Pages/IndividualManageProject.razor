@@ -866,7 +866,11 @@
 
     private async void LoadFiles(InputFileChangeEventArgs inputFile)
     {
-        var newFiles = inputFile.GetMultipleFiles()
+        foreach (var updatedProject in sortedProjects)
+        {
+            if (ProjectManager.ProjectIdeas.TryGetValue(updatedProject.ProjectID, out ProjectInformation existingProject))
+            {
+                var newFiles = inputFile.GetMultipleFiles()
             .Take(ProjectManager.MaxNumberOfFiles)
             .Where(file => file.Size <= ProjectManager.MaxMBSizePerFile)
             .Select(file => new ProjectFile(file));
@@ -890,13 +894,17 @@
 
         
 
-        idea.SetAttachments(loadedFiles);
+                updatedProject.AddAttachments(loadedFiles);
         
 
 
         uploadProgress = 0;
         await Task.Yield();
         StateHasChanged();
+            }
+        }
+
+        
 
        
 
@@ -969,9 +977,17 @@
                     updatedProject.Github = _infoPlaceholder.Github;
                     updatedProject.VideoLink = _infoPlaceholder.VideoLink;
                     updatedProject.SetMembers(teamMembers);
+                    await Task.Run(async () =>
+                    {
+                    var uploaded = await ProjectManager.UpdateAsync(updatedProject);
+
+                        if (uploaded)
+                        {
+                            updatedProject.IsDirty = false;
+                        }
+}                   ); 
 
 
-                    updatedProject.IsDirty = false; 
                 }
             //}
         }
@@ -1044,6 +1060,8 @@
 
                 if (string.IsNullOrEmpty(error))
                 {
+                    NavigationManager.NavigateTo($"/projectlist", true);
+
                     @* this.CloseForm(EventArgs.Empty); *@
                 }
                 else
