@@ -40,12 +40,13 @@
                     </td>
                 </tr>
             </table>
-            <button @onclick="e => this.CancelModify()" class="btn btn-danger">
+            <button @onclick="e => this.CancelModify()" class="btn btn-danger" style="background-color:#A30606; color:#FFFFFF;">
                 Cancel
             </button>
             <ConfirmationDialogBox Command="Delete"
                                    Prompt="Are you sure you want to delete?"
                                    ButtonClass="btn btn-danger"
+                                   ButtonStyle="margin-right: 10px;background-color:#A30606;color:#FFFFFF;"
                                    ConfirmedChanged="DeleteRecord" />
             <ConfirmationDialogBox Command="Update"
                                    Prompt="Confirm changes?"

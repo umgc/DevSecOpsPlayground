@@ -1,4 +1,4 @@
-﻿<button type="button" class=@ButtonClass style="margin-right: 10px;" @onclick="ShowPop">@Command</button>
+﻿<button type="button" class=@ButtonClass style=@ButtonStyle @onclick="ShowPop">@Command</button>
 
 @if (Show)
 {
@@ -22,6 +22,7 @@
 @code {
     public bool Show { get; set; }
     [Parameter] public string ButtonClass { get; set; } = "";
+    [Parameter] public string ButtonStyle { get; set; } = "";
     [Parameter] public string Command { get; set; } = "Action";
     [Parameter] public string Prompt { get; set; } = "Are you sure?";
     [Parameter] public EventCallback<bool> ConfirmedChanged { get; set; }
