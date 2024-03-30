@@ -43,14 +43,35 @@ else
         <table id="projectEntriesTable" style="text-align: left;" class="@string.Join(" ", TableCssClasses) table-striped table-hover">
             
             <thead class="thead-light">
+                @* <tr>
+                    @foreach (var header in this.HeaderRow)
+                    {
+                        @if (@header.Value == "Edit Project"){
+                            <th @onclick="e => SortByColumn(header.ColumnId)">
+
+                                @header.Value
+                            </th>
+                        }
+                        else{
+                            <th @onclick="e => SortByColumn(header.ColumnId)">
+                                @header.Value TEST
+                            </th>
+                        }
+                    }
+                </tr> *@
                 <tr>
                     @foreach (var header in this.HeaderRow)
                     {
                         <th @onclick="e => SortByColumn(header.ColumnId)">
                             @header.Value
+                            @if (header.ColumnId == 3) // Assuming ColumnId indicates the column number
+                            {
+                                @:&nbsp;TEST
+                            }
                         </th>
                     }
-                </tr>
+                </tr> 
+
             </thead> 
 
             <tbody>
@@ -92,11 +113,11 @@ else
                                         @if (isLastCell)
                                         {
                                             <div style="display: flex; align-items: center;"> 
-                                                <span style="margin-right: 10px; visibility: hidden;">s</span>
+                                                <span style="margin-right: 10px; visibility: hidden;">sp</span>
                                                 <button type="button" class="btn" style="background-color:#A30606; color:#FFFFFF;">
                                                     <a href="/individualManageProject/@ProjectID" target="" style="color: #FFFFFF;">Edit</a>
                                                 </button>
-                                                <span style="margin-right: 10px; visibility: hidden;">s</span>
+                                                <span style="margin-right: 10px; visibility: hidden;">sp</span>
                                             </div>
                                         }
                                     </Authorized>
@@ -109,7 +130,24 @@ else
                                                     <a href="/MicrosoftIdentity/Account/SignIn" target="" style="color: #FFFFFF;">Log In to Edit</a>
                                                 </button>
                                                 <span style="margin-right: 10px; visibility: hidden;">s</span>
-                                            </div>
+                                            </div> 
+                                            @* @foreach (var header in this.HeaderRow)
+                                            {
+                                                if (header.ColumnId == 3) // Check if the column is the third one
+                                                {
+                                                    // Render the <th> element with a style that hides it
+                                                    <th style="display: none;" @onclick="e => SortByColumn(header.ColumnId)">
+                                                        @header.Value
+                                                    </th>
+                                                }
+                                                else
+                                                {
+                                                    // Render the <th> element normally for all other columns
+                                                    <th @onclick="e => SortByColumn(header.ColumnId)">
+                                                        @header.Value
+                                                    </th>
+                                                }
+                                            }                              *@
                                         }
                                     </NotAuthorized>
                                 </AuthorizeView>
