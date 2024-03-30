@@ -450,11 +450,13 @@ public string TeamMember {
 
         public void SetAttachments(IList<IProjectFile> files)
         {
+            /*
             if (files.Count == 0)
             {
                 this.IsDirty = false;
                 return;
             }
+            */
 
             this.Attachments.Clear();
 

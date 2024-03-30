@@ -1312,11 +1312,23 @@
         return "/download/document1.pdf";
     }
 
-    private bool isDoc1Selected;
+    private bool isDocSelected=false;
+
+    private void ToggleDocSelected()
+    {
+        if(isDocSelected)
+        {
+            isDocSelected=false;
+        }
+        else
+        {
+            isDocSelected=true;
+        }
+    }
 
     private void DownloadSelected()
     {
-        if (isDoc1Selected)
+        if (isDocSelected)
         {
             var downloadLink = GenerateDownloadLinkForDoc1();
             DownloadFile(downloadLink);
