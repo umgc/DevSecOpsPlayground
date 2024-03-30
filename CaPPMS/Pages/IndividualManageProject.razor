@@ -148,21 +148,21 @@
                         <div class="row">
                             <div class="col-10">
                                 @* <input type="text" class="form-control" @bind="@idea.TeamMember"> *@
-                               <InputText class="form-control" id="teamMember" placeholder="Team Member" @oninput="@(e => setInitialTeamMemberValue(e.Value.ToString()))" @bind-Value="idea.TeamMember" />
+                            <InputText class="form-control" id="teamMember" placeholder="Team Member" @oninput="@(e => setInitialTeamMemberValue(e.Value.ToString()))" @bind-Value="_infoPlaceholder.TeamMember" />
 
                             </div>
                         </div> 
                         <br>
                         <div>
                             @* @foreach (var member in teamMembers) *@
-                            @foreach (var index in Enumerable.Range(0, teamMembers.Count))
+                        @foreach (var index in Enumerable.Range(0, teamMembers.Count))
 
                             {
-                                <div class="row mb-2"> 
+                            <div class="row mb-2"> 
                                     <div class="col-10">
                                         @* <input type="text" class="form-control" @bind="@idea.TeamMember" @oninput="(ChangeEventArgs e) => UpdateTeamMember(e, member)"> *@
-                                        <InputText  class = "form-control" id="teamMember" placeholder="Team Member"@bind-Value="teamMembers[index]" 
-                                                   @oninput="@(e => UpdateIdeaTeamMembers(index, e.Value.ToString()))" />
+                                    <InputText class="form-control" id="teamMember" placeholder="Team Member" @bind-Value="teamMembers[index]"
+                                               @oninput="@(e => UpdateIdeaTeamMembers(index, e.Value.ToString()))" />
                                     </div>
                                     <div class="col-2">
                                         @* <button type="button" class="btn" style="background-color:#A30606;color:#FFFFFF;"  @onclick="() => RemoveTeamMember(member)">-</button> *@
@@ -222,12 +222,12 @@
                     @* <div class="row"> *@
                         <div class = "row">
                             <td class="col-5">
-                                <InputText class="form-control" id="linkName" placeholder="Link Name"@oninput="@(e => setInitialLinkNameValue(e.Value.ToString()))" 
-                                @bind-Value="idea.LinkName" />
+                                <InputText class="form-control" id="linkName" placeholder="Link Name"@oninput="@(e => setInitialLinkNameValue(e.Value.ToString()))"
+                       @bind-Value="_infoPlaceholder.LinkName" />
                             </td>
                         
                             <td class="col-5">
-                                <InputText class="form-control" id="url" placeholder="Link URL" @oninput="@(e => setInitialUrlValue(e.Value.ToString()))" @bind-Value="idea.Url" />
+            <InputText class="form-control" id="url" placeholder="Link URL" @oninput="@(e => setInitialUrlValue(e.Value.ToString()))" @bind-Value="_infoPlaceholder.Url" />
                             </td>
                         </div>   
 
@@ -652,6 +652,24 @@
                 _infoPlaceholder.SponsorPhone = projectInformation.SponsorPhone;
                 _infoPlaceholder.teamMembersInfo = projectInformation.teamMembersInfo;
 
+                foreach(var member in projectInformation.teamMembersInfo)
+                {
+                    teamMembers.Add(member);
+                }
+
+                foreach(var link in projectInformation.linksInfo)
+                {
+                    links.Add(link);
+                }
+
+                foreach (var linkURL in projectInformation.linksURLInfo)
+                {
+                    linkUrl.Add(linkURL);
+                }
+
+                //teamMembers = projectInformation.teamMembersInfo;
+
+
                 foreach (ProjectFile file in projectInformation.Attachments)
                 {
                     attachmentSelection.Add(file, false);
@@ -931,40 +949,40 @@
 
         this.loadedFiles = this.loadedFiles.Concat(newFiles).ToList();
 
-        @* this.loadedFiles = this.loadedFiles.Where(file => !ShouldRemoveFile(file)).ToList(); *@
+                @* this.loadedFiles = this.loadedFiles.Where(file => !ShouldRemoveFile(file)).ToList(); *@
 
 
-        var totalFiles = loadedFiles.Count;
-        var iterations = 10; 
+                var totalFiles = loadedFiles.Count;
+                var iterations = 10; 
 
-        for (var i = 0; i < iterations; i++)
-        {
-            var progress = (int)(((float)i / (iterations - 1)) * 100);
-            uploadProgress = progress;
-            StateHasChanged();
+                for (var i = 0; i < iterations; i++)
+                {
+                    var progress = (int)(((float)i / (iterations - 1)) * 100);
+                    uploadProgress = progress;
+                    StateHasChanged();
 
-            await Task.Delay(500); 
-        }
+                    await Task.Delay(500); 
+                }
 
-        
+
 
                 updatedProject.AddAttachments(loadedFiles);
-        
 
 
-        uploadProgress = 0;
-        await Task.Yield();
-        StateHasChanged();
+
+                uploadProgress = 0;
+                await Task.Yield();
+                StateHasChanged();
             }
         }
 
-        
 
-       
+
+
 
     }
 
-     // Add this method to remove files based on their filenames
+    // Add this method to remove files based on their filenames
     private void RemoveFileByName(string fileName)
     {
         this.loadedFiles = this.loadedFiles.Where(file => file.Name != fileName).ToList();
@@ -1015,22 +1033,28 @@
         {
             //if (updatedProject.IsDirty)
             //{
-                if (ProjectManager.ProjectIdeas.TryGetValue(updatedProject.ProjectID, out ProjectInformation existingProject))
-                {
-                    anyUpdates = true;
-                    updatedProject.ProjectDescription = _infoPlaceholder.ProjectDescription;
-                    updatedProject.ProjectTitle = _infoPlaceholder.ProjectTitle;
-                    updatedProject.FirstName = _infoPlaceholder.FirstName;
-                    updatedProject.LastName = _infoPlaceholder.LastName;
-                    updatedProject.Email = _infoPlaceholder.Email;
-                    updatedProject.Phone = _infoPlaceholder.Phone;
-                    updatedProject.SponsorFirstName = _infoPlaceholder.SponsorFirstName;
-                    updatedProject.SponsorLastName = _infoPlaceholder.SponsorLastName;
-                    updatedProject.SponsorEmail = _infoPlaceholder.SponsorEmail;
-                    updatedProject.SponsorPhone = _infoPlaceholder.SponsorPhone;
-                    updatedProject.Github = _infoPlaceholder.Github;
-                    updatedProject.VideoLink = _infoPlaceholder.VideoLink;
-                    updatedProject.SetMembers(teamMembers);
+            if (ProjectManager.ProjectIdeas.TryGetValue(updatedProject.ProjectID, out ProjectInformation existingProject))
+            {
+                anyUpdates = true;
+                updatedProject.ProjectDescription = _infoPlaceholder.ProjectDescription;
+                updatedProject.ProjectTitle = _infoPlaceholder.ProjectTitle;
+                updatedProject.FirstName = _infoPlaceholder.FirstName;
+                updatedProject.LastName = _infoPlaceholder.LastName;
+                updatedProject.TeamMember = _infoPlaceholder.TeamMember;
+
+                updatedProject.Email = _infoPlaceholder.Email;
+                updatedProject.Phone = _infoPlaceholder.Phone;
+                updatedProject.SponsorFirstName = _infoPlaceholder.SponsorFirstName;
+                updatedProject.SponsorLastName = _infoPlaceholder.SponsorLastName;
+                updatedProject.SponsorEmail = _infoPlaceholder.SponsorEmail;
+                updatedProject.SponsorPhone = _infoPlaceholder.SponsorPhone;
+                updatedProject.Github = _infoPlaceholder.Github;
+                updatedProject.VideoLink = _infoPlaceholder.VideoLink;
+                updatedProject.LinkName = _infoPlaceholder.LinkName;
+                updatedProject.Url = _infoPlaceholder.Url;
+                updatedProject.SetMembers(teamMembers);
+                updatedProject.SetLinks(links);
+                updatedProject.SetLinksURL(linkUrl);
                     await Task.Run(async () =>
                     {
                     var uploaded = await ProjectManager.UpdateAsync(updatedProject);
@@ -1168,7 +1192,7 @@
         IsExpanded = !IsExpanded;
     }
 
-       // Define a list to store team members
+    // Define a list to store team members
     List<string> teamMembers = new List<string>();
 
     // Function to add a new team member input field
@@ -1201,13 +1225,13 @@
         teamMembers[index] = value; // Update the teamMembers array
 
         // Update idea's TeamMembers property
-     //   idea.TeamMember = initialValue + " , " + string.Join(", ", teamMembers.Where(tm => !string.IsNullOrWhiteSpace(tm)));
+        //   idea.TeamMember = initialValue + " , " + string.Join(", ", teamMembers.Where(tm => !string.IsNullOrWhiteSpace(tm)));
     }
 
-   // Function to remove the last added team member input field
-private void RemoveLastTeamMember()
-{
-    // Check if there are any team members in the list
+    // Function to remove the last added team member input field
+    private void RemoveLastTeamMember()
+    {
+        // Check if there are any team members in the list
     if (teamMembers.Count > 0)
     {
         // Remove the last added team member (which is at the end of the list)

@@ -329,6 +329,7 @@ public string TeamMember {
 
         public List<string> teamMembersInfo = new List<string>();
         public List<string> linksInfo = new List<string>();
+        public List<string> linksURLInfo = new List<string>();
 
 
 
@@ -467,12 +468,13 @@ public string TeamMember {
 
         public void SetLinks(List<String> linksToAdd)
         {
+            /*
             if (linksToAdd.Count == 0)
             {
                 this.IsDirty = false;
                 return;
             }
-
+            */
             this.linksInfo.Clear();
 
             foreach (var link in linksToAdd)
@@ -483,13 +485,35 @@ public string TeamMember {
             this.IsDirty = true;
         }
 
+        public void SetLinksURL(List<String> linkURLsToAdd)
+        {
+            /*
+            if (linksToAdd.Count == 0)
+            {
+                this.IsDirty = false;
+                return;
+            }
+            */
+            this.linksURLInfo.Clear();
+
+            foreach (var linkURL in linkURLsToAdd)
+            {
+                this.linksURLInfo.Add(linkURL as String);
+            }
+
+            this.IsDirty = true;
+        }
+
+
         public void SetMembers(List<String> membersToAdd)
         {
+            /*
             if (membersToAdd.Count == 0)
             {
                 this.IsDirty = false;
                 return;
             }
+            */
 
             this.teamMembersInfo.Clear();
 
@@ -500,6 +524,7 @@ public string TeamMember {
 
             this.IsDirty = true;
         }
+
 
 
 

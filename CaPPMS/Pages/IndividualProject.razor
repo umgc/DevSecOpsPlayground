@@ -173,10 +173,34 @@
         @* <b>Links:</b>
         <br>
         <br> *@
+
+        <b>Links:</b>
+        <br>
+        <br>
+        <ul>
+            @if (!string.IsNullOrWhiteSpace(idea.Github))
+            {
+                <li><a href="@idea.Github" target="_blank" style="color: #A30606; font-weight: bold;">GitHub</a></li>
+            }
+            else
+            {
+                <span style="color: red;"></span>
+
+            }
+            <li><a href="@idea.Url" target="_blank" style="color: #A30606; font-weight: bold;">@idea.LinkName</a></li>
+            @foreach (var index in Enumerable.Range(0, Math.Max(idea.linksInfo.Count, idea.linksURLInfo.Count)))
+            {
+            <li><a href="@idea.linksURLInfo[index]" target="_blank" style="color: #A30606; font-weight: bold;">@idea.linksInfo[index]</a></li>
+            }
+
+
+        </ul>
+
+
       
-        @if (!string.IsNullOrWhiteSpace(idea.Github))
+        @*if (!string.IsNullOrWhiteSpace(idea.Github))
         {
-            @* <li><a href="@idea.Github" target="_blank" style="color: #A30606; font-weight: bold;">GitHub</a></li> *@
+            @* <li><a href="@idea.Github" target="_blank" style="color: #A30606; font-weight: bold;">GitHub</a></li> 
 
             <b>Links:</b>
             <br>
@@ -189,7 +213,7 @@
         {
             <span style="color: red;"></span>
 
-        }
+        }*@
             
         @* <b>Team Name:</b>  *@
         <b>Team Members:</b> 
@@ -197,7 +221,10 @@
         <br>
             <ul>
                 <li><a>@idea.TeamMember</a></li>
-                @* <li><a>@idea.TeamMembers</a></li> *@
+                 @for(int i=0; i<idea.teamMembersInfo.Count;i++)
+                {
+                    <li><a>@idea.teamMembersInfo[i]</a></li>
+                }
 
             </ul>
         <br> 
