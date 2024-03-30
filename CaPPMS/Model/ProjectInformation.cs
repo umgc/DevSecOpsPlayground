@@ -35,21 +35,21 @@ namespace CaPPMS.Model
         // }
 
 
-// // [Export(true)]
-// // [DisplayName("Team Members")]
-// // [Browsable(true)]
-private string teamMember = string.Empty;
+        // // [Export(true)]
+        // // [DisplayName("Team Members")]
+        // // [Browsable(true)]
+        private string teamMember = string.Empty;
 
-public string TeamMember { 
-    get 
-    {
-        return this.teamMember;
-    }
-    set{
-        this.teamMember = value;
-        this.IsDirty = true;
-    }
-  }
+        public string TeamMember { 
+            get 
+            {
+                return this.teamMember;
+            }
+            set{
+                this.teamMember = value;
+                this.IsDirty = true;
+            }
+        }
 
         private string videoLink = string.Empty;
 
