@@ -187,10 +187,16 @@
                 <span style="color: red;"></span>
 
             }
-            <li><a href="@idea.Url" target="_blank" style="color: #A30606; font-weight: bold;">@idea.LinkName</a></li>
+            @if (!string.IsNullOrWhiteSpace(idea.LinkName))
+            {
+                <li><a href="@idea.Url" target="_blank" style="color: #A30606; font-weight: bold;">@idea.LinkName</a></li>
+            }
             @foreach (var index in Enumerable.Range(0, Math.Max(idea.linksInfo.Count, idea.linksURLInfo.Count)))
             {
-            <li><a href="@idea.linksURLInfo[index]" target="_blank" style="color: #A30606; font-weight: bold;">@idea.linksInfo[index]</a></li>
+                @if (!string.IsNullOrWhiteSpace(idea.linksURLInfo[index]))
+                {
+                    <li><a href="@idea.linksURLInfo[index]" target="_blank" style="color: #A30606; font-weight: bold;">@idea.linksInfo[index]</a></li>
+                }
             }
 
 
@@ -220,10 +226,16 @@
         <br>
         <br>
             <ul>
-                <li><a>@idea.TeamMember</a></li>
+                @if (!string.IsNullOrWhiteSpace(idea.TeamMember))
+                {
+                    <li><a>@idea.TeamMember</a></li>
+                }
                  @for(int i=0; i<idea.teamMembersInfo.Count;i++)
                 {
-                    <li><a>@idea.teamMembersInfo[i]</a></li>
+                    @if (!string.IsNullOrWhiteSpace(idea.teamMembersInfo[i]))
+                    {
+                        <li><a>@idea.teamMembersInfo[i]</a></li>
+                    }
                 }
 
             </ul>
