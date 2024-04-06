@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
@@ -8,48 +8,13 @@ using CaPPMS.Attributes;
 
 namespace CaPPMS.Model
 {
-    public class ProjectInformation
+    public class ManageProjectInformation
     {
         [Export]
         [Browsable(false)]
         public Guid ProjectID { get; set; } = Guid.NewGuid();
 
         private string projectTitle = string.Empty;
-
-        // private string teamMembers = string.Empty;
-
-        // [Export(true)]
-        // [DisplayName("Team Members")]
-        // [Browsable(true)]
-        // public string TeamMember
-        // {
-        //     get
-        //     {
-        //         return this.teamMembers;
-        //     }
-        //     set
-        //     {
-        //         this.teamMembers = value;
-        //         this.IsDirty = true;
-        //     }
-        // }
-
-
-        // // [Export(true)]
-        // // [DisplayName("Team Members")]
-        // // [Browsable(true)]
-        private string teamMember = string.Empty;
-
-        public string TeamMember { 
-            get 
-            {
-                return this.teamMember;
-            }
-            set{
-                this.teamMember = value;
-                this.IsDirty = true;
-            }
-        }
 
         private string videoLink = string.Empty;
 
@@ -88,7 +53,6 @@ namespace CaPPMS.Model
             }
         }
 
-
         private string projectDescription = string.Empty;
 
         [Export(true)]
@@ -108,9 +72,6 @@ namespace CaPPMS.Model
                 this.IsDirty = true;
             }
         }
-
-
-
 
         private string semesterTerm = string.Empty;
 
@@ -148,43 +109,6 @@ namespace CaPPMS.Model
             }
         }
       
-    
-        private string linkName = string.Empty;
-
-        [Export(true)]
-        [DisplayName("Link Name")]
-        [Browsable(true)]
-        public string LinkName
-        {
-            get
-            {
-                return this.linkName;
-            }
-            set
-            {
-                this.linkName = value;
-                this.IsDirty = true;
-            }
-        }
-
-        // private string linkNames = string.Empty;
-
-        // [Export(true)]
-        // [DisplayName("Link Name")]
-        // [Browsable(true)]
-        // public string LinkNames
-        // {
-        //     get
-        //     {
-        //         return this.linkNames;
-        //     }
-        //     set
-        //     {
-        //         this.linkNames = value;
-        //         this.IsDirty = true;
-        //     }
-        // }
-
         private string url = string.Empty;
 
         [Export(true)]
@@ -202,25 +126,6 @@ namespace CaPPMS.Model
                 this.IsDirty = true;
             }
         }
-
-        // private string urls = string.Empty;
-
-        // [Export(true)]
-        // [DisplayName("Project Website")]
-        // [Browsable(true)]
-        // public string Urls
-        // {
-        //     get
-        //     {
-        //         return this.urls;
-        //     }
-        //     set
-        //     {
-        //         this.urls = value;
-        //         this.IsDirty = true;
-        //     }
-        // }
-
 
         private string gitUrl = string.Empty;
 
@@ -286,7 +191,6 @@ namespace CaPPMS.Model
         }
 
         [Export(true)]
-        [Required]
         [EmailAddress]
         [Browsable(true)]
         public string Email
@@ -303,6 +207,7 @@ namespace CaPPMS.Model
         }
 
         [Export(true)]
+        [Phone]
         [Browsable(true)]
         public string Phone
         {
@@ -326,18 +231,14 @@ namespace CaPPMS.Model
         public IList<ProjectFile> Attachments { get; private set; } = new List<ProjectFile>();
 
         public List<CompletedProjectDocumentation> CompletedDocuments { get; set; } = new List<CompletedProjectDocumentation>();
-
-        public List<string> teamMembersInfo = new List<string>();
-        public List<string> linksInfo = new List<string>();
-        public List<string> linksURLInfo = new List<string>();
-
-
+        
 
         [DisplayName("Are you the sponsor")]
         [Browsable(true)]
         public bool IsSponsor { get; set; } = true;
 
         [Export(true)]
+        [Required]
         [StringLength(255, ErrorMessage = "Sponsor first name is too long.")]
         [DisplayName("Sponsor First Name")]
         [Browsable(true)]
@@ -355,6 +256,7 @@ namespace CaPPMS.Model
         }
 
         [Export(true)]
+        [Required]
         [StringLength(255, ErrorMessage = "Sponsor last name is too long.")]
         [DisplayName("Sponsor Last Name")]
         [Browsable(true)]
@@ -372,6 +274,7 @@ namespace CaPPMS.Model
         }
 
         [Export(true)]
+        [EmailAddress]
         [DisplayName("Sponsor Email")]
         [Browsable(true)]
         public string SponsorEmail
@@ -388,6 +291,7 @@ namespace CaPPMS.Model
         }
 
         [Export(true)]
+        [Phone]
         [DisplayName("Sponsor Phone")]
         [Browsable(true)]
         public string SponsorPhone
@@ -420,26 +324,6 @@ namespace CaPPMS.Model
             }
         }
 
-        private string editProject = string.Empty;
-        
-        [Export(true)]
-        [DisplayName("Edit Project")]
-        // [Browsable(true)]
-        [ColumnHeader]
-        public string EditProject 
-        {
-            get
-            {
-                return this.editProject;
-            }
-            set
-            {
-                this.editProject = value;
-                this.IsDirty = true;
-            }
-        }
-
-
         [Export(false)]
         [DisplayName("Comments:")]
         public Comments Comments { get; } = new Comments();
@@ -450,13 +334,11 @@ namespace CaPPMS.Model
 
         public void SetAttachments(IList<IProjectFile> files)
         {
-            /*
             if (files.Count == 0)
             {
                 this.IsDirty = false;
                 return;
             }
-            */
 
             this.Attachments.Clear();
 
@@ -467,68 +349,6 @@ namespace CaPPMS.Model
 
             this.IsDirty = true;
         }
-
-        public void SetLinks(List<String> linksToAdd)
-        {
-            /*
-            if (linksToAdd.Count == 0)
-            {
-                this.IsDirty = false;
-                return;
-            }
-            */
-            this.linksInfo.Clear();
-
-            foreach (var link in linksToAdd)
-            {
-                this.linksInfo.Add(link as String);
-            }
-
-            this.IsDirty = true;
-        }
-
-        public void SetLinksURL(List<String> linkURLsToAdd)
-        {
-            /*
-            if (linksToAdd.Count == 0)
-            {
-                this.IsDirty = false;
-                return;
-            }
-            */
-            this.linksURLInfo.Clear();
-
-            foreach (var linkURL in linkURLsToAdd)
-            {
-                this.linksURLInfo.Add(linkURL as String);
-            }
-
-            this.IsDirty = true;
-        }
-
-
-        public void SetMembers(List<String> membersToAdd)
-        {
-            /*
-            if (membersToAdd.Count == 0)
-            {
-                this.IsDirty = false;
-                return;
-            }
-            */
-
-            this.teamMembersInfo.Clear();
-
-            foreach (var member in membersToAdd)
-            {
-                this.teamMembersInfo.Add(member as String);
-            }
-
-            this.IsDirty = true;
-        }
-
-
-
 
         public void AddAttachments(IList<IProjectFile> files)
         {
@@ -561,6 +381,5 @@ namespace CaPPMS.Model
                 }
             }
         }
-        }
     }
-
+}

@@ -1,11 +1,19 @@
-﻿@using CaPPMS.Data
+@using CaPPMS.Data
 @using CaPPMS.Model
 @using CaPPMS.Model.Table
 @namespace CaPPMS.Shared
 @inherits CaPPMS.Model.Table.Table
 @implements IIdea
 
-<h3>Project List</h3>
+@* <br>
+<h1>Projects</h1>
+<p>
+    The Master of Information Systems with a Specialization in Software 
+    Engineering program at the University of Maryland Global Campus ends 
+    with a capstone course. This website allows users to view past projects. 
+    The information available on this website is public domain.
+</p> *@
+
 
 @if(this.HeaderRow.Count == 0)
 {
@@ -22,34 +30,66 @@ else
                    placeholder="Filter the data here" 
                    @bind="Filter" 
                    @bind:event="oninput" />
-        </label>
-        <table id="projectEntriesTable" class="@string.Join(" ", TableCssClasses)">
+        </label> 
+        <style>
+            #projectEntriesTable th {
+                text-align: left;
+            }
+            #projectEntriesTable td {
+                border-top: none; 
+            }
+        </style>
+        @* <table id="projectEntriesTable" text-align: left class="@string.Join(" ", TableCssClasses)"> *@
+        <table id="projectEntriesTable" style="text-align: left;" class="@string.Join(" ", TableCssClasses) table-striped table-hover">
             <thead class="thead-light">
                 <tr>
-                    <th></th>
                     @foreach (var header in this.HeaderRow)
                     {
                         <th @onclick="e => SortByColumn(header.ColumnId)">
                             @header.Value
                         </th>
                     }
-                   
                 </tr>
             </thead>
             <tbody>
                 @foreach (var row in this.GetRows())
                 {
                     <tr>
-                        <td>
+                        @* <td>
                             <button @onclick="e => projectListCollapseMap[row.DataBoundItem as ProjectInformation] = !projectListCollapseMap[row.DataBoundItem as ProjectInformation]"
                                     class="btn btn-primary">
                                 @(projectListCollapseMap[row.DataBoundItem as ProjectInformation] ? "+" : "-")
                             </button>
-                        </td>
-                        @foreach (var cell in row)
+                        </td> *@
+
+                        @foreach (var cell in row.Select((value, index) => new { value, index }))
                         {
-                            @((MarkupString)cell.ToString())
+                            if (cell.index == 0)
+                            {
+                                var ProjectID = (row.DataBoundItem as ProjectInformation).ProjectID;
+
+                                <td style="text-align: left;">
+                                    @* <a href="/individualProject/@ProjectTitle">@((MarkupString)cell.value.ToString())</a> *@
+                                    @* <a href="/individualProject">@((MarkupString)cell.value.ToString())</a> *@
+                                    @* <a href="/individualProject">@((MarkupString)cell.value.ToString())</a> *@
+                                    <a href="/individualManageProject/@ProjectID" target="" style="color: #A30606; font-weight: bold;">@((MarkupString)cell.value.ToString())</a>
+                                </td>
+                            }
+                            else
+                            {
+                                <td style="text-align: left;">
+                                    @((MarkupString)cell.value.ToString())
+                                </td>
+                            }
                         }
+
+                        @* @foreach (var cell in row)
+                        {
+                            <td style="text-align: left;">
+                                @((MarkupString)cell.ToString())
+                            </td>
+                            @((MarkupString)cell.ToString()) 
+                        } *@
                         
                     </tr>
                     @if (!projectListCollapseMap[row.DataBoundItem as ProjectInformation])
@@ -71,7 +111,6 @@ else
                                                           ProjectInformation="row.DataBoundItem as ProjectInformation">
                                     </ProjectEntryDropdown>
                                 }
-
                             </td>
                         </tr>
                     }
@@ -87,6 +126,7 @@ else
             </tfoot>
         </table>
     </div>
+    
     @if (idea != null)
     {
         <div class="popOver">
@@ -101,7 +141,6 @@ else
 }
 
 @code{
-
     [CascadingParameter]
     private Task<AuthenticationState> authenticationState { get; set; }
 
