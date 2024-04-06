@@ -1,4 +1,4 @@
-﻿<button type="button" class=@ButtonClass @onclick="ShowPop">@Command</button>
+﻿<button type="button" class=@ButtonClass style=@ButtonStyle @onclick="ShowPop">@Command</button>
 
 @if (Show)
 {
@@ -9,10 +9,10 @@
             <br />
             <div class="row">
                 <div class="col-6">
-                    <button type="button" class="btn-warning" @onclick="() => Confirmation(false)">Cancel</button>
+                    <button type="button" class="btn btn-warning" @onclick="() => Confirmation(false)">Cancel</button>
                 </div>
                 <div class="col-6">
-                    <button type="button" class="btn-primary" @onclick="() => Confirmation(true)">Confirm</button>
+                    <button type="button" class="btn btn-primary" @onclick="() => Confirmation(true)">Confirm</button>
                 </div>
             </div>
         </div>
@@ -22,6 +22,7 @@
 @code {
     public bool Show { get; set; }
     [Parameter] public string ButtonClass { get; set; } = "";
+    [Parameter] public string ButtonStyle { get; set; } = "";
     [Parameter] public string Command { get; set; } = "Action";
     [Parameter] public string Prompt { get; set; } = "Are you sure?";
     [Parameter] public EventCallback<bool> ConfirmedChanged { get; set; }

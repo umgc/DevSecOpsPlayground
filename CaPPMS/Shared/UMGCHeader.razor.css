@@ -1,7 +1,22 @@
-.navbar {
-    margin-bottom: 0;
-    border-radius: 0;
-    background-color: #960513;
-    height: 60px;
-    padding-top: 10px;
+/* Inside your custom CSS file */
+
+/* Navbar styles */
+
+/* For desktop view (viewport width >= 992px) */
+@media (min-width: 992px) {
+    .navbar-nav .nav-link {
+        color: white !important;
+    }
+
+    .navbar-nav .nav-link.login-link {
+        color: white !important;
+    }
+}
+
+/* For mobile view (viewport width <= 991px) */
+@media (max-width: 991px) {
+    .navbar-nav .nav-link {
+        color: white !important;   
+    }
+
 }
