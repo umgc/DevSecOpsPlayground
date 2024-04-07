@@ -80,12 +80,6 @@ namespace CaPPMS.Data
             ProjectIdeasChanged?.Invoke(ProjectIdeas.Values, EventArgs.Empty);
             return true;
         }
-        
-        public void NotifyProjectIdeasChanged()
-        {
-            ProjectIdeasChanged?.Invoke(this, EventArgs.Empty);
-        }
-
 
         public async Task<string> RemoveAsync(ProjectInformation idea, IPrincipal user)
         {

@@ -1,30 +1,25 @@
 ﻿@using CaPPMS.Model
 @namespace CaPPMS.Shared
-<style>
-.space-between {
-    margin-bottom: 10px; /* Adjust this value as needed */
-}
-</style>
+
 <div class="panel panel-default border @CollapseQuestion">
     <div class="panel-body">
         <div class="container-fluid">
             <div class="row">
-                <div class="space-between">
+                <div>
                     <button @onclick="e => this.IsCollapsedReply = !this.IsCollapsedReply"
-                            class="btn btn-primary" style="background-color:#A30606; color:#FFFFFF;">
+                            class="btn btn-primary">
                         @(this.IsCollapsedReply ? "+" : "-")
                     </button>
                     @if (IsAuthenticated)
                     {
                         <button @onclick="e => SelectFaq()"
-                                class="btn btn-secondary" style="background-color:#A30606; color:#FFFFFF;">
+                                class="btn btn-secondary">
                             Modify
                         </button>
                     }
                 </div>
                 <div class="font-italic" style="text-align:left">&nbsp;@FaqInformation.Question</div>
             </div>
-            <br />
             <FaqReply
                 CollapseReply="@(this.IsCollapsedReply ? "collapse" : "")"
                 FaqInformation="@FaqInformation">
@@ -32,7 +27,6 @@
             </FaqReply>
         </div>
     </div>
-    <br />
 </div>
 
 @code {

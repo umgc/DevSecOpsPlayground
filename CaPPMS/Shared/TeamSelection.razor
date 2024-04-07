@@ -7,7 +7,7 @@
     <EditForm Model="@this.ProjectInformation" OnValidSubmit="@HandleValidSubmit">
         <DataAnnotationsValidator />
         <ValidationSummary />
-        <div>
+        <div class="p-5">
 
 
             <label>
@@ -53,15 +53,16 @@
             }
             <br />
             <button class="btn btn-primary" type="button" @onclick="e => teamsClicked = !teamsClicked">Add Team</button>
-            <br />
-            <br />
-
             @if (teamsClicked)
             {
                 <CompleteProjectComponent @bind-ProjectInformation="projectInformation" @bind-IsOpen="teamsClicked" />
             }
             @if (this.ProjectInformation.CompletedDocuments.Count > 0)
             {
+                <hr />
+                <button id="completeProjectBtn" type="submit" class="btn-primary">
+                    Complete Project
+                </button>
             }
 
 

@@ -1,20 +1,16 @@
 ﻿@using CaPPMS.Model
 @inject FaqManagerService FaqManager
 @namespace CaPPMS.Shared
-<style>
-.space-between {
-    margin-bottom: 10px; /* Adjust this value as needed */
-}
-</style>
+
 <div>
     @foreach (string topic in this.faqTopicCollapseMap.Keys)
     {
         if (IsTopicWithAnsweredQuestions(topic) && IsTopicContainsFilter(topic))
         {
             <div class="row">
-                <div class="space-between">
+                <div>
                     <button @onclick="e => this.faqTopicCollapseMap[topic].isCollapsed = !this.faqTopicCollapseMap[topic].isCollapsed"
-                            class="btn btn-primary" style="background-color:#A30606; color:#FFFFFF;">
+                            class="btn btn-primary">
                         @(this.faqTopicCollapseMap[topic].isCollapsed ? "+" : "-")
                     </button>
                 </div>
@@ -34,9 +30,8 @@
                 }
 
             }
-            <br />
         }
-        <br />
+
     }
 </div>
 

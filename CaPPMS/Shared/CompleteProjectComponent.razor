@@ -6,7 +6,7 @@
     <EditForm Model="@this.ProjectInformation" OnValidSubmit="@HandleValidSubmit">
         <DataAnnotationsValidator />
         <ValidationSummary />
-        <div>
+        <div class="p-5">
             <label>Team Name:</label>
             <InputText type="text" @bind-Value="completedProject.TeamName"  required/>
             <hr />
@@ -272,13 +272,7 @@
         ProjectInformation.CompletedDocuments.Add(completedProject);
 
         IsOpen = false;
-
-
-        await ProjectManager.UpdateAsync(ProjectInformation);
-
-
         await IsOpenChanged.InvokeAsync(IsOpen);
-
     }
 
     private string GetFilePath(string fileName)

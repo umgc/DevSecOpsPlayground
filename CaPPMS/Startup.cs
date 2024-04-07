@@ -48,8 +48,6 @@ namespace CaPPMS
             services.AddSingleton<ProjectManagerService>();
             services.AddSingleton<FaqManagerService>();
             services.AddSingleton<GitHubService>();
-            services.AddSingleton(Configuration.GetSection("MailSettings").Get<MailSettings>());
-            services.AddScoped<IMailService, MailService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

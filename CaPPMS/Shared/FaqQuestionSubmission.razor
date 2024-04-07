@@ -1,6 +1,5 @@
 ﻿@inject FaqManagerService FaqManager
-@inject IMailService MailService
-<link rel="stylesheet" href="~/Shared/UMGCHeader.razor.css">
+
 @if (!isAuthenticated)
 {
     <h4>
@@ -9,18 +8,17 @@
     <EditForm Model="NewFaq">
         <div class="card" id="@NewFaq.Guid">
 
-            <span class="fas" style="color:black;font-weight:bold">Topic: </span>
+            <span class="fas" style="color:black;font-weight:bold"> Add Topic: </span>
             <InputText Value="@NewFaq.Topic"
                        ValueChanged="AssignNewFaqTopic"
                        ValueExpression="() => NewFaq.Topic"/><br />
 
-            <span class="fas" style="color:black;font-weight:bold">Question: </span>
-            <InputTextArea Value="@NewFaq.Question"
-                       rows="5"
+            <span class="fas" style="color:black;font-weight:bold"> Add Question: </span>
+            <InputText Value="@NewFaq.Question"
                        ValueChanged="AssignNewFaqQuestion"
                        ValueExpression="() => NewFaq.Question"/><br />
 
-            <span class="fas" style="color:black;font-weight:bold">Email: </span>
+            <span class="fas" style="color:black;font-weight:bold"> Add Email: </span>
             <InputText Value="@NewFaq.Author"
                        ValueChanged="AssignNewFaqAuthor"
                        ValueExpression="() => NewFaq.Author"/><br />
@@ -65,22 +63,7 @@
 
         NewFaq = new();
         isValidQuestion = false;
-        Email("rwilson@umgc.dev", "New Question submitted", "A new Question has been submitted. Please visit the CaPPMS website to approve or reject the Question.");
     }
-
-    private async Task Email(string email, string body, string html)
-    {
-        Console.WriteLine("REACHED SENDING EMAIL");
-        try
-        {
-            await MailService.SendEmailAsync(email, body, html);
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Error sending email: {ex.Message}");
-        }
-    }
-    
     private void AssignNewFaqQuestion(string value)
     {
         NewFaq.Question = value;

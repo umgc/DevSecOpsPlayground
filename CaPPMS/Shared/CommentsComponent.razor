@@ -6,7 +6,7 @@
 
 @inject ProjectManagerService ProjectManager
 
-<h5>Comments</h5>
+<h3>Comments:</h3>
 
 @if(Comments != null && Comments.Count() > 0)
 {
@@ -20,20 +20,25 @@
 else
 {
     <p>
-        <span>This project has no comments</span>
+        <span class="p-2 fas fa-search"></span><span>No Comments Found</span>
     </p>
 }
 
-<div>
+<div class="m-2 p-2 rounded">
     @if (this.isAuthenticated)
     {
         <EditForm OnValidSubmit="@HandleValidSubmit" Model="NewComment">
             <DataAnnotationsValidator />
             <ValidationSummary />
-            <div>
+            <div class="card">
+                <div class="card-title">
+                    <span class="fas fa-comment"></span> Add Comment:
+                </div>
+                <div class="card-body" style="width:100%">
                     Comment:
                     <InputTextArea style="width:100%" @bind-Value="NewComment.Comments" /><br />
                     <button type="submit" class="btn btn-primary">Add Comment</button>
+                </div>
             </div>
         </EditForm>
     }
@@ -102,7 +107,7 @@ else
         {
             ShouldUpdateState();
         };
-
+        
         var authState = await authenticationStateTask;
         this.isAuthenticated = authState.User?.Identity.IsAuthenticated ?? false;
         Comments = CommentManager.GetComments(ProjectGuid);
