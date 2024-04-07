@@ -61,7 +61,11 @@ namespace CaPPMS.Data
             {
                 try
                 {
-                    var repoUpdateVar = new RepositoryUpdate(RepoName) { DefaultBranch = developmentBranch };
+                    var repoUpdateVar = new RepositoryUpdate()
+                    {
+                        DefaultBranch = developmentBranch,
+                        Name = RepoName
+                    };
                     await gitHubClient.Repository.Edit(OrganizationName, RepoName, repoUpdateVar);
                 }
                 catch (AggregateException e)
@@ -90,38 +94,42 @@ namespace CaPPMS.Data
             }).ConfigureAwait(false);
         }
 
-        public async Task<string> DoAllTasks(string OrganizationName, string RepoName, string Description)
+        public async Task<string> DoAllTasks(string organizationName, string repoName, string description)
         {
             string error = string.Empty;
 
             try
             {
-                var repository = new NewRepository(RepoName)
+                var repository = new NewRepository(repoName)
                 {
                     AutoInit = true,
-                    Description = Description,
+                    Description = description,
                     Private = false
                 };
 
-                var newRepository = await gitHubClient.Repository.Create(OrganizationName, repository);
+                var newRepository = await gitHubClient.Repository.Create(organizationName, repository);
 
-                var masterReference = await gitHubClient.Git.Reference.Get(OrganizationName, RepoName, heads + mainBranch);
+                var masterReference = await gitHubClient.Git.Reference.Get(organizationName, repoName, heads + mainBranch);
                 var branchReference = new NewReference(heads + developmentBranch, masterReference.Object.Sha);
-                _ = gitHubClient.Git.Reference.Create(OrganizationName, RepoName, branchReference);
+                _ = gitHubClient.Git.Reference.Create(organizationName, repoName, branchReference);
 
-                var repoUpdateVar = new RepositoryUpdate(RepoName) { DefaultBranch = developmentBranch };
-                _ = gitHubClient.Repository.Edit(OrganizationName, RepoName, repoUpdateVar);
+                var repoUpdateVar = new RepositoryUpdate()
+                {
+                    DefaultBranch = developmentBranch,
+                    Name = repoName,
+                };
+                _ = gitHubClient.Repository.Edit(organizationName, repoName, repoUpdateVar);
 
                 var protection = new BranchProtectionSettingsUpdate(
                             new BranchProtectionRequiredReviewsUpdate(false, true, 1));
 
-                _ = gitHubClient.Repository.Branch.UpdateBranchProtection(OrganizationName, RepoName, mainBranch, protection);
-                _ = gitHubClient.Repository.Branch.UpdateBranchProtection(OrganizationName, RepoName, developmentBranch, protection);
+                _ = gitHubClient.Repository.Branch.UpdateBranchProtection(organizationName, repoName, mainBranch, protection);
+                _ = gitHubClient.Repository.Branch.UpdateBranchProtection(organizationName, repoName, developmentBranch, protection);
 
             }
             catch (Exception e)
             {
-                error = $"Repository:{RepoName} cannot be created. Error: {e.Message}";
+                error = $"Repository:{repoName} cannot be created. Error: {e.Message}";
             }
 
             return error;
