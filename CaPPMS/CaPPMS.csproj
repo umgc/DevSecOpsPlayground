@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <UserSecretsId>aspnet-CaPPMS-A0D09EB7-68B3-478B-B4AD-61650E36F1C0</UserSecretsId>
     <WebProject_DirectoryAccessLevelKey>0</WebProject_DirectoryAccessLevelKey>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
@@ -29,7 +29,7 @@
     <AllowUnsafeBlocks></AllowUnsafeBlocks>
     <CheckForOverflowUnderflow></CheckForOverflowUnderflow>
     <DebugType>portable</DebugType>
-    <DefineConstants>TRACE;RELEASE;NET;NET5_0;NETCOREAPP</DefineConstants>
+    <DefineConstants>TRACE;RELEASE;NET;NET8_0;NETCOREAPP</DefineConstants>
     <NoWarn>1701;1702</NoWarn>
   </PropertyGroup>
   <ItemGroup>
