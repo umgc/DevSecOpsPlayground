@@ -1,0 +1,326 @@
+﻿@using StudentReviews.Data;
+@using Microsoft.Extensions.FileProviders;
+@using CsvHelper;
+ 
+@page "/ManageStudents"
+
+@inject IJSRuntime JSRuntime
+
+<title>Manage Students</title>
+
+<style>
+    .container {
+        display: flex;
+        justify-content: center;
+    }
+
+    .card.classlit {
+        height: 500px;
+    }
+
+    .card-body {
+        max-height: calc(500px - 2.5rem); /* Set max height for the card body, considering the card header height */
+        overflow-y: auto; /* Enable vertical scrolling */
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+
+    .card-header {
+        color: white;
+        font-size: 25px;
+    }
+
+    .headerColor {
+        background-color: rgb(30,30,120);
+        color: white;
+    }
+
+    .entriesColor {
+        background-color: rgb(51,16,90);
+        color: white;
+    }
+
+    .form-group.mb-3 {
+        margin-bottom: 10px; /* Adjust as needed */
+    }
+
+    .short-search {
+        width: 300px; /* Adjust as needed */
+    }
+
+    #clear-btn {
+        margin-left: 5px;
+        width: 110px;
+        font-size: 14px;
+    }
+
+    .form-control {
+        display: inline-block; /* Ensure buttons are displayed inline */
+    }
+</style>
+
+<div class="card classlist mt-1">
+    <h5 class="card-header headerColor">Student Directory</h5>
+    <div class="card-body">
+        <div class="form-group mb-3" style="display: flex;">
+            <input id="filterInput" type="text" class="form-control short-search" oninput="applyFilter()" placeholder="Search Student..." />
+            <input id="clear-btn" class="btn btn-primary headerColor" style="margin-left: 5px" value="Clear Search" onclick="clearSearch()" />  
+            <InputFile OnChange="HandleFileSelection" />
+        </div>
+        <div id="tableContainer" class="card-body tableContainer" style="padding: 1px;">
+            <table id="studentScoreTable" class="table table-striped table-hover scrollTable">
+                <thead class="fixedHeader" style="background-color: darkgray;">
+                    <tr>
+                        <th>Edit</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Assigned Team</th>
+                    </tr>
+                </thead>
+                <tbody class="scrollContent">
+                    @foreach (var student in Students)
+                    {
+                        <tr>
+                            <td><i class="oi oi-pencil" @onclick="() => EditStudent(student)"></i></td>
+                            <td>@student.FirstName</td>
+                            <td>@student.LastName</td>
+                            <td>
+                                <InputSelect @bind-Value="student.AssignedTeam.TeamId" class="form-control">
+                                    <option value="" disabled selected>-- Select Team --</option>
+                                    @foreach (var team in teams)
+                                    {
+                                        <option Value="@team.TeamId">@team.Name</option>
+                                    }
+                                </InputSelect>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<button @onclick="UpdateTeamAssignments" class="form-control headerColor" style="margin-top: 10px; margin-bottom: 20px; width: 300px; float: right;">Update Team Assignments</button>
+
+<div class="container" style="display: flex; justify-content: center;">
+    <div class="card" style="width: 750px; margin-top: 10px;" hidden="@(HidePanel)">
+        <h5 class="card-header entriesColor"> Edit Selected Student</h5>
+        <div class="card-body">
+            <table id="studentsTable" class="table table-striped table-hover" style="background-color: lightgrey">
+                <thead>
+                    <tr>
+                        <th>Student</th>
+                        <th>Score</th>
+                        <th>Team</th>
+                    </tr>
+                    <tr>
+                        <td><InputText @bind-Value="@selectedStudent.FirstName" class="form-control" style="width: 200px;" /></td>
+                        <td><InputText @bind-Value="@selectedStudent.LastName" class="form-control" style="width: 200px;" /></td>
+                        <td>
+                            <InputSelect @bind-Value="teamId" class="form-control" style="width: 150px;">
+                                @foreach (var team in teams)
+                                {
+                                    <option Value="@team.TeamId">@team.Name</option>
+                                }
+                            </InputSelect>
+                        </td>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+            <div colspan="8" style="display: flex; justify-content: flex-end; float: left;">
+                <button @onclick="Update" class="form-control btn btn-primary entriesColor" style="margin-top: 10px; width: 100px;">Update</button>
+                <button @onclick="CloseWindow" class="btn btn-outline-dark form-control" style="margin-top: 10px; width: 100px; margin-left: 5px;">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private List<Teams> teams;
+    SelectedStudent selectedStudent;
+    string teamId = string.Empty;
+    string searchTeam = string.Empty;
+
+    protected override void OnInitialized()
+    {
+        teams = RetrieveTeams();
+        var students = DBOperations.RetrieveStudents();
+
+        foreach (var student in students)
+        {
+            Students.Add(student);
+        }
+
+        selectedStudent = new SelectedStudent();
+    }
+
+    public void EditStudent(Student student)
+    {
+        selectedStudent = new SelectedStudent()
+        {
+            StudentId = student.StudentId,
+            FirstName = student.FirstName,
+            LastName = student.LastName,
+            AssignedTeam = new Teams() { TeamId = student.AssignedTeam.TeamId, Name = student.AssignedTeam.Name }
+        };
+
+        HidePanel = false;
+        teamId = selectedStudent.AssignedTeam.TeamId.ToString();
+    }
+
+    public void Update()
+    {
+        selectedStudent.AssignedTeam.TeamId = int.Parse(teamId);
+
+        if (UpdateTeamMembers(selectedStudent))
+        {
+            var obj = Students.FirstOrDefault(x => x.StudentId == selectedStudent.StudentId);
+
+            if (obj != null)
+            {
+                obj.AssignedTeam.TeamId = int.Parse(teamId);
+            }
+        }
+    }
+
+    string studentTextFile = string.Empty;
+
+    private async Task HandleFileSelected(InputFileChangeEventArgs e)
+    {
+        IFileInfo? studentFile = e.File as IFileInfo;
+
+        try
+        {
+            if (studentFile != null)
+            {
+                string studentTextFile = await File.ReadAllTextAsync(studentFile.PhysicalPath);
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+    }
+
+    private async Task HandleFileSelection(InputFileChangeEventArgs e)
+    {
+        var files = e.GetMultipleFiles();
+
+        foreach (var file in e.GetMultipleFiles())
+        {
+            //using var stream = file.OpenReadStream();
+            await ProcessStreamAsync(file.Name);
+        }
+    }
+
+    private async Task ProcessStreamAsync(string fileName)
+    {
+        //// Read the stream content asynchronously
+        //using var reader = new StreamReader(stream, Encoding.UTF8);
+        //var fileContent = await reader.ReadToEndAsync();
+
+        //List<Student> students = ParseData(fileContent);
+
+        try
+        {
+            using (var reader = new StreamReader(fileName))
+            using (var csv = new CsvReader(reader, System.Globalization.CultureInfo.CurrentCulture))
+            {
+                while (csv.Read())
+                {
+                    var record = csv.GetRecord<Student>();
+                    record.AssignedTeam.TeamId = 1;
+                    Students.Add(record);
+
+                    Console.WriteLine($"StudentId: {record.StudentId}, Name: {record.FirstName} {record.LastName}, Email: {record.Email}");
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+    }
+
+    public void CloseWindow()
+    {
+        HidePanel = true; // Hide the Selected Student panel
+    }
+
+    public class SelectedStudent
+    {
+        public SelectedStudent()
+        {
+            AssignedTeam = new Teams();
+        }
+
+        public int StudentId { get; set; }
+        public string? FirstName { get; set; }
+        public string? LastName { get; set; }
+        public Teams? AssignedTeam { get; set; }
+    }
+
+    static List<Student> ParseData(string data)
+    {
+        List<Student> students = new List<Student>();
+
+        // Split the data into lines
+        string[] lines = data.Split('\n');
+
+        // Iterate over each line (excluding the header)
+        for (int i = 1; i < lines.Length; i++)
+        {
+            string trimmedLine = lines[i].Trim();
+
+            if (!string.IsNullOrWhiteSpace(trimmedLine))
+            {            // Split the line into fields
+                string[] fields = lines[i].Split(',');
+
+                // Create a new Student object
+                Student student = new Student();
+
+                // Populate the fields
+                student.StudentId = int.Parse(fields[0]);
+                student.FirstName = fields[1];
+                student.LastName = fields[2];
+                student.Email = fields[3];
+                student.AssignedTeam.TeamId = int.Parse(fields[4]);
+
+                // Add the student to the list
+                students.Add(student);
+            }
+        }
+
+        return students;
+    }
+}
+
+<script type="text/javascript">
+   // Listen for input changes
+    document.getElementById('filterInput').addEventListener('input', function() {
+        var filterValue = this.value.toLowerCase();
+        var tableRows = document.querySelectorAll('#myTable tbody tr');
+
+        // Filter the rows
+        tableRows.forEach(function(row) {
+            var rowText = row.textContent.toLowerCase();
+            row.style.display = rowText.includes(filterValue) ? 'table-row' : 'none';
+        });
+    });
+
+    function clearSearch() {
+        var filterInput = document.getElementById('filterInput');
+        var tableRows = document.querySelectorAll('#myTable tbody tr');
+
+        // Clear the input field
+        filterInput.value = "";
+
+        // Reset the display of all table rows
+        tableRows.forEach(function(row) {
+            row.style.display = 'table-row';
+        });
+    }
+</script>
