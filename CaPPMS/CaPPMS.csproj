@@ -29,7 +29,7 @@
     <AllowUnsafeBlocks></AllowUnsafeBlocks>
     <CheckForOverflowUnderflow></CheckForOverflowUnderflow>
     <DebugType>portable</DebugType>
-    <DefineConstants>TRACE;RELEASE;NET;NET5_0;NETCOREAPP</DefineConstants>
+    <DefineConstants>TRACE;RELEASE;NET;NET8_0;NETCOREAPP</DefineConstants>
     <NoWarn>1701;1702</NoWarn>
     <Optimize>False</Optimize>
   </PropertyGroup>
