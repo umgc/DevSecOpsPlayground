@@ -1,11 +1,9 @@
-﻿using StudentReviews.Data;
-using StudentReviews.Shared;
+﻿using CaPPMS.Data;
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Data.SQLite;
 
-namespace StudentReviews.Shared
+namespace CaPPMS.Shared
 {
     public class DBOperations
     {

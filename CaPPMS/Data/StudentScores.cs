@@ -1,4 +1,4 @@
-﻿namespace StudentReviews.Data
+﻿namespace CaPPMS.Data
 {
     public class StudentScores
     {

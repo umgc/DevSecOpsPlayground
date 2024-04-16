@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace StudentReviews.Data
+namespace CaPPMS.Data
 {
     public class Review
     {

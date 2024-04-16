@@ -1,4 +1,4 @@
-﻿namespace StudentReviews.Shared
+﻿namespace CaPPMS.Shared
 {
     public class Teams
     {

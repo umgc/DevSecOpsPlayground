@@ -1,12 +1,11 @@
-﻿using StudentReviews.Shared;
-using StudentReviews.Data;
-using System.Data.SQLite;
-using System.ComponentModel.DataAnnotations;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using CaPPMS.Data;
+using CaPPMS.Shared;
 using System;
+using System.Collections.Generic;
+using System.Data.SQLite;
+using System.Threading.Tasks;
 
-namespace StudentReviews.Pages
+namespace CaPPMS.Pages.StudentReviews
 {
     public partial class StudentReview
     {

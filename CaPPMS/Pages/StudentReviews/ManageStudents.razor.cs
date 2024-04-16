@@ -1,7 +1,9 @@
-﻿using StudentReviews.Data;
-using StudentReviews.Shared;
+﻿using CaPPMS.Data;
+using CaPPMS.Shared;
+using System.Collections.Generic;
+using System.Linq;
 
-namespace StudentReviews.Pages
+namespace CaPPMS.Pages.StudentReviews
 {
     public partial class ManageStudents
     {
@@ -37,8 +39,6 @@ namespace StudentReviews.Pages
         {
             teams = new List<Teams>();
             selectedStudent = new SelectedStudent();
-
-            var FilteredStudents = Students.Where((x => x.FirstName == "Maria"));
         }
 
         public List<Teams> RetrieveTeams()

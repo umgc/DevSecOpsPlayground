@@ -1,7 +1,7 @@
-using StudentReviews.Shared;
+using CaPPMS.Shared;
 using System.ComponentModel.DataAnnotations;
 
-namespace StudentReviews.Data
+namespace CaPPMS.Data
 {
     public class Student
     {
