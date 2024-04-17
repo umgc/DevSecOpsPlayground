@@ -80,6 +80,12 @@ namespace CaPPMS.Data
             ProjectIdeasChanged?.Invoke(ProjectIdeas.Values, EventArgs.Empty);
             return true;
         }
+        
+        public void NotifyProjectIdeasChanged()
+        {
+            ProjectIdeasChanged?.Invoke(this, EventArgs.Empty);
+        }
+
 
         public async Task<string> RemoveAsync(ProjectInformation idea, IPrincipal user)
         {
@@ -213,7 +219,6 @@ namespace CaPPMS.Data
                     propertyTitleChunk.SetUnderline(2f, -2f);
                     var itemTitle = new Paragraph(propertyTitleChunk);
                     itemTitle.SpacingAfter = 1f;
-                    itemTitle.Add(Environment.NewLine);
                     var item = new Phrase($"\t\t{exportedField.Item2}", bodyFont);
                     itemTitle.Add(item);
 

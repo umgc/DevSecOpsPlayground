@@ -3,10 +3,25 @@
 @inject ProjectManagerService ProjectManager
 
 @page "/projectlist"
+<br>
+<h1>Projects</h1>
+<p>
+    The project page on the website allows users to explore a diverse range of real-world projects undertaken by
+    students
+    in the Master of Information Systems program with a specialization in Software Engineering at the University of
+    Maryland Global Campus.
+    These projects often represent the culmination of students' academic endeavors, showcasing their ability to apply
+    theoretical knowledge
+    and practical skills to solve complex problems in the field. By browsing through past projects, prospective students
+    can gain valuable insights
+    into the innovative solutions developed by graduates and the tangible outcomes of the program's curriculum..
+</p>
 
-    <CascadingAuthenticationState>
-        <ProjectTable DataSource="new List<ProjectInformation>(ProjectManager.ProjectIdeas.Values.OrderBy(i => i.Status).ToList())" CssClass="table border p-2" />
-    </CascadingAuthenticationState>
+<CascadingAuthenticationState>
+    <ProjectsTable
+        DataSource="new List<ProjectInformation>(ProjectManager.ProjectIdeas.Values.OrderBy(i => i.Status).ToList())"
+        CssClass="table border p-2" />
+</CascadingAuthenticationState>
 
 @code {
 }
