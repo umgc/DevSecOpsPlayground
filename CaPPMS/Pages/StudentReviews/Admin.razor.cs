@@ -1,6 +1,8 @@
-﻿using StudentReviews.Data;
+﻿using CaPPMS.Data;
 
-namespace StudentReviews.Pages
+using System.Collections.Generic;
+
+namespace CaPPMS.Pages.StudentReviews
 {
     public partial class Admin
     {

@@ -82,10 +82,8 @@ namespace CaPPMS
 
         private string GetClientSecret()
         {
-            // Return programmer specified secrets
-            // return string.Empty;
-
-            // Used for Production.
+            // Reading the clientId Graph_Secret is only used for production.
+#if !DEBUG
             string clientId = System.Environment.GetEnvironmentVariable("GRAPH_SECRET");
 
             if (string.IsNullOrEmpty(clientId))
@@ -94,6 +92,9 @@ namespace CaPPMS
             }
 
             return clientId;
+#else
+            return string.Empty;
+#endif
         }
     }
 }

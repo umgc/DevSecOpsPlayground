@@ -1,11 +1,13 @@
 ﻿@using System.ComponentModel.DataAnnotations
 @using Microsoft.AspNetCore.Components.Forms
-@using Microsoft.EntityFrameworkCore
+@using CaPPMS.Pages.StudentReviews
 @using System.Text.RegularExpressions
 
 @inject IJSRuntime JSRuntime
 
-@page "/"
+@namespace CaPPMS.Pages.StudentReviews
+
+@page "/StudentReviews/"
 
 <title>Weekly Peer Reviews</title>
 
@@ -68,26 +70,26 @@
     </div>
 
     @*<div class="card" style="display: none">
-        <h5 class="card-header evaluator">Your Information</h5>
-        <div class="card-body">
+            <h5 class="card-header evaluator">Your Information</h5>
+            <div class="card-body">
 
-            <label class="form-label col-3">
-                First Name:
-                <InputText id="firstName" @bind-Value="@Student.FirstName" placeholder="First Name" class="form-control" />
+                <label class="form-label col-3">
+                    First Name:
+                    <InputText id="firstName" @bind-Value="@Student.FirstName" placeholder="First Name" class="form-control" />
 
-            </label>
+                </label>
 
-            <label class="form-label col-3">
-                Last Name:
-                <InputText id="lastName" @bind-Value="@Student.LastName" placeholder="Last Name" class="form-control" />
-            </label>
+                <label class="form-label col-3">
+                    Last Name:
+                    <InputText id="lastName" @bind-Value="@Student.LastName" placeholder="Last Name" class="form-control" />
+                </label>
 
-            <label class="form-label col-5">
-                Email Address:
-                <InputText id="emailAddress" @bind-Value="@Student.Email" placeholder="Email Address" class="form-control" />
-            </label>
-        </div>
-    </div>*@
+                <label class="form-label col-5">
+                    Email Address:
+                    <InputText id="emailAddress" @bind-Value="@Student.Email" placeholder="Email Address" class="form-control" />
+                </label>
+            </div>
+        </div>*@
 
     <div class="card mt-2">
         <h5 class="card-header student"> Student to be Evaluated</h5>

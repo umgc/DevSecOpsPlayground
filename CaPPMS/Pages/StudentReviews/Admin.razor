@@ -1,7 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Components.Forms
-@using StudentReviews.Data
+@using CaPPMS.Pages.StudentReviews
 
-@page "/Admin"
+@page "/StudentReviews/Admin"
 
 @inject IJSRuntime JSRuntime
 
@@ -210,13 +210,13 @@
             WeeklyRating = new List<Tuple<string, double, string>>();
         }
 
-        public string? FirstName { get; set; }
-        public string? LastName { get; set; }
-        public string? FullName { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string FullName { get; set; }
         public double Score { get; set; }
         public List<Tuple<string, double, string>> WeeklyRating { get; set; }
         public double Average { get; set; }
-        public string? Comments { get; set; }
+        public string Comments { get; set; }
     }
 }
 <script type="text/javascript">
