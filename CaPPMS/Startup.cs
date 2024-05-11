@@ -8,7 +8,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Identity.Web.UI;
 using CaPPMS.Data;
 
-using System.Linq;
 using System;
 
 namespace CaPPMS
