@@ -87,21 +87,6 @@ namespace CaPPMSTests.Data
             Assert.AreEqual(newProjectTitle, projectManagerService.GetIdeaTitles().ToList()[0]);
         }
 
-        [TestMethod]
-        public void doesExportMatch()
-        {
-            ProjectManagerService projectManagerService = new ProjectManagerService("add.json");
-            var idea = CreateIdea();
-            Assert.IsTrue(Task.Run(async () => await projectManagerService.AddAsync(idea)).Result);
-            Assert.AreEqual(1, projectManagerService.GetIdeaTitles().Count());
-
-            //var path = Task.Run(async () => await projectManagerService.ExportAsync(idea)).Result;
-
-            //Assert.IsTrue(File.Exists(path));
-
-            //Assert.AreEqual("", "");
-        }
-
         private ProjectInformation CreateIdea()
         {
             var idea = new ProjectInformation
