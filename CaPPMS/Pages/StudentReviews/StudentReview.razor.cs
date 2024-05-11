@@ -1,8 +1,8 @@
 ﻿using CaPPMS.Data;
 using CaPPMS.Shared;
+using Microsoft.Data.Sqlite;
 using System;
 using System.Collections.Generic;
-using System.Data.SQLite;
 using System.Threading.Tasks;
 
 namespace CaPPMS.Pages.StudentReviews
@@ -10,6 +10,16 @@ namespace CaPPMS.Pages.StudentReviews
     public partial class StudentReview
     {
         const string _connectionString = "Data Source=Data\\StudentReviews.db";
+
+        private string username = string.Empty;
+        private string log = string.Empty;
+
+        public StudentReview()
+        {
+            int teamId = DBOperations.RetrieveUsersTeam(username);
+            ClassList = DBOperations.RetrieveStudents(teamId);
+            WeeksList = DBOperations.RetrieveWeeks();
+        }
 
         public Student student = new Student();
 
@@ -22,23 +32,12 @@ namespace CaPPMS.Pages.StudentReviews
         public bool isSubmitButtonDisabled = true;
 
         public List<Student> ClassList { get; set; }
- 
-        public List<string> WeeksList { get; set; }
 
-        public string log; 
+        public List<string> WeeksList { get; set; }
 
         public string StatusMessage { get; set; }
 
         public bool HidePanel { get; set; } = true;
-
-        private string username = "maria.stewart@yahoo.com";
-
-        public StudentReview()
-        {
-            int teamId = DBOperations.RetrieveUsersTeam(username);
-            ClassList = DBOperations.RetrieveStudents(teamId);
-            WeeksList = DBOperations.RetrieveWeeks();
-        }
 
         public async Task SubmitEvaluation() //method returns the tasks now making it awaitable for SubmitEvaluation confirmation 
         {
@@ -46,7 +45,7 @@ namespace CaPPMS.Pages.StudentReviews
             {
                 await Task.Run(() => //database operation now wrapped insided 'Task.Run' allowing to await method call -preserves the synchronous behavior while making method awaitable
                 {
-                    using (SQLiteConnection connection = new SQLiteConnection(_connectionString))
+                    using (SqliteConnection connection = new(_connectionString))
                     {
                         connection.Open();
 
@@ -54,7 +53,7 @@ namespace CaPPMS.Pages.StudentReviews
                             (ReviewedStudentId, ReviewersEmail, Week, Score, Comments)
                             VALUES (@ReviewedStudentId, @ReviewersEmail, @Week, @Score, @Comments)";
 
-                        using (SQLiteCommand command = new SQLiteCommand(sql, connection))
+                        using (SqliteCommand command = new(sql, connection))
                         {
                             command.Parameters.AddWithValue("@ReviewedStudentId", review.ReviewedStudentId);
                             command.Parameters.AddWithValue("@ReviewersEmail", username);
@@ -100,7 +99,7 @@ namespace CaPPMS.Pages.StudentReviews
         {
             Student student = new Student();
 
-            using (SQLiteConnection connection = new SQLiteConnection(_connectionString))
+            using (SqliteConnection connection = new SqliteConnection(_connectionString))
             {
                 try
                 {
@@ -108,11 +107,11 @@ namespace CaPPMS.Pages.StudentReviews
 
                     string query = "SELECT FirstName, LastName FROM Students WHERE StudentId = @studentId";
 
-                    using (SQLiteCommand command = new SQLiteCommand(query, connection))
+                    using (SqliteCommand command = new(query, connection))
                     {
                         command.Parameters.AddWithValue("@studentId", studentId);
 
-                        using (SQLiteDataReader reader = command.ExecuteReader())
+                        using (SqliteDataReader reader = command.ExecuteReader())
                         {
                             while (reader.Read())
                             {

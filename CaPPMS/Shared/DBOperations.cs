@@ -1,7 +1,7 @@
 ﻿using CaPPMS.Data;
+using Microsoft.Data.Sqlite;
 using System;
 using System.Collections.Generic;
-using System.Data.SQLite;
 
 namespace CaPPMS.Shared
 {
@@ -13,7 +13,7 @@ namespace CaPPMS.Shared
         {
             var students = new List<Student>();
 
-            using (SQLiteConnection connection = new SQLiteConnection(_connectionString))
+            using (SqliteConnection connection = new SqliteConnection(_connectionString))
             {
                 try
                 {
@@ -27,14 +27,14 @@ namespace CaPPMS.Shared
                         query += " WHERE TeamId = @teamId";
                     }
 
-                    using (SQLiteCommand command = new SQLiteCommand(query, connection))
+                    using (SqliteCommand command = new(query, connection))
                     {
                         if (teamId > 0)
                         {
                             command.Parameters.AddWithValue("@teamId", teamId);
                         }
 
-                        using (SQLiteDataReader reader = command.ExecuteReader())
+                        using (SqliteDataReader reader = command.ExecuteReader())
                         {
                             Student student = null;
 
@@ -67,7 +67,7 @@ namespace CaPPMS.Shared
         {
             List<StudentScores> studentScores = new List<StudentScores>();
 
-            using (SQLiteConnection connection = new(_connectionString))
+            using (SqliteConnection connection = new(_connectionString))
             {
                 try
                 {
@@ -79,9 +79,9 @@ namespace CaPPMS.Shared
                         "LEFT JOIN StudentReviews ON students.StudentId = studentreviews.ReviewedStudentId " +
                         "ORDER BY students.LastName, studentreviews.StudentReviewId;";
 
-                    using (SQLiteCommand command = new SQLiteCommand(query, connection))
+                    using (SqliteCommand command = new(query, connection))
                     {
-                        using (SQLiteDataReader reader = command.ExecuteReader())
+                        using (SqliteDataReader reader = command.ExecuteReader())
                         {
                             while (reader.Read())
                             {
@@ -116,7 +116,7 @@ namespace CaPPMS.Shared
         {
             List<StudentScores> studentScores = new List<StudentScores>();
 
-            using (SQLiteConnection connection = new(_connectionString))
+            using (SqliteConnection connection = new(_connectionString))
             {
                 try
                 {
@@ -128,11 +128,11 @@ namespace CaPPMS.Shared
                         "LEFT JOIN StudentReviews ON students.StudentId = studentreviews.ReviewedStudentId WHERE students.StudentId = @studentId " +
                         "ORDER BY students.LastName;";
 
-                    using (SQLiteCommand command = new SQLiteCommand(query, connection))
+                    using (SqliteCommand command = new(query, connection))
                     {
                         command.Parameters.AddWithValue("@studentId", studentId);
 
-                        using (SQLiteDataReader reader = command.ExecuteReader())
+                        using (SqliteDataReader reader = command.ExecuteReader())
                         {
                             while (reader.Read())
                             {
@@ -167,7 +167,7 @@ namespace CaPPMS.Shared
         {
             List<StudentScores> studentScores = new List<StudentScores>();
 
-            using (SQLiteConnection connection = new(_connectionString))
+            using (SqliteConnection connection = new(_connectionString))
             {
                 try
                 {
@@ -187,9 +187,9 @@ namespace CaPPMS.Shared
             LEFT JOIN StudentAverages sa ON students.StudentId = sa.ReviewedStudentId
             ORDER BY students.LastName";
 
-                    using (SQLiteCommand command = new SQLiteCommand(query, connection))
+                    using (SqliteCommand command = new (query, connection))
                     {
-                        using (SQLiteDataReader reader = command.ExecuteReader())
+                        using (SqliteDataReader reader = command.ExecuteReader())
                         {
                             while (reader.Read())
                             {
@@ -222,7 +222,7 @@ namespace CaPPMS.Shared
         {
             List<Teams> teamList = new List<Teams>();
 
-            using (SQLiteConnection connection = new SQLiteConnection(_connectionString))
+            using (SqliteConnection connection = new(_connectionString))
             {
                 try
                 {
@@ -230,9 +230,9 @@ namespace CaPPMS.Shared
 
                     string query = "SELECT TeamId, TeamName FROM Teams";
 
-                    using (SQLiteCommand command = new SQLiteCommand(query, connection))
+                    using (SqliteCommand command = new(query, connection))
                     {
-                        using (SQLiteDataReader reader = command.ExecuteReader())
+                        using (SqliteDataReader reader = command.ExecuteReader())
                         {
                             while (reader.Read())
                             {
@@ -262,7 +262,7 @@ namespace CaPPMS.Shared
         {
             var tempList = new List<string>();
 
-            using (SQLiteConnection connection = new SQLiteConnection(_connectionString))
+            using (SqliteConnection connection = new(_connectionString))
             {
                 try
                 {
@@ -270,9 +270,9 @@ namespace CaPPMS.Shared
 
                     string query = "SELECT WeekNumber FROM Week";
 
-                    using (SQLiteCommand command = new SQLiteCommand(query, connection))
+                    using (SqliteCommand command = new(query, connection))
                     {
-                        using (SQLiteDataReader reader = command.ExecuteReader())
+                        using (SqliteDataReader reader = command.ExecuteReader())
                         {
                             while (reader.Read())
                             {
@@ -302,11 +302,11 @@ namespace CaPPMS.Shared
             {
                 string query = "UPDATE Students Set TeamId = @teamId WHERE StudentId = @studentId";
 
-                using (SQLiteConnection connection = new SQLiteConnection(_connectionString))
+                using (SqliteConnection connection = new(_connectionString))
                 {
                     connection.Open();
 
-                    using (SQLiteCommand command = new SQLiteCommand(query, connection))
+                    using (SqliteCommand command = new SqliteCommand(query, connection))
                     {
                         command.Parameters.AddWithValue("@teamId", teamId);
                         command.Parameters.AddWithValue("@studentId", studentId);
@@ -325,7 +325,7 @@ namespace CaPPMS.Shared
         {
             int teamId = -1;
 
-            using (SQLiteConnection connection = new SQLiteConnection(_connectionString))
+            using (SqliteConnection connection = new(_connectionString))
             {
                 try
                 {
@@ -333,7 +333,7 @@ namespace CaPPMS.Shared
 
                     string query = "SELECT TeamId FROM Students WHERE Email = @email";
 
-                    using (SQLiteCommand command = new SQLiteCommand(query, connection))
+                    using (SqliteCommand command = new(query, connection))
                     {
                         command.Parameters.AddWithValue("@email", username);
                         teamId = Convert.ToInt32(command.ExecuteScalar());
@@ -354,14 +354,14 @@ namespace CaPPMS.Shared
 
         public static void LoadStudent(Student student)
         {
-            using (var connection = new SQLiteConnection(_connectionString))
+            using (SqliteConnection connection = new(_connectionString))
             {
                 connection.Open();
 
                 var insertCommand = @"INSERT INTO Students (FirstName, LastName, Email, TeamId)
                 VALUES (@FirstName, @LastName, @Email, @TeamId)";
 
-                using (var command = new SQLiteCommand(insertCommand, connection))
+                using (SqliteCommand command = new(insertCommand, connection))
                 {
                     command.Parameters.AddWithValue("@FirstName", student.FirstName);
                     command.Parameters.AddWithValue("@LastName", student.LastName);
