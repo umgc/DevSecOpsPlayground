@@ -1,0 +1,247 @@
+﻿@using Microsoft.AspNetCore.Components.Forms
+@using CaPPMS.Pages.StudentReviews
+
+@page "/StudentReviews/Admin"
+
+@inject IJSRuntime JSRuntime
+
+<title>Student Scores</title>
+
+<style>
+    .card.scores {
+        height: 530px;
+    }
+
+    .card-header {
+        color: white;
+        font-size: 25px;
+    }
+
+    .headerColor {
+        background-color: rgb(30,30,120);
+        color: white;
+    }
+
+    .entriesColor {
+        background-color: rgb(51,16,90);
+        color: white;
+    }
+
+    .card-body {
+        max-height: calc(520px - 2.5rem); /* Set max height for the card body, considering the card header height */
+        overflow-y: auto; /* Enable vertical scrolling */
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+
+    /* Style for the outer table */
+    table.outerTable {
+        border-collapse: collapse;
+        border: 2px solid black; /* Add a border to the entire outer table */
+    }
+
+        /* Style for the outer table cells (except for the inner table) */
+        table.outerTable td:not(.innerTable td) {
+            border: 1px solid gray; /* Add a border to the outer table cells */
+            padding: 10px; /* Add some padding for spacing */
+        }
+
+    /* Style for the inner table */
+    table.innerTable {
+        border-collapse: collapse;
+        border: none; /* Remove borders from the inner table */
+    }
+
+        /* Style for the inner table cells (td) */
+        table.innerTable td {
+            padding: 5px; /* Add padding for spacing */
+        }
+
+    .form-group.mb-3 {
+        margin-bottom: 10px; /* Adjust as needed */
+    }
+
+    .short-search {
+        width: 300px; /* Adjust as needed */
+    }
+
+    #clear-btn {
+        margin-left: 5px;
+        width: 110px;
+        font-size: 14px;
+    }
+
+    .form-control {
+        display: inline-block; /* Ensure buttons are displayed inline */
+    }
+    #innerTable.table-striped > tbody > tr:nth-child(odd) > td,
+    #innerTable.table-striped > tbody > tr:nth-child(odd) > th {
+        background-color: lightgray;
+    }
+</style>
+
+<div class="card scores mt-4">
+    <h5 class="card-header headerColor">Student Scores</h5>
+    <div class="form-group mb-3 m-lg-3" style="display: flex;">
+        <input id="filterInput" type="text" class="form-control short-search" oninput="applyFilter()" placeholder="Search Student..." />
+        <input id="clear-btn" class="btn btn-primary headerColor" style="margin-left: 5px" value="Clear Search" onclick="clearSearch()" />
+        <hr />
+        <hr />
+    </div>
+    <div id="tableContainer" class="card-body tableContainer" style="padding: 1px;">
+        <table id="studentScoreTable" class="table table-striped table-hover scrollTable">
+            <thead class="fixedHeader">
+                <tr>
+                    <th>Details</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Average Score</th>
+                </tr>
+            </thead>
+            <tbody class="scrollContent">
+                @foreach (var student in studentScores)
+                {
+                    if (student.StudentId != previousId)
+                    {
+                        // Retrieved data will have multiple rows for some students. We only want to show one row for each
+                        // student at this point.
+                        previousId = student.StudentId;
+
+                        <tr>
+                            <td><i class="oi oi-pencil" @onclick="() => EditStudent(student)"></i></td>
+                            <td>@student.FirstName</td>
+                            <td>@student.LastName</td>
+                            <td>@student.AverageScore</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="card mt-4" hidden="@(HidePanel)">
+    <h5 class="card-header entriesColor">Weekly Ratings</h5>
+    <div class="card-body">
+        <table id="studentsTable" class="table table-hover" border="1">
+            <thead>
+                <tr>
+                    <th style="width: 150px;">Student</th>
+                    <th style="width: 75px;">Average</th>
+                    <th>&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td valign="top">@selectedStudent.FullName</td>
+                    <td valign="top">@selectedStudent.Average</td>
+                    <td>
+                        <table id="innerTable" class="table table-striped table-hover" border="1">
+                            <thead>
+                                <tr class="entriesColor">
+                                    <th style="width: 150px;">Week</th>
+                                    <th>Score</th>
+                                    <th>Comments</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var scoreDetails in selectedStudent.WeeklyRating)
+                                {
+
+                                    <tr>
+                                        <td>@scoreDetails.Item1</td>
+                                        <td>@scoreDetails.Item2</td>
+                                        <td>@scoreDetails.Item3</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div colspan="8" style="display: flex; justify-content: flex-end; float: left;">
+            <button type="button" @onclick="CloseWindow" class="btn btn-outline-dark form-control" style="margin-top: 10px; width: 100px; margin-left: 5px;">Close</button>
+        </div>
+    </div>
+</div>
+
+@code
+{
+    int previousId = 0;
+
+    public List<StudentScores> studentScores = DBOperations.RetrieveStudentScores();
+    SelectedStudent selectedStudent = new SelectedStudent();
+    public bool HidePanel { get; set; } = true;
+
+    public void EditStudent(StudentScores student)
+    {
+        var scoresAndComments = studentScores
+            .Where(s => s.StudentId == student.StudentId)
+            .Select(s => new Tuple<string, double, string>(s.Week, s.Score, s.Comments))
+            .ToList();
+
+        selectedStudent = new SelectedStudent()
+        {
+            FirstName = student.FirstName,
+            LastName = student.LastName,
+            FullName = student.FirstName + " " + student.LastName,
+            Average = student.AverageScore,
+            WeeklyRating = scoresAndComments
+        };
+
+        HidePanel = false;
+    }
+
+    public string GetFullName(string firstName, string lastName)
+    {
+        return string.Concat(firstName, lastName);
+    }
+
+    public void CloseWindow()
+    {
+        HidePanel = true;
+    }
+
+    public class SelectedStudent
+    {
+        public SelectedStudent()
+        {
+            WeeklyRating = new List<Tuple<string, double, string>>();
+        }
+
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string FullName { get; set; }
+        public double Score { get; set; }
+        public List<Tuple<string, double, string>> WeeklyRating { get; set; }
+        public double Average { get; set; }
+        public string Comments { get; set; }
+    }
+}
+<script type="text/javascript">
+ // Listen for input changes
+    document.getElementById('filterInput').addEventListener('input', function() {
+        var filterValue = this.value.toLowerCase();
+        var tableRows = document.querySelectorAll('#studentScoreTable tbody tr');
+
+        // Filter the rows
+        tableRows.forEach(function(row) {
+            var rowText = row.textContent.toLowerCase();
+            row.style.display = rowText.includes(filterValue) ? 'table-row' : 'none';
+        });
+    });
+
+    function clearSearch() {
+        var filterInput = document.getElementById('filterInput');
+        var tableRows = document.querySelectorAll('#studentScoreTable tbody tr');
+
+        // Clear the input field
+        filterInput.value = "";
+
+        // Reset the display of all table rows
+        tableRows.forEach(function(row) {
+            row.style.display = 'table-row';
+        });
+    }
+</script>

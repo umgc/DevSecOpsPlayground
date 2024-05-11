@@ -79,10 +79,6 @@ namespace CaPPMS
 
         private string GetClientSecret()
         {
-            // Return programmer specified secrets
-            // return string.Empty;
-
-            // Used for Production.
             string secret = System.Environment.GetEnvironmentVariable("GRAPH_SECRET");
 
             if (string.IsNullOrEmpty(secret))

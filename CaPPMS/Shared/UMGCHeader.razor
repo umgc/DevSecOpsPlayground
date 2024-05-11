@@ -23,12 +23,19 @@
                     </NavLink>
                 </li>
                 <li class="nav-item">
-                   
+
                     <NavLink class="nav-link" href="faqList">
                         <span class="oi oi-list-rich" aria-hidden="true"></span> FAQ List
                     </NavLink>
                 </li>
-               
+
+                <li class="nav-item">
+
+                    <NavLink class="nav-link" href="studentreviews">
+                        <span class="oi oi-bolt" aria-hidden="true"></span> Student Reviews
+                    </NavLink>
+                </li>
+
                 <AuthorizeView>
                     <Authorized>
                         <li class="nav-item">
@@ -38,6 +45,17 @@
                         </li>
                     </Authorized>
                 </AuthorizeView>
+
+                <AuthorizeView>
+                    <Authorized>
+                        <li class="nav-item">
+                            <NavLink class="nav-link" href="studentreviews">
+                                <span class="oi oi-bolt" aria-hidden="true"></span> Student Reviews
+                            </NavLink>
+                        </li>
+                    </Authorized>
+                </AuthorizeView>
+
                 <li class="nav-item">
                     <NavLink>
                         <LoginDisplay />
