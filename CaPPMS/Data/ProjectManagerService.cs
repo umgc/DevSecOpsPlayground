@@ -34,19 +34,21 @@ namespace CaPPMS.Data
 
             var projectsDbFile = new FileInfo(localProjectDbFilePath);
 
-            if (projectsDbFile.Exists)
-            {
-                var ideas = JsonConvert.DeserializeObject<Dictionary<Guid, ProjectInformation>>(File.ReadAllText(projectsDbFile.FullName));
-                foreach (var idea in ideas)
-                {
-                    idea.Value.IsDirty = false;
-                    _ = ProjectIdeas.TryAdd(idea.Key, idea.Value);
-                }
-            }
 
             FileManager = new LocalProjectFilesManager();
 
             ProjectIdeasChanged += ProjectManagerService_ProjectIdeasChanged;
+            if (!projectsDbFile.Exists)
+            {
+                return;
+            }
+
+            var ideas = JsonConvert.DeserializeObject<Dictionary<Guid, ProjectInformation>>(File.ReadAllText(projectsDbFile.FullName));
+            foreach (var idea in ideas)
+            {
+                idea.Value.IsDirty = false;
+                _ = ProjectIdeas.TryAdd(idea.Key, idea.Value);
+            }
         }
 
         public ConcurrentDictionary<Guid, ProjectInformation> ProjectIdeas { get; } = new ();
@@ -126,6 +128,7 @@ namespace CaPPMS.Data
             }
             return await this.FileManager.DeleteAsync(file.Location, user);
         }
+
         public async Task<bool> UpdateAsync(ProjectInformation idea)
         {
             if (ProjectIdeas.TryGetValue(idea.ProjectID, out ProjectInformation existingProjectInformation))
@@ -252,23 +255,6 @@ namespace CaPPMS.Data
             }
         }
 
-        private string GetConfigurationSetting(string key)
-        {
-            foreach (var item in Program.HostProperties)
-            {
-#pragma warning disable CS0252 // Possible unintended reference comparison; Left side is type
-                if (item.Key == typeof(Microsoft.AspNetCore.Hosting.WebHostBuilderContext))
-#pragma warning restore CS0252 // Possible unintended reference comparison; Left side is type
-                {
-                    var context = item.Value as Microsoft.AspNetCore.Hosting.WebHostBuilderContext;
-
-                    return context.Configuration[key];
-                }
-            }
-
-            return string.Empty;
-        }
-
         public void CompleteProject(ProjectInformation idea)
         {
             Guid projID = idea.ProjectID;
@@ -317,19 +303,27 @@ namespace CaPPMS.Data
             return new List<Comment>();
         }
 
-        private void ProjectManagerService_ProjectIdeasChanged(object sender, EventArgs e)
+        private string GetConfigurationSetting(string key)
+        {
+            foreach (var item in Program.HostProperties)
+            {
+                if (item.Key is Microsoft.AspNetCore.Hosting.WebHostBuilderContext context)
+                {
+                    return context.Configuration[key];
+                }
+            }
+
+            return string.Empty;
+        }
+
+        private async void ProjectManagerService_ProjectIdeasChanged(object sender, EventArgs e)
         {
             // Let's build a gate to control flow. It might be a bit extra but it should be fun.
-            Task.Run(() =>
+            await Task.Run(() =>
             {
                 // Update the file backed db.
                 lock (fileSyncLock)
                 {
-                    if (File.Exists(localProjectDbFilePath))
-                    {
-                        File.Delete(localProjectDbFilePath);
-                    }
-
                     File.WriteAllText(localProjectDbFilePath, JsonConvert.SerializeObject(ProjectIdeas, Formatting.Indented));
                 }
             });
