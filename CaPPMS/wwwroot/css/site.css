@@ -14,12 +14,21 @@ a,
     color: #fff;
     background-color: #da1a32;
     border-color: #a30606;
+    margin:3px
 }
 
 .btn-secondary {
     color: #000;
     background-color: #fdbf38;
     border-color: #008484;
+    margin:3px
+}
+
+.btn-warning {
+    color: azure;
+    background-color: darkred;
+    border-color: #008484;
+    margin:3px
 }
 
 .content {

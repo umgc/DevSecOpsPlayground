@@ -8,7 +8,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Identity.Web.UI;
 using CaPPMS.Data;
 
-using System.Linq;
 using System;
 
 namespace CaPPMS
@@ -25,17 +24,15 @@ namespace CaPPMS
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            string[] initialScopes = Configuration.GetValue<string>("Graph:Scopes")?.Split(' ');
+            string[] initialScopes = Configuration.GetValue<string>("Graph:Scopes")?
+                .Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+            Configuration["AzureAd:ClientSecret"] = GetClientSecret();
 
             services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
                 .AddMicrosoftIdentityWebApp(Configuration)
                 .EnableTokenAcquisitionToCallDownstreamApi(initialScopes)
                 .AddMicrosoftGraph(Configuration.GetSection("Graph"))
                 .AddInMemoryTokenCaches();
-
-            string tenantId = Configuration.GetValue<string>("AzureAd:TenantId");
-            services.Configure<MicrosoftIdentityOptions>(
-               options => { options.ClientSecret = GetClientSecret(); });
 
             services.AddHttpContextAccessor();
 
@@ -82,19 +79,14 @@ namespace CaPPMS
 
         private string GetClientSecret()
         {
-            // Reading the clientId Graph_Secret is only used for production.
-#if !DEBUG
-            string clientId = System.Environment.GetEnvironmentVariable("GRAPH_SECRET");
+            string secret = System.Environment.GetEnvironmentVariable("GRAPH_SECRET");
 
-            if (string.IsNullOrEmpty(clientId))
+            if (string.IsNullOrEmpty(secret))
             {
                 throw new ArgumentException($"Graph Secret could not be retrieved from the environment variables.");
             }
 
-            return clientId;
-#else
-            return string.Empty;
-#endif
+            return secret;
         }
     }
 }
