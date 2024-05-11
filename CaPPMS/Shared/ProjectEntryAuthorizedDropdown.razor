@@ -38,10 +38,10 @@
                             <td style="padding-top:0px;">Phone:</td>
                         </tr>
                         <tr>
-                            <td style="padding-top:0px;"><InputText @bind-Value="_infoPlaceholder.FirstName" /></td>
-                            <td style="padding-top:0px;"><InputText @bind-Value="_infoPlaceholder.LastName" /></td>
-                            <td style="padding-top:0px;"><InputText @bind-Value="_infoPlaceholder.Email" /></td>
-                            <td style="padding-top:0px;"><InputText @bind-Value="_infoPlaceholder.Phone" /></td>
+                            <td style="padding-top:0px;"><InputText @bind-Value="infoPlaceholder.FirstName" /></td>
+                            <td style="padding-top:0px;"><InputText @bind-Value="infoPlaceholder.LastName" /></td>
+                            <td style="padding-top:0px;"><InputText @bind-Value="infoPlaceholder.Email" /></td>
+                            <td style="padding-top:0px;"><InputText @bind-Value="infoPlaceholder.Phone" /></td>
                         </tr>
                     </table>
                 </td>
@@ -57,10 +57,10 @@
                             <td style="padding-top:0px;">Phone:</td>
                         </tr>
                         <tr>
-                            <td style="padding-top:0px;"><InputText @bind-Value="_infoPlaceholder.SponsorFirstName" /></td>
-                            <td style="padding-top:0px;"><InputText @bind-Value="_infoPlaceholder.SponsorLastName" /></td>
-                            <td style="padding-top:0px;"><InputText @bind-Value="_infoPlaceholder.SponsorEmail" /></td>
-                            <td style="padding-top:0px;"><InputText @bind-Value="_infoPlaceholder.SponsorPhone" /></td>
+                            <td style="padding-top:0px;"><InputText @bind-Value="infoPlaceholder.SponsorFirstName" /></td>
+                            <td style="padding-top:0px;"><InputText @bind-Value="infoPlaceholder.SponsorLastName" /></td>
+                            <td style="padding-top:0px;"><InputText @bind-Value="infoPlaceholder.SponsorEmail" /></td>
+                            <td style="padding-top:0px;"><InputText @bind-Value="infoPlaceholder.SponsorPhone" /></td>
                         </tr>
                     </table>
                 </td>
@@ -75,8 +75,8 @@
 
                         </tr>
                         <tr>
-                            <td style="padding-top:0px;"><InputText @bind-Value="_infoPlaceholder.ProjectTitle" /></td>
-                            <td style="padding-top:0px;"><InputText @bind-Value="_infoPlaceholder.ProjectDescription" /></td>
+                            <td style="padding-top:0px;"><InputText @bind-Value="infoPlaceholder.ProjectTitle" /></td>
+                            <td style="padding-top:0px;"><InputText @bind-Value="infoPlaceholder.ProjectDescription" /></td>
                         </tr>
 
                     </table>
@@ -121,9 +121,9 @@
                                 <td style="padding-top:0px;">Video Link:</td>
                             </tr>
                             <tr>
-                                <td style="padding-top:0px;"><InputText @bind-Value="_infoPlaceholder.Url" /></td>
-                                <td style="padding-top:0px;"><InputText @bind-Value="_infoPlaceholder.Github" /></td>
-                                <td style="padding-top:0px;"><InputText @bind-Value="_infoPlaceholder.VideoLink" /></td>
+                                <td style="padding-top:0px;"><InputText @bind-Value="infoPlaceholder.Url" /></td>
+                                <td style="padding-top:0px;"><InputText @bind-Value="infoPlaceholder.Github" /></td>
+                                <td style="padding-top:0px;"><InputText @bind-Value="infoPlaceholder.VideoLink" /></td>
                             </tr>
 
                         </table>
@@ -266,7 +266,7 @@
 @code {
 
     [Parameter]
-    public ProjectInformation ProjectInformation
+    public ProjectInformation? ProjectInformation
     {
         get
         {
@@ -274,6 +274,11 @@
         }
         set
         {
+            if (!(value is ProjectInformation projectValue))
+            {
+                return;
+            }
+
             projectInformation = value;
             SetupPlaceholder();
             attachmentSelection.Clear();
@@ -281,14 +286,13 @@
             {
                 attachmentSelection.Add(file, false);
             }
-
         }
     }
 
     [CascadingParameter] private Task<AuthenticationState> authenticationState { get; set; }
     [Parameter] public string CollapseEntry { get; set; } = "collapse";
-    private ProjectInformation projectInformation;
-    private ProjectInformation _infoPlaceholder;
+    private ProjectInformation? projectInformation;
+    private ProjectInformation? infoPlaceholder;
     private bool completeClicked = false;
 
     private Dictionary<ProjectFile, bool> attachmentSelection = new Dictionary<ProjectFile, bool>();
@@ -311,7 +315,7 @@
 
     // Should create GitHub Repository
     private bool createGitHubRepository = false;
-    private string gitHubRepositoryName;
+    private string? gitHubRepositoryName;
     private string gitHubError = string.Empty;
 
     protected override void OnInitialized()
@@ -328,20 +332,20 @@
             return;
         }
 
-        _infoPlaceholder = new ProjectInformation();
-        _infoPlaceholder.VideoLink = projectInformation.VideoLink;
-        _infoPlaceholder.ProjectTitle = projectInformation.ProjectTitle;
-        _infoPlaceholder.ProjectDescription = projectInformation.ProjectDescription;
-        _infoPlaceholder.Url = projectInformation.Url;
-        _infoPlaceholder.Github = projectInformation.Github;
-        _infoPlaceholder.FirstName = projectInformation.FirstName;
-        _infoPlaceholder.LastName = projectInformation.LastName;
-        _infoPlaceholder.Email = projectInformation.Email;
-        _infoPlaceholder.Phone = projectInformation.Phone;
-        _infoPlaceholder.SponsorFirstName = projectInformation.SponsorFirstName;
-        _infoPlaceholder.SponsorLastName = projectInformation.SponsorLastName;
-        _infoPlaceholder.SponsorEmail = projectInformation.SponsorEmail;
-        _infoPlaceholder.SponsorPhone = projectInformation.SponsorPhone;
+        infoPlaceholder = new ProjectInformation();
+        infoPlaceholder.VideoLink = projectInformation.VideoLink;
+        infoPlaceholder.ProjectTitle = projectInformation.ProjectTitle;
+        infoPlaceholder.ProjectDescription = projectInformation.ProjectDescription;
+        infoPlaceholder.Url = projectInformation.Url;
+        infoPlaceholder.Github = projectInformation.Github;
+        infoPlaceholder.FirstName = projectInformation.FirstName;
+        infoPlaceholder.LastName = projectInformation.LastName;
+        infoPlaceholder.Email = projectInformation.Email;
+        infoPlaceholder.Phone = projectInformation.Phone;
+        infoPlaceholder.SponsorFirstName = projectInformation.SponsorFirstName;
+        infoPlaceholder.SponsorLastName = projectInformation.SponsorLastName;
+        infoPlaceholder.SponsorEmail = projectInformation.SponsorEmail;
+        infoPlaceholder.SponsorPhone = projectInformation.SponsorPhone;
     }
 
     private async Task DeleteRecord(bool confirmed)
@@ -368,7 +372,7 @@
         if (createGitHubRepository)
         {
             var gitHubOrganization = "umgc";
-            var formattedRepoName = this.gitHubRepositoryName.Replace(' ', '-').ToLower();
+            var formattedRepoName = this.gitHubRepositoryName?.Replace(' ', '-').ToLower();
             try
             {
                 this.gitHubState = "none";
@@ -406,19 +410,19 @@
             return;
         }
 
-        projectInformation.VideoLink = _infoPlaceholder.VideoLink;
-        projectInformation.ProjectTitle = _infoPlaceholder.ProjectTitle;
-        projectInformation.ProjectDescription = _infoPlaceholder.ProjectDescription;
-        projectInformation.Url = _infoPlaceholder.Url;
-        projectInformation.Github = _infoPlaceholder.Github;
-        projectInformation.FirstName = _infoPlaceholder.FirstName;
-        projectInformation.LastName = _infoPlaceholder.LastName;
-        projectInformation.Email = _infoPlaceholder.Email;
-        projectInformation.Phone = _infoPlaceholder.Phone;
-        projectInformation.SponsorFirstName = _infoPlaceholder.SponsorFirstName;
-        projectInformation.SponsorLastName = _infoPlaceholder.SponsorLastName;
-        projectInformation.SponsorEmail = _infoPlaceholder.SponsorEmail;
-        projectInformation.SponsorPhone = _infoPlaceholder.SponsorPhone;
+        projectInformation.VideoLink = infoPlaceholder.VideoLink;
+        projectInformation.ProjectTitle = infoPlaceholder.ProjectTitle;
+        projectInformation.ProjectDescription = infoPlaceholder.ProjectDescription;
+        projectInformation.Url = infoPlaceholder.Url;
+        projectInformation.Github = infoPlaceholder.Github;
+        projectInformation.FirstName = infoPlaceholder.FirstName;
+        projectInformation.LastName = infoPlaceholder.LastName;
+        projectInformation.Email = infoPlaceholder.Email;
+        projectInformation.Phone = infoPlaceholder.Phone;
+        projectInformation.SponsorFirstName = infoPlaceholder.SponsorFirstName;
+        projectInformation.SponsorLastName = infoPlaceholder.SponsorLastName;
+        projectInformation.SponsorEmail = infoPlaceholder.SponsorEmail;
+        projectInformation.SponsorPhone = infoPlaceholder.SponsorPhone;
 
         string link = "";
         if ((!ProjectInformation.Url.StartsWith("http://") && !ProjectInformation.Url.StartsWith("https://")) && ProjectInformation.Url.Length != 0)

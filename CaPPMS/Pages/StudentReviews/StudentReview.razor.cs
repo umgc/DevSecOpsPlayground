@@ -13,6 +13,9 @@ namespace CaPPMS.Pages.StudentReviews
 
         private string username = string.Empty;
         private string log = string.Empty;
+        private int count = -1;
+        private bool isSubmitButtonDisabled = true;
+        private string SelectedWeek = string.Empty;
 
         public StudentReview()
         {
@@ -27,15 +30,11 @@ namespace CaPPMS.Pages.StudentReviews
 
         public List<CompletedReviews> completedReviews = new List<CompletedReviews>();
 
-        public int count = -1;
+        public List<Student>? ClassList { get; set; }
 
-        public bool isSubmitButtonDisabled = true;
+        public List<string>? WeeksList { get; set; }
 
-        public List<Student> ClassList { get; set; }
-
-        public List<string> WeeksList { get; set; }
-
-        public string StatusMessage { get; set; }
+        public string? StatusMessage { get; set; }
 
         public bool HidePanel { get; set; } = true;
 
@@ -66,7 +65,7 @@ namespace CaPPMS.Pages.StudentReviews
 
                             if (rowsAffected > 0)
                             {
-                                Student foundStudent = ClassList.Find(student => student.StudentId == int.Parse(review.ReviewedStudentId));
+                                Student? foundStudent = ClassList?.Find(student => student.StudentId == int.Parse(review.ReviewedStudentId));
 
                                 if (foundStudent != null)
                                 {
@@ -115,8 +114,8 @@ namespace CaPPMS.Pages.StudentReviews
                         {
                             while (reader.Read())
                             {
-                                student.FirstName = reader["FirstName"].ToString();
-                                student.LastName = reader["LastName"].ToString();
+                                student.FirstName = reader["FirstName"]?.ToString();
+                                student.LastName = reader["LastName"]?.ToString();
                             }
                         }
                     }
@@ -134,10 +133,9 @@ namespace CaPPMS.Pages.StudentReviews
             return student.FirstName + " " + student.LastName;
         }
 
-        public string SelectedWeek;
     }
 
-    public class CompletedReviews
+    public struct CompletedReviews
     {
         public string RatedStudent { get; set; }
 

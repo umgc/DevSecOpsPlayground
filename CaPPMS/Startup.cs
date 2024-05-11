@@ -24,9 +24,17 @@ namespace CaPPMS
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            string[] initialScopes = Configuration.GetValue<string>("Graph:Scopes")?
-                .Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
             Configuration["AzureAd:ClientSecret"] = GetClientSecret();
+            string[]? initialScopes = Configuration.GetValue<string>("Graph:Scopes")?
+                .Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+
+            if (initialScopes == null)
+            {
+                initialScopes = new[]
+                {
+                    "user.read"
+                };
+            }
 
             services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
                 .AddMicrosoftIdentityWebApp(Configuration)
@@ -79,7 +87,7 @@ namespace CaPPMS
 
         private string GetClientSecret()
         {
-            string secret = System.Environment.GetEnvironmentVariable("GRAPH_SECRET");
+            string? secret = System.Environment.GetEnvironmentVariable("GRAPH_SECRET");
 
             if (string.IsNullOrEmpty(secret))
             {
