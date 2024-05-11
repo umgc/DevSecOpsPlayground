@@ -128,8 +128,8 @@ namespace CaPPMS.Data
                 var protection = new BranchProtectionSettingsUpdate(
                             new BranchProtectionRequiredReviewsUpdate(false, true, 1));
 
-                _ = gitHubClient.Repository.Branch.UpdateBranchProtection(OrganizationName, RepoName, mainBranch, protection);
-                _ = gitHubClient.Repository.Branch.UpdateBranchProtection(OrganizationName, RepoName, developmentBranch, protection);
+                _ = gitHubClient.Repository.Branch.UpdateBranchProtection(organizationName, RepoName, mainBranch, protection);
+                _ = gitHubClient.Repository.Branch.UpdateBranchProtection(organizationName, RepoName, developmentBranch, protection);
 
             }
             catch (Exception e)
