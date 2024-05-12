@@ -26,7 +26,7 @@ namespace CaPPMS
         {
             Configuration["AzureAd:ClientSecret"] = GetClientSecret();
             string[]? initialScopes = Configuration.GetValue<string>("Graph:Scopes")?
-                .Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                .Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
             if (initialScopes == null)
             {
