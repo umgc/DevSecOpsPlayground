@@ -5,20 +5,15 @@ namespace CaPPMS.Data
 {
     public class Student
     {
-        public Student() 
-        {
-            AssignedTeam = new Teams();
-        }
-
         [Required]
-        public int StudentId { get; set; }
+        public int StudentId { get; set; } = default(int);
 
-        public string FirstName { get; set; }
+        public string? FirstName { get; set; }
 
-        public string LastName { get; set; }
+        public string? LastName { get; set; }
 
-        public string Email { get; set; }
+        public string? Email { get; set; }
 
-        public Teams AssignedTeam { get; set; }
+        public Teams AssignedTeam { get; set; } = new Teams();
     }
 }

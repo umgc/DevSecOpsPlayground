@@ -34,19 +34,27 @@ namespace CaPPMS.Data
 
             var projectsDbFile = new FileInfo(localProjectDbFilePath);
 
-            if (projectsDbFile.Exists)
-            {
-                var ideas = JsonConvert.DeserializeObject<Dictionary<Guid, ProjectInformation>>(File.ReadAllText(projectsDbFile.FullName));
-                foreach (var idea in ideas)
-                {
-                    idea.Value.IsDirty = false;
-                    _ = ProjectIdeas.TryAdd(idea.Key, idea.Value);
-                }
-            }
 
             FileManager = new LocalProjectFilesManager();
 
             ProjectIdeasChanged += ProjectManagerService_ProjectIdeasChanged;
+            if (!projectsDbFile.Exists)
+            {
+                return;
+            }
+
+            var ideas = JsonConvert.DeserializeObject<Dictionary<Guid, ProjectInformation>>(File.ReadAllText(projectsDbFile.FullName));
+
+            if (ideas == null)
+            {
+                return;
+            }
+
+            foreach (var idea in ideas)
+            {
+                idea.Value.IsDirty = false;
+                _ = ProjectIdeas.TryAdd(idea.Key, idea.Value);
+            }
         }
 
         public ConcurrentDictionary<Guid, ProjectInformation> ProjectIdeas { get; } = new ();
@@ -85,7 +93,7 @@ namespace CaPPMS.Data
         {
             string error = string.Empty;
 
-            if (this.ProjectIdeas.TryGetValue(idea.ProjectID, out idea))
+            if (this.ProjectIdeas.TryGetValue(idea.ProjectID, out _))
             {
                 foreach(var file in idea.Attachments)
                 {
@@ -113,7 +121,7 @@ namespace CaPPMS.Data
             return error;
         }
 
-        public async Task<string> RemoveFileAsync(ProjectInformation idea, ProjectFile file, IPrincipal user)
+        public async Task<string?> RemoveFileAsync(ProjectInformation idea, ProjectFile file, IPrincipal user)
         {
             idea.Attachments.Remove(file);
             if (ProjectIdeas.TryUpdate(idea.ProjectID, idea, ProjectIdeas[idea.ProjectID]))
@@ -126,9 +134,10 @@ namespace CaPPMS.Data
             }
             return await this.FileManager.DeleteAsync(file.Location, user);
         }
+
         public async Task<bool> UpdateAsync(ProjectInformation idea)
         {
-            if (ProjectIdeas.TryGetValue(idea.ProjectID, out ProjectInformation existingProjectInformation))
+            if (ProjectIdeas.TryGetValue(idea.ProjectID, out ProjectInformation? existingProjectInformation))
             {
                 foreach (var file in idea.Attachments)
                 {
@@ -152,15 +161,25 @@ namespace CaPPMS.Data
             return false;
         }
 
-        public async Task<string> DeleteAsync(ProjectInformation idea, IPrincipal user)
+        public async Task<string> DeleteAsync(ProjectInformation? idea, IPrincipal user)
         {
+            if (idea == null)
+            {
+                return "Idea was null";
+            }
+
             return await RemoveAsync(idea, user);
         }
         
-        public async Task<string> ExportAsync(ProjectInformation idea)
+        public async Task<string> ExportAsync(ProjectInformation? idea)
         {
+            if (idea == null)
+            {
+                return "Idea was null";
+            }
+
             int port = 443;
-            string hostName = GetConfigurationSetting("Host");
+            string hostName = GetConfigurationSetting("Host") ?? "localhost";
 
             if (hostName.Equals("localhost", StringComparison.OrdinalIgnoreCase))
             {
@@ -234,7 +253,7 @@ namespace CaPPMS.Data
                     {
                         string host = port == 443 ? hostName : $"{hostName}:{port}";
 
-                        if (Uri.TryCreate($"https://{host}/download/{attachedFile.Location}", UriKind.Absolute, out Uri uri))
+                        if (Uri.TryCreate($"https://{host}/download/{attachedFile.Location}", UriKind.Absolute, out Uri? uri))
                         {
                             var ideaLink = new Anchor(attachedFile.Name, FontFactory.GetFont("Roboto", 12f, BaseColor.Red));
                             ideaLink.Reference = uri.AbsoluteUri;
@@ -252,28 +271,11 @@ namespace CaPPMS.Data
             }
         }
 
-        private string GetConfigurationSetting(string key)
-        {
-            foreach (var item in Program.HostProperties)
-            {
-#pragma warning disable CS0252 // Possible unintended reference comparison; Left side is type
-                if (item.Key == typeof(Microsoft.AspNetCore.Hosting.WebHostBuilderContext))
-#pragma warning restore CS0252 // Possible unintended reference comparison; Left side is type
-                {
-                    var context = item.Value as Microsoft.AspNetCore.Hosting.WebHostBuilderContext;
-
-                    return context.Configuration[key];
-                }
-            }
-
-            return string.Empty;
-        }
-
         public void CompleteProject(ProjectInformation idea)
         {
             Guid projID = idea.ProjectID;
             ICollection<Guid> ids = ProjectIdeas.Keys;
-            if (ProjectIdeas.TryGetValue(idea.ProjectID, out ProjectInformation project))
+            if (ProjectIdeas.TryGetValue(idea.ProjectID, out ProjectInformation? project))
             {
                 project.Status = idea.Status;
                 project.SemesterTerm = idea.SemesterTerm;
@@ -285,7 +287,7 @@ namespace CaPPMS.Data
 
         public void AddComment(Comment comment)
         {
-            if(ProjectIdeas.TryGetValue(comment.ProjectID, out ProjectInformation project))
+            if(ProjectIdeas.TryGetValue(comment.ProjectID, out ProjectInformation? project))
             {
                 project.Comments.Add(comment);
                 ProjectIdeasChanged?.Invoke(ProjectIdeas.Values, EventArgs.Empty);
@@ -294,7 +296,7 @@ namespace CaPPMS.Data
 
         public void DeleteComment(Comment comment)
         {
-            if (ProjectIdeas.TryGetValue(comment.ProjectID, out ProjectInformation project))
+            if (ProjectIdeas.TryGetValue(comment.ProjectID, out ProjectInformation? project))
             {
                 project.Comments.Remove(comment.CommentId);
                 ProjectIdeasChanged?.Invoke(ProjectIdeas.Values, EventArgs.Empty);
@@ -303,7 +305,7 @@ namespace CaPPMS.Data
 
         public IEnumerable<Comment> GetComments(Guid projectID)
         {
-            if(ProjectIdeas.TryGetValue(projectID, out ProjectInformation project))
+            if(ProjectIdeas.TryGetValue(projectID, out ProjectInformation? project))
             {
                 List<Comment> comments = new List<Comment>();
                 foreach(Comment comment in project.Comments.Values)
@@ -317,19 +319,27 @@ namespace CaPPMS.Data
             return new List<Comment>();
         }
 
-        private void ProjectManagerService_ProjectIdeasChanged(object sender, EventArgs e)
+        private string? GetConfigurationSetting(string key)
+        {
+            foreach (var item in Program.HostProperties)
+            {
+                if (item.Key is Microsoft.AspNetCore.Hosting.WebHostBuilderContext context)
+                {
+                    return context.Configuration[key];
+                }
+            }
+
+            return string.Empty;
+        }
+
+        private async void ProjectManagerService_ProjectIdeasChanged(object? sender, EventArgs? e)
         {
             // Let's build a gate to control flow. It might be a bit extra but it should be fun.
-            Task.Run(() =>
+            await Task.Run(() =>
             {
                 // Update the file backed db.
                 lock (fileSyncLock)
                 {
-                    if (File.Exists(localProjectDbFilePath))
-                    {
-                        File.Delete(localProjectDbFilePath);
-                    }
-
                     File.WriteAllText(localProjectDbFilePath, JsonConvert.SerializeObject(ProjectIdeas, Formatting.Indented));
                 }
             });

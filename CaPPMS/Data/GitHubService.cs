@@ -94,9 +94,9 @@ namespace CaPPMS.Data
             }).ConfigureAwait(false);
         }
 
-        public async Task<string> DoAllTasks(string organizationName, string RepoName, string description)
+        public async Task<string> DoAllTasks(string organizationName, string? RepoName, string description)
         {
-            if (RepoName is null)
+            if (RepoName == null)
             {
                 throw new ArgumentNullException(nameof(RepoName));
             }

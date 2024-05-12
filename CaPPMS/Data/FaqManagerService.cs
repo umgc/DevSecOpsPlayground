@@ -10,7 +10,7 @@ namespace CaPPMS.Data
 {
     public class FaqManagerService
     {
-        public static event EventHandler FaqsChanged;
+        public static event EventHandler? FaqsChanged;
 
         private readonly string localFaqDb;
 
@@ -30,10 +30,9 @@ namespace CaPPMS.Data
 
             var faqDbFile = new FileInfo(localFaqDb);
 
-            if (faqDbFile.Exists)
+            if (faqDbFile.Exists
+                && JsonConvert.DeserializeObject<Dictionary<Guid, FaqInformation>>(File.ReadAllText(faqDbFile.FullName)) is Dictionary<Guid, FaqInformation> faqs)
             {
-                var faqs = JsonConvert.DeserializeObject<Dictionary<Guid, FaqInformation>>(File.ReadAllText(faqDbFile.FullName));
-
                 foreach (var faq in faqs)
 
                 {
@@ -84,7 +83,7 @@ namespace CaPPMS.Data
             return Task.FromResult(completed);
         }
 
-        private void FaqManagerService_FaqsChanged(object sender, EventArgs e)
+        private void FaqManagerService_FaqsChanged(object? sender, EventArgs? e)
         {
             var tempFile = new FileInfo(Path.Combine(localFaqDb + ".temp"));
 

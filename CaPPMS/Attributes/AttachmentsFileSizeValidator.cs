@@ -23,9 +23,12 @@ namespace CaPPMS.Attributes
             return $"Max file size ({maxFileSize}) exceeded on: {files}.";
         }
 
-        protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+        protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
         {
-            var idea = validationContext.ObjectInstance as ProjectInformation;
+            if (!(validationContext.ObjectInstance is ProjectInformation idea))
+            {
+                return new ValidationResult("Input is not an idea");
+            }
 
             badFiles.Clear();
 

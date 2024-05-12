@@ -15,9 +15,12 @@ namespace CaPPMS.Attributes
 
         public string GetErrorMessage() => $"Exceeded max number of files. Max:{maxNumberOfFiles}.";
 
-        protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+        protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
         {
-            var idea = validationContext.ObjectInstance as ProjectInformation;
+            if (!(validationContext.ObjectInstance is ProjectInformation idea))
+            {
+                return new ValidationResult("Input is not an idea");
+            }
 
             return idea.Attachments.Count > maxNumberOfFiles ? new ValidationResult(GetErrorMessage()) : ValidationResult.Success;
         }
