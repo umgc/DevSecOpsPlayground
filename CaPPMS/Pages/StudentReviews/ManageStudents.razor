@@ -30,11 +30,19 @@
         background-color: rgb(30,30,120);
         color: white;
     }
+        .headerColorStudentDirectory {
+            background-color: rgb(243, 149, 9);
+            color: rgb(7, 6, 6);
+        }
 
     .entriesColor {
         background-color: rgb(51,16,90);
         color: white;
     }
+         .entriesColorHeader {
+        background-color: rgb(243, 149, 9);
+            color: rgb(7, 6, 6);
+         }
 
     .short-search {
         width: 300px; /* Adjust as needed */
@@ -80,7 +88,7 @@
 </style>
 
 <div class="card classlist">
-    <h5 class="card-header headerColor">Student Directory</h5>
+    <h5 class="card-header headerColorStudentDirectory">Student Directory</h5>
     <div class="form-group mt-2 mb-2">
         <input id="filterInput" type="text" class="form-control short-search" oninput="applyFilter()" placeholder="Search Student..." />
         <input id="clear-btn" class="btn btn-primary headerColor" style="margin-left: 5px" value="Clear Search" onclick="clearSearch()" />
@@ -95,10 +103,10 @@
             <table id="manageStudentsTable" class="table table-striped table-hover scrollTable">
                 <thead class="fixedHeader">
                     <tr>
-                        <th>Edit</th>
-                        <th>First Name</th>
-                        <th>Last Name</th>
-                        <th>Assigned Team</th>
+                        <th style="background-color:  #960513;  color: white;">Edit</th>
+                        <th style="background-color:  #960513;  color: white;">First Name</th>
+                        <th style="background-color:  #960513;  color: white;">Last Name</th>
+                        <th style="background-color:  #960513;  color: white;">Assigned Team</th>
                     </tr>
                 </thead>
                 <tbody class="scrollContent">
@@ -129,14 +137,14 @@
 
 <div class="editStudentContainer" style="display: flex; justify-content: center;">
     <div class="card" style="width: 750px; margin-top: 10px;" hidden="@(HidePanel)">
-        <h5 class="card-header entriesColor"> Edit Selected Student</h5>
+        <h5 class="card-header entriesColorHeader"> Edit Selected Student</h5>
         <div class="card-body">
             <table id="studentsTable" class="table table-striped table-hover" style="background-color: lightgrey">
                 <thead>
                     <tr>
-                        <th>Student</th>
-                        <th>Score</th>
-                        <th>Team</th>
+                        <th style="background-color:  #960513;  color: white;">Student</th>
+                        <th style="background-color:  #960513;  color: white;">Score</th>
+                        <th style="background-color:  #960513;  color: white;">Team</th>
                     </tr>
                     <tr>
                         <td><InputText @bind-Value="@selectedStudent.FirstName" class="form-control" style="width: 200px;" /></td>

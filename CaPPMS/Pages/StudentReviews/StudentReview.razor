@@ -19,25 +19,30 @@
     }
 
     .card-header {
-        color: white;
+        color: #030303;
         font-size: 25px;
     }
 
         .card-header.description {
-            background-color: rgb(30, 30, 120);
+            background-color: rgb(243, 149, 9);
         }
 
         .card-header.evaluator {
-            background-color: rgb(46, 46, 131);
+            background-color: rgb(243, 149, 9);
         }
 
         .card-header.student {
-            background-color: rgb(51, 16, 90);
+             background-color: rgb(243, 149, 9);
         }
 
         .card-header.entries {
-            background-color: rgb(68, 19, 124);
+             background-color: rgb(243, 149, 9);
         }
+
+     .custom-table-header {
+        background-color: #960513;
+        color: white;
+    }
 
     .form-label {
         font-size: 18px;
@@ -141,10 +146,10 @@
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th>Week</th>
-                        <th>Evaluated Team Member</th>
-                        <th>Score</th>
-                        <th>Comments</th>
+                        <th class="custom-table-header">Week</th>
+                        <th class="custom-table-header">Evaluated Team Member</th>
+                        <th class="custom-table-header">Score</th>
+                        <th class="custom-table-header">Comments</th>
                     </tr>
                 </thead>
                 <tbody>
