@@ -21,11 +21,19 @@
         background-color: rgb(30,30,120);
         color: white;
     }
+        .headerColorStudentScore{
+           background-color: rgb(243, 149, 9);
+            color: rgb(7, 6, 6); 
+        }
 
     .entriesColor {
         background-color: rgb(51,16,90);
         color: white;
     }
+        .entriesColorWeeklyRatings{
+            background-color: rgb(243, 149, 9);
+            color: rgb(7, 6, 6); 
+        }
 
     .card-body {
         max-height: calc(520px - 2.5rem); /* Set max height for the card body, considering the card header height */
@@ -81,7 +89,7 @@
 </style>
 
 <div class="card scores mt-4">
-    <h5 class="card-header headerColor">Student Scores</h5>
+    <h5 class="card-header headerColorStudentScore">Student Scores</h5>
     <div class="form-group mb-3 m-lg-3" style="display: flex;">
         <input id="filterInput" type="text" class="form-control short-search" oninput="applyFilter()" placeholder="Search Student..." />
         <input id="clear-btn" class="btn btn-primary headerColor" style="margin-left: 5px" value="Clear Search" onclick="clearSearch()" />
@@ -92,10 +100,10 @@
         <table id="studentScoreTable" class="table table-striped table-hover scrollTable">
             <thead class="fixedHeader">
                 <tr>
-                    <th>Details</th>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th>Average Score</th>
+                    <th style="background-color:  #960513;  color: white;">Details</th>
+                    <th style="background-color:  #960513;  color: white;">First Name</th>
+                    <th style="background-color:  #960513;  color: white;">Last Name</th>
+                    <th style="background-color:  #960513;  color: white;">Average Score</th>
                 </tr>
             </thead>
             <tbody class="scrollContent">
@@ -121,14 +129,14 @@
 </div>
 
 <div class="card mt-4" hidden="@(HidePanel)">
-    <h5 class="card-header entriesColor">Weekly Ratings</h5>
+    <h5 class="card-header entriesColorWeeklyRatings">Weekly Ratings</h5>
     <div class="card-body">
         <table id="studentsTable" class="table table-hover" border="1">
             <thead>
                 <tr>
-                    <th style="width: 150px;">Student</th>
-                    <th style="width: 75px;">Average</th>
-                    <th>&nbsp;</th>
+                    <th style="width: 150px; background-color:  #960513;  color: white;">Student</th>
+                    <th style="width: 75px; background-color:  #960513;  color: white;">Average</th>
+                    <th style="background-color:  #960513;  color: white;">&nbsp;</th>
                 </tr>
             </thead>
             <tbody>
@@ -139,9 +147,9 @@
                         <table id="innerTable" class="table table-striped table-hover" border="1">
                             <thead>
                                 <tr class="entriesColor">
-                                    <th style="width: 150px;">Week</th>
-                                    <th>Score</th>
-                                    <th>Comments</th>
+                                    <th style="width: 150px; background-color: rgb(243, 149, 9); color: rgb(7, 6, 6);">Week</th>
+                                    <th style="background-color: rgb(243, 149, 9); color: rgb(7, 6, 6);">Score</th>
+                                    <th style="background-color: rgb(243, 149, 9); color: rgb(7, 6, 6);">Comments</th>
                                 </tr>
                             </thead>
                             <tbody>
