@@ -171,30 +171,34 @@ namespace CaPPMS.Data
             return result;
         }
 
-        /// <summary>
-        /// Update Student to team assignment.
-        /// </summary>
-        /// <param name="studentId">Student ID.</param>
-        /// <param name="teamId">Team ID</param>
-        /// <returns>True if successful.</returns>
-        public bool UpdateTeamAssignment(int studentId, int teamId)
+        public static bool UpdateTeamAssignment(int studentId, int teamId)
         {
-            string query = "UPDATE Students Set TeamId = @teamId WHERE StudentId = @studentId";
-            List<SqliteParameter> parameters =
-            [
-                new SqliteParameter("@teamId", teamId),
-                new SqliteParameter("@studentId", studentId),
-            ];
-            int rowsAffected = ExecuteNonQuery(query, [.. parameters]);
-            return rowsAffected > 0;
+            bool updateSuccessful = false;
+
+            try
+            {
+                string query = "UPDATE Students Set TeamId = @teamId WHERE StudentId = @studentId";
+
+                using (SqliteConnection connection = new(ConnectionString))
+                {
+                    connection.Open();
+
+                    using (SqliteCommand command = new SqliteCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@teamId", teamId);
+                        command.Parameters.AddWithValue("@studentId", studentId);
+
+                        int rowsAffected = command.ExecuteNonQuery();
+                        updateSuccessful = rowsAffected > 0;
+                    }
+                }
+            }
+            catch(Exception ex) { Console.WriteLine(ex.ToString()); }
+
+            return updateSuccessful;
         }
 
-        /// <summary>
-        /// Return team for student.
-        /// </summary>
-        /// <param name="username"></param>
-        /// <returns></returns>
-        public int RetrieveUsersTeam(string username)
+        public static int RetrieveUsersTeam(string username)
         {
             int teamId = -1;
             string query = "SELECT TeamId FROM Students WHERE Email = @email";
@@ -210,22 +214,24 @@ namespace CaPPMS.Data
             return teamId;
         }
 
-        /// <summary>
-        /// Add Student to the database.
-        /// </summary>
-        /// <param name="student">Student to add.</param>
-        public void AddStudent(Student student)
+        public static void LoadStudent(Student student)
         {
-            var insertCommand = @"
-INSERT INTO Students (FirstName, LastName, Email, TeamId)
-VALUES (@FirstName, @LastName, @Email, @TeamId)";
-            List<SqliteParameter> parameters =
-            [
-                new SqliteParameter("@FirstName", student.FirstName),
-                new SqliteParameter("@LastName", student.LastName),
-                new SqliteParameter("@Email", student.Email),
-                new SqliteParameter("@TeamId", student.AssignedTeam.TeamId)
-            ];
+            using (SqliteConnection connection = new(ConnectionString))
+            {
+                connection.Open();
+
+                var insertCommand = @"INSERT INTO Students (FirstName, LastName, Email, TeamId)
+                VALUES (@FirstName, @LastName, @Email, @TeamId)";
+
+                using (SqliteCommand command = new(insertCommand, connection))
+                {
+                    command.Parameters.AddWithValue("@FirstName", student.FirstName);
+                    command.Parameters.AddWithValue("@LastName", student.LastName);
+                    command.Parameters.AddWithValue("@Email", student.Email);
+                    command.Parameters.AddWithValue("@TeamId", student.AssignedTeam.TeamId);
+
+                    command.ExecuteNonQuery();
+                }
 
             ExecuteNonQuery(insertCommand, [.. parameters]);
         }
