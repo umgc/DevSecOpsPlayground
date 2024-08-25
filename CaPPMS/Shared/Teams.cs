@@ -1,4 +1,4 @@
-﻿namespace CaPPMS.Data
+﻿namespace CaPPMS.Shared
 {
     public class Teams
     {
