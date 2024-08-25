@@ -89,7 +89,7 @@ namespace CaPPMS.Data
                 }
                 catch (AggregateException e)
                 {
-                    Console.Error.WriteLine($"E: Unable to set branch protection - {e.Message}");
+                    Console.Error.WriteLine($"Unable to set branch protection - Error:{e.Message}");
                 }
             }).ConfigureAwait(false);
         }
@@ -128,8 +128,8 @@ namespace CaPPMS.Data
                 var protection = new BranchProtectionSettingsUpdate(
                             new BranchProtectionRequiredReviewsUpdate(false, true, 1));
 
-                _ = gitHubClient.Repository.Branch.UpdateBranchProtection(OrganizationName, RepoName, mainBranch, protection);
-                _ = gitHubClient.Repository.Branch.UpdateBranchProtection(OrganizationName, RepoName, developmentBranch, protection);
+                _ = gitHubClient.Repository.Branch.UpdateBranchProtection(organizationName, RepoName, mainBranch, protection);
+                _ = gitHubClient.Repository.Branch.UpdateBranchProtection(organizationName, RepoName, developmentBranch, protection);
 
             }
             catch (Exception e)
