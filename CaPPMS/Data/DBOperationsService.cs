@@ -159,6 +159,12 @@ namespace CaPPMS.Data
             return result;
         }
 
+        /// <summary>
+        /// Update Student to team assignment.
+        /// </summary>
+        /// <param name="studentId">Student ID.</param>
+        /// <param name="teamId">Team ID</param>
+        /// <returns>True if successful.</returns>
         public static bool UpdateTeamAssignment(int studentId, int teamId)
         {
             bool updateSuccessful = false;
@@ -181,11 +187,19 @@ namespace CaPPMS.Data
                     }
                 }
             }
-            catch(Exception ex) { Console.WriteLine(ex.ToString()); }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
 
             return updateSuccessful;
         }
 
+        /// <summary>
+        /// Return team for student.
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns></returns>
         public static int RetrieveUsersTeam(string username)
         {
             int teamId = -1;
@@ -217,7 +231,11 @@ namespace CaPPMS.Data
             return teamId;
         }
 
-        public static void LoadStudent(Student student)
+        /// <summary>
+        /// Add Student to the database.
+        /// </summary>
+        /// <param name="student">Student to add.</param>
+        public static void AddStudent(Student student)
         {
             using (SqliteConnection connection = new(ConnectionString))
             {
