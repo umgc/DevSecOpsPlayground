@@ -41,25 +41,45 @@
     <EmbeddedResource Remove="StudentReviews\**" />
     <None Remove="StudentReviews\**" />
   </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="SQLScripts\ReadStudentScoreByStudent.sql" />
+    <None Remove="SQLScripts\ReadStudentScoreDetails.sql" />
+    <None Remove="SQLScripts\ReadStudentScores.sql" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="SQLScripts\ReadStudentScoreByStudent.sql" />
+    <EmbeddedResource Include="SQLScripts\ReadStudentScores.sql" />
+    <EmbeddedResource Include="SQLScripts\ReadStudentScoreDetails.sql" />
+  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="BlazorPro.Spinkit" Version="1.2.0" />
-    <PackageReference Include="iTextSharp.LGPLv2.Core" Version="3.4.19" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.AzureAD.UI" Version="6.0.29" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.4" NoWarn="NU1605" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="8.0.4" NoWarn="NU1605" />
-    <PackageReference Include="Microsoft.Data.Sqlite" Version="8.0.4" />
+    <PackageReference Include="iTextSharp.LGPLv2.Core" Version="3.4.21" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.AzureAD.UI" Version="6.0.33" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.8" NoWarn="NU1605" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="8.0.8" NoWarn="NU1605" />
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="8.0.8" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
-    <PackageReference Include="Microsoft.FeatureManagement" Version="3.3.0" />
-    <PackageReference Include="Microsoft.FeatureManagement.AspNetCore" Version="3.3.0" />
-    <PackageReference Include="Microsoft.Identity.Client" Version="4.61.0" />
-    <PackageReference Include="Microsoft.Identity.Web" Version="2.18.1" />
-    <PackageReference Include="Microsoft.Identity.Web.MicrosoftGraph" Version="2.18.1" />
-    <PackageReference Include="Microsoft.Identity.Web.UI" Version="2.18.1" />
-    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.20.1" />
+    <PackageReference Include="Microsoft.FeatureManagement" Version="3.5.0" />
+    <PackageReference Include="Microsoft.FeatureManagement.AspNetCore" Version="3.5.0" />
+    <PackageReference Include="Microsoft.Identity.Client" Version="4.64.0" />
+    <PackageReference Include="Microsoft.Identity.Web" Version="3.1.0" />
+    <PackageReference Include="Microsoft.Identity.Web.MicrosoftGraph" Version="3.1.0" />
+    <PackageReference Include="Microsoft.Identity.Web.UI" Version="3.1.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="Octokit" Version="11.0.1" />
-    <PackageReference Include="System.Drawing.Common" Version="8.0.4" />
+    <PackageReference Include="Octokit" Version="13.0.1" />
+    <PackageReference Include="System.Drawing.Common" Version="8.0.8" />
     <PackageReference Include="System.Text.Encoding.CodePages" Version="8.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="SQL_Creation\CaPPMS_Table_Generation.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SQL_Creation\StudentDataBaseCreation.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 </Project>
