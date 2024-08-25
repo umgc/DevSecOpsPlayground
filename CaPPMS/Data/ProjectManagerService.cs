@@ -14,7 +14,7 @@ namespace CaPPMS.Data
 {
     public class ProjectManagerService : IIdeaManager, ICommentManager
     {
-        public static event EventHandler ProjectIdeasChanged;
+        public static event EventHandler? ProjectIdeasChanged;
 
         private static readonly object fileSyncLock = new object();
         private readonly string localProjectDbFilePath;
@@ -337,10 +337,12 @@ namespace CaPPMS.Data
             // Let's build a gate to control flow. It might be a bit extra but it should be fun.
             await Task.Run(() =>
             {
+                ProjectManagerService manager = (ProjectManagerService)this.MemberwiseClone();
+
                 // Update the file backed db.
                 lock (fileSyncLock)
                 {
-                    File.WriteAllText(localProjectDbFilePath, JsonConvert.SerializeObject(ProjectIdeas, Formatting.Indented));
+                    File.WriteAllText(localProjectDbFilePath, JsonConvert.SerializeObject(manager.ProjectIdeas, Formatting.Indented));
                 }
             });
         }

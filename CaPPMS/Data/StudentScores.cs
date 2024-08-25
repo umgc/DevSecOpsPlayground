@@ -2,18 +2,44 @@
 {
     public class StudentScores
     {
-        public int StudentId { get; set; }
+        public StudentScores(long id, string firstName, string lastName)
+        {
+            this.StudentId = id;
+        }
 
-        public string FirstName { get; set; }
+        /// <summary>
+        /// Student ID
+        /// </summary>
+        public long StudentId { get; private set; }
 
-        public string LastName { get; set; }
+        /// <summary>
+        /// Student First name.
+        /// </summary>
+        public string FirstName { get; private set; } = string.Empty;
 
+        /// <summary>
+        /// Student last name.
+        /// </summary>
+        public string LastName { get; private set; } = string.Empty;
+
+        /// <summary>
+        /// Current Score.
+        /// </summary>
         public double Score { get; set; }
 
+        /// <summary>
+        /// Average Score.
+        /// </summary>
         public double AverageScore { get; set; }
 
-        public string Comments { get; set; }
+        /// <summary>
+        /// Comment.
+        /// </summary>
+        public string Comment { get; set; } = string.Empty;
 
-        public string Week { get; set; }
+        /// <summary>
+        /// Week of class.
+        /// </summary>
+        public string Week { get; set; } = string.Empty;
     }
 }

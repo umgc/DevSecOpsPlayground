@@ -1,8 +1,6 @@
 ﻿using CaPPMS.Model;
-using System;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Security.Principal;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -39,7 +37,7 @@ namespace CaPPMS.Data
         /// <inheritdoc/>
         public override Task<string> DeleteAsync(string fileLocation, IPrincipal principal)
         {
-            if (!principal.Identity.IsAuthenticated)
+            if (!principal.Identity?.IsAuthenticated ?? false)
             {
                 return Task.FromResult("User is not authenticated");
             }
@@ -63,7 +61,7 @@ namespace CaPPMS.Data
         }
 
         /// <inheritdoc/>
-        public override async Task<Stream> ReadAsync(string fileLocation)
+        public override async Task<Stream?> ReadAsync(string fileLocation)
         {
             var file = new FileInfo(Path.Combine(FileDirInfo.FullName, fileLocation));
 
