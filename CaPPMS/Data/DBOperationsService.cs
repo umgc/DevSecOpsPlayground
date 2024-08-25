@@ -1,4 +1,5 @@
-﻿using Microsoft.Data.Sqlite;
+﻿using Humanizer;
+using Microsoft.Data.Sqlite;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -6,7 +7,7 @@ using System.Reflection;
 
 namespace CaPPMS.Data
 {
-    public static class DBOperations
+    public static class DBOperationsService
     {
         private const string ConnectionString = @"Data Source=Data\StudentReviews.db";
         private const string RetriveStudentScoreDetailsFileName = "ReadStudentScoreDetails.sql";
@@ -17,13 +18,18 @@ namespace CaPPMS.Data
         private static string readStudentScore;
         private static string readStudentScoreById;
 
-        static DBOperations()
+        static DBOperationsService()
         {
             readStudentScoreDetails = GetResourceData(RetriveStudentScoreDetailsFileName);
             readStudentScore = GetResourceData(ReadStudentScoresFileName);
             readStudentScoreById = GetResourceData(ReadStudentScoreByStudentFileName);
         }
 
+        /// <summary>
+        /// Get Students List
+        /// </summary>
+        /// <param name="teamId">Team ID</param>
+        /// <returns>List of Students</returns>
         public static List<Student> RetrieveStudents(int teamId = -1)
         {
             var students = new List<Student>();
@@ -50,6 +56,10 @@ namespace CaPPMS.Data
             return students;
         }
 
+        /// <summary>
+        /// Get Student scores.
+        /// </summary>
+        /// <returns>List of scores.</returns>
         public static List<StudentScores> RetrieveStudentScores()
         {
             List<StudentScores> studentScores = new();
@@ -57,6 +67,11 @@ namespace CaPPMS.Data
             return studentScores;
         }
 
+        /// <summary>
+        /// Gets list of student scores by student id.
+        /// </summary>
+        /// <param name="studentId"></param>
+        /// <returns></returns>
         public static List<StudentScores> RetrieveStudentScores(int studentId)
         {
             List<StudentScores> studentScores = new ();
@@ -65,6 +80,10 @@ namespace CaPPMS.Data
             return studentScores;
         }
 
+        /// <summary>
+        /// Get student score details.
+        /// </summary>
+        /// <returns>List of student scores.</returns>
         public static List<StudentScores> RetrieveStudentScoreDetails()
         {            
             List<StudentScores> studentScores = new List<StudentScores>();
@@ -72,6 +91,10 @@ namespace CaPPMS.Data
             return studentScores;
         }
 
+        /// <summary>
+        /// Get a team list.
+        /// </summary>
+        /// <returns>List of teams.</returns>
         public static List<Teams> RetrieveTeamList()
         {
             List<Teams> teamList = new List<Teams>();
@@ -112,40 +135,28 @@ namespace CaPPMS.Data
             return teamList;
         }
 
+        /// <summary>
+        /// Get number of weeks for the course.
+        /// </summary>
+        /// <returns></returns>
         public static List<string> RetrieveWeeks()
         {
-            var tempList = new List<string>();
+            string numWeeks = Program.GetConfigurationSetting("CourseWeeks");
 
-            using (SqliteConnection connection = new(ConnectionString))
+            if (string.IsNullOrEmpty(numWeeks))
             {
-                try
-                {
-                    connection.Open();
-
-                    string query = "SELECT WeekNumber FROM Week";
-
-                    using (SqliteCommand command = new(query, connection))
-                    {
-                        using (SqliteDataReader reader = command.ExecuteReader())
-                        {
-                            while (reader.Read())
-                            {
-                                tempList.Add(reader["WeekNumber"].ToString() ?? "");
-                            }
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Error accessing the database: {ex.Message}");
-                }
-                finally
-                {
-                    connection.Close();
-                }
+                numWeeks = "12";
             }
 
-            return tempList;
+            int weeks = int.Parse(numWeeks);
+
+            List<string> result = new List<string>();
+            for (int i = 1; i <= weeks; i++)
+            {
+                result.Add(i.ToWords(WordForm.Normal).ApplyCase(LetterCasing.Sentence));
+            }
+
+            return result;
         }
 
         public static bool UpdateTeamAssignment(int studentId, int teamId)

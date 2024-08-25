@@ -23,9 +23,3 @@ CREATE TABLE "Teams" (
 	PRIMARY KEY("TeamId")
 );
 
-CREATE TABLE "Week" (
-	"WeekId"	INTEGER NOT NULL,
-	"WeekNumber"	TEXT,
-	PRIMARY KEY("WeekId")
-);
-
