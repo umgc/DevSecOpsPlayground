@@ -61,9 +61,9 @@ namespace CaPPMS.Data
 
         public IProjectFileManager FileManager { get; private set; }
 
-        public int MaxNumberOfFiles => Convert.ToInt32(GetConfigurationSetting("MaxNumberOfFiles"));
+        public int MaxNumberOfFiles => Convert.ToInt32(Program.GetConfigurationSetting("MaxNumberOfFiles"));
 
-        public long MaxMBSizePerFile => 1024 * 1024 * Convert.ToInt32(GetConfigurationSetting("MaxMBSizePerFile"));
+        public long MaxMBSizePerFile => 1024 * 1024 * Convert.ToInt32(Program.GetConfigurationSetting("MaxMBSizePerFile"));
 
         public IEnumerable<string> GetIdeaTitles()
         {
@@ -179,11 +179,11 @@ namespace CaPPMS.Data
             }
 
             int port = 443;
-            string hostName = GetConfigurationSetting("Host") ?? "localhost";
+            string hostName = Program.GetConfigurationSetting("Host") ?? "localhost";
 
             if (hostName.Equals("localhost", StringComparison.OrdinalIgnoreCase))
             {
-                port = Convert.ToInt32(GetConfigurationSetting("ASPNETCORE_HTTPS_PORT"));
+                port = Convert.ToInt32(Program.GetConfigurationSetting("ASPNETCORE_HTTPS_PORT"));
             }
 
             // Get the fonts used by UMGC.
@@ -317,19 +317,6 @@ namespace CaPPMS.Data
             }
 
             return new List<Comment>();
-        }
-
-        private string? GetConfigurationSetting(string key)
-        {
-            foreach (var item in Program.HostProperties)
-            {
-                if (item.Key is Microsoft.AspNetCore.Hosting.WebHostBuilderContext context)
-                {
-                    return context.Configuration[key];
-                }
-            }
-
-            return string.Empty;
         }
 
         private async void ProjectManagerService_ProjectIdeasChanged(object? sender, EventArgs? e)
