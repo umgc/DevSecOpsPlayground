@@ -1,5 +1,4 @@
-﻿using Humanizer;
-using Microsoft.Data.Sqlite;
+﻿using Microsoft.Data.Sqlite;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -7,7 +6,7 @@ using System.Reflection;
 
 namespace CaPPMS.Data
 {
-    public class DBOperationsService
+    public static class DBOperations
     {
         private const string ConnectionStringFormat = @"Data Source={0}";
         private const string RetriveStudentScoreDetailsFileName = "ReadStudentScoreDetails.sql";
@@ -18,31 +17,14 @@ namespace CaPPMS.Data
         private static string readStudentScore;
         private static string readStudentScoreById;
 
-        private string connectionString;
-
-        static DBOperationsService()
+        static DBOperations()
         {
             readStudentScoreDetails = GetResourceData(RetriveStudentScoreDetailsFileName);
             readStudentScore = GetResourceData(ReadStudentScoresFileName);
             readStudentScoreById = GetResourceData(ReadStudentScoreByStudentFileName);
         }
 
-        public DBOperationsService(string dboperationsFilePath)
-        {
-            if (string.IsNullOrWhiteSpace(dboperationsFilePath))
-            {
-                dboperationsFilePath = @"Data\StudentReviews.db";
-            }
-
-            connectionString = string.Format(ConnectionStringFormat, dboperationsFilePath);
-        }
-
-        /// <summary>
-        /// Get Students List
-        /// </summary>
-        /// <param name="teamId">Team ID</param>
-        /// <returns>List of Students</returns>
-        public List<Student> RetrieveStudents(int teamId = -1)
+        public static List<Student> RetrieveStudents(int teamId = -1)
         {
             var students = new List<Student>();
             string query = "SELECT StudentId, FirstName, LastName, TeamId FROM Students";
@@ -68,23 +50,14 @@ namespace CaPPMS.Data
             return students;
         }
 
-        /// <summary>
-        /// Get Student scores.
-        /// </summary>
-        /// <returns>List of scores.</returns>
-        public List<StudentScores> RetrieveStudentScores()
+        public static List<StudentScores> RetrieveStudentScores()
         {
             List<StudentScores> studentScores = new();
             ExecuteQuery(readStudentScore, (record) => studentScores.Add(ReadStudentRecord(record)));
             return studentScores;
         }
 
-        /// <summary>
-        /// Gets list of student scores by student id.
-        /// </summary>
-        /// <param name="studentId"></param>
-        /// <returns></returns>
-        public List<StudentScores> RetrieveStudentScores(int studentId)
+        public static List<StudentScores> RetrieveStudentScores(int studentId)
         {
             List<StudentScores> studentScores = new ();
             SqliteParameter parameter = new("@studentId", studentId);
@@ -92,22 +65,14 @@ namespace CaPPMS.Data
             return studentScores;
         }
 
-        /// <summary>
-        /// Get student score details.
-        /// </summary>
-        /// <returns>List of student scores.</returns>
-        public List<StudentScores> RetrieveStudentScoreDetails()
+        public static List<StudentScores> RetrieveStudentScoreDetails()
         {            
             List<StudentScores> studentScores = new List<StudentScores>();
             ExecuteQuery(readStudentScoreDetails, (record) => studentScores.Add(ReadStudentRecord(record)));
             return studentScores;
         }
 
-        /// <summary>
-        /// Get a team list.
-        /// </summary>
-        /// <returns>List of teams.</returns>
-        public List<Teams> RetrieveTeamList()
+        public static List<Teams> RetrieveTeamList()
         {
             List<Teams> teamList = new List<Teams>();
 
@@ -147,28 +112,40 @@ namespace CaPPMS.Data
             return teamList;
         }
 
-        /// <summary>
-        /// Get number of weeks for the course.
-        /// </summary>
-        /// <returns></returns>
-        public List<string> RetrieveWeeks()
+        public static List<string> RetrieveWeeks()
         {
-            string numWeeks = Program.GetConfigurationSetting("CourseWeeks");
+            var tempList = new List<string>();
 
-            if (string.IsNullOrEmpty(numWeeks))
+            using (SqliteConnection connection = new(ConnectionString))
             {
-                numWeeks = "12";
+                try
+                {
+                    connection.Open();
+
+                    string query = "SELECT WeekNumber FROM Week";
+
+                    using (SqliteCommand command = new(query, connection))
+                    {
+                        using (SqliteDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                tempList.Add(reader["WeekNumber"].ToString() ?? "");
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error accessing the database: {ex.Message}");
+                }
+                finally
+                {
+                    connection.Close();
+                }
             }
 
-            int weeks = int.Parse(numWeeks);
-
-            List<string> result = new List<string>();
-            for (int i = 1; i <= weeks; i++)
-            {
-                result.Add(i.ToWords(WordForm.Normal).ApplyCase(LetterCasing.Sentence));
-            }
-
-            return result;
+            return tempList;
         }
 
         public static bool UpdateTeamAssignment(int studentId, int teamId)
