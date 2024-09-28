@@ -1,9 +1,12 @@
 ﻿using Humanizer;
 using Microsoft.Data.Sqlite;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace CaPPMS.Data
 {
@@ -13,12 +16,14 @@ namespace CaPPMS.Data
         private const string RetriveStudentScoreDetailsFileName = "ReadStudentScoreDetails.sql";
         private const string ReadStudentScoresFileName = "ReadStudentScores.sql";
         private const string ReadStudentScoreByStudentFileName = "ReadStudentScoreByStudent.sql";
+        private const string StudentDataBaseCreation = "StudentDataBaseCreation.sql";
 
         private static string readStudentScoreDetails;
         private static string readStudentScore;
         private static string readStudentScoreById;
 
-        private string connectionString;
+        private static volatile int dbBroker;
+        private static readonly TimeSpan brokerTimeout = TimeSpan.FromSeconds(10);
 
         static DBOperationsService()
         {
@@ -27,14 +32,32 @@ namespace CaPPMS.Data
             readStudentScoreById = GetResourceData(ReadStudentScoreByStudentFileName);
         }
 
-        public DBOperationsService(string dboperationsFilePath)
+        private string connectionString;
+        private string databaseFilePath;
+        private ILogger logger;
+
+        public DBOperationsService(string dboperationsFilePath, ILogger logger)
         {
             if (string.IsNullOrWhiteSpace(dboperationsFilePath))
             {
                 dboperationsFilePath = @"Data\StudentReviews.db";
             }
 
-            connectionString = string.Format(ConnectionStringFormat, dboperationsFilePath);
+            // Normalize
+            string fullFilePath = dboperationsFilePath.Replace('/', '\\');
+
+            // Make sure it is a full path
+            fullFilePath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, fullFilePath.Trim('\\')));
+
+            // Make sure full path is in expected location
+            if (!fullFilePath.StartsWith(AppContext.BaseDirectory, StringComparison.OrdinalIgnoreCase))
+            {
+                throw new ArgumentException("The database file path is not in the expected location.");
+            }
+
+            this.connectionString = string.Format(ConnectionStringFormat, fullFilePath);
+            this.databaseFilePath = fullFilePath;
+            this.logger = logger;
         }
 
         /// <summary>
@@ -52,7 +75,7 @@ namespace CaPPMS.Data
             }
 
             SqliteParameter teamParam = new("@teamId", teamId);
-            ExecuteQuery(
+            ExecuteQueryAsync(
                 query,
                 (reader) =>
                 {
@@ -75,7 +98,7 @@ namespace CaPPMS.Data
         public List<StudentScores> RetrieveStudentScores()
         {
             List<StudentScores> studentScores = new();
-            ExecuteQuery(readStudentScore, (record) => studentScores.Add(ReadStudentRecord(record)));
+            ExecuteQueryAsync(readStudentScore, (record) => studentScores.Add(ReadStudentRecord(record)));
             return studentScores;
         }
 
@@ -88,7 +111,7 @@ namespace CaPPMS.Data
         {
             List<StudentScores> studentScores = new ();
             SqliteParameter parameter = new("@studentId", studentId);
-            ExecuteQuery(readStudentScore, (record) => studentScores.Add(ReadStudentRecord(record)), parameter);
+            ExecuteQueryAsync(readStudentScore, (record) => studentScores.Add(ReadStudentRecord(record)), parameter);
             return studentScores;
         }
 
@@ -99,7 +122,7 @@ namespace CaPPMS.Data
         public List<StudentScores> RetrieveStudentScoreDetails()
         {            
             List<StudentScores> studentScores = new List<StudentScores>();
-            ExecuteQuery(readStudentScoreDetails, (record) => studentScores.Add(ReadStudentRecord(record)));
+            ExecuteQueryAsync(readStudentScoreDetails, (record) => studentScores.Add(ReadStudentRecord(record)));
             return studentScores;
         }
 
@@ -128,7 +151,7 @@ namespace CaPPMS.Data
                                 teamList.Add(new Teams()
                                 {
                                     TeamId = Convert.ToInt32(reader["TeamId"]),
-                                    Name = reader["TeamName"].ToString() ?? ""
+                                    Name = reader["TeamName"].ToString() ?? string.Empty
                                 });
                             }
                         }
@@ -136,7 +159,7 @@ namespace CaPPMS.Data
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"Error accessing the database: {ex.Message}");
+                    logger.LogError($"Error accessing the database: {ex.Message}");
                 }
                 finally
                 {
@@ -177,7 +200,7 @@ namespace CaPPMS.Data
         /// <param name="studentId">Student ID.</param>
         /// <param name="teamId">Team ID</param>
         /// <returns>True if successful.</returns>
-        public bool UpdateTeamAssignment(int studentId, int teamId)
+        public async Task<bool> UpdateTeamAssignmentAsync(int studentId, int teamId)
         {
             string query = "UPDATE Students Set TeamId = @teamId WHERE StudentId = @studentId";
             List<SqliteParameter> parameters =
@@ -185,7 +208,7 @@ namespace CaPPMS.Data
                 new SqliteParameter("@teamId", teamId),
                 new SqliteParameter("@studentId", studentId),
             ];
-            int rowsAffected = ExecuteNonQuery(query, [.. parameters]);
+            int rowsAffected = await ExecuteNonQueryAsync(query, [.. parameters]);
             return rowsAffected > 0;
         }
 
@@ -194,12 +217,12 @@ namespace CaPPMS.Data
         /// </summary>
         /// <param name="username"></param>
         /// <returns></returns>
-        public int RetrieveUsersTeam(string username)
+        public async Task<int> RetrieveUsersTeamAsync(string username)
         {
             int teamId = -1;
             string query = "SELECT TeamId FROM Students WHERE Email = @email";
             SqliteParameter parameter = new ("@email", username);
-            ExecuteQuery(
+            await ExecuteQueryAsync(
                 query,
                 (reader) =>
                 {
@@ -214,9 +237,9 @@ namespace CaPPMS.Data
         /// Add Student to the database.
         /// </summary>
         /// <param name="student">Student to add.</param>
-        public void AddStudent(Student student)
+        public async Task<bool> AddStudent(Student student)
         {
-            var insertCommand = @"
+            const string insertCommand = @"
 INSERT INTO Students (FirstName, LastName, Email, TeamId)
 VALUES (@FirstName, @LastName, @Email, @TeamId)";
             List<SqliteParameter> parameters =
@@ -227,10 +250,51 @@ VALUES (@FirstName, @LastName, @Email, @TeamId)";
                 new SqliteParameter("@TeamId", student.AssignedTeam.TeamId)
             ];
 
-            ExecuteNonQuery(insertCommand, [.. parameters]);
+            int result = await ExecuteNonQueryAsync(insertCommand, [.. parameters]);
+
+            if (result > -1)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
-        private void ExecuteQuery(string query, Action<SqliteDataReader> readerAction, params SqliteParameter[] sqliteParameters)
+        public async Task EnsureDbExistsAsync()
+        {
+            DateTime timout = DateTime.Now.Add(brokerTimeout);
+            while (Interlocked.CompareExchange(ref dbBroker, 1, 0) == 1)
+            {
+                await Task.Delay(100);
+
+                if (DateTime.Now > timout)
+                {
+                    dbBroker = 0;
+                    throw new InvalidOperationException("Access to DB not granted while trying to create. Blocked by previous request.");
+                }
+            }
+
+            FileInfo dbFileInfo = new FileInfo(this.databaseFilePath);
+            dbFileInfo.Directory?.Create();
+
+            if (!dbFileInfo.Exists)
+            {
+                try
+                {
+                    await CreateDbAsync();
+                }
+                catch (Exception ex)
+                {
+                    logger.LogError($"Error creating database. Error:{ex.GetBaseException()}");
+                }
+            }
+
+            dbBroker = 0;
+        }
+
+        private async Task ExecuteQueryAsync(string query, Action<SqliteDataReader> readerAction, params SqliteParameter[] sqliteParameters)
         {
             using (SqliteConnection connection = new(connectionString))
             {
@@ -245,7 +309,7 @@ VALUES (@FirstName, @LastName, @Email, @TeamId)";
                             command.Parameters.Add(param);
                         }
 
-                        using (SqliteDataReader reader = command.ExecuteReader())
+                        using (SqliteDataReader reader = await command.ExecuteReaderAsync())
                         {
                             while (reader.Read())
                             {
@@ -265,7 +329,7 @@ VALUES (@FirstName, @LastName, @Email, @TeamId)";
             }
         }
 
-        private int ExecuteNonQuery(string query, params SqliteParameter[] parameters)
+        private async Task<int> ExecuteNonQueryAsync(string query, params SqliteParameter[] parameters)
         {
             int result = -1;
             try
@@ -281,7 +345,7 @@ VALUES (@FirstName, @LastName, @Email, @TeamId)";
                             command.Parameters.Add(param);
                         }
 
-                        result = command.ExecuteNonQuery();
+                        result = await command.ExecuteNonQueryAsync();
                     }
 
                     connection.Close();
@@ -340,6 +404,14 @@ VALUES (@FirstName, @LastName, @Email, @TeamId)";
             }
 
             return data;
+        }
+
+        private async Task CreateDbAsync()
+        {
+            this.logger.LogDebug($"Creating database at {this.databaseFilePath}");
+            string dbCreationScript = GetResourceData(StudentDataBaseCreation);
+            int result = await ExecuteNonQueryAsync(dbCreationScript);
+            this.logger.LogDebug($"Database creation result: {result > -1}");
         }
     }
 }

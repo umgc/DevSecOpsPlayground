@@ -1,14 +1,16 @@
 ﻿using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Identity.Web;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Identity.Web.UI;
-using CaPPMS.Data;
-
 using System;
+
+using CaPPMS.Data;
 
 namespace CaPPMS
 {
@@ -36,13 +38,24 @@ namespace CaPPMS
                 };
             }
 
-            services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
+            services.AddHttpLogging(logging =>
+            {
+                logging.LoggingFields = HttpLoggingFields.All;
+            })
+            .AddLogging(options =>
+            {
+                options.AddConfiguration(Configuration.GetSection("Logging"));
+#if DEBUG
+                options.AddDebug()
+                .AddConsole();
+#endif
+            })
+            .AddHttpContextAccessor()
+            .AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
                 .AddMicrosoftIdentityWebApp(Configuration)
                 .EnableTokenAcquisitionToCallDownstreamApi(initialScopes)
                 .AddMicrosoftGraph(Configuration.GetSection("Graph"))
                 .AddInMemoryTokenCaches();
-
-            services.AddHttpContextAccessor();
 
             services.AddRazorPages()
                   .AddMicrosoftIdentityUI();
@@ -53,7 +66,14 @@ namespace CaPPMS
             services.AddSingleton<ProjectManagerService>();
             services.AddSingleton<FaqManagerService>();
             services.AddSingleton<GitHubService>();
-            services.AddSingleton(new DBOperationsService(@"Data\StudentReviews.db"));
+
+            // Add the DB operations service
+            DBOperationsService dbOperationsService = new DBOperationsService(
+                    Configuration.GetValue<string>("RelativeDbFilePath") ?? "data\\StudentReviews.db",
+                    new LoggerFactory().CreateLogger("DbOperations"));
+            dbOperationsService.EnsureDbExistsAsync().Wait();
+
+            services.AddSingleton(dbOperationsService);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

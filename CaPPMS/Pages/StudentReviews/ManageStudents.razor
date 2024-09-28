@@ -124,7 +124,7 @@
     </div>
 </div>
 
-<button @onclick="UpdateTeamAssignments" class="form-control headerColor" style="margin-top: 10px; margin-bottom: 20px; width: 300px; float: right;">Update Team Assignments</button>
+<button @onclick="UpdateTeamAssignmentsAsync" class="form-control headerColor" style="margin-top: 10px; margin-bottom: 20px; width: 300px; float: right;">Update Team Assignments</button>
 
 <div class="editStudentContainer" style="display: flex; justify-content: center;">
     <div class="card" style="width: 750px; margin-top: 10px;" hidden="@(HidePanel)">
@@ -196,7 +196,7 @@
     {
         selectedStudent.AssignedTeam.TeamId = int.Parse(teamId);
 
-        if (UpdateTeamMembers(selectedStudent))
+        if (UpdateTeamMembersAsync(selectedStudent).GetAwaiter().GetResult())
         {
             var obj = Students.FirstOrDefault(x => x.StudentId == selectedStudent.StudentId);
 
