@@ -7,9 +7,9 @@ using System.Reflection;
 
 namespace CaPPMS.Data
 {
-    public static class DBOperationsService
+    public class DBOperationsService
     {
-        private const string ConnectionString = @"Data Source=Data\StudentReviews.db";
+        private const string ConnectionStringFormat = @"Data Source={0}";
         private const string RetriveStudentScoreDetailsFileName = "ReadStudentScoreDetails.sql";
         private const string ReadStudentScoresFileName = "ReadStudentScores.sql";
         private const string ReadStudentScoreByStudentFileName = "ReadStudentScoreByStudent.sql";
@@ -18,6 +18,8 @@ namespace CaPPMS.Data
         private static string readStudentScore;
         private static string readStudentScoreById;
 
+        private string connectionString;
+
         static DBOperationsService()
         {
             readStudentScoreDetails = GetResourceData(RetriveStudentScoreDetailsFileName);
@@ -25,12 +27,22 @@ namespace CaPPMS.Data
             readStudentScoreById = GetResourceData(ReadStudentScoreByStudentFileName);
         }
 
+        public DBOperationsService(string dboperationsFilePath)
+        {
+            if (string.IsNullOrWhiteSpace(dboperationsFilePath))
+            {
+                dboperationsFilePath = @"Data\StudentReviews.db";
+            }
+
+            connectionString = string.Format(ConnectionStringFormat, dboperationsFilePath);
+        }
+
         /// <summary>
         /// Get Students List
         /// </summary>
         /// <param name="teamId">Team ID</param>
         /// <returns>List of Students</returns>
-        public static List<Student> RetrieveStudents(int teamId = -1)
+        public List<Student> RetrieveStudents(int teamId = -1)
         {
             var students = new List<Student>();
             string query = "SELECT StudentId, FirstName, LastName, TeamId FROM Students";
@@ -60,7 +72,7 @@ namespace CaPPMS.Data
         /// Get Student scores.
         /// </summary>
         /// <returns>List of scores.</returns>
-        public static List<StudentScores> RetrieveStudentScores()
+        public List<StudentScores> RetrieveStudentScores()
         {
             List<StudentScores> studentScores = new();
             ExecuteQuery(readStudentScore, (record) => studentScores.Add(ReadStudentRecord(record)));
@@ -72,7 +84,7 @@ namespace CaPPMS.Data
         /// </summary>
         /// <param name="studentId"></param>
         /// <returns></returns>
-        public static List<StudentScores> RetrieveStudentScores(int studentId)
+        public List<StudentScores> RetrieveStudentScores(int studentId)
         {
             List<StudentScores> studentScores = new ();
             SqliteParameter parameter = new("@studentId", studentId);
@@ -84,7 +96,7 @@ namespace CaPPMS.Data
         /// Get student score details.
         /// </summary>
         /// <returns>List of student scores.</returns>
-        public static List<StudentScores> RetrieveStudentScoreDetails()
+        public List<StudentScores> RetrieveStudentScoreDetails()
         {            
             List<StudentScores> studentScores = new List<StudentScores>();
             ExecuteQuery(readStudentScoreDetails, (record) => studentScores.Add(ReadStudentRecord(record)));
@@ -95,11 +107,11 @@ namespace CaPPMS.Data
         /// Get a team list.
         /// </summary>
         /// <returns>List of teams.</returns>
-        public static List<Teams> RetrieveTeamList()
+        public List<Teams> RetrieveTeamList()
         {
             List<Teams> teamList = new List<Teams>();
 
-            using (SqliteConnection connection = new(ConnectionString))
+            using (SqliteConnection connection = new(connectionString))
             {
                 try
                 {
@@ -139,7 +151,7 @@ namespace CaPPMS.Data
         /// Get number of weeks for the course.
         /// </summary>
         /// <returns></returns>
-        public static List<string> RetrieveWeeks()
+        public List<string> RetrieveWeeks()
         {
             string numWeeks = Program.GetConfigurationSetting("CourseWeeks");
 
@@ -165,34 +177,16 @@ namespace CaPPMS.Data
         /// <param name="studentId">Student ID.</param>
         /// <param name="teamId">Team ID</param>
         /// <returns>True if successful.</returns>
-        public static bool UpdateTeamAssignment(int studentId, int teamId)
+        public bool UpdateTeamAssignment(int studentId, int teamId)
         {
-            bool updateSuccessful = false;
-
-            try
-            {
-                string query = "UPDATE Students Set TeamId = @teamId WHERE StudentId = @studentId";
-
-                using (SqliteConnection connection = new(ConnectionString))
-                {
-                    connection.Open();
-
-                    using (SqliteCommand command = new SqliteCommand(query, connection))
-                    {
-                        command.Parameters.AddWithValue("@teamId", teamId);
-                        command.Parameters.AddWithValue("@studentId", studentId);
-
-                        int rowsAffected = command.ExecuteNonQuery();
-                        updateSuccessful = rowsAffected > 0;
-                    }
-                }
-            }
-            catch(Exception ex)
-            {
-                Console.WriteLine(ex.ToString());
-            }
-
-            return updateSuccessful;
+            string query = "UPDATE Students Set TeamId = @teamId WHERE StudentId = @studentId";
+            List<SqliteParameter> parameters =
+            [
+                new SqliteParameter("@teamId", teamId),
+                new SqliteParameter("@studentId", studentId),
+            ];
+            int rowsAffected = ExecuteNonQuery(query, [.. parameters]);
+            return rowsAffected > 0;
         }
 
         /// <summary>
@@ -200,33 +194,18 @@ namespace CaPPMS.Data
         /// </summary>
         /// <param name="username"></param>
         /// <returns></returns>
-        public static int RetrieveUsersTeam(string username)
+        public int RetrieveUsersTeam(string username)
         {
             int teamId = -1;
-
-            using (SqliteConnection connection = new(ConnectionString))
-            {
-                try
+            string query = "SELECT TeamId FROM Students WHERE Email = @email";
+            SqliteParameter parameter = new ("@email", username);
+            ExecuteQuery(
+                query,
+                (reader) =>
                 {
-                    connection.Open();
-
-                    string query = "SELECT TeamId FROM Students WHERE Email = @email";
-
-                    using (SqliteCommand command = new(query, connection))
-                    {
-                        command.Parameters.AddWithValue("@email", username);
-                        teamId = Convert.ToInt32(command.ExecuteScalar());
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Error accessing the database: {ex.Message}");
-                }
-                finally
-                {
-                    connection.Close();
-                }
-            }
+                    teamId = reader["TeamId"] == DBNull.Value ? -1 : Convert.ToInt32(reader["TeamId"]);
+                },
+                parameter);
 
             return teamId;
         }
@@ -235,32 +214,25 @@ namespace CaPPMS.Data
         /// Add Student to the database.
         /// </summary>
         /// <param name="student">Student to add.</param>
-        public static void AddStudent(Student student)
+        public void AddStudent(Student student)
         {
-            using (SqliteConnection connection = new(ConnectionString))
-            {
-                connection.Open();
+            var insertCommand = @"
+INSERT INTO Students (FirstName, LastName, Email, TeamId)
+VALUES (@FirstName, @LastName, @Email, @TeamId)";
+            List<SqliteParameter> parameters =
+            [
+                new SqliteParameter("@FirstName", student.FirstName),
+                new SqliteParameter("@LastName", student.LastName),
+                new SqliteParameter("@Email", student.Email),
+                new SqliteParameter("@TeamId", student.AssignedTeam.TeamId)
+            ];
 
-                var insertCommand = @"INSERT INTO Students (FirstName, LastName, Email, TeamId)
-                VALUES (@FirstName, @LastName, @Email, @TeamId)";
-
-                using (SqliteCommand command = new(insertCommand, connection))
-                {
-                    command.Parameters.AddWithValue("@FirstName", student.FirstName);
-                    command.Parameters.AddWithValue("@LastName", student.LastName);
-                    command.Parameters.AddWithValue("@Email", student.Email);
-                    command.Parameters.AddWithValue("@TeamId", student.AssignedTeam.TeamId);
-
-                    command.ExecuteNonQuery();
-                }
-
-                connection.Close();
-            }
+            ExecuteNonQuery(insertCommand, [.. parameters]);
         }
 
-        private static void ExecuteQuery(string query, Action<SqliteDataReader> readerAction, params SqliteParameter[] sqliteParameters)
+        private void ExecuteQuery(string query, Action<SqliteDataReader> readerAction, params SqliteParameter[] sqliteParameters)
         {
-            using (SqliteConnection connection = new(ConnectionString))
+            using (SqliteConnection connection = new(connectionString))
             {
                 try
                 {
@@ -293,7 +265,37 @@ namespace CaPPMS.Data
             }
         }
 
-        private static StudentScores ReadStudentRecord(SqliteDataReader reader)
+        private int ExecuteNonQuery(string query, params SqliteParameter[] parameters)
+        {
+            int result = -1;
+            try
+            {
+                using (SqliteConnection connection = new(connectionString))
+                {
+                    connection.Open();
+
+                    using (SqliteCommand command = new(query, connection))
+                    {
+                        foreach (SqliteParameter param in parameters)
+                        {
+                            command.Parameters.Add(param);
+                        }
+
+                        result = command.ExecuteNonQuery();
+                    }
+
+                    connection.Close();
+                }
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine($"Error accessing the database: {ex.Message}");
+            }
+
+            return result;
+        }
+
+        private StudentScores ReadStudentRecord(SqliteDataReader reader)
         {
             return new StudentScores(
                 Convert.ToInt64(reader["StudentId"]),

@@ -41,20 +41,20 @@ namespace CaPPMS.Pages.StudentReviews
 
         public List<Teams> RetrieveTeams()
         {
-            return DBOperations.RetrieveTeamList();
+            return DBOperationsService.RetrieveTeamList();
         }
 
         public void UpdateTeamAssignments()
         {
             foreach (var student in Students)
             {
-                DBOperations.UpdateTeamAssignment(student.StudentId, student.AssignedTeam.TeamId);
+                DBOperationsService.UpdateTeamAssignment(student.StudentId, student.AssignedTeam.TeamId);
             }
         }
 
         public bool UpdateTeamMembers(SelectedStudent student)
         {
-            return DBOperations.UpdateTeamAssignment(student.StudentId, student.AssignedTeam?.TeamId ?? -1);
+            return DBOperationsService.UpdateTeamAssignment(student.StudentId, student.AssignedTeam?.TeamId ?? -1);
         }
     }
 }

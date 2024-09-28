@@ -1,9 +1,8 @@
 ﻿@using Microsoft.AspNetCore.Components.Forms
 @using CaPPMS.Pages.StudentReviews
 
+@inject DBOperationsService DBOperationsService
 @page "/StudentReviews/MyRatings"
-
-@inject IJSRuntime JSRuntime
 
 <title>My Ratings</title>
 
@@ -108,7 +107,7 @@
                                         <tr>
                                             <td>@scoreDetails.Week</td>
                                             <td>@scoreDetails.Score</td>
-                                            <td>@scoreDetails.Comments</td>
+                                            <td>@scoreDetails.Comment</td>
                                         </tr>
                                     }
                                 </tbody>
@@ -123,5 +122,10 @@
 
 @code
 {
-    List<StudentScores> studentScores = DBOperations.RetrieveStudentScores(18);
+    private List<StudentScores>? studentScores;
+
+    protected override void OnInitialized()
+    {
+        studentScores = DBOperationsService.RetrieveStudentScores(18);
+    }
 }

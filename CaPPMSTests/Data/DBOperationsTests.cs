@@ -5,8 +5,16 @@ using System;
 namespace CaPPMSTests.Data
 {
     [TestClass]
-    public class ContactTests
+    public class DBOperationsTests
     {
+
+
+        [ClassInitialize]
+        public static void ClassInitialize(TestContext context)
+        {
+
+        }
+
         [TestMethod]
         public void ContactInitialization()
         {
