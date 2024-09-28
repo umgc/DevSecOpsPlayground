@@ -53,7 +53,6 @@ namespace CaPPMS
             services.AddSingleton<ProjectManagerService>();
             services.AddSingleton<FaqManagerService>();
             services.AddSingleton<GitHubService>();
-            services.AddSingleton(new DBOperationsService(@"Data\StudentReviews.db"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
