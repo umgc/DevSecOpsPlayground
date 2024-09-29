@@ -83,4 +83,12 @@
     <PackageReference Include="System.Drawing.Common" Version="8.0.8" />
     <PackageReference Include="System.Text.Encoding.CodePages" Version="8.0.0" />
   </ItemGroup>
+  <ItemGroup>
+    <None Update="SQL_Creation\CaPPMS_Table_Generation.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SQL_Creation\StudentDataBaseCreation.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 </Project>
