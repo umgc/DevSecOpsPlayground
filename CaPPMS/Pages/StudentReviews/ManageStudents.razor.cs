@@ -1,7 +1,5 @@
 ﻿using CaPPMS.Data;
-using CaPPMS.Shared;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace CaPPMS.Pages.StudentReviews
 {
@@ -43,20 +41,20 @@ namespace CaPPMS.Pages.StudentReviews
 
         public List<Teams> RetrieveTeams()
         {
-            return DBOperations.RetrieveTeamList();
+            return DBOperationsService.RetrieveTeamList();
         }
 
         public void UpdateTeamAssignments()
         {
             foreach (var student in Students)
             {
-                DBOperations.UpdateTeamAssignment(student.StudentId, student.AssignedTeam.TeamId);
+                DBOperationsService.UpdateTeamAssignment(student.StudentId, student.AssignedTeam.TeamId);
             }
         }
 
         public bool UpdateTeamMembers(SelectedStudent student)
         {
-            return DBOperations.UpdateTeamAssignment(student.StudentId, student.AssignedTeam.TeamId);
+            return DBOperationsService.UpdateTeamAssignment(student.StudentId, student.AssignedTeam?.TeamId ?? -1);
         }
     }
 }

@@ -1,4 +1,3 @@
-using CaPPMS.Shared;
 using System.ComponentModel.DataAnnotations;
 
 namespace CaPPMS.Data

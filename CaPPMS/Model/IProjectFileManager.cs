@@ -29,6 +29,6 @@ namespace CaPPMS.Model
         /// </summary>
         /// <param name="fileLocation">The location of the stored file.</param>
         /// <returns>The data as <see cref="Stream"/></returns>
-        Task<Stream> ReadAsync(string fileLocation);
+        Task<Stream?> ReadAsync(string fileLocation);
     }
 }

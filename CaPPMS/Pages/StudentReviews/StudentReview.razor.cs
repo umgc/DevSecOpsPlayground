@@ -1,5 +1,4 @@
 ﻿using CaPPMS.Data;
-using CaPPMS.Shared;
 using Microsoft.Data.Sqlite;
 using System;
 using System.Collections.Generic;
@@ -19,9 +18,9 @@ namespace CaPPMS.Pages.StudentReviews
 
         public StudentReview()
         {
-            int teamId = DBOperations.RetrieveUsersTeam(username);
-            ClassList = DBOperations.RetrieveStudents(teamId);
-            WeeksList = DBOperations.RetrieveWeeks();
+            //int teamId = this.bOperationsService.RetrieveUsersTeam(username);
+            //ClassList = this.bOperationsService.RetrieveStudents(teamId);
+            //WeeksList = this.bOperationsService.RetrieveWeeks();
         }
 
         public Student student = new Student();
@@ -65,14 +64,14 @@ namespace CaPPMS.Pages.StudentReviews
 
                             if (rowsAffected > 0)
                             {
-                                Student? foundStudent = ClassList?.Find(student => student.StudentId == int.Parse(review.ReviewedStudentId));
+                                Student? foundStudent = ClassList?.Find(student => student.StudentId == review.ReviewedStudentId);
 
                                 if (foundStudent != null)
                                 {
                                     completedReviews.Add(new CompletedReviews()
                                     {
                                         Week = review.Week,
-                                        RatedStudent = LookupStudent(int.Parse(review.ReviewedStudentId)),
+                                        RatedStudent = LookupStudent(review.ReviewedStudentId),
                                         Score = review.Score,
                                         Comments = review.Comments
                                     });
@@ -114,8 +113,8 @@ namespace CaPPMS.Pages.StudentReviews
                         {
                             while (reader.Read())
                             {
-                                student.FirstName = reader["FirstName"]?.ToString();
-                                student.LastName = reader["LastName"]?.ToString();
+                                student.FirstName = reader["FirstName"].NullSafeToString();
+                                student.LastName = reader["LastName"].NullSafeToString();
                             }
                         }
                     }

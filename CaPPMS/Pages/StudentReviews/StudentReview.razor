@@ -3,9 +3,8 @@
 @using CaPPMS.Pages.StudentReviews
 @using System.Text.RegularExpressions
 
-@inject IJSRuntime JSRuntime
-
 @namespace CaPPMS.Pages.StudentReviews
+@inject DBOperationsService DBOperationsService
 
 @page "/StudentReviews/"
 
@@ -98,7 +97,7 @@
                 Week:*
                 <InputSelect id="weekSelected" @bind-Value="review.Week" class="form-control">
                     <option value="" disabled selected>-- Select Week --</option>
-                    @foreach (var week in WeeksList)
+                    @foreach (var week in DBOperationsService.RetrieveWeeks())
                     {
                         <option Value="@week">@week</option>
                     }
@@ -109,7 +108,7 @@
                 Evaluated Team Member:*
                 <InputSelect id="studentSelected" @bind-Value="review.ReviewedStudentId" class="form-control" @onkeydown="ClearMessage">
                     <option value="" disabled selected>-- Select Student --</option>
-                    @foreach (var student in ClassList)
+                    @foreach (var student in DBOperationsService.RetrieveStudents())
                     {
                         <option Value="@student.StudentId">@student.LastName, @student.FirstName</option>
                     }
@@ -195,7 +194,7 @@
         // The confirmation message indicates that the peer review submission was successful
         DisplayMessage("Submission was successful");
 
-        review.ReviewedStudentId = string.Empty;
+        review.ReviewedStudentId = -1;
         review.Score = string.Empty;
         review.Comments = string.Empty;
     }
@@ -203,7 +202,8 @@
     private async Task ShowAlert(string message)
     {
         // Call JavaScript function to display alert
-        await JSRuntime.InvokeVoidAsync("displayAlert", message);
+        // await JSRuntime.InvokeVoidAsync("displayAlert", message);
+        await Task.CompletedTask;
     }
 
     private bool IsValidScore(string score) //new method to validate the score input to
@@ -226,12 +226,8 @@
         // The JavaScript function is named "displayAlert" and it takes a message parameter
         // The message parameter contains the confirmation message to be displayed
         // The method is awaited to ensure it completes before moving to the next operation
-        await JSRuntime.InvokeVoidAsync("displayAlert", message);
+        // await JSRuntime.InvokeVoidAsync("displayAlert", message);
+
+        await Task.CompletedTask;
     }
 }
-
-<script>
-function displayAlert(message) {
-    window.alert(message);
-}
-</script>
