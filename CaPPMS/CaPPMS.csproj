@@ -46,12 +46,20 @@
     <None Remove="SQLScripts\ReadStudentScoreByStudent.sql" />
     <None Remove="SQLScripts\ReadStudentScoreDetails.sql" />
     <None Remove="SQLScripts\ReadStudentScores.sql" />
+    <None Remove="SQL_Creation\CaPPMS_Table_Generation.sql" />
+    <None Remove="SQL_Creation\StudentDataBaseCreation.sql" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="SQLScripts\ReadStudentScoreByStudent.sql" />
     <EmbeddedResource Include="SQLScripts\ReadStudentScores.sql" />
     <EmbeddedResource Include="SQLScripts\ReadStudentScoreDetails.sql" />
+    <EmbeddedResource Include="SQLScripts\StudentDataBaseCreation.sql">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SQL_Creation\CaPPMS_Table_Generation.sql">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="BlazorPro.Spinkit" Version="1.2.0" />

@@ -1,5 +1,6 @@
 ﻿using CaPPMS.Data;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace CaPPMS.Pages.StudentReviews
 {
@@ -44,17 +45,17 @@ namespace CaPPMS.Pages.StudentReviews
             return DBOperationsService.RetrieveTeamList();
         }
 
-        public void UpdateTeamAssignments()
+        public async Task UpdateTeamAssignmentsAsync()
         {
             foreach (var student in Students)
             {
-                DBOperationsService.UpdateTeamAssignment(student.StudentId, student.AssignedTeam.TeamId);
+                await DBOperationsService.UpdateTeamAssignmentAsync(student.StudentId, student.AssignedTeam.TeamId);
             }
         }
 
-        public bool UpdateTeamMembers(SelectedStudent student)
+        public async Task<bool> UpdateTeamMembersAsync(SelectedStudent student)
         {
-            return DBOperationsService.UpdateTeamAssignment(student.StudentId, student.AssignedTeam?.TeamId ?? -1);
+            return await DBOperationsService.UpdateTeamAssignmentAsync(student.StudentId, student.AssignedTeam?.TeamId ?? -1);
         }
     }
 }
