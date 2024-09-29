@@ -7,7 +7,7 @@ namespace CaPPMS.Data
         public int StudentReviewId { get; set; }
 
         [Required(ErrorMessage = "Student selection is required")]
-        public string ReviewedStudentId { get; set; } = string.Empty;
+        public int ReviewedStudentId { get; set; } = -1;
 
         public string ReviewersEmail { get; set; } = string.Empty;
 

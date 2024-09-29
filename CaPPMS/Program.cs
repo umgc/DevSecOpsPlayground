@@ -6,7 +6,7 @@ namespace CaPPMS
 {
     public class Program
     {
-        public static IDictionary<object, object> HostProperties { get; private set; }
+        public static IDictionary<object, object> HostProperties { get; private set; } = new Dictionary<object, object>();
 
         public static void Main(string[] args)
         {
@@ -21,9 +21,30 @@ namespace CaPPMS
                     webBuilder.UseStartup<Startup>();
                 });
 
-            HostProperties = host.Properties;
+            if (host.Properties != null)
+            {
+                HostProperties = host.Properties;
+            }
 
             return host;
+        }
+
+        /// <summary>
+        /// Get property
+        /// </summary>
+        /// <param name="key">Key to lookup.</param>
+        /// <returns>Value.</returns>
+        public static string GetConfigurationSetting(string key)
+        {
+            foreach (var item in Program.HostProperties)
+            {
+                if (item.Key is WebHostBuilderContext context)
+                {
+                    return context.Configuration[key] ?? string.Empty;
+                }
+            }
+
+            return string.Empty;
         }
     }
 }

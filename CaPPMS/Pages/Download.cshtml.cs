@@ -17,14 +17,8 @@ namespace CaPPMS.Pages
             this.projectManager = projectManager;
         }
 
-        public async Task<IActionResult> OnGet()
+        public async Task<IActionResult?> OnGet()
         {
-#if (!DEBUG)
-            if (!User.Identity.IsAuthenticated)
-            {
-                return null;
-            }
-#endif
             if (!HttpContext.Request.Path.HasValue)
             {
                 return null;
@@ -37,7 +31,13 @@ namespace CaPPMS.Pages
                 return null;
             }
 
-            return File(await GetData(fileLocation), "application/force-download", GetFileName(fileLocation));
+            Stream? data = await GetData(fileLocation);
+            if (data == null)
+            {
+                return null;
+            }
+
+            return File(data, "application/force-download", GetFileName(fileLocation));
         }
 
         private string GetFileName(string fileLocation)
@@ -50,7 +50,7 @@ namespace CaPPMS.Pages
             return fileLocation;
         }
 
-        private async Task<Stream> GetData(string fileLocation)
+        private async Task<Stream?> GetData(string fileLocation)
         {
             return await projectManager.FileManager.ReadAsync(fileLocation);
         }

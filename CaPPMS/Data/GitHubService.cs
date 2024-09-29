@@ -89,7 +89,7 @@ namespace CaPPMS.Data
                 }
                 catch (AggregateException e)
                 {
-                    Console.Error.WriteLine($"E: Unable to set branch protection - {e.Message}");
+                    Console.Error.WriteLine($"Unable to set branch protection - Error:{e.Message}");
                 }
             }).ConfigureAwait(false);
         }

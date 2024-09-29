@@ -1,8 +1,7 @@
 ﻿@using CaPPMS.Pages.StudentReviews;
 @using Microsoft.Extensions.FileProviders;
 @using System.IO; 
-
-@inject IJSRuntime JSRuntime
+@inject DBOperationsService DBOperationsService
 
 @namespace CaPPMS.Pages.StudentReviews
 
@@ -171,7 +170,7 @@
     protected override void OnInitialized()
     {
         teams = RetrieveTeams();
-        var students = DBOperations.RetrieveStudents();
+        var students = DBOperationsService.RetrieveStudents();
 
         foreach (var student in students)
         {
@@ -237,7 +236,7 @@
 
             foreach (Student student in students)
             {
-                DBOperations.LoadStudent(student);
+                DBOperationsService.AddStudent(student);
             }
         }
         catch (Exception ex)
@@ -304,30 +303,3 @@
         return students;
     }
 }
-
-<script type="text/javascript">
-   // Listen for input changes
-    document.getElementById('filterInput').addEventListener('input', function() {
-        var filterValue = this.value.toLowerCase();
-        var tableRows = document.querySelectorAll('#manageStudentsTable tbody tr');
-
-        // Filter the rows
-        tableRows.forEach(function(row) {
-            var rowText = row.textContent.toLowerCase();
-            row.style.display = rowText.includes(filterValue) ? 'table-row' : 'none';
-        });
-    });
-
-    function clearSearch() {
-        var filterInput = document.getElementById('filterInput');
-        var tableRows = document.querySelectorAll('#manageStudentsTable tbody tr');
-
-        // Clear the input field
-        filterInput.value = "";
-
-        // Reset the display of all table rows
-        tableRows.forEach(function(row) {
-            row.style.display = 'table-row';
-        });
-    }
-</script>

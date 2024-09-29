@@ -3,7 +3,7 @@
 
 @page "/StudentReviews/Admin"
 
-@inject IJSRuntime JSRuntime
+@inject DBOperationsService DBOperationsService
 
 <title>Student Scores</title>
 
@@ -147,7 +147,6 @@
                             <tbody>
                                 @foreach (var scoreDetails in selectedStudent.WeeklyRating)
                                 {
-
                                     <tr>
                                         <td>@scoreDetails.Item1</td>
                                         <td>@scoreDetails.Item2</td>
@@ -168,24 +167,29 @@
 
 @code
 {
-    int previousId = 0;
+    private long previousId = 0;
+    private SelectedStudent selectedStudent = new SelectedStudent();
 
-    public List<StudentScores> studentScores = DBOperations.RetrieveStudentScores();
-    SelectedStudent selectedStudent = new SelectedStudent();
+    protected override void OnInitialized()
+    {
+        studentScores = DBOperationsService.RetrieveStudentScores();
+        base.OnInitialized();
+    }
+
+    public List<StudentScores> studentScores;
     public bool HidePanel { get; set; } = true;
 
     public void EditStudent(StudentScores student)
     {
         var scoresAndComments = studentScores
             .Where(s => s.StudentId == student.StudentId)
-            .Select(s => new Tuple<string, double, string>(s.Week, s.Score, s.Comments))
+            .Select(s => new Tuple<string, double, string>(s.Week, s.Score, s.Comment))
             .ToList();
 
         selectedStudent = new SelectedStudent()
         {
             FirstName = student.FirstName,
             LastName = student.LastName,
-            FullName = student.FirstName + " " + student.LastName,
             Average = student.AverageScore,
             WeeklyRating = scoresAndComments
         };
@@ -210,38 +214,18 @@
             WeeklyRating = new List<Tuple<string, double, string>>();
         }
 
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string FullName { get; set; }
+        public string FirstName { get; set; } = string.Empty;
+
+        public string LastName { get; set; } = string.Empty;
+        
+        public string FullName => $"{FirstName.Trim()} {LastName.Trim()}";
+        
         public double Score { get; set; }
+        
         public List<Tuple<string, double, string>> WeeklyRating { get; set; }
+        
         public double Average { get; set; }
-        public string Comments { get; set; }
+        
+        public string Comments { get; set; } = string.Empty;
     }
 }
-<script type="text/javascript">
- // Listen for input changes
-    document.getElementById('filterInput').addEventListener('input', function() {
-        var filterValue = this.value.toLowerCase();
-        var tableRows = document.querySelectorAll('#studentScoreTable tbody tr');
-
-        // Filter the rows
-        tableRows.forEach(function(row) {
-            var rowText = row.textContent.toLowerCase();
-            row.style.display = rowText.includes(filterValue) ? 'table-row' : 'none';
-        });
-    });
-
-    function clearSearch() {
-        var filterInput = document.getElementById('filterInput');
-        var tableRows = document.querySelectorAll('#studentScoreTable tbody tr');
-
-        // Clear the input field
-        filterInput.value = "";
-
-        // Reset the display of all table rows
-        tableRows.forEach(function(row) {
-            row.style.display = 'table-row';
-        });
-    }
-</script>

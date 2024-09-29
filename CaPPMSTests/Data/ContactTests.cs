@@ -20,7 +20,11 @@ namespace CaPPMSTests.Data
                 }
                 else if (prop.PropertyType == typeof(Guid))
                 {
-                    Assert.IsFalse((Guid)prop.GetValue(contact) == Guid.Empty);
+                    if (prop.GetValue(contact) is Guid contactId
+                        && contactId == Guid.Empty)
+                    {
+                        throw new InvalidOperationException("Guid is empty.");
+                    }
                 }
             }
         }
