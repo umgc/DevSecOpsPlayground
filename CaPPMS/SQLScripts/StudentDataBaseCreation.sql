@@ -14,12 +14,22 @@ CREATE TABLE "Students" (
 	"LastName"	TEXT NOT NULL,
 	"Email"	TEXT,
 	"TeamId"	INTEGER,
+	"ClassId" INTEGER
 	PRIMARY KEY("StudentId" AUTOINCREMENT)
 );
 
 CREATE TABLE "Teams" (
 	"TeamId"	INTEGER NOT NULL,
 	"TeamName"	TEXT NOT NULL,
-	PRIMARY KEY("TeamId")
+	"ClassId" Text NOT NULL
+	PRIMARY KEY("TeamId" AUTOINCREMENT)
+
+CREATE TABLE "ClassInformation" (
+	"ClassId"	INTEGER NOT NULL,
+	"ClassName"	TEXT NOT NULL,
+	"Course" TEXT NOT NULL,
+	"StartDate" Date,
+	"EndDate" Date
+	PRIMARY KEY("ClassId" AUTOINCREMENT)
 );
 

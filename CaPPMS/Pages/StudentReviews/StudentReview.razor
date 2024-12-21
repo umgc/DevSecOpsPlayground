@@ -12,43 +12,43 @@
 
 <style>
     .card-body {
-        /*        display: flex;*/
-        flex-wrap: wrap;
-        justify-content: space-between;
+    /*        display: flex;*/
+    flex-wrap: wrap;
+    justify-content: space-between;
     }
 
     .card-header {
-        color: white;
-        font-size: 25px;
+    color: white;
+    font-size: 25px;
     }
 
-        .card-header.description {
-            background-color: rgb(30, 30, 120);
-        }
+    .card-header.description {
+    background-color: rgb(30, 30, 120);
+    }
 
-        .card-header.evaluator {
-            background-color: rgb(46, 46, 131);
-        }
+    .card-header.evaluator {
+    background-color: rgb(46, 46, 131);
+    }
 
-        .card-header.student {
-            background-color: rgb(51, 16, 90);
-        }
+    .card-header.student {
+    background-color: rgb(51, 16, 90);
+    }
 
-        .card-header.entries {
-            background-color: rgb(68, 19, 124);
-        }
+    .card-header.entries {
+    background-color: rgb(68, 19, 124);
+    }
 
     .form-label {
-        font-size: 18px;
-        margin-left: 10px;
+    font-size: 18px;
+    margin-left: 10px;
     }
 
     .input-valid {
-        border: 1px solid green;
+    border: 1px solid green;
     }
 
     .input-invalid {
-        border: 1px solid red;
+    border: 1px solid red;
     }
 </style>
 
@@ -108,7 +108,7 @@
                 Evaluated Team Member:*
                 <InputSelect id="studentSelected" @bind-Value="review.ReviewedStudentId" class="form-control" @onkeydown="ClearMessage">
                     <option value="" disabled selected>-- Select Student --</option>
-                    @foreach (var student in DBOperationsService.RetrieveStudents())
+                    @foreach (var student in DBOperationsService.RetrieveStudentsAsync().GetAwaiter().GetResult())
                     {
                         <option Value="@student.StudentId">@student.LastName, @student.FirstName</option>
                     }

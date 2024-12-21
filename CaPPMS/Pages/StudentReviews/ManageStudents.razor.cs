@@ -8,41 +8,17 @@ namespace CaPPMS.Pages.StudentReviews
     {
         public bool HidePanel { get; set; } = true;
 
-        private List<Student> value = new List<Student>();
-
-        public List<Student> Students
-        {
-            get
-            {
-                if (value != null && value.Count > 0)
-                {
-                    var tempTeam = teams.Find(e => e.TeamId == value[0].AssignedTeam.TeamId);
-
-                    if (value.Count > 0 && tempTeam != null)
-                    {
-                        value[0].AssignedTeam.Name = tempTeam.Name;
-                    }
-                }
-                else
-                {
-                    value = new List<Student>();
-                }
-
-                return value;
-            }
-
-            set { this.Students = value; }
-        }
+        public List<Student> Students { get; set; } = [];
 
         public ManageStudents()
         {
-            teams = new List<Teams>();
+            teams = new List<Team>();
             selectedStudent = new SelectedStudent();
         }
 
-        public List<Teams> RetrieveTeams()
+        public async Task<IEnumerable<Team>> RetrieveTeamsAsync()
         {
-            return DBOperationsService.RetrieveTeamList();
+            return await DBOperationsService.RetrieveTeamListAsync();
         }
 
         public async Task UpdateTeamAssignmentsAsync()

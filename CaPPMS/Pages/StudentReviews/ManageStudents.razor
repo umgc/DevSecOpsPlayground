@@ -11,71 +11,71 @@
 
 <style>
     .card.classlist {
-        height: 500px;
+    height: 500px;
     }
 
     .card-body {
-        max-height: calc(500px - 2.5rem); /* Set max height for the card body, considering the card header height */
-        overflow-y: auto; /* Enable vertical scrolling */
-        flex-wrap: wrap;
-        justify-content: space-between;
+    max-height: calc(500px - 2.5rem); /* Set max height for the card body, considering the card header height */
+    overflow-y: auto; /* Enable vertical scrolling */
+    flex-wrap: wrap;
+    justify-content: space-between;
     }
 
     .card-header {
-        font-size: 25px;
+    font-size: 25px;
     }
 
     .headerColor {
-        background-color: rgb(30,30,120);
-        color: white;
+    background-color: rgb(30,30,120);
+    color: white;
     }
 
     .entriesColor {
-        background-color: rgb(51,16,90);
-        color: white;
+    background-color: rgb(51,16,90);
+    color: white;
     }
 
     .short-search {
-        width: 300px; /* Adjust as needed */
+    width: 300px; /* Adjust as needed */
     }
 
     #clear-btn {
-        margin-left: 5px;
-        width: 110px;
-        font-size: 14px;
+    margin-left: 5px;
+    width: 110px;
+    font-size: 14px;
     }
 
     .form-control {
-        display: inline-block; /* Ensure buttons are displayed inline */
+    display: inline-block; /* Ensure buttons are displayed inline */
     }
 
     .editStudentContainer {
-        display: flex;
-        justify-content: center;
+    display: flex;
+    justify-content: center;
     }
 
     .custom-button {
-        display: flex;
-        float: right;
-        align-items: center;
-        justify-content: center;
-        background-color: blue;
-        color: white;
-        cursor: pointer;
-        position: relative;
+    display: flex;
+    float: right;
+    align-items: center;
+    justify-content: center;
+    background-color: blue;
+    color: white;
+    cursor: pointer;
+    position: relative;
     }
 
-        .custom-button:hover {
-            background-color: lightblue;
-        }
+    .custom-button:hover {
+    background-color: lightblue;
+    }
 
-        .custom-button input[type=file] {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            opacity: 0;
-            cursor: pointer;
-        }
+    .custom-button input[type=file] {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    }
 </style>
 
 <div class="card classlist">
@@ -162,20 +162,15 @@
 </div>
 
 @code {
-    private List<Teams> teams;
+    private IEnumerable<Team> teams;
     SelectedStudent selectedStudent;
     string teamId = string.Empty;
     string searchTeam = string.Empty;
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        teams = RetrieveTeams();
-        var students = DBOperationsService.RetrieveStudents();
-
-        foreach (var student in students)
-        {
-            Students.Add(student);
-        }
+        teams = await RetrieveTeamsAsync();
+        Students.AddRange(await DBOperationsService.RetrieveStudentsAsync());
     }
 
     public void EditStudent(Student student)
@@ -185,7 +180,7 @@
             StudentId = student.StudentId,
             FirstName = student.FirstName,
             LastName = student.LastName,
-            AssignedTeam = new Teams() { TeamId = student.AssignedTeam.TeamId, Name = student.AssignedTeam.Name }
+            AssignedTeam = new Team() { TeamId = student.AssignedTeam.TeamId, Name = student.AssignedTeam.Name }
         };
 
         HidePanel = false;
@@ -236,7 +231,7 @@
 
             foreach (Student student in students)
             {
-                DBOperationsService.AddStudent(student);
+                await DBOperationsService.AddStudentAsync(student);
             }
         }
         catch (Exception ex)
@@ -254,13 +249,13 @@
     {
         public SelectedStudent()
         {
-            AssignedTeam = new Teams();
+            AssignedTeam = new Team();
         }
 
-        public int StudentId { get; set; }
+        public long StudentId { get; set; }
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
-        public Teams? AssignedTeam { get; set; }
+        public Team? AssignedTeam { get; set; }
     }
 
     static List<Student> ParseData(string data)

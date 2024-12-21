@@ -1,4 +1,7 @@
-﻿namespace CaPPMS.Data
+﻿using System;
+using System.Data;
+
+namespace CaPPMS.Data
 {
     public class StudentScores
     {
@@ -41,5 +44,33 @@
         /// Week of class.
         /// </summary>
         public string Week { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Get <see cref="StudentScores"/> from the <see cref="IDataReader"/>.
+        /// </summary>
+        /// <param name="dataReader">Active <see cref="IDataReader"/>.</param>
+        /// <returns><see cref="StudentScores"/>.</returns>
+        public static StudentScores GetStudentScores(IDataReader dataReader)
+        {
+            if (dataReader.IsClosed)
+            {
+                throw new InvalidOperationException("Data Reader is closed.");
+            }
+
+            return new StudentScores(
+                Convert.ToInt64(dataReader[nameof(StudentId)]),
+                dataReader[nameof(FirstName)].NullSafeToString(),
+                dataReader[nameof(LastName)].NullSafeToString())
+            {
+                AverageScore = dataReader[nameof(AverageScore)] == DBNull.Value
+                ? 0
+                : Convert.ToInt32(dataReader[nameof(AverageScore)]),
+                Week = dataReader[nameof(Week)].NullSafeToString(),
+                Score = dataReader[nameof(Score)] == DBNull.Value
+                ? 0
+                : Convert.ToDouble(dataReader[nameof(Score)]),
+                Comment = dataReader[nameof(Comment)].NullSafeToString()
+            };
+        }
     }
 }
