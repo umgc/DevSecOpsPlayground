@@ -1,4 +1,5 @@
-CREATE TABLE "StudentReviews" (
+CREATE TABLE "StudentReviews"
+(
 	"StudentReviewId"	INTEGER NOT NULL,
 	"ReviewedStudentId"	INTEGER,
 	"ReviewersEmail"	TEXT,
@@ -8,28 +9,31 @@ CREATE TABLE "StudentReviews" (
 	PRIMARY KEY("StudentReviewId" AUTOINCREMENT)
 );
 
-CREATE TABLE "Students" (
+CREATE TABLE "Students"
+(
 	"StudentId"	INTEGER,
 	"FirstName"	TEXT NOT NULL,
 	"LastName"	TEXT NOT NULL,
 	"Email"	TEXT,
-	"TeamId"	INTEGER,
-	"ClassId" INTEGER
+	"TeamId" INTEGER,
+	"ClassId" INTEGER,
 	PRIMARY KEY("StudentId" AUTOINCREMENT)
 );
 
-CREATE TABLE "Teams" (
-	"TeamId"	INTEGER NOT NULL,
-	"TeamName"	TEXT NOT NULL,
-	"ClassId" Text NOT NULL
+CREATE TABLE "Teams"
+(
+	"TeamId" INTEGER NOT NULL,
+	"TeamName" TEXT NOT NULL,
+	"ClassId" INTEGER NOT NULL,
 	PRIMARY KEY("TeamId" AUTOINCREMENT)
+);
 
-CREATE TABLE "ClassInformation" (
+CREATE TABLE "ClassInformation"
+(
 	"ClassId"	INTEGER NOT NULL,
 	"ClassName"	TEXT NOT NULL,
 	"Course" TEXT NOT NULL,
 	"StartDate" Date,
-	"EndDate" Date
+	"EndDate" Date,
 	PRIMARY KEY("ClassId" AUTOINCREMENT)
 );
-

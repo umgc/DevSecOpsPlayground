@@ -390,8 +390,15 @@ VALUES (@FirstName, @LastName, @Email, @TeamId)";
         {
             this.logger.LogDebug($"Creating database at {this.databaseFilePath}");
             string dbCreationScript = GetResourceData(StudentDataBaseCreation);
-            int result = await ExecuteNonQueryAsync(dbCreationScript);
-            this.logger.LogDebug($"Database creation result: {result > -1}");
+            try
+            {
+                int result = await ExecuteNonQueryAsync(dbCreationScript);
+                this.logger.LogDebug($"Database creation result: {result > -1}");
+            }
+            catch (Exception ex)
+            {
+                this.logger.LogError($"Error creating database. Error:{ex.GetBaseException()}");
+            }
         }
     }
 }
