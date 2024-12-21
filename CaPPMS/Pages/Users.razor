@@ -16,21 +16,35 @@
 <h1>Users</h1>
 <AuthorizeView>
     <Authorized>
-        @if (hasAccess)
+        @if (!isAdmin && !isStudent)
         {
-            @if (this.users?.Count > 0)
-            {
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th scope="col">Name</th>
-                            <th scope="col">Email</th>
-                            <th scope="col"></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var user in this.users)
+            <h3>You must not be authorized to access this page.</h3>
+            return;
+        }
+
+        @if (this.users?.Count > 0)
+        {
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Class#</th>
+                        @if (isAdmin)
                         {
+                            <th scope="col">User Group</th>
+                        }
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var user in this.users)
+                    {
+                        if (!isAdmin && !string.Equals(user.Mail, this.consentHandler.User?.Identity?.Name))
+                        {
+                            continue;
+                        }
+
                         <tr>
                             <td>
                                 @(user.DisplayName)
@@ -38,97 +52,122 @@
                             <td>
                                 @(user.Mail)
                             </td>
-                            @if (UserDelete)
+                            <td>
+                                @(user.Department)
+                            </td>
+                            @if (isAdmin)
+                            {
+                                <td>
+                                    @{
+                                        string userGroups = GetUserGroups(user);
+                                        if (string.IsNullOrEmpty(userGroups))
+                                        {
+                                            <button class="btn btn-primary" type="button" @onclick="@(async () => await AddGroupToUser(user))">Add Student Claim</button>
+                                        }
+                                        else
+                                        {
+                                            @userGroups
+                                        }
+                                    }
+                                </td>
+                            }
+                            @if ((userDelete && !string.Equals(user.Mail, this.consentHandler.User?.Identity?.Name))
+                           || (this.isStudent && string.Equals(user.Mail, this.consentHandler.User?.Identity?.Name)))
                             {
                                 <td>
                                     <button class="btn btn-secondary" type="button" @onclick="() => DeleteUser(user)">Delete</button>
                                 </td>
                             }
                         </tr>
-                        }
-                    </tbody>
-                </table>
-            }
-            @if (UserInvite)
-            {
-                <div class="card">
-                    <div class="card-header">
-                        Invite new user
-                    </div>
-                    <div class="card-body">
-                        <div class="form-group">
-                            <EditForm Model="newUser" OnValidSubmit="InviteUser" Context="userAddContext">
-                                <DataAnnotationsValidator />
-                                <ValidationSummary />
-                                <label for="email">
-                                    <span class="fas fa-empire"></span>Email address
-                                    <InputText @bind-Value="newUser.Mail" />
-                                </label>
-                                <button type="submit" class="btn btn-primary">Invite</button>
-                            </EditForm>
-                        </div>
+                    }
+                </tbody>
+            </table>
+        }
+
+        @if (userInvite)
+        {
+            <div class="card">
+                <div class="card-header">
+                    Invite new user
+                </div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <EditForm Model="newUser" OnValidSubmit="InviteUser" Context="userAddContext">
+                            <DataAnnotationsValidator />
+                            <ValidationSummary />
+                            <label for="email">
+                                <span class="fas fa-empire"></span>Email address
+                                <InputText @bind-Value="newUser.Mail" />
+                            </label>
+                            <button type="submit" class="btn btn-primary">Invite</button>
+                        </EditForm>
                     </div>
                 </div>
-            }
-        }
-        else
-        {
-            <h3>You must not be authorized to access this page.</h3>
+            </div>
         }
     </Authorized>
     <NotAuthorized>
-        <h3 id="notAuthorized">You must not be authorized to access this page.</h3>
+        @if (!isLoaded)
+        {
+            <h3>Loading...</h3>
+        }
+        else
+        {
+            <h3 id="notAuthorized">You must not be authorized to access this page.</h3>
+        }
     </NotAuthorized>
 </AuthorizeView>
 
 @code {
 
-    private const string canInvite = "1142214c-0150-4043-8b20-de8e45d9b452";
-    private const string canDelete = "072b7ca7-3933-4be6-ab9e-0455e9b14330";
-
     [CascadingParameter]
-    private Task<AuthenticationState> authenticationState { get; set; }
+    private Task<AuthenticationState>? authenticationState { get; set; }
 
     private User newUser { get; set; } = new User();
 
-    private List<User> users;
+    private List<User>? users;
 
-    private bool UserInvite { get; set; }
-    private bool UserDelete { get; set; }
+    private bool userInvite { get; set; }
+    private bool userDelete { get; set; }
 
-    private bool hasAccess { get; set; } = false;
+    private bool isAdmin { get; set; } = false;
+    private bool isStudent { get; set; } = false;
+
+    private bool isLoaded { get; set; } = false;
 
     // Runs when the page is accessed.
     protected override async Task OnInitializedAsync()
     {
         // Call to constructor of base
-        base.OnInitialized();
+        await base.OnInitializedAsync();
+
+        if (authenticationState == null)
+        {
+            return;
+        }
+
+        await authenticationState;
+
+        if (consentHandler.User?.Identity == null)
+        {
+            isLoaded = true;
+            return;
+        }
 
         try
         {
-            var directoryRoles = await this.GraphClient.DirectoryRoles.Request().GetAsync();
+            this.userInvite = consentHandler.User.CanInvite();
+            this.userDelete = consentHandler.User.CanDelete();
+            this.isAdmin = consentHandler.User.IsAdmin();
+            this.isStudent = consentHandler.User.IsStudent();
 
-            var userMembers = (await this.GraphClient.DirectoryRoles[canInvite].Members.Request().GetAsync()).Cast<User>().ToList();
-            var adminMembers = (await this.GraphClient.DirectoryRoles[canDelete].Members.Request().GetAsync()).Cast<User>().ToList();
-
-            UserInvite = userMembers?.Any(m => m.UserPrincipalName
-                                    .Split(new char[] { '#' }, StringSplitOptions.RemoveEmptyEntries)
-                                    .First()
-                                    .Replace('_', '@')
-                                    .Equals(consentHandler.User.Identity.Name, StringComparison.OrdinalIgnoreCase)) ?? false;
-
-            UserDelete = adminMembers?.Any(m => m.UserPrincipalName
-                                .Split(new char[] { '#' }, StringSplitOptions.RemoveEmptyEntries)
-                                .First()
-                                .Replace('_', '@')
-                                .Equals(consentHandler.User.Identity.Name, StringComparison.OrdinalIgnoreCase)) ?? false;
-
-            if (UserDelete)
+            // If user can delete, they can also invite.
+            if (userDelete)
             {
-                UserInvite = true;
+                userInvite = true;
             }
         }
-        catch
+        catch (Exception ex)
         {
             // No access but we will silently fail
         }
@@ -136,17 +175,31 @@
         try
         {
             this.users = await this.GetUsers();
-            hasAccess = true;
         }
-        catch
+        catch (Exception ex)
         {
-            // No access but we will silently fail
+            consentHandler.HandleException(ex);
+            await this.RefreshPage();
         }
+
+        isLoaded = true;
     }
 
     private async Task<List<User>> GetUsers()
     {
-        var users = await this.GraphClient.Users.Request().GetAsync();
+        var users = await this.GraphClient.Users
+        .Request()
+        .Select("id,displayName,mail,department")
+        .GetAsync();
+        foreach (var user in users)
+        {
+            IUserMemberOfCollectionWithReferencesPage groups = await this.GraphClient
+            .Users[user.Id]
+            .MemberOf
+            .Request()
+            .GetAsync();
+            user.MemberOf = groups;
+        }
 
         return users.Cast<User>().ToList();
     }
@@ -155,13 +208,13 @@
     {
         // TODO: Invite user
         // Maybe confirmation modal? See https://github.com/Blazored/Modal
-        if (UserInvite)
+        if (userInvite)
         {
             var invitation = new Invitation
             {
                 InvitedUserEmailAddress = this.newUser.Mail,
                 InviteRedirectUrl = "https://umgc-cappms.azurewebsites.net",
-                SendInvitationMessage = true
+                SendInvitationMessage = true,
             };
 
             var sentInvitation = await this.GraphClient.Invitations.Request().AddAsync(invitation);
@@ -176,13 +229,21 @@
 
     private async Task DeleteUser(User user)
     {
-        if (user.Mail.Equals(consentHandler.User.Identity.Name, StringComparison.OrdinalIgnoreCase))
+        if (!this.isStudent && user.Mail.Equals(consentHandler.User.Identity?.Name, StringComparison.OrdinalIgnoreCase))
         {
             Debug.WriteLine($"Silly user tried to delete themselves. User:{user.Mail}");
             return;
         }
 
-        if (UserDelete)
+        if (this.isStudent && user.Mail.Equals(consentHandler.User.Identity?.Name, StringComparison.OrdinalIgnoreCase))
+        {
+            await this.GraphClient.Users[user.Id].Request().DeleteAsync();
+            Debug.WriteLine($"Student {user.UserPrincipalName} has removed themselves.");
+            NavigationManager.NavigateTo("MicrosoftIdentity/Account/SignOut");
+            return;
+        }
+
+        if (userDelete)
         {
             Debug.WriteLine($"User {user.UserPrincipalName} has been deleted!");
             await this.GraphClient.Users[user.Id].Request().DeleteAsync();
@@ -191,12 +252,56 @@
         await this.RefreshPage();
     }
 
+    private async Task AddGroupToUser(User user)
+    {
+        if (user.IsStudent())
+        {
+            Debug.WriteLine($"Student {user.DisplayName} is already a memeber.");
+            return;
+        }
+
+        try
+        {
+            var directoryObject = new DirectoryObject
+                {
+                    Id = user.Id
+                };
+
+            await GraphClient.Groups[UserExtensions.Student].Members.References.Request().AddAsync(directoryObject);
+            Debug.WriteLine($"User {user.DisplayName} added to group {UserExtensions.Student}");
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Error adding user to group: {ex.Message}");
+        }
+
+        await RefreshPage();
+    }
+
     private async Task RefreshPage()
     {
         await this.InvokeAsync( async () =>
         {
-            await Task.Delay(2000);
+            await Task.Delay(350);
             this.StateHasChanged();
         });
+    }
+
+    private string GetUserGroups(User user)
+    {
+        return string.Join(",", user.MemberOf.Select(g =>
+            {
+                if (g is Group group)
+                {
+                    return group.DisplayName;
+                }
+
+                if (g is DirectoryRole role)
+                {
+                    return role.DisplayName;
+                }
+
+                return string.Empty;
+            }));
     }
 }
