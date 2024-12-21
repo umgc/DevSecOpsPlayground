@@ -1,4 +1,7 @@
-﻿<header class="umgcHeader">
+﻿@using Extensions;
+@using Microsoft.Identity.Web
+@inject MicrosoftIdentityConsentAndConditionalAccessHandler consentHandler
+<header class="umgcHeader">
     <div>
         <nav class="navbar navbar-expand-sm  navbar-dark">
             <ul class="navbar-nav">
@@ -31,16 +34,22 @@
 
                 <AuthorizeView>
                     <Authorized>
-                        <li class="nav-item">
-                            <NavLink class="nav-link" href="users">
-                                <span class="oi oi-person" aria-hidden="true"></span> Users
-                            </NavLink>
-                        </li>
-                        <li class="nav-item">
-                            <NavLink class="nav-link" href="studentreviews">
-                                <span class="oi oi-bolt" aria-hidden="true"></span> Student Reviews
-                            </NavLink>
-                        </li>
+                        @{
+                            // Add layer of authroization.
+                            @if (consentHandler.User.IsAdmin() || consentHandler.User.IsStudent())
+                            {
+                                <li class="nav-item">
+                                    <NavLink class="nav-link" href="users">
+                                        <span class="oi oi-person" aria-hidden="true"></span> Users
+                                    </NavLink>
+                                </li>
+                                <li class="nav-item">
+                                    <NavLink class="nav-link" href="studentreviews">
+                                        <span class="oi oi-bolt" aria-hidden="true"></span> Student Reviews
+                                    </NavLink>
+                                </li>
+                            }
+                        }
                     </Authorized>
                 </AuthorizeView>
 
