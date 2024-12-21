@@ -1,7 +1,7 @@
 ﻿using Microsoft.Graph;
 using System.Security.Claims;
 
-namespace CaPPMS.Model
+namespace CaPPMS.Extensions
 {
     public static class UserExtensions
     {
@@ -31,7 +31,7 @@ namespace CaPPMS.Model
 
         public static bool HasStudentAreaAccess(this ClaimsPrincipal user)
         {
-            return IsStudent(user) || IsAdmin(user);
+            return user.IsStudent() || user.IsAdmin();
         }
 
         public static bool CanInvite(this ClaimsPrincipal user)
