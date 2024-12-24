@@ -256,6 +256,63 @@ VALUES (@FirstName, @LastName, @Email, @TeamId)";
             }
         }
 
+        /// <summary>
+        /// Add ClassInformation to the database.
+        /// </summary>
+        /// <param name="classInformation">ClassInformation to add.</param>
+        public async Task<bool> AddClassInformationAsync(ClassInformation classInformation)
+        {
+            const string insertCommand = $@"
+        INSERT INTO ClassInformation ({nameof(ClassInformation.Cohort)}, {nameof(ClassInformation.Course)}, {nameof(ClassInformation.StartDate)}, {nameof(ClassInformation.EndDate)})
+        VALUES (@{nameof(ClassInformation.Cohort)}, @{nameof(ClassInformation.Course)}, @{nameof(ClassInformation.StartDate)}, @{nameof(ClassInformation.EndDate)})";
+            List<SqliteParameter> parameters =
+            [
+                new SqliteParameter($"@{nameof(ClassInformation.Cohort)}", classInformation.Cohort),
+                new SqliteParameter($"@{nameof(ClassInformation.Course)}", classInformation.Course),
+                new SqliteParameter($"@{nameof(ClassInformation.StartDate)}", classInformation.StartDate),
+                new SqliteParameter($"@{nameof(ClassInformation.EndDate)}", classInformation.EndDate)
+            ];
+
+            int result = await ExecuteNonQueryAsync(insertCommand, parameters.ToArray());
+
+            return result > -1;
+        }
+
+        public async Task<bool> RemoveRecord<T>(T record)
+        {
+            ArgumentNullException.ThrowIfNull(record);
+
+            // Get the table name.
+            string? tableName = record.GetType().GetCustomAttribute<SqlTableNameAttribute>()?.TableName;
+
+            if (string.IsNullOrEmpty(tableName))
+            {
+                throw new InvalidOperationException("Table name not found.");
+            }
+
+            // Look for the ID property
+            PropertyInfo? idProperty = record.GetType().GetProperties().FirstOrDefault(prop => prop.GetCustomAttribute<SqlIdPropertyAttribute>() != null);
+            if (idProperty == null)
+            {
+                throw new InvalidOperationException("ID property not found.");
+            }
+
+            object? propertyValue = idProperty?.GetValue(record);
+            if (propertyValue == null)
+            {
+                throw new InvalidOperationException("ID property value not found.");
+            }
+
+            // Execute
+            string query = $"DELETE FROM {tableName} WHERE {idProperty?.Name} = @{idProperty?.Name};";
+            List<SqliteParameter> parameters = new()
+            {
+                new SqliteParameter($"@{idProperty?.Name}", propertyValue)
+            };
+            int result = await ExecuteNonQueryAsync(query, [.. parameters]);
+            return result > -1;
+        }
+
         public async Task EnsureDbExistsAsync()
         {
             DateTime timout = DateTime.Now.Add(brokerTimeout);
