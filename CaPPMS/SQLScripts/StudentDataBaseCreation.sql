@@ -31,7 +31,7 @@ CREATE TABLE "Teams"
 CREATE TABLE "ClassInformation"
 (
 	"ClassId"	INTEGER NOT NULL,
-	"ClassName"	TEXT NOT NULL,
+	"Cohort"	TEXT NOT NULL,
 	"Course" TEXT NOT NULL,
 	"StartDate" Date,
 	"EndDate" Date,
