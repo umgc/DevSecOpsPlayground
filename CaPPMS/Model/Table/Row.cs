@@ -6,17 +6,28 @@ using System.Linq;
 
 namespace CaPPMS.Model.Table
 {
-    public class Row : IList<Cell>
+    public class Row<T> : IList<Cell> where T : class, new()
     {
-        public Row() { }
+        /// <summary>
+        /// Used for creating header.
+        /// </summary>
+        public Row()
+        {
+        }
 
-        public Row(int rowNumber)
+        public Row(T item)
+        {
+            this.DataBoundItem = item;
+        }
+
+        public Row(int rowNumber, T item)
+            : this(item)
         {
             this.RowNumber = rowNumber;
         }
 
-        public Row(int rowNumber, List<Cell> cells)
-            : this(rowNumber)
+        public Row(int rowNumber, T item, List<Cell> cells)
+            : this(rowNumber, item)
         {
             this.Cells = cells;
         }
@@ -43,7 +54,7 @@ namespace CaPPMS.Model.Table
 
         public bool IsReadOnly => false;
 
-        public object DataBoundItem { get; set; }
+        public T DataBoundItem { get; set; }
 
         public Cell this[int index]
         {

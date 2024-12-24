@@ -1,0 +1,52 @@
+﻿@typeparam T where T : class, new()
+@inherits Table<T>
+
+<h3> @TableName </h3>
+
+@if (this.HeaderRow.Count == 0)
+{
+    <pre>Loading ...</pre>
+    return;
+}
+
+<div>
+    <label>
+        <input id="filter"
+                class="input-group-text p-2 mb-lg-3"
+                type="text"
+                placeholder="Filter the data here"
+                @bind="Filter"
+                @bind:event="oninput" />
+    </label>
+    <table id="projectEntriesTable" class="@string.Join(" ", TableCssClasses)">
+        <thead class="thead-light">
+            <tr>
+                @foreach (var header in this.HeaderRow)
+                {
+                    <th style="cursor:pointer" @onclick="e => SortByColumn(header.ColumnId)">
+                        @header.Value
+                    </th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var row in this.GetRows())
+            {
+                <tr>
+                    @foreach (var cell in row)
+                    {
+                        @((MarkupString)cell.ToString())
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@code {
+    [Parameter]
+    public string TableName { get; set; } = typeof(T).Name;
+
+    [Parameter]
+    public string TableCssClasses { get; set; } = "table";
+}

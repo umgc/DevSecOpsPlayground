@@ -1,4 +1,5 @@
 ﻿using CaPPMS.Attributes;
+using iTextSharp.text;
 using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections;
@@ -15,13 +16,15 @@ namespace CaPPMS.Model.Table
     ///     To add a column, simply decrorate with [ColumnHeader]
     /// 2. The rows will look preference DisplayNameAttribute over the Property Name. DisplayNameAttribute is not required for the table to build.
     /// </summary>
-    public class Table : ComponentBase, IList<Row>
+    public class Table<T> : ComponentBase, IList<Row<T>> where T : class, new()
     {
-        public event EventHandler DataSourceChanged;
-        public event EventHandler RowsPerPageChanged;
-        public event EventHandler FilterChanged;
+        public event EventHandler<TableDataChangedEventArgs<T>> DataSourceChanged;
 
-        public readonly int[] RowsPerPageOptions = new int[] { 10, 25, 50, 100 };
+        public event EventHandler RowsPerPageChanged;
+
+        public event EventHandler<string> FilterChanged;
+
+        public readonly int[] RowsPerPageOptions = [10, 25, 50, 100];
 
         private int rowsPerPage = 5;
 
@@ -29,7 +32,7 @@ namespace CaPPMS.Model.Table
         {
         }
 
-        public Row this[int index]
+        public Row<T> this[int index]
         {
             get
             {
@@ -41,10 +44,10 @@ namespace CaPPMS.Model.Table
             }
         }
 
-        private IEnumerable<object> dataSource;
+        private IEnumerable<T> dataSource = [];
 
         [Parameter]
-        public IEnumerable<object> DataSource
+        public IEnumerable<T> DataSource
         {
             get
             {
@@ -52,10 +55,10 @@ namespace CaPPMS.Model.Table
             }
             set
             {
-                if (value is IEnumerable<object>)
+                if (value is IEnumerable<T>)
                 {
                     this.dataSource = value;
-                    DataSourceChanged?.Invoke(this, new TableDataChangedEventArgs(this.dataSource));
+                    this.DataSourceChanged?.Invoke(this, new TableDataChangedEventArgs<T>(this.dataSource));
                 }
             }
         }
@@ -75,6 +78,7 @@ namespace CaPPMS.Model.Table
 
         private string filter = string.Empty;
 
+        [Parameter]
         public string Filter
         {
             get
@@ -84,13 +88,13 @@ namespace CaPPMS.Model.Table
             set
             {
                 this.filter = value;
-                this.FilterChanged?.Invoke(this.filter, EventArgs.Empty);
+                this.FilterChanged?.Invoke(this, this.filter);
             }
         }
 
-        public Row HeaderRow => GetHeaderRow();
+        public Row<T> HeaderRow => GetHeaderRow();
 
-        public List<Row> Rows => this.GetRows().ToList();
+        public List<Row<T>> Rows => this.GetRows().ToList();
 
         public int Count => this.DataSource.Count();
 
@@ -101,11 +105,12 @@ namespace CaPPMS.Model.Table
         public int CurrentPage { get; private set; } = 1;
 
         public int SortColumnIndex { get; set; } = 0;
+
         public bool IsColumnSortAscending { get; set; } = true;
 
         #region IList Interface
 
-        public void Add(Row item)
+        public void Add(Row<T> item)
         {
             this.Rows.Add(item);
         }
@@ -115,32 +120,32 @@ namespace CaPPMS.Model.Table
             this.Rows.Clear();
         }
 
-        public bool Contains(Row item)
+        public bool Contains(Row<T> item)
         {
             return this .Rows.Contains(item);
         }
 
-        public void CopyTo(Row[] array, int arrayIndex)
+        public void CopyTo(Row<T>[] array, int arrayIndex)
         {
             this.CopyTo(array, arrayIndex);
         }
 
-        public IEnumerator<Row> GetEnumerator()
+        public IEnumerator<Row<T>> GetEnumerator()
         {
             return this.Rows.GetEnumerator();
         }
 
-        public int IndexOf(Row item)
+        public int IndexOf(Row<T> item)
         {
             return this.Rows.IndexOf(item);
         }
 
-        public void Insert(int index, Row item)
+        public void Insert(int index, Row<T> item)
         {
             this.Rows.Insert(index, item);
         }
 
-        public bool Remove(Row item)
+        public bool Remove(Row<T> item)
         {
             return this.Rows.Remove(item);
         }
@@ -169,9 +174,9 @@ namespace CaPPMS.Model.Table
             this.StateHasChanged();
         }
 
-        public Row GetHeaderRow()
+        public Row<T> GetHeaderRow()
         {
-            var row = new Row();
+            var row = new Row<T>();
             List<string> cNames = new List<string>(GetColumnNames());
 
             for(int c = 0; c < cNames.Count; c++)
@@ -182,14 +187,19 @@ namespace CaPPMS.Model.Table
             return row;
         }
 
-        public IEnumerable<Row> GetRows()
+        public IEnumerable<Row<T>> GetRows()
         {
+            if (this.dataSource == null)
+            {
+                return [];
+            }
+
             var dataList = this.dataSource.ToList();
 
-            List<Row> rows = new List<Row>();
+            List<Row<T>> rows = [];
             for (int r = 0; r < dataList.Count; r++)
             {
-                Row row = new Row(r);
+                Row<T> row = new Row<T>(r, dataList[r]);
                 for (int c = 0; c < this.HeaderRow.Count; c++)
                 {
                     var prop = dataList[r].GetType().GetRuntimeProperties()
@@ -226,9 +236,22 @@ namespace CaPPMS.Model.Table
             return rows.Skip(skipNumber).Take(this.rowsPerPage).ToArray();
         }
 
-        public void SetDataSource(IEnumerable<object> dataSource)
+        public void SetDataSource(IEnumerable<T> dataSource)
         {
             this.DataSource = dataSource;
+        }
+
+        protected virtual void SortByColumn(int column)
+        {
+            if (SortColumnIndex == column)
+            {
+                IsColumnSortAscending = !IsColumnSortAscending;
+            }
+            else
+            {
+                IsColumnSortAscending = true;
+                SortColumnIndex = column;
+            }
         }
 
         private List<string> GetColumnNames()
@@ -241,7 +264,7 @@ namespace CaPPMS.Model.Table
                 return columns;
             }
 
-            foreach (var prop in this.dataSource.First().GetType().GetRuntimeProperties())
+            foreach (var prop in typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance))
             {
                 var attribute = prop.GetCustomAttribute<ColumnHeaderAttribute>();
                 if (attribute is null)
