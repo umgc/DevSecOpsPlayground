@@ -1,10 +1,14 @@
-﻿using Humanizer;
+﻿using CaPPMS.Attributes;
+using CaPPMS.Extensions;
+using CaPPMS.Model;
+using Humanizer;
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
@@ -80,12 +84,7 @@ namespace CaPPMS.Data
                 query,
                 (reader) =>
                 {
-                    var student = new Student();
-                    student.StudentId = Convert.ToInt32(reader["StudentId"]);
-                    student.FirstName = reader["FirstName"].NullSafeToString();
-                    student.LastName = reader["LastName"].NullSafeToString();
-                    student.AssignedTeam.TeamId = Convert.ToInt32(reader["TeamId"]);
-                    students.Add(student);
+                    students.Add(reader.ConvertRecord<Student>());
                 },
                 teamParam);
 
@@ -99,7 +98,9 @@ namespace CaPPMS.Data
         public async Task <IEnumerable<StudentScores>> RetrieveStudentScoresAsync()
         {
             List<StudentScores> studentScores = [];
-            await ExecuteQueryAsync(readStudentScore, (record) => studentScores.Add(StudentScores.GetStudentScores(record)));
+            await ExecuteQueryAsync(
+                readStudentScore,
+                (record) => studentScores.Add(record.ConvertRecord<StudentScores>()));
             return studentScores.AsReadOnly();
         }
 
@@ -112,7 +113,10 @@ namespace CaPPMS.Data
         {
             List<StudentScores> studentScores = [];
             SqliteParameter parameter = new("@studentId", studentId);
-            await ExecuteQueryAsync(readStudentScore, (record) => studentScores.Add(StudentScores.GetStudentScores(record)), parameter);
+            await ExecuteQueryAsync(
+                readStudentScore,
+                (record) => studentScores.Add(record.ConvertRecord<StudentScores>()),
+                parameter);
             return studentScores.AsReadOnly();
         }
 
@@ -123,7 +127,9 @@ namespace CaPPMS.Data
         public async Task<IEnumerable<StudentScores>> RetrieveStudentScoreDetails()
         {
             List<StudentScores> studentScores = new List<StudentScores>();
-            await ExecuteQueryAsync(readStudentScoreDetails, (record) => studentScores.Add(StudentScores.GetStudentScores(record)));
+            await ExecuteQueryAsync(
+                readStudentScoreDetails,
+                (record) => studentScores.Add(record.ConvertRecord<StudentScores>()));
             return studentScores.AsReadOnly();
         }
 
@@ -134,34 +140,33 @@ namespace CaPPMS.Data
         public async Task<IEnumerable<Team>> RetrieveTeamListAsync()
         {
             List<Team> teamList = [];
-
-            using (SqliteConnection connection = new(connectionString))
-            {
-                try
-                {
-                    connection.Open();
-
-                    string query = "SELECT * FROM Teams";
-
-                    using (SqliteCommand command = new(query, connection))
-                    {
-                        using (IDataReader reader = await command.ExecuteReaderAsync())
-                        {
-                            teamList.AddRange(Team.GetTeams(reader));
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    logger.LogError($"Error accessing the database: {ex.Message}");
-                }
-                finally
-                {
-                    connection.Close();
-                }
-            }
+            string query = "SELECT * FROM Teams";
+            await ExecuteQueryAsync(
+                query,
+                (record) => teamList.Add(record.ConvertRecord<Team>()));
 
             return teamList.AsReadOnly();
+        }
+
+        /// <summary>
+        /// Get a team list.
+        /// </summary>
+        /// <returns>List of teams.</returns>
+        public async Task<IEnumerable<ClassInformation>> RetrieveCohortAsync(long classId = -1)
+        {
+            List<ClassInformation> cohorts = [];
+            string query = "SELECT * FROM ClassInformation";
+            if (classId > -1)
+            {
+                query += " WHERE ClassId = @classId";
+            }
+
+            SqliteParameter parameter = new("@classId", classId);
+            await ExecuteQueryAsync(
+                query,
+                (record) => cohorts.Add(record.ConvertRecord<ClassInformation>()));
+
+            return cohorts.AsReadOnly();
         }
 
         /// <summary>
@@ -169,15 +174,8 @@ namespace CaPPMS.Data
         /// </summary>
         /// <returns></returns>
         public List<string> RetrieveWeeks()
-        {
-            string numWeeks = Program.GetConfigurationSetting("CourseWeeks");
-
-            if (string.IsNullOrEmpty(numWeeks))
-            {
-                numWeeks = "12";
-            }
-
-            int weeks = int.Parse(numWeeks);
+        { 
+            int weeks = this.ReteiveNumberOfWeeks();
 
             List<string> result = [];
             for (int i = 1; i <= weeks; i++)
@@ -186,6 +184,21 @@ namespace CaPPMS.Data
             }
 
             return result;
+        }
+
+        /// <summary>
+        /// Gets the number of weeks a cohort is active.
+        /// </summary>
+        /// <returns>Default is 12 weeks, else what is configured.</returns>
+        public int ReteiveNumberOfWeeks()
+        {
+            string numWeeks = Program.GetConfigurationSetting("CourseWeeks");
+            if (string.IsNullOrEmpty(numWeeks))
+            {
+                numWeeks = "12";
+            }
+
+            return int.Parse(numWeeks);
         }
 
         /// <summary>
