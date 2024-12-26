@@ -98,4 +98,19 @@ namespace CaPPMS.Model
             return NearestDay(endDate, DayOfWeek.Tuesday);
         }
     }
+
+    public class ClassInformationComparer : IComparer<ClassInformation>
+    {
+        public int Compare(ClassInformation? x, ClassInformation? y)
+        {
+            if (x == null && y == null) return 0;
+            if (x == null) return -1;
+            if (y == null) return 1;
+
+            string xStr = $"{x.ToString()} - Start:{x.StartDate}. End:{x.EndDate}";
+            string yStr = $"{y.ToString()} - Start:{y.StartDate}. End:{y.EndDate}";
+
+            return xStr.CompareTo(yStr);
+        }
+    }
 }

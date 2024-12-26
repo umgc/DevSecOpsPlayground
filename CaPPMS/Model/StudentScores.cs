@@ -1,28 +1,10 @@
-﻿namespace CaPPMS.Model
+﻿using System.Collections.Generic;
+
+namespace CaPPMS.Model
 {
-    public class StudentScores
+    public class StudentScores : Student
     {
         public StudentScores() { }
-
-        public StudentScores(long id, string firstName, string lastName)
-        {
-            StudentId = id;
-        }
-
-        /// <summary>
-        /// Student ID
-        /// </summary>
-        public long StudentId { get; set; }
-
-        /// <summary>
-        /// Student First name.
-        /// </summary>
-        public string FirstName { get; set; } = string.Empty;
-
-        /// <summary>
-        /// Student last name.
-        /// </summary>
-        public string LastName { get; set; } = string.Empty;
 
         /// <summary>
         /// Current Score.
@@ -37,7 +19,7 @@
         /// <summary>
         /// Comment.
         /// </summary>
-        public string Comment { get; set; } = string.Empty;
+        public List<string> Comment { get; set; } = [];
 
         /// <summary>
         /// Week of class.

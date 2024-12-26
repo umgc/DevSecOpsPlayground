@@ -1,15 +1,25 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using CaPPMS.Data;
+using System.ComponentModel.DataAnnotations;
 
 namespace CaPPMS.Model
 {
     public class Review
     {
-        public int StudentReviewId { get; set; }
+        private int classId;
+        DBOperationsService dbOperationsService;
+
+        public Review() { }
+
+        public Review(int classId, DBOperationsService dB)
+        {
+            this.classId = classId;
+            dbOperationsService = dB;
+        }
+
+        public int StudentReviewId { get; set; } = -1;
 
         [Required(ErrorMessage = "Student selection is required")]
         public int ReviewedStudentId { get; set; } = -1;
-
-        public string ReviewersEmail { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Week selection is required")]
         public string Week { get; set; } = string.Empty;
