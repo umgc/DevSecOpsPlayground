@@ -12,6 +12,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using static MudBlazor.Defaults;
 
 namespace CaPPMS.Data
 {
@@ -68,9 +69,35 @@ namespace CaPPMS.Data
         /// <summary>
         /// Get Students List.
         /// </summary>
+        /// <param name="classId">Class ID.</param>
+        /// <returns>List of Students.</returns>
+        public async Task<IEnumerable<Student>> RetrieveStudentsByClassAsync(long classId = -1)
+        {
+            var students = new List<Student>();
+            string query = "SELECT * FROM Students";
+            if (classId > -1)
+            {
+                query += " WHERE ClassId = @classId";
+            }
+
+            SqliteParameter classParam = new("@classId", classId);
+            await ExecuteQueryAsync(
+                query,
+                (reader) =>
+                {
+                    students.Add(reader.ConvertRecord<Student>());
+                },
+                classParam);
+
+            return students.AsReadOnly();
+        }
+
+        /// <summary>
+        /// Get Students List.
+        /// </summary>
         /// <param name="teamId">Team ID.</param>
         /// <returns>List of Students.</returns>
-        public async Task<IEnumerable<Student>> RetrieveStudentsAsync(int teamId = -1)
+        public async Task<IEnumerable<Student>> RetrieveStudentsByTeamAsync(int teamId = -1)
         {
             var students = new List<Student>();
             string query = "SELECT * FROM Students";
@@ -164,7 +191,8 @@ namespace CaPPMS.Data
             SqliteParameter parameter = new("@classId", classId);
             await ExecuteQueryAsync(
                 query,
-                (record) => cohorts.Add(record.ConvertRecord<ClassInformation>()));
+                (record) => cohorts.Add(record.ConvertRecord<ClassInformation>()),
+                parameter);
 
             return cohorts.AsReadOnly();
         }
@@ -241,53 +269,71 @@ namespace CaPPMS.Data
         }
 
         /// <summary>
-        /// Add Student to the database.
+        /// Gets records of a type.
         /// </summary>
-        /// <param name="student">Student to add.</param>
-        public async Task<bool> AddStudentAsync(Student student)
+        /// <typeparam name="T">Type of record to get.</typeparam>
+        /// <param name="id">Id of record, if not given, all records will be retrieved.</param>
+        /// <returns><see cref="IEnumerable{T}"/>.</returns>
+        /// <exception cref="InvalidOperationException"></exception>
+        public async Task<IEnumerable<T>> GetRecords<T>(long id = -1) where T : class, new()
         {
-            const string insertCommand = @"
-INSERT INTO Students (FirstName, LastName, Email, TeamId)
-VALUES (@FirstName, @LastName, @Email, @TeamId)";
-            List<SqliteParameter> parameters =
-            [
-                new SqliteParameter("@FirstName", student.FirstName),
-                new SqliteParameter("@LastName", student.LastName),
-                new SqliteParameter("@Email", student.Email),
-                new SqliteParameter("@TeamId", student.AssignedTeam.TeamId)
-            ];
+            List<T> records = new();
 
-            int result = await ExecuteNonQueryAsync(insertCommand, [.. parameters]);
+            // Get the table name.
+            string? tableName = typeof(T).GetCustomAttribute<SqlTableNameAttribute>()?.TableName;
+            if (string.IsNullOrEmpty(tableName))
+            {
+                throw new InvalidOperationException("Table name not found.");
+            }
 
-            if (result > -1)
+            // Build the query
+            SqliteParameter parameter = new("@id", id);
+            string query = $"SELECT * FROM {tableName};";
+            if (id > -1)
             {
-                return true;
+                query += " WHERE ClassId = @id";
             }
-            else
-            {
-                return false;
-            }
+
+            // Execute
+            await ExecuteQueryAsync(
+                query,
+                (record) => records.Add(record.ConvertRecord<T>()),
+                parameter);
+            return records.AsReadOnly();
         }
 
-        /// <summary>
-        /// Add ClassInformation to the database.
-        /// </summary>
-        /// <param name="classInformation">ClassInformation to add.</param>
-        public async Task<bool> AddClassInformationAsync(ClassInformation classInformation)
+        public async Task<bool> AddRecord<T>(T record) where T : class, new()
         {
-            const string insertCommand = $@"
-        INSERT INTO ClassInformation ({nameof(ClassInformation.Cohort)}, {nameof(ClassInformation.Course)}, {nameof(ClassInformation.StartDate)}, {nameof(ClassInformation.EndDate)})
-        VALUES (@{nameof(ClassInformation.Cohort)}, @{nameof(ClassInformation.Course)}, @{nameof(ClassInformation.StartDate)}, @{nameof(ClassInformation.EndDate)})";
-            List<SqliteParameter> parameters =
-            [
-                new SqliteParameter($"@{nameof(ClassInformation.Cohort)}", classInformation.Cohort),
-                new SqliteParameter($"@{nameof(ClassInformation.Course)}", classInformation.Course),
-                new SqliteParameter($"@{nameof(ClassInformation.StartDate)}", classInformation.StartDate),
-                new SqliteParameter($"@{nameof(ClassInformation.EndDate)}", classInformation.EndDate)
-            ];
+            ArgumentNullException.ThrowIfNull(record);
 
-            int result = await ExecuteNonQueryAsync(insertCommand, parameters.ToArray());
+            // Get the table name.
+            string? tableName = record.GetType().GetCustomAttribute<SqlTableNameAttribute>()?.TableName;
+            if (string.IsNullOrEmpty(tableName))
+            {
+                throw new InvalidOperationException("Table name not found.");
+            }
 
+            // Get the properties
+            PropertyInfo[] properties = record.GetType().GetProperties();
+
+            // Get the properties that are not the ID
+            PropertyInfo[] nonIdProperties = properties.Where(prop => prop.GetCustomAttribute<SqlIdPropertyAttribute>() == null).ToArray();
+
+            // Build the query
+            string query = $"INSERT INTO {tableName} (";
+            string values = "VALUES (";
+            List<SqliteParameter> parameters = new();
+            foreach (PropertyInfo property in nonIdProperties)
+            {
+                query += $"{property.Name}, ";
+                values += $"@{property.Name}, ";
+                parameters.Add(new SqliteParameter($"@{property.Name}", property.GetValue(record)));
+            }
+            query = query.TrimEnd(',', ' ') + ") ";
+            values = values.TrimEnd(',', ' ') + ");";
+            query += values;
+            // Execute
+            int result = await ExecuteNonQueryAsync(query, [.. parameters]);
             return result > -1;
         }
 
