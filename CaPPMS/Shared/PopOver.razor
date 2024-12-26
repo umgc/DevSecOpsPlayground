@@ -1,0 +1,35 @@
+﻿@typeparam T where T : class
+
+@if (Show)
+{
+    <div class="pop-edit">
+        <span class="close fa fa-window-close" style="cursor:pointer" onclick="@Close"></span>
+        <h3>@Title</h3>
+
+        <div>
+            @ChildContent
+        </div>
+    </div>
+}
+
+@code {
+    private bool show = false;
+
+    [Parameter]
+    public bool Show { get; set; }
+
+    [Parameter]
+    public string Title { get; set; } = "PopOver Title";
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    [Parameter]
+    public T? Context { get; set; }
+
+    public Task Close(MouseEventArgs e)
+    {
+        Show = false;
+        return Task.CompletedTask;
+    }
+}
