@@ -2,7 +2,6 @@ CREATE TABLE "StudentReviews"
 (
 	"StudentReviewId"	INTEGER NOT NULL,
 	"ReviewedStudentId"	INTEGER,
-	"ReviewersEmail"	TEXT,
 	"Week"	TEXT,
 	"Score"	INTEGER,
 	"Comments"	TEXT,
