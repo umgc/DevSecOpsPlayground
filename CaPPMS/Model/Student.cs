@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CaPPMS.Model
 {
+    [SqlTableName("Students")]
     public class Student
     {
         private long classId = -1;
@@ -11,6 +12,7 @@ namespace CaPPMS.Model
         public Student() { }
 
         [Required]
+        [SqlIdProperty]
         public long StudentId { get; set; } = default;
 
         [ColumnHeader]
