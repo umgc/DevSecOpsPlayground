@@ -1,4 +1,5 @@
-﻿using CaPPMS.Data;
+﻿using CaPPMS.Extensions;
+using CaPPMS.Model;
 using Microsoft.Data.Sqlite;
 using System;
 using System.Collections.Generic;

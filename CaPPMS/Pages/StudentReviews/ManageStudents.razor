@@ -1,11 +1,15 @@
-﻿@using CaPPMS.Pages.StudentReviews;
+﻿@using System.IO;
 @using Microsoft.Extensions.FileProviders;
-@using System.IO; 
+@using Microsoft.Identity.Web
+
+@using CaPPMS.Pages.StudentReviews;
 @inject DBOperationsService DBOperationsService
+@inject MicrosoftIdentityConsentAndConditionalAccessHandler consentHandler
 
 @namespace CaPPMS.Pages.StudentReviews
 
-@page "/StudentReviews/ManageStudents"
+@attribute [Authorize]
+@page "/ManageStudents"
 
 <title>Manage Students</title>
 
@@ -170,7 +174,7 @@
     protected override async Task OnInitializedAsync()
     {
         teams = await RetrieveTeamsAsync();
-        Students.AddRange(await DBOperationsService.RetrieveStudentsAsync());
+        Students.AddRange(await DBOperationsService.GetRecords<Student>());
     }
 
     public void EditStudent(Student student)
@@ -231,7 +235,7 @@
 
             foreach (Student student in students)
             {
-                await DBOperationsService.AddStudentAsync(student);
+                await DBOperationsService.AddRecord(student);
             }
         }
         catch (Exception ex)

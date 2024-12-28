@@ -1,12 +1,16 @@
 ﻿@using System.ComponentModel.DataAnnotations
-@using Microsoft.AspNetCore.Components.Forms
-@using CaPPMS.Pages.StudentReviews
 @using System.Text.RegularExpressions
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.Identity.Web
+
+@using CaPPMS.Pages.StudentReviews
 
 @namespace CaPPMS.Pages.StudentReviews
 @inject DBOperationsService DBOperationsService
+@inject MicrosoftIdentityConsentAndConditionalAccessHandler consentHandler
 
-@page "/StudentReviews/"
+@attribute [Authorize]
+@page "/StudentReviews"
 
 <title>Weekly Peer Reviews</title>
 
@@ -108,7 +112,7 @@
                 Evaluated Team Member:*
                 <InputSelect id="studentSelected" @bind-Value="review.ReviewedStudentId" class="form-control" @onkeydown="ClearMessage">
                     <option value="" disabled selected>-- Select Student --</option>
-                    @foreach (var student in DBOperationsService.RetrieveStudentsAsync().GetAwaiter().GetResult())
+                    @foreach (var student in DBOperationsService.GetRecords<Student>().GetAwaiter().GetResult())
                     {
                         <option Value="@student.StudentId">@student.LastName, @student.FirstName</option>
                     }

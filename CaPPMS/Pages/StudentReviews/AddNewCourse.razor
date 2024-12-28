@@ -32,7 +32,7 @@
 
     private async Task AddNewCourseAsync()
     {
-        if (await DBOperationsService.AddClassInformationAsync(classInformation))
+        if (await DBOperationsService.AddRecord(classInformation))
         {
             await OnTableUpdated.InvokeAsync();
         }

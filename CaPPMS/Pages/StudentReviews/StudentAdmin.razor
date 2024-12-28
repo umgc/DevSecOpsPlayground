@@ -3,7 +3,7 @@
 @using Microsoft.Identity.Web
 
 @attribute [Authorize]
-@page "/StudentReviews/Admin"
+@page "/classadmin"
 
 @inject DBOperationsService DBOperationsService
 @inject MicrosoftIdentityConsentAndConditionalAccessHandler consentHandler
@@ -112,7 +112,7 @@
     {
         var scoresAndComments = studentScores
             .Where(s => s.StudentId == student.StudentId)
-            .Select(s => new Tuple<string, double, string>(s.Week, s.Score, s.Comment))
+            .Select(s => new Tuple<string, double, string>(s.Week, s.Score, string.Join("\n", s.Comment)))
             .ToList();
 
         selectedStudent = new SelectedStudent()
