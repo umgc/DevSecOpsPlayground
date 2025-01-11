@@ -2,8 +2,8 @@ CREATE TABLE "StudentReviews"
 (
 	"StudentReviewId"	INTEGER NOT NULL,
 	"ReviewedStudentId"	INTEGER,
-	"Week"	INTEGER,
-	"Score"	INTEGER,
+	"Week"	TEXT,
+	"Score"	TEXT,
 	"Comments"	TEXT,
 	PRIMARY KEY("StudentReviewId" AUTOINCREMENT)
 );

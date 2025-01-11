@@ -112,7 +112,7 @@
                 Evaluated Team Member:*
                 <InputSelect id="studentSelected" @bind-Value="review.ReviewedStudentId" class="form-control" @onkeydown="ClearMessage">
                     <option value="" disabled selected>-- Select Student --</option>
-                    @foreach (var student in DBOperationsService.GetRecords<Student>().GetAwaiter().GetResult())
+                    @foreach (Student student in studentsToReview)
                     {
                         <option Value="@student.StudentId">@student.LastName, @student.FirstName</option>
                     }
@@ -151,9 +151,8 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var review in completedReviews)
+                    @foreach (var review in CompletedReviews)
                     {
-
                         <tr>
                             <td>@review.Week</td>
                             <td>@review.RatedStudent</td>
@@ -167,9 +166,29 @@
     </div>
 </EditForm>
 
+<ConfirmationDialogBox @ref="confirmationDialogBox" ConfirmationButtonText="OK" ConfirmedChanged="CompleteSubmission" />
+
 @code {
-    protected override void OnInitialized()
+
+    private ConfirmationDialogBox confirmationDialogBox = new ConfirmationDialogBox();
+    private List<Student> studentsToReview = new List<Student>();
+    private Student loggedInStudent = new Student();
+
+    protected override async Task OnInitializedAsync()
     {
+        IEnumerable<Student> students = await DBOperationsService.GetRecords<Student>();
+        foreach (Student student in students)
+        {
+            if (student.Email == consentHandler.User.Identity.Name)
+            {
+                loggedInStudent = student;
+                continue;
+            }
+
+            studentsToReview.Add(student);
+        }
+
+        await base.OnInitializedAsync();
     }
 
     // Method to clear the status message
@@ -192,46 +211,26 @@
 
     public async Task HandleValidSubmit()
     {
-        await SubmitEvaluation();
-
-        // After successful submission, await the display of a confirmation message
-        // The confirmation message indicates that the peer review submission was successful
-        DisplayMessage("Submission was successful");
-
-        review.ReviewedStudentId = -1;
-        review.Score = string.Empty;
-        review.Comments = string.Empty;
+        await ShowConfirmationMessage("Are you sure you want to submit this evaluation?");
     }
 
-    private async Task ShowAlert(string message)
+    private async Task CompleteSubmission()
     {
-        // Call JavaScript function to display alert
-        // await JSRuntime.InvokeVoidAsync("displayAlert", message);
-        await Task.CompletedTask;
-    }
+        if (await SubmitEvaluation())
+        {
+            // After successful submission, await the display of a confirmation message
+            // The confirmation message indicates that the peer review submission was successful
+            DisplayMessage("Submission was successful");
 
-    private bool IsValidScore(string score) //new method to validate the score input to
-    {
-        if (int.TryParse(score, out int parsedScore)) //check to see if input can be parsed as an int in specific range
-        {
-            // Check if score is within the range of 0 to 100
-            return parsedScore >= 0 && parsedScore <= 100;
-        }
-        else
-        {
-            // Return false if score is not a valid integer
-            return false;
+            CompletedReviews.Add(review); // Add the completed review to the list of completed reviews)
+            review = new Review(); // Clear the form fields after submission
+            this.StateHasChanged(); // Notify the component that the state has changed
         }
     }
 
     private async Task ShowConfirmationMessage(string message) // Method declaration for showing a confirmation message asynchronously
     {
-        // Using the JSRuntime service to invoke a JavaScript function asynchronously
-        // The JavaScript function is named "displayAlert" and it takes a message parameter
-        // The message parameter contains the confirmation message to be displayed
-        // The method is awaited to ensure it completes before moving to the next operation
-        // await JSRuntime.InvokeVoidAsync("displayAlert", message);
-
+        confirmationDialogBox.ShowPopup(message);
         await Task.CompletedTask;
     }
 }

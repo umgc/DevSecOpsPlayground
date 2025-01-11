@@ -1,4 +1,4 @@
-﻿<button type="button" class=@ButtonClass @onclick="ShowPop">@Command</button>
+﻿<button type="button" class=@ButtonClass @onclick="ShowPopup">@Command</button>
 
 @if (Show)
 {
@@ -8,11 +8,14 @@
             <br />
             <br />
             <div class="row">
+                @if (ShowCancelButton)
+                {
+                    <div class="col-6">
+                        <button type="button" class="btn btn-warning" @onclick="() => Confirmation(false)">@CancelButtonText</button>
+                    </div>
+                }
                 <div class="col-6">
-                    <button type="button" class="btn-warning" @onclick="() => Confirmation(false)">Cancel</button>
-                </div>
-                <div class="col-6">
-                    <button type="button" class="btn-primary" @onclick="() => Confirmation(true)">Confirm</button>
+                    <button type="button" class="btn btn-primary" @onclick="() => Confirmation(true)">@ConfirmationButtonText</button>
                 </div>
             </div>
         </div>
@@ -20,19 +23,35 @@
 } 
 
 @code {
-    public bool Show { get; set; }
+
+    [Parameter] public string ConfirmationButtonText { get; set; } = "Confirm";
+    [Parameter] public bool ShowCancelButton { get; set; } = true;
+    [Parameter] public string CancelButtonText { get; set; } = "Cancel";
     [Parameter] public string ButtonClass { get; set; } = "";
     [Parameter] public string Command { get; set; } = "Action";
     [Parameter] public string Prompt { get; set; } = "Are you sure?";
     [Parameter] public EventCallback<bool> ConfirmedChanged { get; set; }
+
+    public bool Show { get; set; }
 
     public async Task Confirmation(bool value)
     {
         Show = false;
         await ConfirmedChanged.InvokeAsync(value);
     }
-    public void ShowPop()
+
+    public void ShowPopup()
     {
         Show = true;
+    }
+
+    public void ShowPopup(string? message)
+    {
+        if (!string.IsNullOrEmpty(message))
+        {
+            Prompt = message;
+        }
+
+        this.ShowPopup();
     }
 }

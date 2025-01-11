@@ -7,19 +7,15 @@ namespace CaPPMS.Pages.StudentReviews
 {
     public partial class ManageStudents
     {
+        private IEnumerable<Team>? teams;
+
         public bool HidePanel { get; set; } = true;
 
         public List<Student> Students { get; set; } = [];
 
         public ManageStudents()
         {
-            teams = new List<Team>();
             selectedStudent = new SelectedStudent();
-        }
-
-        public async Task<IEnumerable<Team>> RetrieveTeamsAsync()
-        {
-            return await DBOperationsService.RetrieveTeamListAsync();
         }
 
         public async Task UpdateTeamAssignmentsAsync()

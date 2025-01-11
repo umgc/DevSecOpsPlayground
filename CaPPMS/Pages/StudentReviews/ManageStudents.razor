@@ -82,6 +82,9 @@
     }
 </style>
 
+<AddNewCourse OnTableUpdated="Refresh" />
+
+
 <div class="card classlist">
     <h5 class="card-header headerColor">Student Directory</h5>
     <div class="form-group mt-2 mb-2">
@@ -166,15 +169,29 @@
 </div>
 
 @code {
-    private IEnumerable<Team> teams;
+
     SelectedStudent selectedStudent;
     string teamId = string.Empty;
     string searchTeam = string.Empty;
 
     protected override async Task OnInitializedAsync()
     {
-        teams = await RetrieveTeamsAsync();
+        teams = await DBOperationsService.GetRecords<Team>(); ;
         Students.AddRange(await DBOperationsService.GetRecords<Student>());
+    }
+
+    private async Task LoadData()
+    {
+        teams = await DBOperationsService.GetRecords<Team>(); ;
+        Students.AddRange(await DBOperationsService.GetRecords<Student>());
+    }
+
+    private async Task Refresh()
+    {
+        await this.InvokeAsync(async () => 
+        {
+            await LoadData();
+        });
     }
 
     public void EditStudent(Student student)
@@ -231,7 +248,7 @@
             using (StreamReader reader = new StreamReader(stream))
             {
                 string fileContent = await reader.ReadToEndAsync();
-                List<Student> students = ParseData(fileContent);
+                List<Student> students = Student.ParseData(fileContent);
                 foreach (Student student in students)
                 {
                     await DBOperationsService.AddRecord(student);
@@ -260,63 +277,5 @@
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
         public Team? AssignedTeam { get; set; }
-    }
-
-    static List<Student> ParseData(string data)
-    {
-        List<Student> students = new List<Student>();
-
-        try
-        {
-            // Split the data into lines
-            string[] lines = data.Split('\n');
-
-            string[] headerFields = lines[0].Split(',');
-            if (headerFields.Length != 4)
-            {
-                throw new Exception("Invalid file format.");
-            }
-
-            Dictionary<string, int> headerMap = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
-
-            for (int i = 0; i < headerFields.Length; i++)
-            {
-                headerMap[headerFields[i].Trim()] = i;
-            }
-
-            // Iterate over each line (excluding the header)
-            for (int i = 1; i < lines.Length; i++)
-            {
-                string trimmedLine = lines[i].Trim();
-
-                // Skip empty lines.
-                if (string.IsNullOrWhiteSpace(trimmedLine))
-                {
-                    continue;
-                }
-
-                if (!string.IsNullOrWhiteSpace(trimmedLine))
-                {
-                    string[] fields = lines[i].Split(',');
-
-                    // Create a new Student object
-                    Student student = new Student();
-
-                    // Populate the fields
-                    student.LastName = fields[headerMap["LastName"]];
-                    student.FirstName = fields[headerMap["FirstName"]];
-                    student.Email = fields[headerMap["Email"]];
-
-                    // Add the student to the list
-                    students.Add(student);
-                }
-            }
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.Message);
-        }
-
-        return students;
     }
 }

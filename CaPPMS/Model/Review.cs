@@ -1,5 +1,6 @@
 ﻿using CaPPMS.Attributes;
 using System.ComponentModel.DataAnnotations;
+using System.Runtime.Serialization;
 
 namespace CaPPMS.Model
 {
@@ -14,13 +15,16 @@ namespace CaPPMS.Model
         [Required(ErrorMessage = "Student selection is required")]
         public int ReviewedStudentId { get; set; } = -1;
 
+        [IgnoreDataMember]
+        public string RatedStudent { get; set; } = string.Empty;
+
         [Required(ErrorMessage = "Week selection is required")]
-        [Range(0, 12, ErrorMessage = "The value must be between 0 and 12.")]
-        public int Week { get; set; }
+        [AllowedStringNumericBasedValues(0, 12, ErrorMessage = "Please select a week between 1 and 10.")]
+        public string Week { get; set; } = "1";
 
         [Required(ErrorMessage = "Score is required")]
-        [Range(0, 100, ErrorMessage = "The value must be between 0 and 100.")]
-        public int Score { get; set; }
+        [AllowedStringNumericBasedValues(0, 100, ErrorMessage = "Please select a score between 0 and 100.")]
+        public string Score { get; set; } = "0";
 
         [Required(ErrorMessage = "Your comments for the student are appreciated.", AllowEmptyStrings = false)]
         [StringLength(maximumLength: 255, MinimumLength = 25, ErrorMessage = "Please use at least 25 characters to describe the interaction of this student.")]

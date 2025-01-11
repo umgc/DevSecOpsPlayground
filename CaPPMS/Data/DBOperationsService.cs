@@ -10,6 +10,7 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using static MudBlazor.Defaults;
@@ -317,7 +318,13 @@ namespace CaPPMS.Data
             PropertyInfo[] properties = record.GetType().GetProperties();
 
             // Get the properties that are not the ID
-            PropertyInfo[] nonIdProperties = properties.Where(prop => prop.GetCustomAttribute<SqlIdPropertyAttribute>() == null).ToArray();
+            PropertyInfo[] nonIdProperties = properties
+                .Where(prop =>
+                {
+                    return prop.GetCustomAttribute<SqlIdPropertyAttribute>() == null
+                    && prop.GetCustomAttribute<IgnoreDataMemberAttribute>() == null;
+                })
+                .ToArray();
 
             // Build the query
             string query = $"INSERT INTO {tableName} (";
@@ -329,6 +336,7 @@ namespace CaPPMS.Data
                 values += $"@{property.Name}, ";
                 parameters.Add(new SqliteParameter($"@{property.Name}", property.GetValue(record)));
             }
+
             query = query.TrimEnd(',', ' ') + ") ";
             values = values.TrimEnd(',', ' ') + ");";
             query += values;

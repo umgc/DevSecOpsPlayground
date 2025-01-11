@@ -1,5 +1,4 @@
-﻿@using Extensions;
-@using Microsoft.Identity.Web
+﻿@using Microsoft.Identity.Web
 @inject MicrosoftIdentityConsentAndConditionalAccessHandler consentHandler
 <header class="umgcHeader">
     <div>
@@ -42,13 +41,13 @@
                         @if (consentHandler.User.IsAdmin())
                         {
                             <li class="nav-item">
-                                <NavLink class="nav-link" href="classadmin">
-                                    <span class="oi oi-bolt" aria-hidden="true"></span> Class Admin
+                                <NavLink class="nav-link" href="ManageStudents">
+                                    <span class="oi oi-bolt" aria-hidden="true"></span> Manage Students
                                 </NavLink>
                             </li>
                             <li class="nav-item">
-                                <NavLink class="nav-link" href="ManageStudents">
-                                    <span class="oi oi-bolt" aria-hidden="true"></span> Student Admin
+                                <NavLink class="nav-link" href="adminstudentreview">
+                                    <span class="oi oi-bolt" aria-hidden="true"></span> Student Review (admin)
                                 </NavLink>
                             </li>
                         }
