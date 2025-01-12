@@ -170,7 +170,7 @@
 
     <!-- Student table -->
     <div class="form-group mt-2 mb-2">
-        <InputText class="short-search" @bind-Value="SearchTerm" Placeholder="Search student..." />
+        <span class="btn-group"><InputText class="short-search" @bind-Value="SearchTerm" Placeholder="Search student..." /><span class="btn btn-info oi oi-arrow-right" @onclick="() => SearchAsync()"></span></span>
     </div>
     <div id="tableContainer" >
         <table id="manageStudentsTable" class="table table-bordered table-striped table-hover scrollTable">
@@ -249,7 +249,7 @@
         set
         {
             this.searchTerm = value;
-            _ = Task.Run(async () => await Search(this.searchTerm));
+            _ = Task.Run(async () => await SearchAsync());
         }
     }
 
@@ -266,7 +266,7 @@
             this.SelectedClass = availableClasses.First();
         }
 
-        this.StateHasChanged();
+        await this.InvokeAsync(() => this.StateHasChanged());
     }
 
     private async Task DeleteStudent(Student student)
@@ -332,7 +332,7 @@
             student.SetTeam(team);
         }
 
-        this.StateHasChanged();
+        await this.InvokeAsync(() => this.StateHasChanged());
     }
 
     private async Task TeamChanged(long teamId, Student student)
@@ -364,9 +364,8 @@
         return items;
     }
 
-    private async Task Search(string searchTerm)
+    private async Task SearchAsync()
     {
-        this.searchTerm = searchTerm;
         await ClassChangedAsync(SelectedClass);
     }
 
@@ -428,6 +427,5 @@
         }
 
         await ClassChangedAsync(this.selectedClass);
-        this.StateHasChanged();
     }
 }
