@@ -3,7 +3,7 @@
 namespace CaPPMS.Model
 {
     [SqlTableName("Teams")]
-    public class Team
+    public class Team : ISqlTableModel
     {
         /// <summary>
         /// Id of the team.

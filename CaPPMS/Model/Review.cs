@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 namespace CaPPMS.Model
 {
     [SqlTableName("StudentReviews")]
-    public class Review
+    public class Review : ISqlTableModel
     {
         public Review() { }
 

@@ -276,7 +276,7 @@ namespace CaPPMS.Data
         /// <param name="id">Id of record, if not given, all records will be retrieved.</param>
         /// <returns><see cref="IEnumerable{T}"/>.</returns>
         /// <exception cref="InvalidOperationException"></exception>
-        public async Task<IEnumerable<T>> GetRecords<T>(long id = -1) where T : class, new()
+        public async Task<IEnumerable<T>> GetRecords<T>(long id = -1) where T : ISqlTableModel, new()
         {
             List<T> records = new();
 
@@ -303,7 +303,14 @@ namespace CaPPMS.Data
             return records.AsReadOnly();
         }
 
-        public async Task<bool> AddRecord<T>(T record) where T : class, new()
+        /// <summary>
+        /// Add a record to the database.
+        /// </summary>
+        /// <typeparam name="T">Type of record to add.</typeparam>
+        /// <param name="record"></param>
+        /// <returns></returns>
+        /// <exception cref="InvalidOperationException"></exception>
+        public async Task<bool> AddRecord<T>(T record) where T : ISqlTableModel, new()
         {
             ArgumentNullException.ThrowIfNull(record);
 
@@ -340,6 +347,58 @@ namespace CaPPMS.Data
             query = query.TrimEnd(',', ' ') + ") ";
             values = values.TrimEnd(',', ' ') + ");";
             query += values;
+            // Execute
+            int result = await ExecuteNonQueryAsync(query, [.. parameters]);
+            return result > -1;
+        }
+
+        public async Task<bool> UpdateRecord<T>(T record) where T : ISqlTableModel, new()
+        {
+            ArgumentNullException.ThrowIfNull(record);
+
+            // Get the table name.
+            string? tableName = record.GetType().GetCustomAttribute<SqlTableNameAttribute>()?.TableName;
+            if (string.IsNullOrEmpty(tableName))
+            {
+                throw new InvalidOperationException("Table name not found.");
+            }
+
+            // Get the properties
+            PropertyInfo[] properties = record.GetType().GetProperties();
+
+            // Get the properties that are not the ID
+            PropertyInfo[] nonIdProperties = properties
+                .Where(prop =>
+                {
+                    return prop.GetCustomAttribute<SqlIdPropertyAttribute>() == null
+                    && prop.GetCustomAttribute<IgnoreDataMemberAttribute>() == null;
+                })
+                .ToArray();
+
+            PropertyInfo? id = properties.FirstOrDefault(prop => prop.GetCustomAttribute<SqlIdPropertyAttribute>() != null);
+            if (id == null)
+            {
+                throw new InvalidOperationException("ID property not found.");
+            }
+
+            // Build the query
+            string query = $"UPDATE {tableName}\n";
+
+            // SET
+            query += "SET ";
+            List<SqliteParameter> parameters = new();
+            foreach (PropertyInfo property in nonIdProperties)
+            {
+                query += $"{property.Name} = @{property.Name}, ";
+                parameters.Add(new SqliteParameter($"@{property.Name}", property.GetValue(record)));
+            }
+
+            // Trim the fat.
+            query = query.TrimEnd(',', ' ');
+
+            // WHERE
+            query += $"\nWHERE {id.Name} = {id.GetValue(record)};";
+
             // Execute
             int result = await ExecuteNonQueryAsync(query, [.. parameters]);
             return result > -1;

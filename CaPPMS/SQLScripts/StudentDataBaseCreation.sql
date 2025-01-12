@@ -14,6 +14,7 @@ CREATE TABLE "Students"
 	"FirstName"	TEXT NOT NULL,
 	"LastName"	TEXT NOT NULL,
 	"Email"	TEXT,
+	"GitHub" TEXT,
 	"TeamId" INTEGER,
 	"ClassId" INTEGER,
 	PRIMARY KEY("StudentId" AUTOINCREMENT)

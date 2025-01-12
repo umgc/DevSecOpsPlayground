@@ -1,6 +1,9 @@
-﻿using System;
+﻿using CaPPMS.Attributes;
+using System;
 using System.Data;
+using System.Linq;
 using System.Reflection;
+using System.Runtime.Serialization;
 
 namespace CaPPMS.Extensions
 {
@@ -12,6 +15,10 @@ namespace CaPPMS.Extensions
 
             T record = new();
             typeof(T).GetProperties(BindingFlags.Instance | BindingFlags.Public)
+                .Where(prop =>
+                {
+                    return prop.GetCustomAttribute<IgnoreDataMemberAttribute>() == null;
+                })
                 .Foreach(property =>
                 {
                     object? value = dataReader[property.Name];

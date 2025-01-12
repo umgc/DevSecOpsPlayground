@@ -5,6 +5,7 @@
 @using CaPPMS.Pages.StudentReviews;
 @inject DBOperationsService DBOperationsService
 @inject MicrosoftIdentityConsentAndConditionalAccessHandler consentHandler
+@inject NavigationManager NavigationManager
 
 @namespace CaPPMS.Pages.StudentReviews
 
@@ -82,73 +83,81 @@
     }
 </style>
 
-<AddNewCourse OnTableUpdated="Refresh" />
+<AddNewCourse OnTableUpdated="() => Refresh(updateSelectedClass: true)" />
 
+@if (availableClasses.Count() == 0 || !consentHandler.User.IsAdmin())
+{
+    <p>No classes available. Please add one.</p>
+    return;
+}
 
-<div class="card classlist">
-    <h5 class="card-header headerColor">Student Directory</h5>
-    <div class="form-group mt-2 mb-2">
-        <input id="filterInput" type="text" class="form-control short-search" oninput="applyFilter()" placeholder="Search Student..." />
-        <input id="clear-btn" class="btn btn-primary headerColor" style="margin-left: 5px" value="Clear Search" onclick="clearSearch()" />
-        <div class="custom-button btn btn-primary" style="background-color: rgb(30,30,120); ">
-            <InputFile OnChange="HandleFileSelection" />
-            <img src="/bx-select-multiple-icon-white.png" alt="Load New Class Image" width="30" height="25" style="margin-right: 5px;" />
-            Load New Class
-        </div>
-    </div>
-    <div id="tableContainer" class="card-body tableContainer p-1">
-        <EditForm Model="Students">
-            <table id="manageStudentsTable" class="table table-striped table-hover scrollTable">
-                <thead class="fixedHeader">
-                    <tr>
-                        <th>Edit</th>
-                        <th>First Name</th>
-                        <th>Last Name</th>
-                        <th>Assigned Team</th>
-                    </tr>
-                </thead>
-                <tbody class="scrollContent">
-                    @foreach (var student in Students)
-                    {
-                        <tr>
-                            <td><i class="oi oi-pencil" @onclick="() => EditStudent(student)"></i></td>
-                            <td>@student.FirstName</td>
-                            <td>@student.LastName</td>
-                            <td>
-                                <InputSelect @bind-Value="student.AssignedTeam.TeamId" class="form-control">
-                                    <option value="" disabled selected>-- Select Team --</option>
-                                    @foreach (var team in teams)
-                                    {
-                                        <option Value="@team.TeamId">@team.Name</option>
-                                    }
-                                </InputSelect>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </EditForm>
-    </div>
+<div class="card">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Team</th>
+                <th>Members</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (dynamic team in students
+            .GroupBy(s => s.TeamName)
+            .Where(g => g.Count() > 0)
+            .Select(g => new { TeamName = g.Key, Count = g.Count(), Members = string.Join(",", g.Select(s => $"{s.FirstName} {s.LastName}")) })
+            .OrderBy(item => item.TeamName))
+            {
+                <tr>
+                    <td>@team.TeamName (@team.Count)</td>
+                    <td>@team.Members</td>
+                </tr>
+            }
+            <tr>
+                <td colspan="2">Total Count:@students.Count</td>
+            </tr>
+        </tbody>
+    </table>
 </div>
 
-<button @onclick="UpdateTeamAssignmentsAsync" class="form-control headerColor" style="margin-top: 10px; margin-bottom: 20px; width: 300px; float: right;">Update Team Assignments</button>
+<div class="card classlist">
+    <h5 class="card-header umgcHeader">
+        Student Directory.  Class Context:
+        <InputSelect @bind-Value="this.SelectedClass" class="form-control" style="width: 200px;" >
+            <option disabled selected>-- Select Class --</option>
 
-<div class="editStudentContainer" style="display: flex; justify-content: center;">
-    <div class="card" style="width: 750px; margin-top: 10px;" hidden="@(HidePanel)">
-        <h5 class="card-header entriesColor"> Edit Selected Student</h5>
-        <div class="card-body">
-            <table id="studentsTable" class="table table-striped table-hover" style="background-color: lightgrey">
-                <thead>
+            @foreach (ClassInformation classInfo in availableClasses)
+            {
+                <option Value="@classInfo">@classInfo.Course - @classInfo.Cohort</option>
+            }
+        </InputSelect>
+    </h5>
+    <div class="form-group mt-2 mb-2">
+        <input id="filterInput" type="text" class="form-control short-search" placeholder="Search Student..." />
+        <span class="btn btn-primary">Upload Class CSV:&nbsp;<InputFile OnChange="HandleFileSelection" />
+        </span>
+    </div>
+    <div id="tableContainer" >
+        <table id="manageStudentsTable" class="table table-bordered table-striped table-hover scrollTable">
+            <thead class="fixedHeader">
+                <tr>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+                    <th>GitHub</th>
+                    <th>Assigned Team</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var student in students)
+                {
                     <tr>
-                        <th>Student</th>
-                        <th>Score</th>
-                        <th>Team</th>
-                    </tr>
-                    <tr>
-                        <td><InputText @bind-Value="@selectedStudent.FirstName" class="form-control" style="width: 200px;" /></td>
-                        <td><InputText @bind-Value="@selectedStudent.LastName" class="form-control" style="width: 200px;" /></td>
+                        <td><InputText DisplayName="First Name" @bind-Value="student.FirstName" /></td>
+                        <td><InputText DisplayName="Last Name" @bind-Value="student.LastName" /></td>
+                        <td><InputText DisplayName="Student Email" @bind-Value="student.Email" /></td>
+                        <td><InputText DisplayName="GitHub Account" @bind-Value="student.GitHub" /></td>
                         <td>
-                            <InputSelect @bind-Value="teamId" class="form-control" style="width: 150px;">
+                            <InputSelect class="form-control" @bind-Value="student.TeamId">
+                                <option disabled selected>-- Select Team --</option>
                                 @foreach (var team in teams)
                                 {
                                     <option Value="@team.TeamId">@team.Name</option>
@@ -156,71 +165,118 @@
                             </InputSelect>
                         </td>
                     </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
-            <div colspan="8" style="display: flex; justify-content: flex-end; float: left;">
-                <button @onclick="Update" class="form-control btn btn-primary entriesColor" style="margin-top: 10px; width: 100px;">Update</button>
-                <button @onclick="CloseWindow" class="btn btn-outline-dark form-control" style="margin-top: 10px; width: 100px; margin-left: 5px;">Close</button>
-            </div>
-        </div>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="5"><button class="btn btn-primary" @onclick="UpdateStudents">Save Changes</button></td>
+                </tr>
+            </tfoot>
+        </table>
     </div>
+</div>
+<div>
+    <!-- Keep some buffer at the bottom -->
+    <br />
+    <br />
+    <br />
 </div>
 
 @code {
-
-    SelectedStudent selectedStudent;
-    string teamId = string.Empty;
-    string searchTeam = string.Empty;
+    private IEnumerable<ClassInformation> availableClasses = [];
+    private string searchTeam = string.Empty;
+    private bool isAvailableClassLoaded => availableClasses.Any(c => DateTime.Now.Month >= c.StartDate.Month && DateTime.Now.Month <= c.EndDate.Month);
+    private ClassInformation selectedClass = new ClassInformation();
+    private IEnumerable<Team> teams = new List<Team>();
+    private bool hidePanel = true;
+    private List<Student> students = [];
+    private ClassInformation SelectedClass
+    {
+        get
+        {
+            return this.selectedClass;
+        }
+        set
+        {
+            this.selectedClass = value;
+            ClassChanged(this.selectedClass);
+        }
+    }
 
     protected override async Task OnInitializedAsync()
     {
-        teams = await DBOperationsService.GetRecords<Team>(); ;
-        Students.AddRange(await DBOperationsService.GetRecords<Student>());
+        await Refresh(updateSelectedClass: true);
     }
 
-    private async Task LoadData()
+    private async Task Refresh(bool updateSelectedClass)
     {
-        teams = await DBOperationsService.GetRecords<Team>(); ;
-        Students.AddRange(await DBOperationsService.GetRecords<Student>());
-    }
-
-    private async Task Refresh()
-    {
-        await this.InvokeAsync(async () => 
+        availableClasses = await DBOperationsService.GetRecords<ClassInformation>();
+        if (updateSelectedClass && availableClasses.Any())
         {
-            await LoadData();
+            this.SelectedClass = availableClasses.First();
+        }
+
+        await this.InvokeAsync(async () =>
+        {
+            this.StateHasChanged();
         });
     }
 
-    public void EditStudent(Student student)
+    public async Task UpdateStudents()
     {
-        selectedStudent = new SelectedStudent()
+        foreach (Student student in students)
         {
-            StudentId = student.StudentId,
-            FirstName = student.FirstName,
-            LastName = student.LastName,
-            AssignedTeam = new Team() { TeamId = student.AssignedTeam.TeamId, Name = student.AssignedTeam.Name }
-        };
+            if (student.ClassId < 0 || student.TeamId < 0)
+            {
+                continue;
+            }
 
-        HidePanel = false;
-        teamId = selectedStudent.AssignedTeam.TeamId.ToString();
+            await DBOperationsService.UpdateRecord(student);
+        }
+
+        await Task.Delay(500);
+        NavigationManager.Refresh();
     }
 
-    public void Update()
+    public async void ClassChanged(ClassInformation classInformation)
     {
-        selectedStudent.AssignedTeam.TeamId = int.Parse(teamId);
+        students = (await DBOperationsService.GetRecords<Student>())
+        .OrderBy(s => s.FirstName)
+        .Where(s => s.ClassId == selectedClass.ClassId).ToList();
+        teams = (await DBOperationsService.GetRecords<Team>()).Where(t => t.ClassId == selectedClass.ClassId).ToList();
 
-        if (UpdateTeamMembersAsync(selectedStudent).GetAwaiter().GetResult())
+        // Assign the team to the student.
+        foreach (Student student in students)
         {
-            var obj = Students.FirstOrDefault(x => x.StudentId == selectedStudent.StudentId);
-
-            if (obj != null)
+            Team? team = teams.FirstOrDefault(t => t.TeamId == student.TeamId);
+            if (team == null)
             {
-                obj.AssignedTeam.TeamId = int.Parse(teamId);
+                continue;
             }
+
+            student.SetTeam(team);
         }
+
+        this.StateHasChanged();
+    }
+
+    public async Task TeamChanged(long teamId, Student student)
+    {
+        Team? team = teams.FirstOrDefault(t => t.TeamId == teamId);
+        if (team == null)
+        {
+            return;
+        }
+
+        Team? team1 = (await DBOperationsService.GetRecords<Team>(team.TeamId)).FirstOrDefault();
+        if (team1 == null)
+        {
+            return;
+        }
+
+        student.SetTeam(team1);
+        await DBOperationsService.UpdateTeamAssignmentAsync(student.TeamId, student.TeamId);
+        await this.Refresh(updateSelectedClass: false);
     }
 
     private async Task HandleFileSelection(InputFileChangeEventArgs e)
@@ -228,11 +284,18 @@
         try
         {
             var files = e.GetMultipleFiles();
-
             foreach (var file in e.GetMultipleFiles())
             {
-                using var stream = file.OpenReadStream();
-                await ProcessStreamAsync(stream, file.Name);
+                if (file.Name.EndsWith(".csv", StringComparison.OrdinalIgnoreCase))
+                {
+                    // Process CSV file
+                    await ProcessStreamAsync(file.OpenReadStream(), file.Name);
+                }
+                else
+                {
+                    // Handle unsupported file types
+                    Console.WriteLine($"Unsupported file type: {file.Name}");
+                }
             }
         }
         catch (Exception ex)
@@ -248,8 +311,13 @@
             using (StreamReader reader = new StreamReader(stream))
             {
                 string fileContent = await reader.ReadToEndAsync();
-                List<Student> students = Student.ParseData(fileContent);
-                foreach (Student student in students)
+
+                // TODO: Add dropped records to another table for notification to user.
+                List<Student> students = Student.ParseData(fileContent, selectedClass.ClassId, out _);
+                var currentStudents = await DBOperationsService.GetRecords<Student>();
+                foreach (Student student in students
+                    .Where(s => !currentStudents
+                        .Any(c => string.Equals(c.Email, s.Email, StringComparison.OrdinalIgnoreCase))))
                 {
                     await DBOperationsService.AddRecord(student);
                 }
@@ -259,23 +327,8 @@
         {
             Console.WriteLine(ex.Message);
         }
-    }
 
-    public void CloseWindow()
-    {
-        HidePanel = true; // Hide the Selected Student panel
-    }
-
-    public class SelectedStudent
-    {
-        public SelectedStudent()
-        {
-            AssignedTeam = new Team();
-        }
-
-        public long StudentId { get; set; }
-        public string? FirstName { get; set; }
-        public string? LastName { get; set; }
-        public Team? AssignedTeam { get; set; }
+        ClassChanged(this.selectedClass);
+        this.StateHasChanged();
     }
 }

@@ -10,7 +10,7 @@ namespace CaPPMS.Model
     /// The class information.
     /// </summary>
     [SqlTableName("ClassInformation")]
-    public class ClassInformation
+    public class ClassInformation : ISqlTableModel
     {
         private static readonly List<Tuple<int[], string>> cohortSeasons = new()
         {
@@ -57,7 +57,7 @@ namespace CaPPMS.Model
         /// </summary>
         [ColumnHeader]
         [DisplayName("Start Date")]
-        public DateTime? StartDate
+        public DateTime StartDate
         {
             get
             {
@@ -65,7 +65,17 @@ namespace CaPPMS.Model
             }
             set
             {
-                this.startDate = value ?? NearestDay(DateTime.Now, DayOfWeek.Wednesday);
+                // Anything less than 10 years ago, assume the user made a mistake and set it to the nearest Wednesday.
+                // Initial date is the nearest Wednesday as a result for when the page loads.
+                if (value.Year < DateTime.Now.AddYears(-10).Year)
+                {
+                    this.startDate = NearestDay(DateTime.Now, DayOfWeek.Wednesday);
+                }
+                else
+                {
+                    this.startDate = value;
+                }
+
                 this.EndDate = CalculateEndDate(this.startDate);
             }
         }
@@ -75,11 +85,11 @@ namespace CaPPMS.Model
         /// </summary>
         [ColumnHeader]
         [DisplayName("End Date")]
-        public DateTime? EndDate { get; set; } = DateTime.Now.AddDays(83);
+        public DateTime EndDate { get; set; } = DateTime.Now.AddDays(83);
 
         public override string ToString()
         {
-            return $"{Course} - {Cohort}";
+            return $"{Course}-{Cohort}";
         }
 
         private static DateTime NearestDay(DateTime date, DayOfWeek day)
