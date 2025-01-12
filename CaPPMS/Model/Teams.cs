@@ -21,5 +21,10 @@ namespace CaPPMS.Model
         /// Class ID.
         /// </summary>
         public long ClassId { get; set; }
+
+        internal Team Clone()
+        {
+            return (Team)this.MemberwiseClone();
+        }
     }
 }

@@ -16,7 +16,7 @@ namespace CaPPMS.Model
 
         [Required]
         [SqlIdProperty]
-        public long StudentId { get; set; } = default;
+        public long StudentId { get; set; } = -1;
 
         [ColumnHeader]
         [DisplayName("First Name")]
@@ -70,7 +70,7 @@ namespace CaPPMS.Model
         /// <param name="team">Appropiate team.</param>
         public void SetTeam(Team team)
         {
-            this.AssignedTeam = team;
+            this.AssignedTeam = team.Clone();
         }
 
         public void SetProperty(string propertyName, object value)

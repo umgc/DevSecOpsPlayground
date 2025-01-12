@@ -83,6 +83,7 @@
     }
 </style>
 
+<!-- Add a new cohort -->
 <AddNewCourse OnTableUpdated="() => Refresh(updateSelectedClass: true)" />
 
 @if (availableClasses.Count() == 0 || !consentHandler.User.IsAdmin())
@@ -91,35 +92,8 @@
     return;
 }
 
-<div class="card">
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>Team</th>
-                <th>Members</th>
-            </tr>
-        </thead>
-        <tbody>
-
-            @foreach (dynamic team in students
-            .GroupBy(s => s.TeamName)
-            .Where(g => g.Count() > 0)
-            .Select(g => new { TeamName = g.Key, Count = g.Count(), Members = string.Join(",", g.Select(s => $"{s.FirstName} {s.LastName}")) })
-            .OrderBy(item => item.TeamName))
-            {
-                <tr>
-                    <td>@team.TeamName (@team.Count)</td>
-                    <td>@team.Members</td>
-                </tr>
-            }
-            <tr>
-                <td colspan="2">Total Count:@students.Count</td>
-            </tr>
-        </tbody>
-    </table>
-</div>
-
 <div class="card classlist">
+    <!-- Class Selection -->
     <h5 class="card-header umgcHeader">
         Student Directory.  Class Context:
         <InputSelect @bind-Value="this.SelectedClass" class="form-control" style="width: 200px;" >
@@ -131,11 +105,39 @@
             }
         </InputSelect>
     </h5>
+
+    <!-- CSV file input -->
     <div class="form-group mt-2 mb-2">
         <input id="filterInput" type="text" class="form-control short-search" placeholder="Search Student..." />
         <span class="btn btn-primary">Upload Class CSV:&nbsp;<InputFile OnChange="HandleFileSelection" />
         </span>
     </div>
+
+    <!-- Team allocation snapshot -->
+    <div class="card">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Team</th>
+                    <th>Members</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (dynamic team in GetGroupedTeams())
+                {
+                    <tr>
+                        <td>@team.TeamName (@team.Count)</td>
+                        <td>@team.Members</td>
+                    </tr>
+                }
+                <tr>
+                    <td colspan="2">Total Count:@students.Count</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Student table -->
     <div id="tableContainer" >
         <table id="manageStudentsTable" class="table table-bordered table-striped table-hover scrollTable">
             <thead class="fixedHeader">
@@ -145,6 +147,7 @@
                     <th>Email</th>
                     <th>GitHub</th>
                     <th>Assigned Team</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -164,6 +167,7 @@
                                 }
                             </InputSelect>
                         </td>
+                        <td><span class="oi oi-delete" aria-hidden="true" @onclick="() => DeleteStudent(student)"></span></td>
                     </tr>
                 }
             </tbody>
@@ -222,12 +226,26 @@
         });
     }
 
-    public async Task UpdateStudents()
+    private async Task DeleteStudent(Student student)
+    {
+        // Implement the logic to delete a student
+        await DBOperationsService.RemoveRecord(student);
+        await this.ClassChanged(this.selectedClass);
+    }
+
+    private async Task UpdateStudents()
     {
         foreach (Student student in students)
         {
             if (student.ClassId < 0 || student.TeamId < 0)
             {
+                continue;
+            }
+
+            // Add students with -1 student id.
+            if (student.StudentId < 0)
+            {
+                await DBOperationsService.AddRecord(student);
                 continue;
             }
 
@@ -238,16 +256,28 @@
         NavigationManager.Refresh();
     }
 
-    public async void ClassChanged(ClassInformation classInformation)
+    private async Task ClassChanged(ClassInformation classInformation)
     {
+        // Students associated with the current selected class.
         students = (await DBOperationsService.GetRecords<Student>())
         .OrderBy(s => s.FirstName)
-        .Where(s => s.ClassId == selectedClass.ClassId).ToList();
+        .Where(s => s.ClassId == selectedClass.ClassId)
+        .ToList();
+
+        // Add blank if wanting to add a new student manually.
+        students.Add(new Student() { ClassId = selectedClass.ClassId, TeamId = -1 });
+
+        // Teams associated with the current selected class.
         teams = (await DBOperationsService.GetRecords<Team>()).Where(t => t.ClassId == selectedClass.ClassId).ToList();
 
         // Assign the team to the student.
         foreach (Student student in students)
         {
+            if (student.StudentId < 0)
+            {
+                continue;
+            }
+
             Team? team = teams.FirstOrDefault(t => t.TeamId == student.TeamId);
             if (team == null)
             {
@@ -260,7 +290,7 @@
         this.StateHasChanged();
     }
 
-    public async Task TeamChanged(long teamId, Student student)
+    private async Task TeamChanged(long teamId, Student student)
     {
         Team? team = teams.FirstOrDefault(t => t.TeamId == teamId);
         if (team == null)
@@ -277,6 +307,16 @@
         student.SetTeam(team1);
         await DBOperationsService.UpdateTeamAssignmentAsync(student.TeamId, student.TeamId);
         await this.Refresh(updateSelectedClass: false);
+    }
+
+    private dynamic GetGroupedTeams()
+    {
+        var items = students
+            .GroupBy(s => s.TeamName)
+            .Where(g => !string.IsNullOrEmpty(g.Key) && g.Count() > 0)
+            .Select(g => new { TeamName = g.Key, Count = g.Count(), Members = string.Join(",", g.Select(s => $"{s.FirstName} {s.LastName}")) })
+            .OrderBy(item => item.TeamName);
+        return items;
     }
 
     private async Task HandleFileSelection(InputFileChangeEventArgs e)
