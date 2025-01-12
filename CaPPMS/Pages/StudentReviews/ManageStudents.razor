@@ -94,24 +94,55 @@
 
 <div class="card classlist">
     <!-- Class Selection -->
-    <h5 class="card-header umgcHeader">
-        Student Directory.  Class Context:
-        <InputSelect @bind-Value="this.SelectedClass" class="form-control" style="width: 200px;" >
-            <option disabled selected>-- Select Class --</option>
+        <h5 class="card-header umgcHeader">
+            Student Directory.
+        </h5>
+        <div class="btn">
+            Class Context:
+            <InputSelect @bind-Value="this.SelectedClass" class="form-control" style="width: 275px;">
+                <option disabled selected>-- Select Class --</option>
 
-            @foreach (ClassInformation classInfo in availableClasses)
-            {
-                <option Value="@classInfo">@classInfo.Course - @classInfo.Cohort</option>
-            }
-        </InputSelect>
-    </h5>
+                @foreach (ClassInformation classInfo in availableClasses)
+                {
+                    <option Value="@classInfo">@classInfo.Course - @classInfo.Cohort</option>
+                }
+            </InputSelect>
 
-    <!-- CSV file input -->
-    <div class="form-group mt-2 mb-2">
-        <input id="filterInput" type="text" class="form-control short-search" placeholder="Search Student..." />
-        <span class="btn btn-primary">Upload Class CSV:&nbsp;<InputFile OnChange="HandleFileSelection" />
-        </span>
-    </div>
+            <!-- CSV file input -->
+            &nbsp;Upload Class CSV:&nbsp;<InputFile OnChange="HandleFileSelection" />
+        </div>
+
+    <!-- Display student entries that the parser kicked out due to validation issues.  -->
+    @if(droppedStudents.Any())
+    {
+        <br />
+        <div>
+            <h5 class="card-header umgcHeader">Parser failed on these students...</h5>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Email</th>
+                        <th>GitHub</th>
+                        <th>Reason</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var student in droppedStudents)
+                    {
+                        <tr>
+                            <td>@student.Item1.FirstName</td>
+                            <td>@student.Item1.LastName</td>
+                            <td>@student.Item1.Email</td>
+                            <td>@student.Item1.GitHub</td>
+                            <td>@student.Item2</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
 
     <!-- Team allocation snapshot -->
     <div class="card">
@@ -138,6 +169,9 @@
     </div>
 
     <!-- Student table -->
+    <div class="form-group mt-2 mb-2">
+        <InputText class="short-search" @bind-Value="SearchTerm" Placeholder="Search student..." />
+    </div>
     <div id="tableContainer" >
         <table id="manageStudentsTable" class="table table-bordered table-striped table-hover scrollTable">
             <thead class="fixedHeader">
@@ -187,13 +221,13 @@
 </div>
 
 @code {
+    private string searchTerm = string.Empty;
     private IEnumerable<ClassInformation> availableClasses = [];
-    private string searchTeam = string.Empty;
     private bool isAvailableClassLoaded => availableClasses.Any(c => DateTime.Now.Month >= c.StartDate.Month && DateTime.Now.Month <= c.EndDate.Month);
     private ClassInformation selectedClass = new ClassInformation();
     private IEnumerable<Team> teams = new List<Team>();
-    private bool hidePanel = true;
     private List<Student> students = [];
+    private IEnumerable<Tuple<Student, string>> droppedStudents = [];
     private ClassInformation SelectedClass
     {
         get
@@ -203,7 +237,19 @@
         set
         {
             this.selectedClass = value;
-            ClassChanged(this.selectedClass);
+            _ = Task.Run(async () => await ClassChangedAsync(this.selectedClass));
+        }
+    }
+    private string SearchTerm
+    {
+        get
+        {
+            return this.searchTerm;
+        }
+        set
+        {
+            this.searchTerm = value;
+            _ = Task.Run(async () => await Search(this.searchTerm));
         }
     }
 
@@ -220,17 +266,14 @@
             this.SelectedClass = availableClasses.First();
         }
 
-        await this.InvokeAsync(async () =>
-        {
-            this.StateHasChanged();
-        });
+        this.StateHasChanged();
     }
 
     private async Task DeleteStudent(Student student)
     {
         // Implement the logic to delete a student
         await DBOperationsService.RemoveRecord(student);
-        await this.ClassChanged(this.selectedClass);
+        await this.ClassChangedAsync(this.selectedClass);
     }
 
     private async Task UpdateStudents()
@@ -256,12 +299,14 @@
         NavigationManager.Refresh();
     }
 
-    private async Task ClassChanged(ClassInformation classInformation)
+    private async Task ClassChangedAsync
+    (ClassInformation classInformation)
     {
         // Students associated with the current selected class.
         students = (await DBOperationsService.GetRecords<Student>())
-        .OrderBy(s => s.FirstName)
         .Where(s => s.ClassId == selectedClass.ClassId)
+        .Where(s => s.IsMatch(searchTerm))
+        .OrderBy(s => s.FirstName)
         .ToList();
 
         // Add blank if wanting to add a new student manually.
@@ -319,6 +364,12 @@
         return items;
     }
 
+    private async Task Search(string searchTerm)
+    {
+        this.searchTerm = searchTerm;
+        await ClassChangedAsync(SelectedClass);
+    }
+
     private async Task HandleFileSelection(InputFileChangeEventArgs e)
     {
         try
@@ -348,27 +399,35 @@
     {
         try
         {
+            string fileContent = string.Empty;
             using (StreamReader reader = new StreamReader(stream))
             {
-                string fileContent = await reader.ReadToEndAsync();
-
-                // TODO: Add dropped records to another table for notification to user.
-                List<Student> students = Student.ParseData(fileContent, selectedClass.ClassId, out _);
-                var currentStudents = await DBOperationsService.GetRecords<Student>();
-                foreach (Student student in students
-                    .Where(s => !currentStudents
-                        .Any(c => string.Equals(c.Email, s.Email, StringComparison.OrdinalIgnoreCase))))
-                {
-                    await DBOperationsService.AddRecord(student);
-                }
+                fileContent = await reader.ReadToEndAsync();
             }
+
+            if (string.IsNullOrEmpty(fileContent))
+            {
+                return;
+            }
+
+            // TODO: Add dropped records to another table for notification to user.
+            List<Student> students = Student.ParseData(fileContent, selectedClass.ClassId, out List<Tuple<Student, string>> droppedStudents);
+            var currentStudents = await DBOperationsService.GetRecords<Student>();
+            foreach (Student student in students
+                .Where(s => !currentStudents
+                    .Any(c => string.Equals(c.Email, s.Email, StringComparison.OrdinalIgnoreCase))))
+            {
+                await DBOperationsService.AddRecord(student);
+            }
+
+            this.droppedStudents = droppedStudents;
         }
         catch (Exception ex)
         {
             Console.WriteLine(ex.Message);
         }
 
-        ClassChanged(this.selectedClass);
+        await ClassChangedAsync(this.selectedClass);
         this.StateHasChanged();
     }
 }

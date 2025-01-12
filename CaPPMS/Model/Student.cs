@@ -4,6 +4,8 @@ using System;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
+using CaPPMS.Extensions;
+using System.Linq;
 
 namespace CaPPMS.Model
 {
@@ -105,7 +107,7 @@ namespace CaPPMS.Model
         /// </summary>
         /// <param name="data">The CSV.</param>
         /// <returns><see cref="IEnumerable{Student}"/>.</returns>
-        public static List<Student> ParseData(string data, long classId, out List<Student> droppedRecords)
+        public static List<Student> ParseData(string data, long classId, out List<Tuple<Student, string>> droppedRecords)
         {
             if (string.IsNullOrEmpty(data))
             {
@@ -118,7 +120,7 @@ namespace CaPPMS.Model
             }
 
             List<Student> students = new List<Student>();
-            droppedRecords = new List<Student>();
+            droppedRecords = [];
 
             try
             {
@@ -162,36 +164,33 @@ namespace CaPPMS.Model
                     student.Email = fields[headerMap["Email Address"]];
                     student.GitHub = fields[headerMap["Github.com account"]].Replace("https://github.com/", string.Empty);
 
+                    string error = string.Empty;
+
                     // Validation
                     if (string.IsNullOrEmpty(student.LastName))
                     {
-                        droppedRecords.Add(student);
-
-                        // TODO: log
-                        continue;
+                        error += "Last name is required.";
                     }
 
                     if (string.IsNullOrEmpty(student.FirstName))
                     {
-                        droppedRecords.Add(student);
-
-                        // TODO: log
-                        continue;
+                        error += ", First name is required.";
                     }
 
                     if (!student.Email.EndsWith(EmailSuffix, StringComparison.OrdinalIgnoreCase))
                     {
-                        droppedRecords.Add(student);
-
-                        // TODO: log
-                        continue;
+                        error += $", Invalid email address. Given address={student.Email}";
                     }
 
                     if (student.GitHub.Contains("@"))
                     {
-                        droppedRecords.Add(student);
+                        error += $", Invalid GitHub username. Given Github={student.GitHub}";
+                    }
 
-                        // TODO: log
+                    if (!string.IsNullOrEmpty(error))
+                    {
+                        error = error.TrimStart(',', ' ');
+                        droppedRecords.Add(Tuple.Create(student, error));
                         continue;
                     }
 
@@ -208,6 +207,30 @@ namespace CaPPMS.Model
             }
 
             return students;
+        }
+
+        /// <summary>
+        /// Check if the object matches the filter.
+        /// </summary>
+        /// <param name="filter">Search Term.</param>
+        /// <returns>If object matches the filter.</returns>
+        public bool IsMatch(string filter)
+        {
+            if (string.IsNullOrEmpty(filter))
+            {
+                return true;
+            }
+
+            string[] filters = filter.Split(new char[] { ' ', ',' }, StringSplitOptions.RemoveEmptyEntries);
+
+            return filters.All(f =>
+            {
+                return this.FirstName.IndexOf(f, StringComparison.OrdinalIgnoreCase) >= 0
+                    || this.LastName.IndexOf(f, StringComparison.OrdinalIgnoreCase) >= 0
+                    || this.Email.IndexOf(f, StringComparison.OrdinalIgnoreCase) >= 0
+                    || this.GitHub.IndexOf(f, StringComparison.OrdinalIgnoreCase) >= 0
+                    || this.TeamName.NullSafeToString().IndexOf(f, StringComparison.OrdinalIgnoreCase) >= 0;
+            });
         }
     }
 }
