@@ -70,29 +70,7 @@
     </div>
 </div>
 
-    @*<div class="card" style="display: none">
-            <h5 class="card-header evaluator">Your Information</h5>
-            <div class="card-body">
-
-                <label class="form-label col-3">
-                    First Name:
-                    <InputText id="firstName" @bind-Value="@Student.FirstName" placeholder="First Name" class="form-control" />
-
-                </label>
-
-                <label class="form-label col-3">
-                    Last Name:
-                    <InputText id="lastName" @bind-Value="@Student.LastName" placeholder="Last Name" class="form-control" />
-                </label>
-
-                <label class="form-label col-5">
-                    Email Address:
-                    <InputText id="emailAddress" @bind-Value="@Student.Email" placeholder="Email Address" class="form-control" />
-                </label>
-            </div>
-        </div>*@
-
-<EditForm Model="@review" OnValidSubmit="HandleValidSubmit">
+<EditForm Model="@review" OnValidSubmit="HandleValidSubmit" id="@formId">
     <DataAnnotationsValidator />
     <AntiforgeryToken />
 
@@ -133,16 +111,14 @@
             </label>
         </div>
     </div>
-
-    <div style="margin-top: 10px; margin-bottom: 10px;">
-        <h4 style="float: left; color: rgb(21, 142, 21)">@StatusMessage</h4>
-        <input id="submitButton" type="submit" class="btn btn-primary" style="float: right;" value="Submit" />
-    </div>
 </EditForm>
 
-<!-- Confirmation dialog box -->
-<ConfirmationDialogBox @ref="confirmationDialogBox" ConfirmationButtonText="OK" ConfirmedChanged="CompleteSubmission" />
+<div style="margin-top: 10px; margin-bottom: 10px;">
+    <h4 style="float: left; color: rgb(21, 142, 21)">@StatusMessage</h4>
+    <button form="@formId" type="submit" class="btn btn-primary" style="float: right;">Submit</button>
+</div>
 
+<ConfirmationDialogBox @ref="confirmationDialogBox" ConfirmationButtonText="OK" ConfirmedChanged="CompleteSubmission" ShowCommandButton="false" />
 
 <br />
 
@@ -212,6 +188,7 @@
             review = value;
         }
     }
+    private string formId = "reviewForm";
 
     protected override async Task OnInitializedAsync()
     {

@@ -1,4 +1,7 @@
-﻿<button type="button" class=@ButtonClass @onclick="ShowPopup">@Command</button>
+﻿@if (this.ShowCommandButton)
+{
+    <button type="button" class=@ButtonClass @onclick="ShowPopup">@Command</button>
+}
 
 @if (Show)
 {
@@ -29,6 +32,7 @@
     [Parameter] public string CancelButtonText { get; set; } = "Cancel";
     [Parameter] public string ButtonClass { get; set; } = "";
     [Parameter] public string Command { get; set; } = "Action";
+    [Parameter] public bool ShowCommandButton { get; set; } = true;
     [Parameter] public string Prompt { get; set; } = "Are you sure?";
     [Parameter] public EventCallback<bool> ConfirmedChanged { get; set; }
 
