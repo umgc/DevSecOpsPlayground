@@ -1,6 +1,4 @@
-﻿using CaPPMS.Attributes;
-using CaPPMS.Model;
-using System;
+﻿using CaPPMS.Model;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,23 +15,16 @@ namespace CaPPMS.Pages.StudentReviews
 
         public Student student = new Student();
 
-        public Review review = new Review();
-
-        public List<Review> CompletedReviews = [];
-
         public List<Student>? ClassList { get; set; }
 
         public List<string>? WeeksList { get; set; }
 
         public string? StatusMessage { get; set; }
 
-        public bool HidePanel { get; set; } = true;
-
         /// <summary>
         /// Submit the evaluation.
         /// </summary>
         /// <returns><c>true</c> if successful.</returns>
-        /// <exception cref="Exception"></exception>
         public async Task<bool> SubmitEvaluation()
         {
             string? studentName = await LookupStudentAsync(review.ReviewedStudentId);
@@ -45,14 +36,13 @@ namespace CaPPMS.Pages.StudentReviews
             if (await DBOperationsService.AddRecord(review))
             {
                 review.RatedStudent = studentName;
-                HidePanel = false;
                 return true;
             }
 
             return false;
         }
 
-        public async Task<string?> LookupStudentAsync(int studentId)
+        public async Task<string?> LookupStudentAsync(long studentId)
         {
             Student? student = (await DBOperationsService.GetRecords<Student>(studentId)).FirstOrDefault();
 

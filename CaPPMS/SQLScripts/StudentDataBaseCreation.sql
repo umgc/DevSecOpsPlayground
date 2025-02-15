@@ -1,6 +1,7 @@
 CREATE TABLE "StudentReviews"
 (
 	"StudentReviewId"	INTEGER NOT NULL,
+	"ReviewedById"	INTEGER,
 	"ReviewedStudentId"	INTEGER,
 	"Week"	TEXT,
 	"Score"	TEXT,

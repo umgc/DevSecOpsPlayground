@@ -109,7 +109,7 @@
                                         <tr>
                                             <td>@scoreDetails.Week</td>
                                             <td>@scoreDetails.Score</td>
-                                            <td>@scoreDetails.Comment</td>
+                                            <td>@scoreDetails.Comments</td>
                                         </tr>
                                     }
                                 </tbody>
@@ -129,7 +129,7 @@
     protected override async Task OnInitializedAsync()
     {
         // TODO: Replace the hardcoded student ID with the actual student ID
-        studentScores.AddRange(await DBOperationsService.RetrieveStudentScoresAsync(18));
+        studentScores.AddRange(await DBOperationsService.GetStudentScoresAsync(18));
         await base.OnInitializedAsync();
     }
 }

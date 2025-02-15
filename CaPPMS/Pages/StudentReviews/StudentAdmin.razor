@@ -101,7 +101,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        studentScores.AddRange(await DBOperationsService.RetrieveStudentScoresAsync());
+        studentScores.AddRange(await DBOperationsService.GetStudentScoresAsync());
         await base.OnInitializedAsync();
     }
 
@@ -112,7 +112,7 @@
     {
         var scoresAndComments = studentScores
             .Where(s => s.StudentId == student.StudentId)
-            .Select(s => new Tuple<string, double, string>(s.Week, s.Score, string.Join("\n", s.Comment)))
+            .Select(s => new Tuple<string, double, string>(s.Week, s.Score, string.Join("\n", s.Comments)))
             .ToList();
 
         selectedStudent = new SelectedStudent()

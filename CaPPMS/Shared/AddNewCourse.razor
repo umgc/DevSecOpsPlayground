@@ -37,7 +37,7 @@
         {
             ClassInformation? createdClass = null;
             ClassInformationComparer comparer = new ClassInformationComparer();
-            foreach (ClassInformation cohort in await DBOperationsService.RetrieveCohortAsync())
+            foreach (ClassInformation cohort in await DBOperationsService.GetRecords<ClassInformation>())
             {
                 if (comparer.Compare(cohort, classInformation) == 0)
                 {

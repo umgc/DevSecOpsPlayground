@@ -303,8 +303,7 @@
     (ClassInformation classInformation)
     {
         // Students associated with the current selected class.
-        students = (await DBOperationsService.GetRecords<Student>())
-        .Where(s => s.ClassId == selectedClass.ClassId)
+        students = (await DBOperationsService.GetStudentsByClassAsync(selectedClass.ClassId))
         .Where(s => s.IsMatch(searchTerm))
         .OrderBy(s => s.FirstName)
         .ToList();
@@ -333,25 +332,6 @@
         }
 
         await this.InvokeAsync(() => this.StateHasChanged());
-    }
-
-    private async Task TeamChanged(long teamId, Student student)
-    {
-        Team? team = teams.FirstOrDefault(t => t.TeamId == teamId);
-        if (team == null)
-        {
-            return;
-        }
-
-        Team? team1 = (await DBOperationsService.GetRecords<Team>(team.TeamId)).FirstOrDefault();
-        if (team1 == null)
-        {
-            return;
-        }
-
-        student.SetTeam(team1);
-        await DBOperationsService.UpdateTeamAssignmentAsync(student.TeamId, student.TeamId);
-        await this.Refresh(updateSelectedClass: false);
     }
 
     private dynamic GetGroupedTeams()

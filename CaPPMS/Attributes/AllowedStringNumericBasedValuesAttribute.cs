@@ -1,7 +1,8 @@
-﻿using System;
+﻿using CaPPMS.Extensions;
+using Humanizer;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 
 namespace CaPPMS.Attributes
 {
@@ -11,7 +12,8 @@ namespace CaPPMS.Attributes
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Parameter, AllowMultiple = false)]
     public class AllowedStringNumericBasedValuesAttribute : ValidationAttribute
     {
-        private readonly int[] range;
+        private HashSet<string> stringLookup = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        private HashSet<int> intLookup = new();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AllowedStringNumericBasedValuesAttribute" /> class.
@@ -20,13 +22,13 @@ namespace CaPPMS.Attributes
         /// <param name="end">The top of the range.</param>
         public AllowedStringNumericBasedValuesAttribute(int start, int end)
         {
-            this.range = Enumerable.Range(start, end).ToArray();
+            while(start <= end)
+            {
+                stringLookup.Add(start.ToWords());
+                intLookup.Add(start);
+                start++;
+            }
         }
-
-        /// <summary>
-        /// Gets the range of values allowed by this attribute.
-        /// </summary>
-        public IEnumerable<int> Range => range;
 
         /// <summary>
         /// Determines whether a specified object is valid. (Overrides <see cref="ValidationAttribute.IsValid(object)" />)
@@ -40,12 +42,17 @@ namespace CaPPMS.Attributes
                 return false;
             }
 
-            if (int.TryParse(value.ToString(), out int result))
+            if (stringLookup.Contains(value.NullSafeToString()))
             {
-                return range.Any(i => i == result);
+                return true;
             }
 
-            return base.IsValid(value);
+            if (int.TryParse(value.NullSafeToString(), out int result) && intLookup.Contains(result))
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }
