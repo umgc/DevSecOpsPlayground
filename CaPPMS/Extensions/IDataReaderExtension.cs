@@ -41,18 +41,7 @@ namespace CaPPMS.Extensions
                     object? value = dataReader.GetValue(columnId);
                     if (value != DBNull.Value)
                     {
-                        if (property.PropertyType == typeof(double))
-                        {
-                            property.SetValue(record, Convert.ToDouble(value));
-                        }
-                        else if (property.PropertyType == typeof(List<string>))
-                        {
-                            property.SetValue(record, value?.ToString()?.Split(',').ToList());
-                        }
-                        else
-                        {
-                            property.SetValue(record, ConvertValue(value, property.PropertyType));
-                        }
+                        property.SetValue(record, ConvertValue(value, property.PropertyType));
                     }
                 });
 
@@ -87,6 +76,18 @@ namespace CaPPMS.Extensions
                 }
 
                 return result;
+            }
+
+            // Check doubles
+            if (expectedType == typeof(double))
+            {
+                return Convert.ToDouble(value);
+            }
+
+            // Check lists
+            if (expectedType == typeof(List<string>))
+            {
+                return value?.ToString()?.Split(',').ToList() ?? [];
             }
 
             return value;
