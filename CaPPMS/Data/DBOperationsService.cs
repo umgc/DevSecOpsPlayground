@@ -13,7 +13,6 @@ using System.Reflection;
 using System.Runtime.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
-using static MudBlazor.Defaults;
 
 namespace CaPPMS.Data
 {
@@ -72,7 +71,7 @@ namespace CaPPMS.Data
         /// </summary>
         /// <param name="classId">Class ID.</param>
         /// <returns>List of Students.</returns>
-        public async Task<IEnumerable<Student>> RetrieveStudentsByClassAsync(long classId = -1)
+        public async Task<IEnumerable<Student>> GetStudentsByClassAsync(long classId = -1)
         {
             var students = new List<Student>();
             string query = "SELECT * FROM Students";
@@ -84,9 +83,9 @@ namespace CaPPMS.Data
             SqliteParameter classParam = new("@classId", classId);
             await ExecuteQueryAsync(
                 query,
-                (reader) =>
+                (reader, map) =>
                 {
-                    students.Add(reader.ConvertRecord<Student>());
+                    students.Add(reader.ConvertRecord<Student>(map));
                 },
                 classParam);
 
@@ -98,7 +97,7 @@ namespace CaPPMS.Data
         /// </summary>
         /// <param name="teamId">Team ID.</param>
         /// <returns>List of Students.</returns>
-        public async Task<IEnumerable<Student>> RetrieveStudentsByTeamAsync(int teamId = -1)
+        public async Task<IEnumerable<Student>> GetStudentsByTeamAsync(int teamId = -1)
         {
             var students = new List<Student>();
             string query = "SELECT * FROM Students";
@@ -110,9 +109,9 @@ namespace CaPPMS.Data
             SqliteParameter teamParam = new("@teamId", teamId);
             await ExecuteQueryAsync(
                 query,
-                (reader) =>
+                (reader, map) =>
                 {
-                    students.Add(reader.ConvertRecord<Student>());
+                    students.Add(reader.ConvertRecord<Student>(map));
                 },
                 teamParam);
 
@@ -123,12 +122,12 @@ namespace CaPPMS.Data
         /// Get Student scores.
         /// </summary>
         /// <returns>List of scores.</returns>
-        public async Task <IEnumerable<StudentScores>> RetrieveStudentScoresAsync()
+        public async Task <IEnumerable<StudentScores>> GetStudentScoresAsync()
         {
             List<StudentScores> studentScores = [];
             await ExecuteQueryAsync(
                 readStudentScore,
-                (record) => studentScores.Add(record.ConvertRecord<StudentScores>()));
+                (record, map) => studentScores.Add(record.ConvertRecord<StudentScores>(map)));
             return studentScores.AsReadOnly();
         }
 
@@ -137,13 +136,13 @@ namespace CaPPMS.Data
         /// </summary>
         /// <param name="studentId"></param>
         /// <returns></returns>
-        public async Task<IEnumerable<StudentScores>> RetrieveStudentScoresAsync(int studentId)
+        public async Task<IEnumerable<StudentScores>> GetStudentScoresAsync(int studentId)
         {
             List<StudentScores> studentScores = [];
             SqliteParameter parameter = new("@studentId", studentId);
             await ExecuteQueryAsync(
                 readStudentScore,
-                (record) => studentScores.Add(record.ConvertRecord<StudentScores>()),
+                (record, map) => studentScores.Add(record.ConvertRecord<StudentScores>(map)),
                 parameter);
             return studentScores.AsReadOnly();
         }
@@ -152,59 +151,22 @@ namespace CaPPMS.Data
         /// Get student score details.
         /// </summary>
         /// <returns>List of student scores.</returns>
-        public async Task<IEnumerable<StudentScores>> RetrieveStudentScoreDetails()
+        public async Task<IEnumerable<StudentScores>> GetStudentScoreDetails()
         {
             List<StudentScores> studentScores = new List<StudentScores>();
             await ExecuteQueryAsync(
                 readStudentScoreDetails,
-                (record) => studentScores.Add(record.ConvertRecord<StudentScores>()));
+                (record, map) => studentScores.Add(record.ConvertRecord<StudentScores>(map)));
             return studentScores.AsReadOnly();
-        }
-
-        /// <summary>
-        /// Get a team list.
-        /// </summary>
-        /// <returns>List of teams.</returns>
-        public async Task<IEnumerable<Team>> RetrieveTeamListAsync()
-        {
-            List<Team> teamList = [];
-            string query = "SELECT * FROM Teams";
-            await ExecuteQueryAsync(
-                query,
-                (record) => teamList.Add(record.ConvertRecord<Team>()));
-
-            return teamList.AsReadOnly();
-        }
-
-        /// <summary>
-        /// Get a team list.
-        /// </summary>
-        /// <returns>List of teams.</returns>
-        public async Task<IEnumerable<ClassInformation>> RetrieveCohortAsync(long classId = -1)
-        {
-            List<ClassInformation> cohorts = [];
-            string query = "SELECT * FROM ClassInformation";
-            if (classId > -1)
-            {
-                query += " WHERE ClassId = @classId";
-            }
-
-            SqliteParameter parameter = new("@classId", classId);
-            await ExecuteQueryAsync(
-                query,
-                (record) => cohorts.Add(record.ConvertRecord<ClassInformation>()),
-                parameter);
-
-            return cohorts.AsReadOnly();
         }
 
         /// <summary>
         /// Get number of weeks for the course.
         /// </summary>
         /// <returns></returns>
-        public List<string> RetrieveWeeks()
+        public List<string> GetWeeks()
         { 
-            int weeks = this.ReteiveNumberOfWeeks();
+            int weeks = this.GetNumberOfWeeks();
 
             List<string> result = [];
             for (int i = 1; i <= weeks; i++)
@@ -219,7 +181,7 @@ namespace CaPPMS.Data
         /// Gets the number of weeks a cohort is active.
         /// </summary>
         /// <returns>Default is 12 weeks, else what is configured.</returns>
-        public int ReteiveNumberOfWeeks()
+        public int GetNumberOfWeeks()
         {
             string numWeeks = Program.GetConfigurationSetting("CourseWeeks");
             if (string.IsNullOrEmpty(numWeeks))
@@ -228,45 +190,6 @@ namespace CaPPMS.Data
             }
 
             return int.Parse(numWeeks);
-        }
-
-        /// <summary>
-        /// Update Student to team assignment.
-        /// </summary>
-        /// <param name="studentId">Student ID.</param>
-        /// <param name="teamId">Team ID</param>
-        /// <returns>True if successful.</returns>
-        public async Task<bool> UpdateTeamAssignmentAsync(long studentId, long teamId)
-        {
-            string query = "UPDATE Students Set TeamId = @teamId WHERE StudentId = @studentId";
-            List<SqliteParameter> parameters =
-            [
-                new SqliteParameter("@teamId", teamId),
-                new SqliteParameter("@studentId", studentId),
-            ];
-            int rowsAffected = await ExecuteNonQueryAsync(query, [.. parameters]);
-            return rowsAffected > 0;
-        }
-
-        /// <summary>
-        /// Return team for student.
-        /// </summary>
-        /// <param name="username"></param>
-        /// <returns></returns>
-        public async Task<long> RetrieveUsersTeamAsync(string username)
-        {
-            long teamId = -1;
-            string query = "SELECT TeamId FROM Students WHERE Email = @email";
-            SqliteParameter parameter = new("@email", username);
-            await ExecuteQueryAsync(
-                query,
-                (reader) =>
-                {
-                    teamId = reader[nameof(Team.TeamId)] == DBNull.Value ? -1 : Convert.ToInt64(reader[nameof(Team.TeamId)]);
-                },
-                parameter);
-
-            return teamId;
         }
 
         /// <summary>
@@ -298,7 +221,7 @@ namespace CaPPMS.Data
             // Execute
             await ExecuteQueryAsync(
                 query,
-                (record) => records.Add(record.ConvertRecord<T>()),
+                (record, map) => records.Add(record.ConvertRecord<T>(map)),
                 parameter);
             return records.AsReadOnly();
         }
@@ -352,6 +275,13 @@ namespace CaPPMS.Data
             return result > -1;
         }
 
+        /// <summary>
+        /// Update a record in the database.
+        /// </summary>
+        /// <typeparam name="T">Type of record.</typeparam>
+        /// <param name="record">Record to update.</param>
+        /// <returns><c>true</c> if record changed > 0</returns>
+        /// <exception cref="InvalidOperationException"></exception>
         public async Task<bool> UpdateRecord<T>(T record) where T : ISqlTableModel, new()
         {
             ArgumentNullException.ThrowIfNull(record);
@@ -404,6 +334,13 @@ namespace CaPPMS.Data
             return result > -1;
         }
 
+        /// <summary>
+        /// Remove a record from the database.
+        /// </summary>
+        /// <typeparam name="T">Type of record.</typeparam>
+        /// <param name="record">Record to take action on.</param>
+        /// <returns><c>true</c> if record changed > 0</returns>
+        /// <exception cref="InvalidOperationException"></exception>
         public async Task<bool> RemoveRecord<T>(T record)
         {
             ArgumentNullException.ThrowIfNull(record);
@@ -439,6 +376,11 @@ namespace CaPPMS.Data
             return result > -1;
         }
 
+        /// <summary>
+        /// Ensure the database exists.
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="InvalidOperationException"></exception>
         public async Task EnsureDbExistsAsync()
         {
             DateTime timout = DateTime.Now.Add(brokerTimeout);
@@ -469,41 +411,6 @@ namespace CaPPMS.Data
             }
 
             dbBroker = 0;
-        }
-
-        private async Task ExecuteQueryAsync(string query, Action<IDataReader> readerAction, params SqliteParameter[] sqliteParameters)
-        {
-            using (SqliteConnection connection = new(connectionString))
-            {
-                try
-                {
-                    connection.Open();
-
-                    using (SqliteCommand command = new(query, connection))
-                    {
-                        foreach (SqliteParameter param in sqliteParameters)
-                        {
-                            command.Parameters.Add(param);
-                        }
-
-                        using (IDataReader reader = await command.ExecuteReaderAsync())
-                        {
-                            while (reader.Read())
-                            {
-                                readerAction?.Invoke(reader);
-                            }
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Error accessing the database: {ex.Message}");
-                }
-                finally
-                {
-                    connection.Close();
-                }
-            }
         }
 
         private static string GetResourceData(string name)
@@ -537,6 +444,42 @@ namespace CaPPMS.Data
             }
 
             return data;
+        }
+
+        private async Task ExecuteQueryAsync(string query, Action<IDataReader, Dictionary<string, int>> readerAction, params SqliteParameter[] sqliteParameters)
+        {
+            using (SqliteConnection connection = new(connectionString))
+            {
+                try
+                {
+                    connection.Open();
+
+                    using (SqliteCommand command = new(query, connection))
+                    {
+                        foreach (SqliteParameter param in sqliteParameters)
+                        {
+                            command.Parameters.Add(param);
+                        }
+
+                        using (IDataReader reader = await command.ExecuteReaderAsync())
+                        {
+                            Dictionary<string, int> columnMap = reader.GetColumnMap();
+                            while (reader.Read())
+                            {
+                                readerAction?.Invoke(reader, columnMap);
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error accessing the database: {ex.Message}");
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            }
         }
 
         private async Task<int> ExecuteNonQueryAsync(string query, params SqliteParameter[] parameters)

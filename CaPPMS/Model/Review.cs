@@ -10,16 +10,18 @@ namespace CaPPMS.Model
         public Review() { }
 
         [SqlIdProperty]
-        public int StudentReviewId { get; set; } = -1;
+        public long StudentReviewId { get; set; } = -1;
 
         [Required(ErrorMessage = "Student selection is required")]
-        public int ReviewedStudentId { get; set; } = -1;
+        public long ReviewedStudentId { get; set; } = -1;
+
+        public long ReviewedById { get; set; } = -1;
 
         [IgnoreDataMember]
         public string RatedStudent { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Week selection is required")]
-        [AllowedStringNumericBasedValues(0, 12, ErrorMessage = "Please select a week between 1 and 10.")]
+        [AllowedStringNumericBasedValues(1, 12, ErrorMessage = "Please select a week between 1 and 10.")]
         public string Week { get; set; } = "1";
 
         [Required(ErrorMessage = "Score is required")]

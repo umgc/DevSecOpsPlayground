@@ -19,7 +19,7 @@ namespace CaPPMS.Model
         /// <summary>
         /// Comment.
         /// </summary>
-        public List<string> Comment { get; set; } = [];
+        public List<string> Comments { get; set; } = [];
 
         /// <summary>
         /// Week of class.
