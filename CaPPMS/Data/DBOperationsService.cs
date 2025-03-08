@@ -1,10 +1,16 @@
-﻿using Humanizer;
+﻿using CaPPMS.Attributes;
+using CaPPMS.Extensions;
+using CaPPMS.Model;
+using Humanizer;
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
+using System.Linq;
 using System.Reflection;
+using System.Runtime.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -61,45 +67,68 @@ namespace CaPPMS.Data
         }
 
         /// <summary>
-        /// Get Students List
+        /// Get Students List.
         /// </summary>
-        /// <param name="teamId">Team ID</param>
-        /// <returns>List of Students</returns>
-        public List<Student> RetrieveStudents(int teamId = -1)
+        /// <param name="classId">Class ID.</param>
+        /// <returns>List of Students.</returns>
+        public async Task<IEnumerable<Student>> GetStudentsByClassAsync(long classId = -1)
         {
             var students = new List<Student>();
-            string query = "SELECT StudentId, FirstName, LastName, TeamId FROM Students";
+            string query = "SELECT * FROM Students";
+            if (classId > -1)
+            {
+                query += " WHERE ClassId = @classId";
+            }
+
+            SqliteParameter classParam = new("@classId", classId);
+            await ExecuteQueryAsync(
+                query,
+                (reader, map) =>
+                {
+                    students.Add(reader.ConvertRecord<Student>(map));
+                },
+                classParam);
+
+            return students.AsReadOnly();
+        }
+
+        /// <summary>
+        /// Get Students List.
+        /// </summary>
+        /// <param name="teamId">Team ID.</param>
+        /// <returns>List of Students.</returns>
+        public async Task<IEnumerable<Student>> GetStudentsByTeamAsync(int teamId = -1)
+        {
+            var students = new List<Student>();
+            string query = "SELECT * FROM Students";
             if (teamId > -1)
             {
                 query += " WHERE TeamId = @teamId";
             }
 
             SqliteParameter teamParam = new("@teamId", teamId);
-            ExecuteQueryAsync(
+            await ExecuteQueryAsync(
                 query,
-                (reader) =>
+                (reader, map) =>
                 {
-                    var student = new Student();
-                    student.StudentId = Convert.ToInt32(reader["StudentId"]);
-                    student.FirstName = reader["FirstName"].NullSafeToString();
-                    student.LastName = reader["LastName"].NullSafeToString();
-                    student.AssignedTeam.TeamId = Convert.ToInt32(reader["TeamId"]);
-                    students.Add(student);
+                    students.Add(reader.ConvertRecord<Student>(map));
                 },
                 teamParam);
 
-            return students;
+            return students.AsReadOnly();
         }
 
         /// <summary>
         /// Get Student scores.
         /// </summary>
         /// <returns>List of scores.</returns>
-        public List<StudentScores> RetrieveStudentScores()
+        public async Task <IEnumerable<StudentScores>> GetStudentScoresAsync()
         {
-            List<StudentScores> studentScores = new();
-            ExecuteQueryAsync(readStudentScore, (record) => studentScores.Add(ReadStudentRecord(record)));
-            return studentScores;
+            List<StudentScores> studentScores = [];
+            await ExecuteQueryAsync(
+                readStudentScore,
+                (record, map) => studentScores.Add(record.ConvertRecord<StudentScores>(map)));
+            return studentScores.AsReadOnly();
         }
 
         /// <summary>
@@ -107,161 +136,257 @@ namespace CaPPMS.Data
         /// </summary>
         /// <param name="studentId"></param>
         /// <returns></returns>
-        public List<StudentScores> RetrieveStudentScores(int studentId)
+        public async Task<IEnumerable<StudentScores>> GetStudentScoresAsync(int studentId)
         {
-            List<StudentScores> studentScores = new ();
+            List<StudentScores> studentScores = [];
             SqliteParameter parameter = new("@studentId", studentId);
-            ExecuteQueryAsync(readStudentScore, (record) => studentScores.Add(ReadStudentRecord(record)), parameter);
-            return studentScores;
+            await ExecuteQueryAsync(
+                readStudentScore,
+                (record, map) => studentScores.Add(record.ConvertRecord<StudentScores>(map)),
+                parameter);
+            return studentScores.AsReadOnly();
         }
 
         /// <summary>
         /// Get student score details.
         /// </summary>
         /// <returns>List of student scores.</returns>
-        public List<StudentScores> RetrieveStudentScoreDetails()
-        {            
-            List<StudentScores> studentScores = new List<StudentScores>();
-            ExecuteQueryAsync(readStudentScoreDetails, (record) => studentScores.Add(ReadStudentRecord(record)));
-            return studentScores;
-        }
-
-        /// <summary>
-        /// Get a team list.
-        /// </summary>
-        /// <returns>List of teams.</returns>
-        public List<Teams> RetrieveTeamList()
+        public async Task<IEnumerable<StudentScores>> GetStudentScoreDetails()
         {
-            List<Teams> teamList = new List<Teams>();
-
-            using (SqliteConnection connection = new(connectionString))
-            {
-                try
-                {
-                    connection.Open();
-
-                    string query = "SELECT TeamId, TeamName FROM Teams";
-
-                    using (SqliteCommand command = new(query, connection))
-                    {
-                        using (SqliteDataReader reader = command.ExecuteReader())
-                        {
-                            while (reader.Read())
-                            {
-                                teamList.Add(new Teams()
-                                {
-                                    TeamId = Convert.ToInt32(reader["TeamId"]),
-                                    Name = reader["TeamName"].ToString() ?? string.Empty
-                                });
-                            }
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    logger.LogError($"Error accessing the database: {ex.Message}");
-                }
-                finally
-                {
-                    connection.Close();
-                }
-            }
-
-            return teamList;
+            List<StudentScores> studentScores = new List<StudentScores>();
+            await ExecuteQueryAsync(
+                readStudentScoreDetails,
+                (record, map) => studentScores.Add(record.ConvertRecord<StudentScores>(map)));
+            return studentScores.AsReadOnly();
         }
 
         /// <summary>
         /// Get number of weeks for the course.
         /// </summary>
         /// <returns></returns>
-        public List<string> RetrieveWeeks()
-        {
-            string numWeeks = Program.GetConfigurationSetting("CourseWeeks");
+        public List<Tuple<int, string>> GetWeeks()
+        { 
+            int weeks = this.GetNumberOfWeeks();
 
-            if (string.IsNullOrEmpty(numWeeks))
-            {
-                numWeeks = "12";
-            }
-
-            int weeks = int.Parse(numWeeks);
-
-            List<string> result = new List<string>();
+            List<Tuple<int, string>> result = [];
             for (int i = 1; i <= weeks; i++)
             {
-                result.Add(i.ToWords(WordForm.Normal).ApplyCase(LetterCasing.Sentence));
+                result.Add(
+                    Tuple.Create(
+                        i,
+                        i.ToWords(WordForm.Normal)
+                        .ApplyCase(LetterCasing.Sentence)));
             }
 
             return result;
         }
 
         /// <summary>
-        /// Update Student to team assignment.
+        /// Gets the number of weeks a cohort is active.
         /// </summary>
-        /// <param name="studentId">Student ID.</param>
-        /// <param name="teamId">Team ID</param>
-        /// <returns>True if successful.</returns>
-        public async Task<bool> UpdateTeamAssignmentAsync(int studentId, int teamId)
+        /// <returns>Default is 12 weeks, else what is configured.</returns>
+        public int GetNumberOfWeeks()
         {
-            string query = "UPDATE Students Set TeamId = @teamId WHERE StudentId = @studentId";
-            List<SqliteParameter> parameters =
-            [
-                new SqliteParameter("@teamId", teamId),
-                new SqliteParameter("@studentId", studentId),
-            ];
-            int rowsAffected = await ExecuteNonQueryAsync(query, [.. parameters]);
-            return rowsAffected > 0;
+            string numWeeks = Program.GetConfigurationSetting("CourseWeeks");
+            if (string.IsNullOrEmpty(numWeeks))
+            {
+                numWeeks = "12";
+            }
+
+            return int.Parse(numWeeks);
         }
 
+        #region Get
         /// <summary>
-        /// Return team for student.
+        /// Gets records of a type.
         /// </summary>
-        /// <param name="username"></param>
-        /// <returns></returns>
-        public async Task<int> RetrieveUsersTeamAsync(string username)
+        /// <typeparam name="T">Type of record to get.</typeparam>
+        /// <param name="id">Id of record, if not given, all records will be retrieved.</param>
+        /// <returns><see cref="IEnumerable{T}"/>.</returns>
+        /// <exception cref="InvalidOperationException"></exception>
+        public async Task<IEnumerable<T>> GetRecords<T>(long id = -1, string conditionItem = "ClassId") where T : ISqlTableModel, new()
         {
-            int teamId = -1;
-            string query = "SELECT TeamId FROM Students WHERE Email = @email";
-            SqliteParameter parameter = new ("@email", username);
+            List<T> records = new();
+
+            // Get the table name.
+            string? tableName = typeof(T).GetCustomAttribute<SqlTableNameAttribute>()?.TableName;
+            if (string.IsNullOrEmpty(tableName))
+            {
+                throw new InvalidOperationException("Table name not found.");
+            }
+
+            // Build the query
+            SqliteParameter parameter = new("@id", id);
+            string query = $"SELECT * FROM {tableName};";
+            if (id > -1)
+            {
+                query += $" WHERE {conditionItem} = @id";
+            }
+
+            // Execute
             await ExecuteQueryAsync(
                 query,
-                (reader) =>
-                {
-                    teamId = reader["TeamId"] == DBNull.Value ? -1 : Convert.ToInt32(reader["TeamId"]);
-                },
+                (record, map) => records.Add(record.ConvertRecord<T>(map)),
                 parameter);
+            return records.AsReadOnly();
+        }
 
-            return teamId;
+        #endregion
+        /// <summary>
+        /// Add a record to the database.
+        /// </summary>
+        /// <typeparam name="T">Type of record to add.</typeparam>
+        /// <param name="record"></param>
+        /// <returns></returns>
+        /// <exception cref="InvalidOperationException"></exception>
+        public async Task<bool> AddRecord<T>(T record) where T : ISqlTableModel, new()
+        {
+            ArgumentNullException.ThrowIfNull(record);
+
+            // Get the table name.
+            string? tableName = record.GetType().GetCustomAttribute<SqlTableNameAttribute>()?.TableName;
+            if (string.IsNullOrEmpty(tableName))
+            {
+                throw new InvalidOperationException("Table name not found.");
+            }
+
+            // Get the properties
+            PropertyInfo[] properties = record.GetType().GetProperties();
+
+            // Get the properties that are not the ID
+            PropertyInfo[] nonIdProperties = properties
+                .Where(prop =>
+                {
+                    return prop.GetCustomAttribute<SqlIdPropertyAttribute>() == null
+                    && prop.GetCustomAttribute<IgnoreDataMemberAttribute>() == null;
+                })
+                .ToArray();
+
+            // Build the query
+            string query = $"INSERT INTO {tableName} (";
+            string values = "VALUES (";
+            List<SqliteParameter> parameters = new();
+            foreach (PropertyInfo property in nonIdProperties)
+            {
+                query += $"{property.Name}, ";
+                values += $"@{property.Name}, ";
+                parameters.Add(new SqliteParameter($"@{property.Name}", property.GetValue(record)));
+            }
+
+            query = query.TrimEnd(',', ' ') + ") ";
+            values = values.TrimEnd(',', ' ') + ");";
+            query += values;
+            // Execute
+            int result = await ExecuteNonQueryAsync(query, [.. parameters]);
+            return result > -1;
         }
 
         /// <summary>
-        /// Add Student to the database.
+        /// Update a record in the database.
         /// </summary>
-        /// <param name="student">Student to add.</param>
-        public async Task<bool> AddStudent(Student student)
+        /// <typeparam name="T">Type of record.</typeparam>
+        /// <param name="record">Record to update.</param>
+        /// <returns><c>true</c> if record changed > 0</returns>
+        /// <exception cref="InvalidOperationException"></exception>
+        public async Task<bool> UpdateRecord<T>(T record) where T : ISqlTableModel, new()
         {
-            const string insertCommand = @"
-INSERT INTO Students (FirstName, LastName, Email, TeamId)
-VALUES (@FirstName, @LastName, @Email, @TeamId)";
-            List<SqliteParameter> parameters =
-            [
-                new SqliteParameter("@FirstName", student.FirstName),
-                new SqliteParameter("@LastName", student.LastName),
-                new SqliteParameter("@Email", student.Email),
-                new SqliteParameter("@TeamId", student.AssignedTeam.TeamId)
-            ];
+            ArgumentNullException.ThrowIfNull(record);
 
-            int result = await ExecuteNonQueryAsync(insertCommand, [.. parameters]);
+            // Get the table name.
+            string? tableName = record.GetType().GetCustomAttribute<SqlTableNameAttribute>()?.TableName;
+            if (string.IsNullOrEmpty(tableName))
+            {
+                throw new InvalidOperationException("Table name not found.");
+            }
 
-            if (result > -1)
+            // Get the properties
+            PropertyInfo[] properties = record.GetType().GetProperties();
+
+            // Get the properties that are not the ID
+            PropertyInfo[] nonIdProperties = properties
+                .Where(prop =>
+                {
+                    return prop.GetCustomAttribute<SqlIdPropertyAttribute>() == null
+                    && prop.GetCustomAttribute<IgnoreDataMemberAttribute>() == null;
+                })
+                .ToArray();
+
+            PropertyInfo? id = properties.FirstOrDefault(prop => prop.GetCustomAttribute<SqlIdPropertyAttribute>() != null);
+            if (id == null)
             {
-                return true;
+                throw new InvalidOperationException("ID property not found.");
             }
-            else
+
+            // Build the query
+            string query = $"UPDATE {tableName}\n";
+
+            // SET
+            query += "SET ";
+            List<SqliteParameter> parameters = new();
+            foreach (PropertyInfo property in nonIdProperties)
             {
-                return false;
+                query += $"{property.Name} = @{property.Name}, ";
+                parameters.Add(new SqliteParameter($"@{property.Name}", property.GetValue(record)));
             }
+
+            // Trim the fat.
+            query = query.TrimEnd(',', ' ');
+
+            // WHERE
+            query += $"\nWHERE {id.Name} = {id.GetValue(record)};";
+
+            // Execute
+            int result = await ExecuteNonQueryAsync(query, [.. parameters]);
+            return result > -1;
         }
 
+        /// <summary>
+        /// Remove a record from the database.
+        /// </summary>
+        /// <typeparam name="T">Type of record.</typeparam>
+        /// <param name="record">Record to take action on.</param>
+        /// <returns><c>true</c> if record changed > 0</returns>
+        /// <exception cref="InvalidOperationException"></exception>
+        public async Task<bool> RemoveRecord<T>(T record)
+        {
+            ArgumentNullException.ThrowIfNull(record);
+
+            // Get the table name.
+            string? tableName = record.GetType().GetCustomAttribute<SqlTableNameAttribute>()?.TableName;
+
+            if (string.IsNullOrEmpty(tableName))
+            {
+                throw new InvalidOperationException("Table name not found.");
+            }
+
+            // Look for the ID property
+            PropertyInfo? idProperty = record.GetType().GetProperties().FirstOrDefault(prop => prop.GetCustomAttribute<SqlIdPropertyAttribute>() != null);
+            if (idProperty == null)
+            {
+                throw new InvalidOperationException("ID property not found.");
+            }
+
+            object? propertyValue = idProperty?.GetValue(record);
+            if (propertyValue == null)
+            {
+                throw new InvalidOperationException("ID property value not found.");
+            }
+
+            // Execute
+            string query = $"DELETE FROM {tableName} WHERE {idProperty?.Name} = @{idProperty?.Name};";
+            List<SqliteParameter> parameters = new()
+            {
+                new SqliteParameter($"@{idProperty?.Name}", propertyValue)
+            };
+            int result = await ExecuteNonQueryAsync(query, [.. parameters]);
+            return result > -1;
+        }
+
+        /// <summary>
+        /// Ensure the database exists.
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="InvalidOperationException"></exception>
         public async Task EnsureDbExistsAsync()
         {
             DateTime timout = DateTime.Now.Add(brokerTimeout);
@@ -276,7 +401,7 @@ VALUES (@FirstName, @LastName, @Email, @TeamId)";
                 }
             }
 
-            FileInfo dbFileInfo = new FileInfo(this.databaseFilePath);
+            FileInfo dbFileInfo = new (this.databaseFilePath);
             dbFileInfo.Directory?.Create();
 
             if (!dbFileInfo.Exists)
@@ -294,7 +419,40 @@ VALUES (@FirstName, @LastName, @Email, @TeamId)";
             dbBroker = 0;
         }
 
-        private async Task ExecuteQueryAsync(string query, Action<SqliteDataReader> readerAction, params SqliteParameter[] sqliteParameters)
+        private static string GetResourceData(string name)
+        {
+            string data = string.Empty;
+            Assembly executing = Assembly.GetExecutingAssembly();
+            string[] fileNames = executing.GetManifestResourceNames();
+            foreach (string fileName in fileNames)
+            {
+                if (!fileName.EndsWith(name, StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
+
+                if (!(executing.GetManifestResourceStream(fileName) is Stream stream))
+                {
+                    continue;
+                }
+
+                using (StreamReader sr = new StreamReader(stream))
+                {
+                    data = sr.ReadToEnd();
+                }
+
+                break;
+            }
+
+            if (string.IsNullOrEmpty(data))
+            {
+                throw new InvalidDataException($"Expected to find the requested data but didn't or is empty. File:{name}");
+            }
+
+            return data;
+        }
+
+        private async Task ExecuteQueryAsync(string query, Action<IDataReader, Dictionary<string, int>> readerAction, params SqliteParameter[] sqliteParameters)
         {
             using (SqliteConnection connection = new(connectionString))
             {
@@ -309,11 +467,12 @@ VALUES (@FirstName, @LastName, @Email, @TeamId)";
                             command.Parameters.Add(param);
                         }
 
-                        using (SqliteDataReader reader = await command.ExecuteReaderAsync())
+                        using (IDataReader reader = await command.ExecuteReaderAsync())
                         {
+                            Dictionary<string, int> columnMap = reader.GetColumnMap();
                             while (reader.Read())
                             {
-                                readerAction?.Invoke(reader);
+                                readerAction?.Invoke(reader, columnMap);
                             }
                         }
                     }
@@ -351,7 +510,7 @@ VALUES (@FirstName, @LastName, @Email, @TeamId)";
                     connection.Close();
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine($"Error accessing the database: {ex.Message}");
             }
@@ -359,59 +518,19 @@ VALUES (@FirstName, @LastName, @Email, @TeamId)";
             return result;
         }
 
-        private StudentScores ReadStudentRecord(SqliteDataReader reader)
-        {
-            return new StudentScores(
-                Convert.ToInt64(reader["StudentId"]),
-                reader["FirstName"].NullSafeToString(),
-                reader["LastName"].NullSafeToString())
-            {
-                AverageScore = reader["AverageScore"] == DBNull.Value ? 0 : Convert.ToInt32(reader["AverageScore"]),
-                Week = reader["Week"].NullSafeToString(),
-                Score = reader["Score"] == DBNull.Value ? 0 : Convert.ToDouble(reader["Score"]),
-                Comment = reader["Comments"].NullSafeToString()
-            };
-        }
-
-        private static string GetResourceData(string name)
-        {
-            string data = string.Empty;
-            Assembly executing = Assembly.GetExecutingAssembly();
-            string[] fileNames = executing.GetManifestResourceNames();
-            foreach (string fileName in fileNames)
-            {
-                if (!fileName.EndsWith(name, StringComparison.OrdinalIgnoreCase))
-                {
-                    continue;
-                }
-
-                if (!(executing.GetManifestResourceStream(fileName) is Stream stream))
-                {
-                    continue;
-                }
-
-                using (StreamReader sr = new StreamReader(stream))
-                {
-                    data = sr.ReadToEnd();
-                }
-
-                break;
-            }
-
-            if (string.IsNullOrEmpty(data))
-            {
-                throw new InvalidDataException($"Expected to find the requested data but didn't or is empty. File:{name}");
-            }
-
-            return data;
-        }
-
         private async Task CreateDbAsync()
         {
             this.logger.LogDebug($"Creating database at {this.databaseFilePath}");
             string dbCreationScript = GetResourceData(StudentDataBaseCreation);
-            int result = await ExecuteNonQueryAsync(dbCreationScript);
-            this.logger.LogDebug($"Database creation result: {result > -1}");
+            try
+            {
+                int result = await ExecuteNonQueryAsync(dbCreationScript);
+                this.logger.LogDebug($"Database creation result: {result > -1}");
+            }
+            catch (Exception ex)
+            {
+                this.logger.LogError($"Error creating database. Error:{ex.GetBaseException()}");
+            }
         }
     }
 }

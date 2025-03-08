@@ -5,77 +5,79 @@
 @page "/StudentReviews/MyRatings"
 
 <title>My Ratings</title>
-
+@{
+    // TODO: Remove style and use site.css
+}
 <style>
     .card.scores {
-        height: 530px;
+    height: 530px;
     }
 
     .card-header {
-        color: white;
-        font-size: 25px;
+    color: white;
+    font-size: 25px;
     }
 
     .headerColor {
-        background-color: rgb(30,30,120);
-        color: white;
+    background-color: rgb(30,30,120);
+    color: white;
     }
 
     .entriesColor {
-        background-color: rgb(51,16,90);
-        color: white;
+    background-color: rgb(51,16,90);
+    color: white;
     }
 
     .card-body {
-        max-height: calc(520px - 2.5rem); /* Set max height for the card body, considering the card header height */
-        overflow-y: auto; /* Enable vertical scrolling */
-        flex-wrap: wrap;
-        justify-content: space-between;
+    max-height: calc(520px - 2.5rem); /* Set max height for the card body, considering the card header height */
+    overflow-y: auto; /* Enable vertical scrolling */
+    flex-wrap: wrap;
+    justify-content: space-between;
     }
 
     /* Style for the outer table */
     table.outerTable {
-        border-collapse: collapse;
-        border: 2px solid black; /* Add a border to the entire outer table */
+    border-collapse: collapse;
+    border: 2px solid black; /* Add a border to the entire outer table */
     }
 
-        /* Style for the outer table cells (except for the inner table) */
-        table.outerTable td:not(.innerTable td) {
-            border: 1px solid gray; /* Add a border to the outer table cells */
-            padding: 10px; /* Add some padding for spacing */
-        }
+    /* Style for the outer table cells (except for the inner table) */
+    table.outerTable td:not(.innerTable td) {
+    border: 1px solid gray; /* Add a border to the outer table cells */
+    padding: 10px; /* Add some padding for spacing */
+    }
 
     /* Style for the inner table */
     table.innerTable {
-        border-collapse: collapse;
-        border: none; /* Remove borders from the inner table */
+    border-collapse: collapse;
+    border: none; /* Remove borders from the inner table */
     }
 
-        /* Style for the inner table cells (td) */
-        table.innerTable td {
-            padding: 5px; /* Add padding for spacing */
-        }
+    /* Style for the inner table cells (td) */
+    table.innerTable td {
+    padding: 5px; /* Add padding for spacing */
+    }
 
     .form-group.mb-3 {
-        margin-bottom: 10px; /* Adjust as needed */
+    margin-bottom: 10px; /* Adjust as needed */
     }
 
     .short-search {
-        width: 300px; /* Adjust as needed */
+    width: 300px; /* Adjust as needed */
     }
 
     #clear-btn {
-        margin-left: 5px;
-        width: 110px;
-        font-size: 14px;
+    margin-left: 5px;
+    width: 110px;
+    font-size: 14px;
     }
 
     .form-control {
-        display: inline-block; /* Ensure buttons are displayed inline */
+    display: inline-block; /* Ensure buttons are displayed inline */
     }
     #innerTable.table-striped > tbody > tr:nth-child(odd) > td,
     #innerTable.table-striped > tbody > tr:nth-child(odd) > th {
-        background-color: lightgray;
+    background-color: lightgray;
     }
 </style>
 
@@ -107,7 +109,7 @@
                                         <tr>
                                             <td>@scoreDetails.Week</td>
                                             <td>@scoreDetails.Score</td>
-                                            <td>@scoreDetails.Comment</td>
+                                            <td>@scoreDetails.Comments</td>
                                         </tr>
                                     }
                                 </tbody>
@@ -122,10 +124,12 @@
 
 @code
 {
-    private List<StudentScores>? studentScores;
+    private List<StudentScores> studentScores = [];
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        studentScores = DBOperationsService.RetrieveStudentScores(18);
+        // TODO: Replace the hardcoded student ID with the actual student ID
+        studentScores.AddRange(await DBOperationsService.GetStudentScoresAsync(18));
+        await base.OnInitializedAsync();
     }
 }

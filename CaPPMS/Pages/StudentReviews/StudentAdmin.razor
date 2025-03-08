@@ -1,85 +1,14 @@
-﻿@using Microsoft.AspNetCore.Components.Forms
-@using CaPPMS.Pages.StudentReviews
+﻿@using CaPPMS.Pages.StudentReviews
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.Identity.Web
 
-@page "/StudentReviews/Admin"
+@attribute [Authorize]
+@page "/adminstudentreview"
 
 @inject DBOperationsService DBOperationsService
+@inject MicrosoftIdentityConsentAndConditionalAccessHandler consentHandler
 
 <title>Student Scores</title>
-
-<style>
-    .card.scores {
-        height: 530px;
-    }
-
-    .card-header {
-        color: white;
-        font-size: 25px;
-    }
-
-    .headerColor {
-        background-color: rgb(30,30,120);
-        color: white;
-    }
-
-    .entriesColor {
-        background-color: rgb(51,16,90);
-        color: white;
-    }
-
-    .card-body {
-        max-height: calc(520px - 2.5rem); /* Set max height for the card body, considering the card header height */
-        overflow-y: auto; /* Enable vertical scrolling */
-        flex-wrap: wrap;
-        justify-content: space-between;
-    }
-
-    /* Style for the outer table */
-    table.outerTable {
-        border-collapse: collapse;
-        border: 2px solid black; /* Add a border to the entire outer table */
-    }
-
-        /* Style for the outer table cells (except for the inner table) */
-        table.outerTable td:not(.innerTable td) {
-            border: 1px solid gray; /* Add a border to the outer table cells */
-            padding: 10px; /* Add some padding for spacing */
-        }
-
-    /* Style for the inner table */
-    table.innerTable {
-        border-collapse: collapse;
-        border: none; /* Remove borders from the inner table */
-    }
-
-        /* Style for the inner table cells (td) */
-        table.innerTable td {
-            padding: 5px; /* Add padding for spacing */
-        }
-
-    .form-group.mb-3 {
-        margin-bottom: 10px; /* Adjust as needed */
-    }
-
-    .short-search {
-        width: 300px; /* Adjust as needed */
-    }
-
-    #clear-btn {
-        margin-left: 5px;
-        width: 110px;
-        font-size: 14px;
-    }
-
-    .form-control {
-        display: inline-block; /* Ensure buttons are displayed inline */
-    }
-    #innerTable.table-striped > tbody > tr:nth-child(odd) > td,
-    #innerTable.table-striped > tbody > tr:nth-child(odd) > th {
-        background-color: lightgray;
-    }
-</style>
-
 <div class="card scores mt-4">
     <h5 class="card-header headerColor">Student Scores</h5>
     <div class="form-group mb-3 m-lg-3" style="display: flex;">
@@ -170,20 +99,20 @@
     private long previousId = 0;
     private SelectedStudent selectedStudent = new SelectedStudent();
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        studentScores = DBOperationsService.RetrieveStudentScores();
-        base.OnInitialized();
+        studentScores.AddRange(await DBOperationsService.GetStudentScoresAsync());
+        await base.OnInitializedAsync();
     }
 
-    public List<StudentScores> studentScores;
+    public List<StudentScores> studentScores = [];
     public bool HidePanel { get; set; } = true;
 
     public void EditStudent(StudentScores student)
     {
         var scoresAndComments = studentScores
             .Where(s => s.StudentId == student.StudentId)
-            .Select(s => new Tuple<string, double, string>(s.Week, s.Score, s.Comment))
+            .Select(s => new Tuple<string, double, string>(s.Week, s.Score, string.Join("\n", s.Comments)))
             .ToList();
 
         selectedStudent = new SelectedStudent()

@@ -11,6 +11,7 @@ using Microsoft.Identity.Web.UI;
 using System;
 
 using CaPPMS.Data;
+using MudBlazor.Services;
 
 namespace CaPPMS
 {
@@ -63,17 +64,18 @@ namespace CaPPMS
             services.AddServerSideBlazor()
                 .AddMicrosoftIdentityConsentHandler();
 
-            services.AddSingleton<ProjectManagerService>();
-            services.AddSingleton<FaqManagerService>();
-            services.AddSingleton<GitHubService>();
-
-            // Add the DB operations service
-            DBOperationsService dbOperationsService = new DBOperationsService(
+            services.AddMudServices();
+            services.AddSingleton<ProjectManagerService>()
+            .AddSingleton<FaqManagerService>()
+            .AddSingleton<GitHubService>()
+            .AddSingleton(provider =>
+            {
+                DBOperationsService dBOperationsService = new DBOperationsService(
                     Configuration.GetValue<string>("RelativeDbFilePath") ?? "data\\StudentReviews.db",
                     new LoggerFactory().CreateLogger("DbOperations"));
-            dbOperationsService.EnsureDbExistsAsync().Wait();
-
-            services.AddSingleton(dbOperationsService);
+                dBOperationsService.EnsureDbExistsAsync().Wait();
+                return dBOperationsService;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

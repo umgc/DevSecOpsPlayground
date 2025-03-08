@@ -17,20 +17,20 @@ namespace CaPPMS.Model.Table
     {
         public Cell() { }
 
-        public Cell(int rowId, int columnId, object value)
+        public Cell(int rowId, int columnId, object? value)
         {
             this.RowId = rowId;
             this.ColumnId = columnId;
             this.Value = value;
         }
 
-        public Cell(int rowId, int columnId, object value, CellType cellType)
+        public Cell(int rowId, int columnId, object? value, CellType cellType)
             : this(rowId, columnId, value)
         {
             this.CellType = cellType;
         }
 
-        public Cell(int rowId, int columnId, object value, CellType cellType, IEnumerable<Attribute> attributes)
+        public Cell(int rowId, int columnId, object? value, CellType cellType, IEnumerable<Attribute> attributes)
             : this(rowId, columnId, value, cellType)
         {
             this.Attributes = attributes;
@@ -38,7 +38,7 @@ namespace CaPPMS.Model.Table
 
         public CellType CellType { get; private set; } = CellType.Data;
 
-        public object Value { get; set; }
+        public object? Value { get; set; }
 
         public int RowId { get; private set; }
 

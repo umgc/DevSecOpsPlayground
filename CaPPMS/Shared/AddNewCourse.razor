@@ -1,0 +1,77 @@
+﻿@using Microsoft.Identity.Web
+@using MudBlazor
+@inject DBOperationsService DBOperationsService
+@inject MicrosoftIdentityConsentAndConditionalAccessHandler consentHandler
+
+@if (consentHandler.User != null && !consentHandler.User.IsAdmin())
+{
+    <p>You are not authorized to view this information.</p>
+    return;
+}
+
+<div class="input-group input-border">
+    <div class="center">
+        <InputText @bind-Value="classInformation.Course" DisplayName="Course" class="input-border" />
+        <InputText @bind-Value="classInformation.Cohort" DisplayName="Cohort" class="input-border" />
+        <InputDate @bind-Value="classInformation.StartDate" DisplayName="Start" class="input-border" />
+        <InputDate @bind-Value="classInformation.EndDate" DisplayName="End" class="input-border" />
+        <button class="btn btn-primary" @onclick="AddNewCourseAsync">Add Cohort</button>
+    </div>
+</div>
+
+@code {
+    private ClassInformation classInformation = new ClassInformation();
+    private bool userHadSetEndDate = false;
+
+    [Parameter]
+    public EventCallback OnTableUpdated { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+    }
+
+    private async Task AddNewCourseAsync()
+    {
+        if (await DBOperationsService.AddRecord(classInformation))
+        {
+            ClassInformation? createdClass = null;
+            ClassInformationComparer comparer = new ClassInformationComparer();
+            foreach (ClassInformation cohort in await DBOperationsService.GetRecords<ClassInformation>())
+            {
+                if (comparer.Compare(cohort, classInformation) == 0)
+                {
+                    createdClass = cohort;
+                    break;
+                }
+            }
+
+            if (createdClass != null)
+            {
+                // Create 5 default teams for the class.
+                // TODO: Make this configurable.
+                for (int i = 1; i <= 5; i++)
+                {
+                    await DBOperationsService.AddRecord(new Team
+                    {
+                        Name = $"Team {(char)(i + 64)}",
+                        ClassId = createdClass.ClassId
+                    });
+                }
+            }
+        }
+
+        await OnTableUpdated.InvokeAsync();
+
+        await RefreshPage();
+    }
+
+    private async Task RefreshPage()
+    {
+        await this.InvokeAsync(() =>
+        {
+            classInformation = new ClassInformation();
+            this.StateHasChanged();
+        });
+    }
+}

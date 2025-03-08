@@ -2,7 +2,7 @@
 @using CaPPMS.Model
 @using CaPPMS.Model.Table
 @namespace CaPPMS.Shared
-@inherits CaPPMS.Model.Table.Table
+@inherits CaPPMS.Model.Table.Table<ProjectInformation>
 @implements IIdea
 
 <h3>Project List</h3>
@@ -41,9 +41,9 @@ else
                 {
                     <tr>
                         <td>
-                            <button @onclick="e => projectListCollapseMap[row.DataBoundItem as ProjectInformation] = !projectListCollapseMap[row.DataBoundItem as ProjectInformation]"
+                            <button @onclick="e => projectListCollapseMap[row.DataBoundItem] = !projectListCollapseMap[row.DataBoundItem]"
                                     class="btn btn-primary">
-                                @(projectListCollapseMap[row.DataBoundItem as ProjectInformation] ? "+" : "-")
+                                @(projectListCollapseMap[row.DataBoundItem] ? "+" : "-")
                             </button>
                         </td>
                         @foreach (var cell in row)
@@ -52,7 +52,7 @@ else
                         }
                         
                     </tr>
-                    @if (!projectListCollapseMap[row.DataBoundItem as ProjectInformation])
+                    @if (!projectListCollapseMap[row.DataBoundItem])
                     {
                         <tr>
                             <td colspan="100">
@@ -60,15 +60,15 @@ else
                                 {
                                     <CascadingAuthenticationState>
                                         <ProjectEntryAuthorizedDropdown 
-                                            CollapseEntry="@(projectListCollapseMap[row.DataBoundItem as ProjectInformation] ? "collapse" : "")"
-                                            ProjectInformation="row.DataBoundItem as ProjectInformation">
+                                            CollapseEntry="@(projectListCollapseMap[row.DataBoundItem] ? "collapse" : "")"
+                                            ProjectInformation="row.DataBoundItem">
                                         </ProjectEntryAuthorizedDropdown>
-                                    </CascadingAuthenticationState>                                    
+                                    </CascadingAuthenticationState>
                                 }
                                 else
                                 {
-                                    <ProjectEntryDropdown CollapseEntry="@(projectListCollapseMap[row.DataBoundItem as ProjectInformation] ? "collapse" : "")"
-                                                          ProjectInformation="row.DataBoundItem as ProjectInformation">
+                                    <ProjectEntryDropdown CollapseEntry="@(projectListCollapseMap[row.DataBoundItem] ? "collapse" : "")"
+                                                          ProjectInformation="row.DataBoundItem">
                                     </ProjectEntryDropdown>
                                 }
 
@@ -196,11 +196,11 @@ else
         }
 
         projectListCollapseMap.Clear();
-        foreach (Row row in this.GetRows())
+        foreach (Row<ProjectInformation> row in this.GetRows())
         {
-            if (!projectListCollapseMap.ContainsKey(row.DataBoundItem as ProjectInformation))
+            if (!projectListCollapseMap.ContainsKey(row.DataBoundItem))
             {
-                ProjectInformation newInfo = row.DataBoundItem as ProjectInformation;
+                ProjectInformation newInfo = row.DataBoundItem;
                 projectListCollapseMap.Add(newInfo, true);
                 if (oldCollapseMap.ContainsKey(newInfo.ProjectID))
                 {
