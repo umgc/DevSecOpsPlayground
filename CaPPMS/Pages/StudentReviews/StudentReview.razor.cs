@@ -11,7 +11,6 @@ namespace CaPPMS.Pages.StudentReviews
         private string log = string.Empty;
         private int count = -1;
         private bool isSubmitButtonDisabled = true;
-        private string selectedWeek = string.Empty;
 
         public Student student = new Student();
 
@@ -33,9 +32,9 @@ namespace CaPPMS.Pages.StudentReviews
                 return false;
             }
 
-            if (!string.IsNullOrEmpty(selectedWeek))
+            if (!string.IsNullOrEmpty(reviewWeek))
             {
-                review.Week = selectedWeek;
+                review.Week = reviewWeek;
             }
 
             if (await DBOperationsService.AddRecord(review))

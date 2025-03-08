@@ -1,5 +1,6 @@
 ﻿@using System.ComponentModel.DataAnnotations
 @using System.Text.RegularExpressions
+@using Humanizer
 @using Microsoft.AspNetCore.Components.Forms
 @using Microsoft.Identity.Web
 
@@ -83,7 +84,7 @@
                     <option value="" disabled selected>-- Select Week --</option>
                     @foreach (var week in DBOperationsService.GetWeeks())
                     {
-                        <option Value="@week">@week</option>
+                        <option Value="@week.Item1">@week.Item2</option>
                     }
                 </InputSelect>
                 <ValidationMessage For="@(() => review.Week)" />
@@ -108,6 +109,7 @@
             <label style="width: 90%;" class="form-label">
                 Comments:
                 <textarea @bind="@review.Comments" class="form-control" rows="4" placeholder="Write your comments here!" @onclick="ClearMessage"></textarea>
+                <ValidationMessage For="@(() => review.Comments)" />
             </label>
         </div>
     </div>
@@ -121,11 +123,13 @@
 <ConfirmationDialogBox @ref="confirmationDialogBox" ConfirmationButtonText="OK" ConfirmedChanged="CompleteSubmission" ShowCommandButton="false" />
 
 <br />
+<br />
+<br />
 
-@if (completedReviews.Any())
+@if(GetCompletedReviewsAsync().GetAwaiter().GetResult().Any())
 {
     <!-- Table for displaying completed student evaluations -->
-    <h5 class="card-header entries">Completed Evaluations</h5>
+    <h5 class="card-header umgcHeader">Completed Evaluations</h5>
     <div class="card-body">
         <table class="table table-striped">
             <thead>
@@ -138,7 +142,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var review in completedReviews)
+                @foreach (var review in GetCompletedReviewsAsync().GetAwaiter().GetResult())
                 {
                     <tr>
                         <td>@review.Week</td>
@@ -157,8 +161,8 @@
 
     private ConfirmationDialogBox confirmationDialogBox = new ConfirmationDialogBox();
     private List<Student> studentsToReview = new List<Student>();
-    private List<Review> completedReviews = [];
     private Student loggedInStudent = new Student();
+    private long selectedStudentId = -1;
     private int studentId = -1;
     private int StudentId
     {
@@ -169,14 +173,14 @@
             OnStudentIdChangedAsync(value);
         }
     }
-    private string reviewWeek = "One";
+    private string reviewWeek = "1";
     private string ReviewWeek
     {
         get => reviewWeek;
         set
         {
             reviewWeek = value;
-            _ = Task.Run(() => OnReviewWeekChangedAsync(this.reviewWeek));
+            OnReviewWeekChangedAsync(this.reviewWeek);
         }
     }
     private Review review = new Review();
@@ -197,7 +201,7 @@
         {
             if (student.Email == consentHandler.User.Identity.Name)
             {
-                loggedInStudent = student;
+                loggedInStudent = student.Clone();
                 break;
             }
         }
@@ -210,23 +214,36 @@
 
     private async void OnReviewWeekChangedAsync(string week)
     {
-        IEnumerable<Review> reviews = await DBOperationsService
-        .GetRecords<Review>();
-        completedReviews = reviews.Where(w => string.Equals(week, w.Week, StringComparison.OrdinalIgnoreCase) && w.StudentReviewId == this.loggedInStudent.StudentId)
-        .ToList();
-
-        _ = this.InvokeAsync(() => this.StateHasChanged());
+        await GetCompletedReviewAsync();
+        this.StateHasChanged();
     }
 
     private async void OnStudentIdChangedAsync(int studentId)
     {
-        IEnumerable<Review> reviews = await DBOperationsService.GetRecords<Review>();
-        Review? review = reviews.FirstOrDefault(r =>
+        this.selectedStudentId = studentId;
+        await GetCompletedReviewAsync();
+    }
+
+    private async Task<IEnumerable<Review>> GetCompletedReviewsAsync()
+    {
+        long loggedInId = loggedInStudent.StudentId;
+        return await DBOperationsService.GetRecords<Review>(loggedInId, "ReviewedById");
+    }
+
+    private async Task GetCompletedReviewAsync()
+    {
+        Review? review = (await GetCompletedReviewsAsync()).FirstOrDefault(r =>
+        {
+            int week = int.Parse(r.Week);
+            bool isMatch =
             r.ReviewedStudentId == studentId &&
-            r.Week == ReviewWeek &&
-            r.StudentReviewId == this.loggedInStudent.StudentId);
+            string.Equals(week.ToString(), ReviewWeek, StringComparison.OrdinalIgnoreCase);
+
+            return isMatch;
+        });
 
         this.review = review ?? new Review();
+        this.StateHasChanged();
     }
 
     // Method to clear the status message
@@ -256,15 +273,8 @@
     {
         if (await DBOperationsService.RemoveRecord(review))
         {
-            completedReviews = (await GetCompletedReviewsAsync()).ToList();
             this.StateHasChanged();
         }
-    }
-
-    private async Task<IEnumerable<Review>> GetCompletedReviewsAsync()
-    {
-        IEnumerable<Review> reviews = await DBOperationsService.GetRecords<Review>();
-        return reviews.Where(r => r.StudentReviewId == loggedInStudent.StudentId);
     }
 
     private async Task CompleteSubmission()
@@ -285,13 +295,12 @@
             // The confirmation message indicates that the peer review submission was successful
             DisplayMessage("Submission was successful");
 
-            completedReviews = (await GetCompletedReviewsAsync()).ToList(); // Add the completed review to the list of completed reviews)
             review = new Review()
             {
                 ReviewedById = loggedInStudent.StudentId
             }; // Clear the form fields after submission
 
-            await this.InvokeAsync(() => this.StateHasChanged()); // Notify the component that the state has changed
+            await GetCompletedReviewAsync();
         }
     }
 

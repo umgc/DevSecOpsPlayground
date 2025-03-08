@@ -164,14 +164,18 @@ namespace CaPPMS.Data
         /// Get number of weeks for the course.
         /// </summary>
         /// <returns></returns>
-        public List<string> GetWeeks()
+        public List<Tuple<int, string>> GetWeeks()
         { 
             int weeks = this.GetNumberOfWeeks();
 
-            List<string> result = [];
+            List<Tuple<int, string>> result = [];
             for (int i = 1; i <= weeks; i++)
             {
-                result.Add(i.ToWords(WordForm.Normal).ApplyCase(LetterCasing.Sentence));
+                result.Add(
+                    Tuple.Create(
+                        i,
+                        i.ToWords(WordForm.Normal)
+                        .ApplyCase(LetterCasing.Sentence)));
             }
 
             return result;
@@ -192,6 +196,7 @@ namespace CaPPMS.Data
             return int.Parse(numWeeks);
         }
 
+        #region Get
         /// <summary>
         /// Gets records of a type.
         /// </summary>
@@ -199,7 +204,7 @@ namespace CaPPMS.Data
         /// <param name="id">Id of record, if not given, all records will be retrieved.</param>
         /// <returns><see cref="IEnumerable{T}"/>.</returns>
         /// <exception cref="InvalidOperationException"></exception>
-        public async Task<IEnumerable<T>> GetRecords<T>(long id = -1) where T : ISqlTableModel, new()
+        public async Task<IEnumerable<T>> GetRecords<T>(long id = -1, string conditionItem = "ClassId") where T : ISqlTableModel, new()
         {
             List<T> records = new();
 
@@ -215,7 +220,7 @@ namespace CaPPMS.Data
             string query = $"SELECT * FROM {tableName};";
             if (id > -1)
             {
-                query += " WHERE ClassId = @id";
+                query += $" WHERE {conditionItem} = @id";
             }
 
             // Execute
@@ -226,6 +231,7 @@ namespace CaPPMS.Data
             return records.AsReadOnly();
         }
 
+        #endregion
         /// <summary>
         /// Add a record to the database.
         /// </summary>
