@@ -21,12 +21,10 @@ namespace CaPPMS.Data
         private const string ConnectionStringFormat = @"Data Source={0}";
         private const string RetriveStudentScoreDetailsFileName = "ReadStudentScoreDetails.sql";
         private const string ReadStudentScoresFileName = "ReadStudentScores.sql";
-        private const string ReadStudentScoreByStudentFileName = "ReadStudentScoreByStudent.sql";
         private const string StudentDataBaseCreation = "StudentDataBaseCreation.sql";
 
         private static string readStudentScoreDetails;
         private static string readStudentScore;
-        private static string readStudentScoreById;
 
         private static volatile int dbBroker;
         private static readonly TimeSpan brokerTimeout = TimeSpan.FromSeconds(10);
@@ -35,7 +33,6 @@ namespace CaPPMS.Data
         {
             readStudentScoreDetails = GetResourceData(RetriveStudentScoreDetailsFileName);
             readStudentScore = GetResourceData(ReadStudentScoresFileName);
-            readStudentScoreById = GetResourceData(ReadStudentScoreByStudentFileName);
         }
 
         private string connectionString;
