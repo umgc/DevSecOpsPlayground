@@ -4,6 +4,7 @@ using CaPPMS.Model;
 using Humanizer;
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Logging;
+using Octokit;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -21,12 +22,10 @@ namespace CaPPMS.Data
         private const string ConnectionStringFormat = @"Data Source={0}";
         private const string RetriveStudentScoreDetailsFileName = "ReadStudentScoreDetails.sql";
         private const string ReadStudentScoresFileName = "ReadStudentScores.sql";
-        private const string ReadStudentScoreByStudentFileName = "ReadStudentScoreByStudent.sql";
         private const string StudentDataBaseCreation = "StudentDataBaseCreation.sql";
-
+        private const string TableNameNotFoundMessage = "Table name not found for type {0}. Skipping verification.";
         private static string readStudentScoreDetails;
         private static string readStudentScore;
-        private static string readStudentScoreById;
 
         private static volatile int dbBroker;
         private static readonly TimeSpan brokerTimeout = TimeSpan.FromSeconds(10);
@@ -35,7 +34,6 @@ namespace CaPPMS.Data
         {
             readStudentScoreDetails = GetResourceData(RetriveStudentScoreDetailsFileName);
             readStudentScore = GetResourceData(ReadStudentScoresFileName);
-            readStudentScoreById = GetResourceData(ReadStudentScoreByStudentFileName);
         }
 
         private string connectionString;
@@ -416,6 +414,10 @@ namespace CaPPMS.Data
                 }
             }
 
+            // Verify database.
+            // Can be that the database is created but the backing tables have changed.
+            await VerifiyDatabase();
+
             dbBroker = 0;
         }
 
@@ -531,6 +533,113 @@ namespace CaPPMS.Data
             {
                 this.logger.LogError($"Error creating database. Error:{ex.GetBaseException()}");
             }
+        }
+
+        private async Task VerifiyDatabase()
+        {
+            Type[] dbTypes = [.. Assembly.GetExecutingAssembly()
+                .GetTypes()
+                .Where(type => type.GetCustomAttribute<SqlTableNameAttribute>() != null)];
+
+            foreach (Type type in dbTypes)
+            {
+                string tableName = ReflectionHelper.GetTableName(type);
+                if (string.IsNullOrEmpty(tableName))
+                {
+                    logger.LogWarning(TableNameNotFoundMessage, type.Name);
+                    continue;
+                }
+
+                bool result = await VerifyColumnsExistAsync(type, tableName);
+                if (result)
+                {
+                    logger.LogDebug($"Table '{tableName}' verification succeeded for type '{type.Name}'.");
+                }
+                else
+                {
+                    logger.LogWarning($"Table '{tableName}' verification failed for type '{type.Name}'.");
+                }
+            }
+        }
+
+        private async Task<bool> VerifyColumnsExistAsync(Type type, string tableName)
+        {
+            var properties = ReflectionHelper.GetNonIgnoredProperties(type);
+            var columnNames = await GetColumnNamesFromDatabaseAsync(tableName);
+
+            foreach (var property in properties)
+            {
+                if (!columnNames.Contains(property.Name))
+                {
+                    logger.LogWarning($"Column '{property.Name}' does not exist in table '{tableName}'. Attempting to add it.");
+                    bool columnAdded = await TryAddColumnAsync(tableName, property);
+                    if (!columnAdded)
+                    {
+                        logger.LogError($"Failed to add column '{property.Name}' to table '{tableName}'.");
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        private async Task<bool> TryAddColumnAsync(string tableName, PropertyInfo property)
+        {
+            string columnType = GetSqlType(property.PropertyType);
+            string query = $"ALTER TABLE {tableName} ADD COLUMN {property.Name} {columnType};";
+
+            try
+            {
+                await ExecuteNonQueryAsync(query);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                logger.LogError($"Error adding column '{property.Name}' to table '{tableName}': {ex.Message}");
+                return false;
+            }
+        }
+
+        private string GetSqlType(Type type)
+        {
+            if (type == typeof(int) || type == typeof(long))
+            {
+                return "INTEGER";
+            }
+            if (type == typeof(string) || type == typeof(IEnumerable<string>))
+            {
+                return "TEXT";
+            }
+            if (type == typeof(bool))
+            {
+                return "BOOLEAN";
+            }
+            if (type == typeof(double) || type == typeof(float))
+            {
+                return "REAL";
+            }
+            if (type == typeof(DateTime))
+            {
+                return "DATETIME";
+            }
+
+            // Add more type mappings as needed
+            throw new NotSupportedException($"Type '{type.Name}' is not supported.");
+        }
+
+        private async Task<HashSet<string>> GetColumnNamesFromDatabaseAsync(string tableName)
+        {
+            var columnNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+            var query = $"PRAGMA table_info({tableName})";
+
+            await this.ExecuteQueryAsync(query, (reader, map) =>
+            {
+                columnNames.Add(reader.GetString(1)); // Column name is in the second column
+            });
+
+            return columnNames;
         }
     }
 }
