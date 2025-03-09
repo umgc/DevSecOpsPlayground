@@ -9,31 +9,55 @@ using System.Linq;
 
 namespace CaPPMS.Model
 {
+    /// <summary>
+    /// Model for the Student.
+    /// </summary>
     [SqlTableName("Students")]
     public class Student : ISqlTableModel
     {
         private const string EmailSuffix = "@student.umgc.edu";
 
+        /// <summary>
+        /// Initialize a new instance of the <see cref="Student"/> class.
+        /// </summary>
         public Student() { }
 
+        /// <summary>
+        /// Gets or sets the student ID.
+        /// </summary>
         [Required]
         [SqlIdProperty]
         public long StudentId { get; set; } = -1;
 
+        /// <summary>
+        /// Gets or sets the first name.
+        /// </summary>
         [ColumnHeader]
         [DisplayName("First Name")]
         public string FirstName { get; set; } = string.Empty;
 
+        /// <summary>
+        /// Gets or sets the last name.
+        /// </summary>
         [ColumnHeader]
         [DisplayName("Last Name")]
         public string LastName { get; set; } = string.Empty;
 
+        /// <summary>
+        /// Gets or sets the email address.
+        /// </summary>
         [ColumnHeader]
         public string Email { get; set; } = string.Empty;
 
+        /// <summary>
+        /// Gets or sets the GitHub account.
+        /// </summary>
         [ColumnHeader]
         public string GitHub { get; set; } = string.Empty;
 
+        /// <summary>
+        /// Gets or sets the team name.
+        /// </summary>
         [ColumnHeader]
         [DisplayName("Team")]
         [IgnoreDataMember]
@@ -49,9 +73,15 @@ namespace CaPPMS.Model
             }
         }
 
+        /// <summary>
+        /// Gets or sets the team assigned to the student.
+        /// </summary>
         [IgnoreDataMember]
         public Team AssignedTeam { get; private set; } = new Team();
 
+        /// <summary>
+        /// Gets or sets the team ID.
+        /// </summary>
         public long TeamId
         {
             get
@@ -64,7 +94,16 @@ namespace CaPPMS.Model
             }
         }
 
+        /// <summary>
+        /// Gets or sets the class ID.
+        /// </summary>
         public long ClassId { get; set; } = -1;
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the student is a team leader.
+        /// </summary>
+        [ColumnHeader]
+        public bool IsTeamLead { get; set; } = false;
 
         /// <summary>
         /// Set the team for the student.
