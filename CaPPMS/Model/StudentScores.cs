@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using CaPPMS.Attributes;
+using System.Collections.Generic;
 
 namespace CaPPMS.Model
 {
+    [SqlTableName(tableName: "")]
     public class StudentScores : Student
     {
         public StudentScores() { }
