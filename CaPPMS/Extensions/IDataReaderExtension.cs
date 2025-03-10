@@ -84,6 +84,12 @@ namespace CaPPMS.Extensions
                 return Convert.ToDouble(value);
             }
 
+            // Check booleans
+            if (expectedType == typeof(bool))
+            {
+                return Convert.ToBoolean(value);
+            }
+
             // Check lists
             if (expectedType == typeof(List<string>))
             {
