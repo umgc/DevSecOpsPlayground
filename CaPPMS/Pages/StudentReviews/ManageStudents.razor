@@ -10,110 +10,46 @@
 @namespace CaPPMS.Pages.StudentReviews
 
 @attribute [Authorize]
-@page "/ManageStudents"
+@page "/ManageStudents/{*Cohort}"
 
 <title>Manage Students</title>
 
-<style>
-    .card.classlist {
-    height: 500px;
-    }
-
-    .card-body {
-    max-height: calc(500px - 2.5rem); /* Set max height for the card body, considering the card header height */
-    overflow-y: auto; /* Enable vertical scrolling */
-    flex-wrap: wrap;
-    justify-content: space-between;
-    }
-
-    .card-header {
-    font-size: 25px;
-    }
-
-    .headerColor {
-    background-color: rgb(30,30,120);
-    color: white;
-    }
-
-    .entriesColor {
-    background-color: rgb(51,16,90);
-    color: white;
-    }
-
-    .short-search {
-    width: 300px; /* Adjust as needed */
-    }
-
-    #clear-btn {
-    margin-left: 5px;
-    width: 110px;
-    font-size: 14px;
-    }
-
-    .form-control {
-    display: inline-block; /* Ensure buttons are displayed inline */
-    }
-
-    .editStudentContainer {
-    display: flex;
-    justify-content: center;
-    }
-
-    .custom-button {
-    display: flex;
-    float: right;
-    align-items: center;
-    justify-content: center;
-    background-color: blue;
-    color: white;
-    cursor: pointer;
-    position: relative;
-    }
-
-    .custom-button:hover {
-    background-color: lightblue;
-    }
-
-    .custom-button input[type=file] {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    opacity: 0;
-    cursor: pointer;
-    }
-</style>
+@if (!consentHandler.User.IsAdmin())
+{
+    <p>User not authorized.</p>
+}
 
 <!-- Add a new cohort -->
 <AddNewCourse OnTableUpdated="() => Refresh(updateSelectedClass: true)" />
 
-@if (availableClasses.Count() == 0 || !consentHandler.User.IsAdmin())
+@if (availableClasses.Count() == 0)
 {
     <p>No classes available. Please add one.</p>
     return;
 }
 
-<div class="card classlist">
+<div class="card" style="width:fit-content">
     <!-- Class Selection -->
-        <h5 class="card-header umgcHeader">
-            Student Directory.
-        </h5>
-        <div class="btn">
-            Class Context:
-            <InputSelect @bind-Value="this.SelectedClass" class="form-control" style="width: 275px;">
-                <option disabled selected>-- Select Class --</option>
+    <h5 class="card-header umgcHeader">
+        Student Directory.
+    </h5>
+    <div class="btn">
+        Class Context:
+        <InputSelect @bind-Value="SelectedClass" class="form-control" style="width: 275px;">
+            <option disabled selected>-- Select Class --</option>
 
-                @foreach (ClassInformation classInfo in availableClasses)
-                {
-                    <option Value="@classInfo">@classInfo.Course - @classInfo.Cohort</option>
-                }
-            </InputSelect>
+            @foreach (ClassInformation classInfo in availableClasses)
+            {
+                <option Value="@classInfo.ClassId">@classInfo.Course - @classInfo.Cohort</option>
+            }
+        </InputSelect>
 
-            <!-- CSV file input -->
-            &nbsp;Upload Class CSV:&nbsp;<InputFile OnChange="HandleFileSelection" />
-        </div>
+        <!-- CSV file input -->
+        &nbsp;Upload Class CSV:&nbsp;<InputFile OnChange="HandleFileSelection" />
+    </div>
 
     <!-- Display student entries that the parser kicked out due to validation issues.  -->
-    @if(droppedStudents.Any())
+    @if (droppedStudents.Any())
     {
         <br />
         <div>
@@ -145,7 +81,7 @@
     }
 
     <!-- Team allocation snapshot -->
-    <div class="card">
+    <div>
         <table class="table table-bordered">
             <thead>
                 <tr>
@@ -173,14 +109,15 @@
         <span class="btn-group"><InputText class="short-search" @bind-Value="SearchTerm" Placeholder="Search student..." /><span class="btn btn-info oi oi-arrow-right" @onclick="() => SearchAsync()"></span></span>
     </div>
     <div id="tableContainer" >
-        <table id="manageStudentsTable" class="table table-bordered table-striped table-hover scrollTable">
-            <thead class="fixedHeader">
+        <table id="manageStudentsTable" class="table table-bordered table-striped table-hover scrollTable" style="display:block;">
+            <thead>
                 <tr>
                     <th>First Name</th>
                     <th>Last Name</th>
                     <th>Email</th>
                     <th>GitHub</th>
                     <th>Assigned Team</th>
+                    <th>Team Lead?</th>
                     <th></th>
                 </tr>
             </thead>
@@ -201,6 +138,7 @@
                                 }
                             </InputSelect>
                         </td>
+                        <td><InputCheckbox DisplayName="Team Lead?" @bind-Value="student.IsTeamLead" /></td>
                         <td><span class="oi oi-delete" aria-hidden="true" @onclick="() => DeleteStudent(student)"></span></td>
                     </tr>
                 }
@@ -213,22 +151,24 @@
         </table>
     </div>
 </div>
-<div>
-    <!-- Keep some buffer at the bottom -->
-    <br />
-    <br />
-    <br />
+
+<div style="visibility:@waitBar">
+    Adding students. Please wait...
+    <div>
+        <Wander Center="true" />
+    </div>
 </div>
 
 @code {
     private string searchTerm = string.Empty;
     private IEnumerable<ClassInformation> availableClasses = [];
     private bool isAvailableClassLoaded => availableClasses.Any(c => DateTime.Now.Month >= c.StartDate.Month && DateTime.Now.Month <= c.EndDate.Month);
-    private ClassInformation selectedClass = new ClassInformation();
+    private long selectedClass = -1;
     private IEnumerable<Team> teams = new List<Team>();
     private List<Student> students = [];
     private IEnumerable<Tuple<Student, string>> droppedStudents = [];
-    private ClassInformation SelectedClass
+    private string waitBar = "hidden";
+    private long SelectedClass
     {
         get
         {
@@ -253,8 +193,25 @@
         }
     }
 
+    [Parameter]
+    public string Cohort { get; set; } = string.Empty;
+
     protected override async Task OnInitializedAsync()
     {
+        if (!string.IsNullOrEmpty(Cohort))
+        {
+            availableClasses = await DBOperationsService.GetRecords<ClassInformation>();
+            foreach (ClassInformation classInformation in availableClasses)
+            {
+                if (classInformation.Cohort.IndexOf(Cohort, StringComparison.OrdinalIgnoreCase) >= 0)
+                {
+                    this.selectedClass = classInformation.ClassId;
+                    await Refresh(updateSelectedClass: false);
+                    return;
+                }
+            }
+        }
+
         await Refresh(updateSelectedClass: true);
     }
 
@@ -263,7 +220,7 @@
         availableClasses = await DBOperationsService.GetRecords<ClassInformation>();
         if (updateSelectedClass && availableClasses.Any())
         {
-            this.SelectedClass = availableClasses.First();
+            this.SelectedClass = availableClasses.First().ClassId;
         }
 
         await this.InvokeAsync(() => this.StateHasChanged());
@@ -299,20 +256,19 @@
         NavigationManager.Refresh();
     }
 
-    private async Task ClassChangedAsync
-    (ClassInformation classInformation)
+    private async Task ClassChangedAsync(long selectedClassId)
     {
         // Students associated with the current selected class.
-        students = (await DBOperationsService.GetStudentsByClassAsync(selectedClass.ClassId))
+        students = (await DBOperationsService.GetStudentsByClassAsync(selectedClassId))
         .Where(s => s.IsMatch(searchTerm))
         .OrderBy(s => s.FirstName)
         .ToList();
 
         // Add blank if wanting to add a new student manually.
-        students.Add(new Student() { ClassId = selectedClass.ClassId, TeamId = -1 });
+        students.Add(new Student() { ClassId = selectedClassId, TeamId = -1 });
 
         // Teams associated with the current selected class.
-        teams = (await DBOperationsService.GetRecords<Team>()).Where(t => t.ClassId == selectedClass.ClassId).ToList();
+        teams = (await DBOperationsService.GetRecords<Team>()).Where(t => t.ClassId == selectedClassId).ToList();
 
         // Assign the team to the student.
         foreach (Student student in students)
@@ -351,6 +307,7 @@
 
     private async Task HandleFileSelection(InputFileChangeEventArgs e)
     {
+        this.waitBar = "visible";
         try
         {
             var files = e.GetMultipleFiles();
@@ -372,6 +329,12 @@
         {
             Console.WriteLine(ex.Message);
         }
+        finally
+        {
+            this.waitBar = "hidden";
+        }
+
+        await Refresh(updateSelectedClass: true);
     }
 
     private async Task ProcessStreamAsync(Stream stream, string fileName)
@@ -390,11 +353,11 @@
             }
 
             // TODO: Add dropped records to another table for notification to user.
-            List<Student> students = Student.ParseData(fileContent, selectedClass.ClassId, out List<Tuple<Student, string>> droppedStudents);
+            List<Student> students = Student.ParseData(fileContent, selectedClass, out List<Tuple<Student, string>> droppedStudents);
             var currentStudents = await DBOperationsService.GetRecords<Student>();
             foreach (Student student in students
                 .Where(s => !currentStudents
-                    .Any(c => string.Equals(c.Email, s.Email, StringComparison.OrdinalIgnoreCase))))
+                    .Any(c => c.ClassId == this.selectedClass && string.Equals(c.Email, s.Email, StringComparison.OrdinalIgnoreCase))))
             {
                 await DBOperationsService.AddRecord(student);
             }
