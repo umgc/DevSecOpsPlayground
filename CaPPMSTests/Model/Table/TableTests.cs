@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using CaPPMS.Model;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace CaPPMSTests.Model.Table
 {
@@ -8,7 +9,7 @@ namespace CaPPMSTests.Model.Table
         [TestMethod]
         public void NumberOfColumns()
         {
-            var table = new CaPPMS.Model.Table.Table()
+            var table = new CaPPMS.Model.Table.Table<DummyTableObject>()
             {
                 DataSource = new IEnumberableDummyObject()
             };
@@ -19,7 +20,7 @@ namespace CaPPMSTests.Model.Table
         [TestMethod]
         public void ColumnNames()
         {
-            var table = new CaPPMS.Model.Table.Table()
+            var table = new CaPPMS.Model.Table.Table<DummyTableObject>()
             {
                 DataSource = new IEnumberableDummyObject()
             };
@@ -31,7 +32,7 @@ namespace CaPPMSTests.Model.Table
         [TestMethod]
         public void VerifySingleRow()
         {
-            var table = new CaPPMS.Model.Table.Table()
+            var table = new CaPPMS.Model.Table.Table<DummyTableObject>()
             {
                 DataSource = new IEnumberableDummyObject()
             };
