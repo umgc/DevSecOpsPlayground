@@ -7,6 +7,11 @@ namespace CaPPMS.Model
     [SqlTableName("StudentReviews")]
     public class Review : ISqlTableModel
     {
+        /// <summary>
+        /// The maximum length of a string in the database.
+        /// </summary>
+        public const int MaxStringLength = 4 * 1024;
+
         public Review() { }
 
         [SqlIdProperty]
@@ -29,7 +34,10 @@ namespace CaPPMS.Model
         public string Score { get; set; } = "0";
 
         [Required(ErrorMessage = "Your comments for the student are appreciated.", AllowEmptyStrings = false)]
-        [StringLength(maximumLength: 255, MinimumLength = 25, ErrorMessage = "Please use at least 25 characters to describe the interaction of this student.")]
+        [CappmsStringLength(
+            maximumLength: MaxStringLength,
+            MinimumLength = 25,
+            ErrorMessage = "Please use at least {2} characters to describe the interaction of this student and at most {1} characters.")]
         public string Comments { get; set; } = string.Empty;
     }
 }
