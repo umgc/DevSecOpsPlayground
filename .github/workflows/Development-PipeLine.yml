@@ -11,8 +11,12 @@ env:
 on:
   push:
     branches: [ developer ]
+    paths:
+      - Flutter_Demo/**/*
   pull_request:
     branches: [ developer ]
+    paths:
+      - Flutter_Demo/**/*
 
 jobs:
   linter:
@@ -25,7 +29,9 @@ jobs:
       # Setup Flutter
       - name: Set up Flutter
         uses: subosito/flutter-action@v1
-        
+      # Change directory to the project
+      - run: cd Flutter_Demo
+
       # Add formating standards
       - run: flutter pub add --dev effective_dart
       - run: flutter pub get
@@ -45,6 +51,9 @@ jobs:
       
       - name: Set up Flutter
         uses: subosito/flutter-action@v1
+
+      # Change directory to the project
+      - run: cd Flutter_Demo
       - run: flutter pub get
       
       - name: Run tests
@@ -71,6 +80,8 @@ jobs:
       
       - name: Set up Flutter
         uses: subosito/flutter-action@v1
+      # Change directory to the project
+      - run: cd Flutter_Demo
       - run: flutter pub get
         
       - name: Build APK
