@@ -33,7 +33,6 @@ jobs:
       - run: cd Flutter_Demo
 
       # Add formating standards
-      - run: flutter pub add --dev effective_dart
       - run: flutter pub get
 
       # Analyze
