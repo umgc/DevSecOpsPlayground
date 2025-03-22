@@ -37,50 +37,12 @@ jobs:
       - run: flutter pub get
 
       # Add formating standards
-      - run: flutter pub analyze
-        
-  test:
-    name: Run Unit Tests
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v2
-      
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v1
-
-      # Change directory to the project
-      - run: cd Flutter_Demo
-      - run: flutter pub get
+      - name: Run Linting
+        run: flutter analyze
       
       - name: Run tests
         run: flutter test
 
-  build:
-    name: Build Project
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Echo GITHUB variables
-        run: |
-          echo "Github Run ID- $GITHUB_RUN_ID "
-          echo "Github Action ID- $GITHUB_ACTION "
-          echo "Github Run Number- $GITHUB_RUN_NUMBER "
-          
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
-      - uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin' # See 'Supported distributions' for available options
-          java-version: '21'
-      
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v1
-      # Change directory to the project
-      - run: cd Flutter_Demo
-      - run: flutter pub get
-        
       - name: Build APK
         run: flutter build apk --${{env.FLUTTER_VERSION}}
         
@@ -97,4 +59,4 @@ jobs:
         uses: 'actions/upload-artifact@v4'
         with:
           name: hello-flutter-web-${{env.FLUTTER_VERSION}}
-          path: build/web/**/*.*
+          path: build/web/**/*
