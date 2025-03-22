@@ -23,7 +23,7 @@ defaults:
     working-directory: ./Flutter_Demo
 
 jobs:
-  linter:
+  Build:
     runs-on: ubuntu-latest
     name: Lint flutter code
     steps:
