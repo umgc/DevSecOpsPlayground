@@ -5,6 +5,15 @@ plugins {
 }
 
 android {
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    
     namespace = "com.example.dev_sec_ops_hello_world"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
@@ -30,3 +39,5 @@ android {
 flutter {
     source '../..'
 }
+
+
