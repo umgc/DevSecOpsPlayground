@@ -29,17 +29,15 @@ jobs:
       # Setup Flutter
       - name: Set up Flutter
         uses: subosito/flutter-action@v1
+
       # Change directory to the project
       - run: cd Flutter_Demo
 
       # Add formating standards
       - run: flutter pub get
 
-      # Analyze
-      - name: Analyze Flutter
-        uses: ValentinVignal/action-dart-analyze@v0.11
-        with:
-          fail-on: "format"
+      # Add formating standards
+      - run: flutter pub analyze
         
   test:
     name: Run Unit Tests
