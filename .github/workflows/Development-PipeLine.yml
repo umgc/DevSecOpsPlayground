@@ -25,7 +25,7 @@ defaults:
 jobs:
   Build:
     runs-on: ubuntu-latest
-    name: Lint flutter code
+    name: Linter, test, Build, deploy
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
