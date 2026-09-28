@@ -1,4 +1,4 @@
 <Project>
   <Import Project="CaPPMS.csproj" />
-  <Import Project="..\unitests\CaPPMSTests.csproj" />
+  <Import Project="unitests\CaPPMSTests.csproj" />
 </Project>
