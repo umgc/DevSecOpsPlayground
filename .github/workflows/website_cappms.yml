@@ -31,9 +31,9 @@ jobs:
 
       - name: Test CAPPMS with dotnet
         run: |
-          cd cappms
+          cd CaPPMS/site
           dotnet test --configuration Release
-          
+
   build-and-deploy:
     runs-on: windows-latest
 
@@ -50,13 +50,13 @@ jobs:
 
     - name: Build with dotnet
       run: |
-        cd ./CaPPMS
+        cd ./CaPPMS/site
         dotnet nuget add source https://api.nuget.org/v3/index.json -n nuget.org
         dotnet restore
 
     - name: dotnet publish
       run: |
-        cd ./CaPPMS
+        cd ./CaPPMS/site
         dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
     - name: Run Azure webapp deploy action using publish profile credentials
