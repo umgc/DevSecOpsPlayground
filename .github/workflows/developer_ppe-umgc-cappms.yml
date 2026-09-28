@@ -32,7 +32,7 @@ jobs:
 
       - name: Test CAPPMS with dotnet
         run: |
-          cd CaPPMS/unitests
+          cd ./CaPPMS/unitests
           dotnet test --configuration Release
 
   build:
