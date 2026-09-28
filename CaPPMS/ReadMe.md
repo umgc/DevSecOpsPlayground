@@ -19,6 +19,12 @@ The initial page that the user sees contains a form. Here the user can fill out 
 
 ## Managing the Project List
 
+# Restoring the project.
+
+- Make sure you have [.net 10 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/10.0) installed.
+
+- Run ``` dotnet restore ``` at ./Cappms
+
 # Generating the Solution
 
 This repo uses MSBuild Traversal projects. To generate a Visual Studio solution:
