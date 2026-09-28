@@ -19,6 +19,17 @@ The initial page that the user sees contains a form. Here the user can fill out 
 
 ## Managing the Project List
 
+# Generating the Solution
+
+This repo uses MSBuild Traversal projects. To generate a Visual Studio solution:
+
+    ``` slngen ``` at the Cappms root where dirs.proj is located.
+
+If you don't have SLNGen installed:
+
+    dotnet tool install --global Microsoft.VisualStudio.SlnGen.Tool
+
+
 **Note**: This is an authorized user only area that was meant to be used by the faculity members of UMGC.
 
 Clicking the Project List link from the Navigation Bar will bring you to the Project List Page:
