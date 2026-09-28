@@ -32,9 +32,9 @@ jobs:
 
       - name: Test CAPPMS with dotnet
         run: |
-          cd CaPPMSTests
+          cd CaPPMS/unitests
           dotnet test --configuration Release
-          
+
   build:
     runs-on: windows-latest
     needs: test
@@ -51,12 +51,12 @@ jobs:
         
       - name: Build CAPPMS with dotnet
         run: |
-          cd cappms
+          cd ./CaPPMS/site
           dotnet build --configuration Release
 
       - name: dotnet publish
         run: |
-          cd cappms
+          cd ./CaPPMS/site
           dotnet publish -c Release -o "${{env.DOTNET_ROOT}}/myapp"
 
       - name: Upload artifact for deployment job
@@ -95,4 +95,4 @@ jobs:
           app-name: 'ppe-umgc-cappms'
           slot-name: 'Production'
           package: .
-          
+
