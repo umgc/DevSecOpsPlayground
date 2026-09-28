@@ -1,0 +1,235 @@
+﻿@using System.ComponentModel.DataAnnotations
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.EntityFrameworkCore
+@using System.Text.RegularExpressions
+
+@inject IJSRuntime JSRuntime
+
+@page "/"
+
+<title>Weekly Peer Reviews</title>
+
+<style>
+    .card-body {
+        /*        display: flex;*/
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+
+    .card-header {
+        color: white;
+        font-size: 25px;
+    }
+
+        .card-header.description {
+            background-color: rgb(30, 30, 120);
+        }
+
+        .card-header.evaluator {
+            background-color: rgb(46, 46, 131);
+        }
+
+        .card-header.student {
+            background-color: rgb(51, 16, 90);
+        }
+
+        .card-header.entries {
+            background-color: rgb(68, 19, 124);
+        }
+
+    .form-label {
+        font-size: 18px;
+        margin-left: 10px;
+    }
+
+    .input-valid {
+        border: 1px solid green;
+    }
+
+    .input-invalid {
+        border: 1px solid red;
+    }
+</style>
+
+<EditForm Model="@review" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <AntiforgeryToken />
+
+    <div class="card">
+        <h5 class="card-header description">Evaluations of Own Team Members</h5>
+        <div class="card-body">
+            <p class="card-text">
+                To fairly acknowledge your team members for their contributions to the success of your team's project, each team member submits an evaluation for all team members (excluding yourself). This feedback about your team is required for Milestones 1 through 4.
+            </p>
+            <p class="card-text">
+                Please provide a numeric value between 0 and 100 to your peers below for each milestone. If a team member is not contributing, the correct score for the team member is zero. If there are four such zeroes from the team members, the student is going to fail this course, no matter what he or she gets in other assessments. This is your way of getting your teammates attention.
+            </p>
+        </div>
+    </div>
+
+    @*<div class="card" style="display: none">
+        <h5 class="card-header evaluator">Your Information</h5>
+        <div class="card-body">
+
+            <label class="form-label col-3">
+                First Name:
+                <InputText id="firstName" @bind-Value="@Student.FirstName" placeholder="First Name" class="form-control" />
+
+            </label>
+
+            <label class="form-label col-3">
+                Last Name:
+                <InputText id="lastName" @bind-Value="@Student.LastName" placeholder="Last Name" class="form-control" />
+            </label>
+
+            <label class="form-label col-5">
+                Email Address:
+                <InputText id="emailAddress" @bind-Value="@Student.Email" placeholder="Email Address" class="form-control" />
+            </label>
+        </div>
+    </div>*@
+
+    <div class="card mt-2">
+        <h5 class="card-header student"> Student to be Evaluated</h5>
+        <div class="card-body">
+            <label class="form-label">
+                Week:*
+                <InputSelect id="weekSelected" @bind-Value="review.Week" class="form-control">
+                    <option value="" disabled selected>-- Select Week --</option>
+                    @foreach (var week in WeeksList)
+                    {
+                        <option Value="@week">@week</option>
+                    }
+                </InputSelect>
+                <ValidationMessage For="@(() => review.Week)" />
+            </label>
+            <label class="form-label">
+                Evaluated Team Member:*
+                <InputSelect id="studentSelected" @bind-Value="review.ReviewedStudentId" class="form-control" @onkeydown="ClearMessage">
+                    <option value="" disabled selected>-- Select Student --</option>
+                    @foreach (var student in ClassList)
+                    {
+                        <option Value="@student.StudentId">@student.LastName, @student.FirstName</option>
+                    }
+                </InputSelect>
+                <ValidationMessage For="@(() => review.ReviewedStudentId)" />
+            </label>
+            <label class="form-label" style="width: 90%;">
+                Score (0 - 100, no contribution = 0, expected contribution = 85, beyond the call of duty = 90+):*
+                <InputText id="score" @bind-Value="@review.Score" class="form-control" style="width: 10%" MaxLength="3" @onclick="ClearMessage" />
+                <ValidationMessage For="@(() => review.Score)" />
+            </label>
+
+            <label style="width: 90%;" class="form-label">
+                Comments:
+                <textarea @bind="@review.Comments" class="form-control" rows="4" placeholder="Write your comments here!" @onclick="ClearMessage"></textarea>
+            </label>
+        </div>
+    </div>
+
+    <div style="margin-top: 10px; margin-bottom: 10px;">
+        <h4 style="float: left; color: rgb(21, 142, 21)">@StatusMessage</h4>
+        <input id="submitButton" type="submit" class="btn btn-primary" style="float: right;" value="Submit" />
+    </div>
+    <br />
+    <!-- Table for displaying completed student evaluations -->
+    <div class="card mt-4" hidden="@(HidePanel)">
+        <h5 class="card-header entries">Completed Evaluations</h5>
+        <div class="card-body">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Week</th>
+                        <th>Evaluated Team Member</th>
+                        <th>Score</th>
+                        <th>Comments</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var review in completedReviews)
+                    {
+
+                        <tr>
+                            <td>@review.Week</td>
+                            <td>@review.RatedStudent</td>
+                            <td>@review.Score</td>
+                            <td>@review.Comments</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</EditForm>
+
+@code {
+    protected override void OnInitialized()
+    {
+    }
+
+    // Method to clear the status message
+    private void ClearMessage()
+    {
+        StatusMessage = ""; // Clear the status message
+    }
+
+    // Method to display a status message
+    private void DisplayMessage(string message)
+    {
+        StatusMessage = message; // Set the status message
+    }
+
+    // Method to handle the focus event of form fields
+    private void HandleFieldFocus()
+    {
+        ClearMessage(); // Clear the status message when a field gains focus
+    }
+
+    public async Task HandleValidSubmit()
+    {
+        await SubmitEvaluation();
+
+        // After successful submission, await the display of a confirmation message
+        // The confirmation message indicates that the peer review submission was successful
+        DisplayMessage("Submission was successful");
+
+        review.ReviewedStudentId = string.Empty;
+        review.Score = string.Empty;
+        review.Comments = string.Empty;
+    }
+
+    private async Task ShowAlert(string message)
+    {
+        // Call JavaScript function to display alert
+        await JSRuntime.InvokeVoidAsync("displayAlert", message);
+    }
+
+    private bool IsValidScore(string score) //new method to validate the score input to
+    {
+        if (int.TryParse(score, out int parsedScore)) //check to see if input can be parsed as an int in specific range
+        {
+            // Check if score is within the range of 0 to 100
+            return parsedScore >= 0 && parsedScore <= 100;
+        }
+        else
+        {
+            // Return false if score is not a valid integer
+            return false;
+        }
+    }
+
+    private async Task ShowConfirmationMessage(string message) // Method declaration for showing a confirmation message asynchronously
+    {
+        // Using the JSRuntime service to invoke a JavaScript function asynchronously
+        // The JavaScript function is named "displayAlert" and it takes a message parameter
+        // The message parameter contains the confirmation message to be displayed
+        // The method is awaited to ensure it completes before moving to the next operation
+        await JSRuntime.InvokeVoidAsync("displayAlert", message);
+    }
+}
+
+<script>
+function displayAlert(message) {
+    window.alert(message);
+}
+</script>
