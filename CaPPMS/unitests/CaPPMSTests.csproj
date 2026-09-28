@@ -30,7 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CaPPMS\CaPPMS.csproj" />
+    <ProjectReference Include="..\site\CaPPMS.csproj" />
   </ItemGroup>
 
 </Project>
