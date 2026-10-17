@@ -122,13 +122,14 @@ namespace CaPPMS.Data
 
         /// <summary>
         /// This method is used to enable testable results. The test will not specifically be able to delete like an authenticated user so we will enable with this helper method.
+        /// When called from tests, the file must live under a build output folder (bin/Debug or bin/Release).
         /// </summary>
         /// <param name="fileLocation">Location of the File</param>
         /// <param name="fromTest">If from test or not.</param>
         /// <returns></returns>
         private string Delete(string fileLocation, bool fromTest)
         {
-            Regex testLocation = new Regex(@"[\\/][Bb]in[\\/][Dd]ebug[\\/]");
+            Regex testLocation = new Regex(@"[\\/][Bb]in[\\/](Debug|Release)[\\/]");
 
             if (fromTest && !testLocation.IsMatch(fileLocation))
             {
