@@ -61,9 +61,14 @@ namespace CaPPMS.Data
 
         public IProjectFileManager FileManager { get; private set; }
 
-        public int MaxNumberOfFiles => Convert.ToInt32(Program.GetConfigurationSetting("MaxNumberOfFiles"));
+        public int MaxNumberOfFiles => GetIntSetting("MaxNumberOfFiles", 10);
 
-        public long MaxMBSizePerFile => 1024 * 1024 * Convert.ToInt32(Program.GetConfigurationSetting("MaxMBSizePerFile"));
+        public long MaxMBSizePerFile => 1024L * 1024L * GetIntSetting("MaxMBSizePerFile", 20);
+
+        private static int GetIntSetting(string key, int defaultValue)
+        {
+            return int.TryParse(Program.GetConfigurationSetting(key), out int value) ? value : defaultValue;
+        }
 
         public IEnumerable<string> GetIdeaTitles()
         {
@@ -77,7 +82,8 @@ namespace CaPPMS.Data
         {
             foreach(var file in idea.Attachments)
             {
-                file.Location = await FileManager.SaveAsync(file.BrowserFile.OpenReadStream(MaxMBSizePerFile), file.File_ID.ToString(), file.Name);
+                using var stream = file.BrowserFile.OpenReadStream(MaxMBSizePerFile);
+                file.Location = await FileManager.SaveAsync(stream, file.File_ID.ToString(), file.Name);
             }
 
             if (!ProjectIdeas.TryAdd(idea.ProjectID, idea))
@@ -123,8 +129,13 @@ namespace CaPPMS.Data
 
         public async Task<string?> RemoveFileAsync(ProjectInformation idea, ProjectFile file, IPrincipal user)
         {
+            if (!ProjectIdeas.TryGetValue(idea.ProjectID, out ProjectInformation? existingProjectInformation))
+            {
+                return "Project was not found.";
+            }
+
             idea.Attachments.Remove(file);
-            if (ProjectIdeas.TryUpdate(idea.ProjectID, idea, ProjectIdeas[idea.ProjectID]))
+            if (ProjectIdeas.TryUpdate(idea.ProjectID, idea, existingProjectInformation))
             {
                 ProjectIdeasChanged?.Invoke(ProjectIdeas.Values, EventArgs.Empty);
             }
@@ -147,7 +158,8 @@ namespace CaPPMS.Data
                         continue;
                     }
 
-                    file.Location = await FileManager.SaveAsync(file.BrowserFile.OpenReadStream(MaxMBSizePerFile), file.File_ID.ToString(), file.Name);
+                    using var stream = file.BrowserFile.OpenReadStream(MaxMBSizePerFile);
+                    file.Location = await FileManager.SaveAsync(stream, file.File_ID.ToString(), file.Name);
                 }
 
                 bool completed;
@@ -319,19 +331,14 @@ namespace CaPPMS.Data
             return new List<Comment>();
         }
 
-        private async void ProjectManagerService_ProjectIdeasChanged(object? sender, EventArgs? e)
+        private void ProjectManagerService_ProjectIdeasChanged(object? sender, EventArgs? e)
         {
-            // Let's build a gate to control flow. It might be a bit extra but it should be fun.
-            await Task.Run(() =>
+            // Synchronous, lock-serialized persistence so a mutation is written before the caller continues
+            // and failures surface to the caller instead of being swallowed by an async void continuation.
+            lock (fileSyncLock)
             {
-                ProjectManagerService manager = (ProjectManagerService)this.MemberwiseClone();
-
-                // Update the file backed db.
-                lock (fileSyncLock)
-                {
-                    File.WriteAllText(localProjectDbFilePath, JsonConvert.SerializeObject(manager.ProjectIdeas, Formatting.Indented));
-                }
-            });
+                File.WriteAllText(localProjectDbFilePath, JsonConvert.SerializeObject(ProjectIdeas, Formatting.Indented));
+            }
         }
     }
 }
