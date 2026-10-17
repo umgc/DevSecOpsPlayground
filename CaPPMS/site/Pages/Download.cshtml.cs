@@ -17,24 +17,24 @@ namespace CaPPMS.Pages
             this.projectManager = projectManager;
         }
 
-        public async Task<IActionResult?> OnGet()
+        public async Task<IActionResult> OnGet()
         {
             if (!HttpContext.Request.Path.HasValue)
             {
-                return null;
+                return NotFound();
             }
 
             var fileLocation = HttpContext.Request.Path.Value.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries).Last();
 
             if (string.IsNullOrEmpty(fileLocation))
             {
-                return null;
+                return NotFound();
             }
 
             Stream? data = await GetData(fileLocation);
             if (data == null)
             {
-                return null;
+                return NotFound();
             }
 
             return File(data, "application/force-download", GetFileName(fileLocation));

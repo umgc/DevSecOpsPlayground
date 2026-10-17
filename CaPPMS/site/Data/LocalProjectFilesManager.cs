@@ -1,4 +1,5 @@
 ﻿using CaPPMS.Model;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Security.Principal;
@@ -47,11 +48,9 @@ namespace CaPPMS.Data
             //    return $"User:{principal.Identity.Name} does not have permission to delete {fileLocation.Split(Delimiter).Last()}.";
             //}
 
-            var filePath = Path.Combine(this.FileDirInfo.FullName, fileLocation);
+            var filePath = Path.GetFullPath(Path.Combine(this.FileDirInfo.FullName, fileLocation));
 
-            filePath = Path.GetFullPath(filePath);
-
-            if (!filePath.StartsWith(this.FileDirInfo.FullName))
+            if (!IsWithinFileDir(filePath))
             {
                 // Maybe log this in
                 return Task.FromResult($"Path not within the specified storage location. User:{principal?.Identity?.Name}. Attempted path:{filePath}");
@@ -63,7 +62,14 @@ namespace CaPPMS.Data
         /// <inheritdoc/>
         public override async Task<Stream?> ReadAsync(string fileLocation)
         {
-            var file = new FileInfo(Path.Combine(FileDirInfo.FullName, fileLocation));
+            var fullPath = Path.GetFullPath(Path.Combine(FileDirInfo.FullName, fileLocation));
+
+            if (!IsWithinFileDir(fullPath))
+            {
+                return null;
+            }
+
+            var file = new FileInfo(fullPath);
 
             if (!file.Exists)
             {
@@ -77,15 +83,13 @@ namespace CaPPMS.Data
         public override async Task<string> SaveAsync(Stream stream, string fileId, string fileName)
         {
             fileName = fileId + Delimiter + fileName;
-            var filePath = Path.Combine(FileDirInfo.FullName, fileName);
+            var filePath = Path.GetFullPath(Path.Combine(FileDirInfo.FullName, fileName));
 
-            filePath = Path.GetFullPath(filePath);
-            
-            if (!filePath.StartsWith(FileDirInfo.FullName))
+            if (!IsWithinFileDir(filePath))
             {
                 // Maybe log this in
                 Debug.WriteLine($"Path not within the specified storage location. Attempted path: {filePath}");
-                return null;
+                throw new UnauthorizedAccessException($"Path not within the specified storage location. Attempted path: {filePath}");
             }
 
             if (File.Exists(filePath))
@@ -100,21 +104,7 @@ namespace CaPPMS.Data
                     stream.Position = 0;
                 }
 
-                Task writeTask = stream.CopyToAsync(fs);
-
-                await writeTask;
-
-                if (writeTask.IsFaulted)
-                {
-                    throw new IOException("Failed to save the incoming stream to the file system.", writeTask.Exception);
-                }
-            }
-
-            int wait = -1;
-
-            while(!File.Exists(filePath) && wait++ < 3)
-            {
-                await Task.Delay(300);
+                await stream.CopyToAsync(fs);
             }
 
             return fileName;
@@ -143,6 +133,16 @@ namespace CaPPMS.Data
             }
 
            return "File does not exist.";
+        }
+
+        /// <summary>
+        /// Ensures a resolved path stays inside the storage directory so callers cannot escape it via ".." segments.
+        /// </summary>
+        private bool IsWithinFileDir(string fullPath)
+        {
+            string dir = FileDirInfo.FullName.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar) + Path.DirectorySeparatorChar;
+
+            return fullPath.StartsWith(dir, StringComparison.Ordinal);
         }
     }
 }

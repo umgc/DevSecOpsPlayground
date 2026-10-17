@@ -210,7 +210,7 @@ else
         }
     }
 
-    private void SortByColumn(int column)
+    protected override void SortByColumn(int column)
     {
         Console.Error.WriteLine(column + " clicked");
         if (SortColumnIndex == column)

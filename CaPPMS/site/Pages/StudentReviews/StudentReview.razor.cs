@@ -9,8 +9,6 @@ namespace CaPPMS.Pages.StudentReviews
     {
         private string username = string.Empty;
         private string log = string.Empty;
-        private int count = -1;
-        private bool isSubmitButtonDisabled = true;
 
         public Student student = new Student();
 
