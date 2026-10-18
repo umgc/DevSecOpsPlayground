@@ -55,7 +55,11 @@ namespace CaPPMS.Pages
                             continue;
                         }
 
-                        var entryName = $"{project.ProjectTitle}/{attachment.Name}";
+                        // Use ProjectID (GUID) and File_ID (GUID) in the zip path so
+                        // entries never collide, even when multiple teams in the same
+                        // cohort have same-titled projects or same-named attachments.
+                        var entryName =
+                            $"cohort-{classId}/project-{project.ProjectID}/{attachment.File_ID}_{SanitizeFileName(attachment.Name)}";
                         var zipEntry = zipArchive.CreateEntry(entryName, CompressionLevel.Optimal);
 
                         using var zipEntryStream = zipEntry.Open();
@@ -68,6 +72,19 @@ namespace CaPPMS.Pages
 
             var fileName = $"cohort-{classId}-projects.zip";
             return File(zipMemoryStream.ToArray(), "application/zip", fileName);
+        }
+
+        /// <summary>
+        /// Strips path separators and other unsafe characters from an attachment
+        /// name so it can safely be used as a zip entry segment.
+        /// </summary>
+        private static string SanitizeFileName(string name)
+        {
+            foreach (var c in System.IO.Path.GetInvalidFileNameChars())
+            {
+                name = name.Replace(c, '_');
+            }
+            return name;
         }
     }
 }
