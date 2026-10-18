@@ -34,7 +34,7 @@ namespace CaPPMS.Data
         /// change.
         /// </summary>
         /// <remarks>
-        /// TODO: [rwilson127] Remove this method and the Program.cs call site
+        /// TODO: [willywil548] Remove this method and the Program.cs call site
         /// once all files on PPE and Live have been migrated to .gz.
         /// </remarks>
         public async Task MigrateExistingFilesAsync()

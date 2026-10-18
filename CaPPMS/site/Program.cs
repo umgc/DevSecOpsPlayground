@@ -17,7 +17,7 @@ namespace CaPPMS
             var host = CreateHostBuilder(args).Build();
 
             // One-time migration: compress legacy uncompressed files to .gz.
-            // TODO: [rwilson127] Remove this block once PPE and Live have both
+            // TODO: [willywil548] Remove this block once PPE and Live have both
             // been rolled out with compressed file storage and all existing
             // files have been migrated.
             var fileManager = new LocalProjectFilesManager();
