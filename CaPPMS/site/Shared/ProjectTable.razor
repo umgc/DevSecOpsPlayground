@@ -1,226 +1,125 @@
-﻿@using CaPPMS.Data
+@using CaPPMS.Data
 @using CaPPMS.Model
-@using CaPPMS.Model.Table
+@using CaPPMS.Attributes
+@using MudBlazor
 @namespace CaPPMS.Shared
-@inherits CaPPMS.Model.Table.Table<ProjectInformation>
 @implements IIdea
 
-<h3>Project List</h3>
+@inject ProjectManagerService ProjectManager
 
-@if(this.HeaderRow.Count == 0)
-{
-    <pre>Loading ...</pre>
-}
-else
-{
-<div>
-    <div>
-        <label>
-            <input id="filter" 
-                   class="input-group-text p-2 mb-lg-3" 
-                   type="text" 
-                   placeholder="Filter the data here" 
-                   @bind="Filter" 
-                   @bind:event="oninput" />
-        </label>
-        <table id="projectEntriesTable" class="@string.Join(" ", TableCssClasses)">
-            <thead class="thead-light">
-                <tr>
-                    <th></th>
-                    @foreach (var header in this.HeaderRow)
-                    {
-                            <th style="cursor:pointer" @onclick="e => SortByColumn(header.ColumnId)">
-                            @header.Value
-                        </th>
-                    }
-                   
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var row in this.GetRows())
-                {
-                    <tr>
-                        <td>
-                            <button @onclick="e => projectListCollapseMap[row.DataBoundItem] = !projectListCollapseMap[row.DataBoundItem]"
-                                    class="btn btn-primary">
-                                @(projectListCollapseMap[row.DataBoundItem] ? "+" : "-")
-                            </button>
-                        </td>
-                        @foreach (var cell in row)
-                        {
-                            @((MarkupString)cell.ToString())
-                        }
-                        
-                    </tr>
-                    @if (!projectListCollapseMap[row.DataBoundItem])
-                    {
-                        <tr>
-                            <td colspan="100">
-                                @if (isAuthenticated)
-                                {
-                                    <CascadingAuthenticationState>
-                                        <ProjectEntryAuthorizedDropdown 
-                                            CollapseEntry="@(projectListCollapseMap[row.DataBoundItem] ? "collapse" : "")"
-                                            ProjectInformation="row.DataBoundItem">
-                                        </ProjectEntryAuthorizedDropdown>
-                                    </CascadingAuthenticationState>
-                                }
-                                else
-                                {
-                                    <ProjectEntryDropdown CollapseEntry="@(projectListCollapseMap[row.DataBoundItem] ? "collapse" : "")"
-                                                          ProjectInformation="row.DataBoundItem">
-                                    </ProjectEntryDropdown>
-                                }
+<MudTable Items="PagedItems" Class="@CssClass" Dense="true">
+    <HeaderContent>
+        <MudTableRow>
+            <MudTableTh Style="cursor:pointer" OnClick="() => SortByColumn(nameof(ProjectInformation.ProjectTitle))">
+                Project Title
+            </MudTableTh>
+            <MudTableTh Style="cursor:pointer" OnClick="() => SortByColumn(nameof(ProjectInformation.ProjectDescription))">
+                Project Description
+            </MudTableTh>
+            <MudTableTh Style="cursor:pointer" OnClick="() => SortByColumn(nameof(ProjectInformation.Status))">
+                Status
+            </MudTableTh>
+        </MudTableRow>
+    </HeaderContent>
+    <RowTemplate Context="item">
+        <MudTableRow>
+            <MudTableDataCell>
+                <button @onclick="() => ToggleCollapse(item)" class="btn btn-primary btn-sm">
+                    @(IsCollapsed(item) ? "+" : "-")
+                </button>
+            </MudTableDataCell>
+            <MudTableDataCell>@item.ProjectTitle</MudTableDataCell>
+            <MudTableDataCell>@item.ProjectDescription</MudTableDataCell>
+            <MudTableDataCell>@item.Status</MudTableDataCell>
+        </MudTableRow>
+    </RowTemplate>
+    <PagerContent>
+        <MudTablePager />
+    </PagerContent>
+</MudTable>
 
-                            </td>
-                        </tr>
-                    }
-                }
-            </tbody>
-            <tfoot>
-                <tr>
-                    <td colspan="@this.ColumnCount + 1">
-                        <Paginate Parent="@this"
-                                  PageChanged="InitializeCollapseMap"/>
-                    </td>
-                </tr>
-            </tfoot>
-        </table>
-    </div>
-    @if (idea != null)
-    {
-        <div class="popOver">
-            <CascadingAuthenticationState>
-                <Idea ShowComments="true" ShowFileAttachments="true" ShowFormButton="Idea.FormButtons.Approver" ProjectIdea="idea" Parent="this" />
-            </CascadingAuthenticationState>
-        </div>
-    }
-    <br />
-    <br />
+<div class="filter-container">
+    <MudTextField T="string" @bind="Filter" Label="Filter projects" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" />
 </div>
+
+@if (selectedIdea != null)
+{
+    <div class="popOver">
+        <CascadingAuthenticationState>
+            <Idea ShowComments="true" ShowFileAttachments="true" ShowFormButton="Idea.FormButtons.Approver" ProjectIdea="selectedIdea" Parent="this" />
+        </CascadingAuthenticationState>
+    </div>
 }
 
-@code{
-
-    [CascadingParameter]
-    private Task<AuthenticationState> authenticationState { get; set; }
+@code {
+    [Parameter]
+    public IEnumerable<ProjectInformation> DataSource { get; set; } = Enumerable.Empty<ProjectInformation>();
 
     [Parameter]
-    public string CssClass
+    public string CssClass { get; set; } = "table border p-2";
+
+    private string filter = string.Empty;
+    private string sortColumn = nameof(ProjectInformation.ProjectTitle);
+    private bool sortAscending = true;
+    private int page = 1;
+    private int pageSize = 10;
+    private ProjectInformation? selectedIdea;
+    private readonly HashSet<Guid> collapsedIds = new();
+
+    private IEnumerable<ProjectInformation> SortedItems =>
+        sortAscending
+            ? DataSource.OrderBy(p => GetSortValue(p, sortColumn))
+            : DataSource.OrderByDescending(p => GetSortValue(p, sortColumn));
+
+    private IEnumerable<ProjectInformation> FilteredItems =>
+        string.IsNullOrWhiteSpace(filter)
+            ? SortedItems
+            : SortedItems.Where(p =>
+                (p.ProjectTitle?.Contains(filter, StringComparison.OrdinalIgnoreCase) ?? false) ||
+                (p.ProjectDescription?.Contains(filter, StringComparison.OrdinalIgnoreCase) ?? false) ||
+                (p.Status?.Contains(filter, StringComparison.OrdinalIgnoreCase) ?? false));
+
+    private IEnumerable<ProjectInformation> PagedItems =>
+        FilteredItems.Skip((page - 1) * pageSize).Take(pageSize);
+
+    private object GetSortValue(ProjectInformation p, string column) => column switch
     {
-        get
+        nameof(ProjectInformation.ProjectTitle) => (object?)(p.ProjectTitle ?? string.Empty),
+        nameof(ProjectInformation.ProjectDescription) => (object?)(p.ProjectDescription ?? string.Empty),
+        _ => (object?)(p.Status ?? string.Empty),
+    };
+
+    private void SortByColumn(string column)
+    {
+        if (column == sortColumn)
         {
-            return string.Join(" ", this.CssClass);
+            sortAscending = !sortAscending;
         }
-        set
+        else
         {
-            this.TableCssClasses.Clear();
-            this.TableCssClasses.AddRange(value.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries));
+            sortColumn = column;
+            sortAscending = true;
+        }
+        page = 1;
+    }
+
+    private void ToggleCollapse(ProjectInformation idea)
+    {
+        if (idea is null) return;
+        if (collapsedIds.Contains(idea.ProjectID))
+        {
+            collapsedIds.Remove(idea.ProjectID);
+        }
+        else
+        {
+            collapsedIds.Add(idea.ProjectID);
         }
     }
 
-    private List<string> TableCssClasses = new List<string>();
-
-    private ProjectInformation idea { get; set; }
-
-    private bool isAuthenticated;
-
-    private Dictionary<ProjectInformation, bool> projectListCollapseMap = new Dictionary<ProjectInformation, bool>();
-
-    protected override async Task OnInitializedAsync()
-    {
-
-        var authState = await authenticationState;
-
-        this.isAuthenticated = authState.User?.Identity.IsAuthenticated ?? false;
-        InitializeCollapseMap();
-
-        this.DataSourceChanged += (o, e) =>
-        {
-            if (idea != null && !this.DataSource.Contains(idea))
-            {
-                idea = null;
-            }
-
-            this.ShouldProcessStateChange();
-            InitializeCollapseMap();
-        };
-
-        this.FilterChanged += (o, e) =>
-        {
-            this.SetPageNumber(1);
-            this.ShouldProcessStateChange();
-            InitializeCollapseMap();
-        };
-
-        ProjectManagerService.ProjectIdeasChanged += (o, e) =>
-        {
-            var ideas = o as ICollection<ProjectInformation>;
-
-            this.DataSource = ideas;
-        };
-
-        await base.OnInitializedAsync();
-    }
+    private bool IsCollapsed(ProjectInformation idea) => idea is not null && collapsedIds.Contains(idea.ProjectID);
 
     public void CloseIdea(Idea idea)
     {
-        this.idea = null;
-        ShouldProcessStateChange();
-    }
-
-    private void PageRight(MouseEventArgs e)
-    {
-        this.SetPageNumber(this.CurrentPage + 1);
-    }
-
-    private void ShowView(ProjectInformation idea)
-    {
-        this.idea = idea;
-    }
-
-    private void ShouldProcessStateChange()
-    {
-        this.InvokeAsync(() =>
-        {
-            this.StateHasChanged();
-        });
-    }
-
-    private void InitializeCollapseMap()
-    {
-        Dictionary<Guid, bool> oldCollapseMap = new Dictionary<Guid, bool>();
-        foreach (ProjectInformation info in projectListCollapseMap.Keys)
-        {
-            oldCollapseMap.Add(info.ProjectID, projectListCollapseMap[info]);
-        }
-
-        projectListCollapseMap.Clear();
-        foreach (Row<ProjectInformation> row in this.GetRows())
-        {
-            if (!projectListCollapseMap.ContainsKey(row.DataBoundItem))
-            {
-                ProjectInformation newInfo = row.DataBoundItem;
-                projectListCollapseMap.Add(newInfo, true);
-                if (oldCollapseMap.ContainsKey(newInfo.ProjectID))
-                {
-                    projectListCollapseMap[newInfo] = oldCollapseMap[newInfo.ProjectID];
-                }
-            }
-        }
-    }
-
-    protected override void SortByColumn(int column)
-    {
-        Console.Error.WriteLine(column + " clicked");
-        if (SortColumnIndex == column)
-        {
-            IsColumnSortAscending = !IsColumnSortAscending;
-        } else
-        {
-            IsColumnSortAscending = true;
-            SortColumnIndex = column;
-        }
-        InitializeCollapseMap();
+        selectedIdea = null;
     }
 }
