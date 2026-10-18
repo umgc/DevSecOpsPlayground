@@ -3,6 +3,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
+using System.Linq;
 using System.Security.Principal;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -21,6 +22,55 @@ namespace CaPPMS.Data
 
                 // Reassign it to force object update based on new directory.
                 FileDirInfo = new DirectoryInfo(FileDirInfo.FullName);
+            }
+        }
+
+        /// <summary>
+        /// One-time migration: compresses every legacy uncompressed file in the
+        /// storage directory into a .gz variant, then removes the original.
+        /// Naturally idempotent — once every file is stored as .gz this is a
+        /// no-op and the method (plus its call site in Program.cs) can be
+        /// deleted after PPE and Live have both been rolled out with this
+        /// change.
+        /// </summary>
+        /// <remarks>
+        /// TODO: [rwilson127] Remove this method and the Program.cs call site
+        /// once all files on PPE and Live have been migrated to .gz.
+        /// </remarks>
+        public async Task MigrateExistingFilesAsync()
+        {
+            if (!FileDirInfo.Exists)
+            {
+                return;
+            }
+
+            var rawFiles = FileDirInfo.GetFiles("*", SearchOption.TopDirectoryOnly)
+                .Where(f => !f.Name.EndsWith(CompressedExtension, StringComparison.OrdinalIgnoreCase));
+
+            foreach (var rawFile in rawFiles)
+            {
+                var compressedPath = rawFile.FullName + CompressedExtension;
+
+                // Skip if a compressed variant already exists.
+                if (File.Exists(compressedPath) && IsWithinFileDir(compressedPath))
+                {
+                    if (rawFile.Exists)
+                    {
+                        rawFile.Delete();
+                    }
+                    continue;
+                }
+
+                // Read the entire file into memory first, then write the compressed
+                // variant. This avoids file-share locking issues on Windows where the
+                // raw file may still be held by the caller that created it.
+                var rawBytes = await File.ReadAllBytesAsync(rawFile.FullName);
+
+                using var outputStream = File.Create(compressedPath);
+                using var gzip = new GZipStream(outputStream, CompressionMode.Compress);
+                await gzip.WriteAsync(rawBytes, 0, rawBytes.Length);
+
+                rawFile.Delete();
             }
         }
 

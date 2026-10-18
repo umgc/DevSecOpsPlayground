@@ -14,6 +14,14 @@ namespace CaPPMS.Model
         [Browsable(false)]
         public Guid ProjectID { get; set; } = Guid.NewGuid();
 
+        /// <summary>
+        /// The class/cohort this project belongs to. Matches ClassInformation.ClassId.
+        /// Defaults to -1 for projects not yet assigned to a cohort.
+        /// </summary>
+        [Export]
+        [Browsable(false)]
+        public long ClassId { get; set; } = -1;
+
         private string projectTitle = string.Empty;
 
         private string videoLink = string.Empty;
