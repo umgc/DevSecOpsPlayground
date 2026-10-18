@@ -23,14 +23,14 @@
     </HeaderContent>
     <RowTemplate Context="item">
         <MudTableRow>
-            <MudTableDataCell>
+            <MudTableCell>
                 <button @onclick="() => ToggleCollapse(item)" class="btn btn-primary btn-sm">
                     @(IsCollapsed(item) ? "+" : "-")
                 </button>
-            </MudTableDataCell>
-            <MudTableDataCell>@item.ProjectTitle</MudTableDataCell>
-            <MudTableDataCell>@item.ProjectDescription</MudTableDataCell>
-            <MudTableDataCell>@item.Status</MudTableDataCell>
+            </MudTableCell>
+            <MudTableCell>@item.ProjectTitle</MudTableCell>
+            <MudTableCell>@item.ProjectDescription</MudTableCell>
+            <MudTableCell>@item.Status</MudTableCell>
         </MudTableRow>
     </RowTemplate>
     <PagerContent>
@@ -82,7 +82,7 @@
     private IEnumerable<ProjectInformation> PagedItems =>
         FilteredItems.Skip((page - 1) * pageSize).Take(pageSize);
 
-    private object GetSortValue(ProjectInformation p, string column) => column switch
+    private object? GetSortValue(ProjectInformation p, string column) => column switch
     {
         nameof(ProjectInformation.ProjectTitle) => (object?)(p.ProjectTitle ?? string.Empty),
         nameof(ProjectInformation.ProjectDescription) => (object?)(p.ProjectDescription ?? string.Empty),

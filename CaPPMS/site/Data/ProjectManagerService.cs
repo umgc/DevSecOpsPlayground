@@ -204,7 +204,7 @@ namespace CaPPMS.Data
             var bodyFont = FontFactory.GetFont("Roboto", 12f);
 
             // Set up the document.
-            // TODO: [rwilson127] Page size should be set by user in some setting
+            // TODO: [willywil548] Page size should be set by user in some setting
             Document pdf = new Document(PageSize.Letter, 25f, 25f, 25f, 35f);
             pdf.AddTitle(idea.ProjectTitle);
             pdf.AddAuthor($"{idea.FirstName} {idea.LastName}");
