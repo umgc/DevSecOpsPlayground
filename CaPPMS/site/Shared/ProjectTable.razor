@@ -82,7 +82,7 @@
     private IEnumerable<ProjectInformation> PagedItems =>
         FilteredItems.Skip((page - 1) * pageSize).Take(pageSize);
 
-    private object GetSortValue(ProjectInformation p, string column) => column switch
+    private object? GetSortValue(ProjectInformation p, string column) => column switch
     {
         nameof(ProjectInformation.ProjectTitle) => (object?)(p.ProjectTitle ?? string.Empty),
         nameof(ProjectInformation.ProjectDescription) => (object?)(p.ProjectDescription ?? string.Empty),
