@@ -23,14 +23,14 @@
     </HeaderContent>
     <RowTemplate Context="item">
         <MudTableRow>
-            <MudTableCell>
+            <MudTableTd>
                 <button @onclick="() => ToggleCollapse(item)" class="btn btn-primary btn-sm">
                     @(IsCollapsed(item) ? "+" : "-")
                 </button>
-            </MudTableCell>
-            <MudTableCell>@item.ProjectTitle</MudTableCell>
-            <MudTableCell>@item.ProjectDescription</MudTableCell>
-            <MudTableCell>@item.Status</MudTableCell>
+            </MudTableTd>
+            <MudTableTd>@item.ProjectTitle</MudTableTd>
+            <MudTableTd>@item.ProjectDescription</MudTableTd>
+            <MudTableTd>@item.Status</MudTableTd>
         </MudTableRow>
     </RowTemplate>
     <PagerContent>
