@@ -126,7 +126,8 @@ namespace CaPPMSTests.Data.Table
 
                 Assert.IsTrue(File.Exists(fullPath + ".gz"), "Compressed file must exist before delete.");
 
-                var result = Task.Run(async () => await projectFileManager.DeleteAsync(location, new System.Security.Principal.GenericPrincipal(new System.Security.Principal.GenericIdentity("test"), new[] { "test" }))).Result;
+                var principal = new GenericPrincipal(new GenericIdentity("test"), new[] { "test" });
+                var result = Task.Run(async () => await projectFileManager.DeleteAsync(location, principal)).Result;
 
                 Assert.IsNull(result, "Delete of an existing file must return null (no error).");
                 Assert.IsFalse(File.Exists(fullPath + ".gz"), "Compressed file must be removed on delete.");
