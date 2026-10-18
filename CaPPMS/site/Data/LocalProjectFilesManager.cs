@@ -2,6 +2,7 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.IO.Compression;
 using System.Security.Principal;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -10,6 +11,8 @@ namespace CaPPMS.Data
 {
     public class LocalProjectFilesManager : ProjectFileManager
     {
+        private const string CompressedExtension = ".gz";
+
         public LocalProjectFilesManager()
         {
             if (!FileDirInfo.Exists)
@@ -56,7 +59,22 @@ namespace CaPPMS.Data
                 return Task.FromResult($"Path not within the specified storage location. User:{principal?.Identity?.Name}. Attempted path:{filePath}");
             }
 
-            return Task.FromResult(Delete(filePath, false));
+            // Clean up both compressed (.gz) and legacy (raw) variants so a
+            // migration between formats leaves no orphans behind.
+            bool deleted = false;
+            var compressedPath = filePath + CompressedExtension;
+            if (File.Exists(compressedPath) && IsWithinFileDir(compressedPath))
+            {
+                File.Delete(compressedPath);
+                deleted = true;
+            }
+            if (File.Exists(filePath))
+            {
+                File.Delete(filePath);
+                deleted = true;
+            }
+
+            return Task.FromResult(deleted ? null : "File does not exist.");
         }
 
         /// <inheritdoc/>
@@ -69,6 +87,21 @@ namespace CaPPMS.Data
                 return null;
             }
 
+            // Prefer the compressed (.gz) variant and hydrate (decompress) on serve.
+            var compressedPath = fullPath + CompressedExtension;
+            if (File.Exists(compressedPath) && IsWithinFileDir(compressedPath))
+            {
+                using var fileStream = File.OpenRead(compressedPath);
+                var memoryStream = new MemoryStream();
+                using (var gzip = new GZipStream(fileStream, CompressionMode.Decompress))
+                {
+                    await gzip.CopyToAsync(memoryStream);
+                }
+                memoryStream.Position = 0;
+                return memoryStream;
+            }
+
+            // Fall back to legacy uncompressed files written before compression was introduced.
             var file = new FileInfo(fullPath);
 
             if (!file.Exists)
@@ -97,14 +130,24 @@ namespace CaPPMS.Data
                 File.Delete(filePath);
             }
 
-            using(var fs = new FileStream(filePath, FileMode.Create, FileAccess.Write))
+            var compressedPath = filePath + CompressedExtension;
+            if (File.Exists(compressedPath))
+            {
+                File.Delete(compressedPath);
+            }
+
+            // Compress every file on store; the download path hydrates (decompresses) on serve.
+            using(var fs = new FileStream(compressedPath, FileMode.Create, FileAccess.Write))
             {
                 if (stream.CanSeek)
                 {
                     stream.Position = 0;
                 }
 
-                await stream.CopyToAsync(fs);
+                using(var gzip = new GZipStream(fs, CompressionMode.Compress))
+                {
+                    await stream.CopyToAsync(gzip);
+                }
             }
 
             return fileName;

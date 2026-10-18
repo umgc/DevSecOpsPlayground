@@ -56,9 +56,79 @@ namespace CaPPMSTests.Data.Table
 
             Assert.IsFalse(string.IsNullOrEmpty(filePath));
 
-            filePath = Path.Combine(projectFileManager.FileDirInfo.FullName, filePath);
+            var fullPath = Path.Combine(projectFileManager.FileDirInfo.FullName, filePath);
 
-            Assert.IsTrue(File.Exists(filePath));
+            // Files are stored compressed on disk; the logical Location has no extension.
+            Assert.IsTrue(File.Exists(fullPath + ".gz"), "Compressed file must be written to disk on save.");
+            Assert.IsFalse(File.Exists(fullPath), "Uncompressed variant must not exist after save.");
+        }
+
+        [TestMethod]
+        public void SaveReadRoundTripPreservesContent()
+        {
+            var projectFileManager = new LocalProjectFilesManager();
+
+            const string testData = "Compressed roundtrip content - verify hydration on serve.";
+            string ext = ".txt";
+
+            using(var ms = new MemoryStream(Encoding.UTF8.GetBytes(testData)))
+            {
+                var location = Task.Run(async () => await projectFileManager.SaveAsync(ms, Guid.NewGuid().ToString(), ext)).Result;
+                var fullPath = Path.Combine(projectFileManager.FileDirInfo.FullName, location);
+
+                using var readStream = Task.Run(async () => await projectFileManager.ReadAsync(location)).Result;
+                Assert.IsNotNull(readStream, "ReadAsync must return a stream for a saved file.");
+
+                using var ms2 = new MemoryStream();
+                readStream.CopyTo(ms2);
+                var roundTrip = Encoding.UTF8.GetString(ms2.ToArray());
+
+                Assert.AreEqual(testData, roundTrip, "Decompressed content must match the original.");
+                Assert.IsTrue(File.Exists(fullPath + ".gz"), "Compressed file must persist on disk.");
+            }
+        }
+
+        [TestMethod]
+        public void ReadLegacyUncompressedFileStillWorks()
+        {
+            var projectFileManager = new LocalProjectFilesManager();
+
+            const string testData = "Legacy uncompressed content.";
+            var legacyPath = Path.Combine(projectFileManager.FileDirInfo.FullName, "LegacyFile.text");
+
+            File.WriteAllText(legacyPath, testData);
+
+            using var readStream = Task.Run(async () => await projectFileManager.ReadAsync("LegacyFile.text")).Result;
+            Assert.IsNotNull(readStream, "ReadAsync must read legacy uncompressed files.");
+
+            using var ms = new MemoryStream();
+            readStream.CopyTo(ms);
+            var readBack = Encoding.UTF8.GetString(ms.ToArray());
+
+            Assert.AreEqual(testData, readBack, "Legacy file content must be readable without decompression.");
+        }
+
+        [TestMethod]
+        public void DeleteRemovesCompressedAndLegacyVariants()
+        {
+            var projectFileManager = new LocalProjectFilesManager();
+
+            const string testData = "Delete me in both formats.";
+            string ext = ".txt";
+
+            using(var ms = new MemoryStream(Encoding.UTF8.GetBytes(testData)))
+            {
+                var location = Task.Run(async () => await projectFileManager.SaveAsync(ms, Guid.NewGuid().ToString(), ext)).Result;
+                var fullPath = Path.Combine(projectFileManager.FileDirInfo.FullName, location);
+
+                Assert.IsTrue(File.Exists(fullPath + ".gz"), "Compressed file must exist before delete.");
+
+                var result = Task.Run(async () => await projectFileManager.DeleteAsync(location, new System.Security.Principal.GenericPrincipal(new System.Security.Principal.GenericIdentity("test"), new[] { "test" }))).Result;
+
+                Assert.IsNull(result, "Delete of an existing file must return null (no error).");
+                Assert.IsFalse(File.Exists(fullPath + ".gz"), "Compressed file must be removed on delete.");
+                Assert.IsFalse(File.Exists(fullPath), "Legacy variant must be removed on delete.");
+            }
         }
 
         [TestMethod]
