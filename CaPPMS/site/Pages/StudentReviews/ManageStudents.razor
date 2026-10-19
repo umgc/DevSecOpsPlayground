@@ -13,6 +13,71 @@
 @page "/ManageStudents/{*Cohort}"
 
 <title>Manage Students</title>
+<style>
+    .card.classlist {
+        height: 500px;
+    }
+
+    .card-body {
+        max-height: calc(500px - 2.5rem);
+        overflow-y: auto;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+
+    .card-header {
+        font-size: 25px;
+    }
+
+    .headerColor {
+        background-color: rgb(30,30,120);
+        color: white;
+    }
+
+    .headerColorStudentDirectory {
+        background-color: darkred;
+        color: white;
+    }
+
+    .entriesColor {
+        background-color: rgb(51,16,90);
+        color: white;
+    }
+
+    .entriesColorHeader {
+        background-color: darkred;
+        color: white;
+    }
+
+    .short-search {
+        width: 300px;
+    }
+
+    #clear-btn {
+        margin-left: 5px;
+        width: 110px;
+        font-size: 14px;
+    }
+
+    .form-control {
+        display: inline-block;
+    }
+
+    .custom-button {
+        display: flex;
+        float: right;
+        align-items: center;
+        justify-content: center;
+        background-color: blue;
+        color: white;
+        cursor: pointer;
+        position: relative;
+    }
+
+    .custom-button:hover {
+        background-color: lightblue;
+    }
+</style>
 
 @if (!consentHandler.User.IsAdmin())
 {
@@ -30,7 +95,7 @@
 
 <div class="card" style="width:fit-content">
     <!-- Class Selection -->
-    <h5 class="card-header umgcHeader">
+    <h5 class="card-header headerColorStudentDirectory">
         Student Directory.
     </h5>
     <div class="btn">
@@ -112,13 +177,13 @@
         <table id="manageStudentsTable" class="table table-bordered table-striped table-hover scrollTable" style="display:block;">
             <thead>
                 <tr>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th>Email</th>
-                    <th>GitHub</th>
-                    <th>Assigned Team</th>
-                    <th>Team Lead?</th>
-                    <th></th>
+                    <th style="background-color: darkred; color: white;">First Name</th>
+                    <th style="background-color: darkred; color: white;">Last Name</th>
+                    <th style="background-color: darkred; color: white;">Email</th>
+                    <th style="background-color: darkred; color: white;">GitHub</th>
+                    <th style="background-color: darkred; color: white;">Assigned Team</th>
+                    <th style="background-color: darkred; color: white;">Team Lead?</th>
+                    <th style="background-color: darkred; color: white;"></th>
                 </tr>
             </thead>
             <tbody>
