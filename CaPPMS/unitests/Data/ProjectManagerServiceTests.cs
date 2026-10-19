@@ -123,5 +123,23 @@ namespace CaPPMSTests.Data
                 }
             }
         }
+
+        [TestMethod]
+        public void NotifyProjectIdeasChangedRaisesEvent()
+        {
+            ProjectManagerService projectManagerService = new ProjectManagerService("notify.json");
+            bool eventRaised = false;
+            ProjectManagerService.ProjectIdeasChanged += (sender, args) => eventRaised = true;
+
+            try
+            {
+                projectManagerService.NotifyProjectIdeasChanged();
+                Assert.IsTrue(eventRaised, "NotifyProjectIdeasChanged should raise the ProjectIdeasChanged event.");
+            }
+            finally
+            {
+                ProjectManagerService.ProjectIdeasChanged -= (sender, args) => eventRaised = true;
+            }
+        }
     }
 }
