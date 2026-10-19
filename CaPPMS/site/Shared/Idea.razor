@@ -147,28 +147,6 @@
         {
             <button id="btnSubmit" type="submit" @onclick="SponsorCheck" class="btn btn-primary">Submit</button> <button type="reset" class="btn btn-danger">Reset</button>
         }
-        else if (this.ShowFormButton == FormButtons.Approver)
-        {
-            <CascadingAuthenticationState>
-                <CommentsComponent ProjectGuid="idea.ProjectID" />
-            </CascadingAuthenticationState>
-
-            if (this.idea.IsDirty)
-            {
-                <button type="button" @onclick="UpdateRecordAsync" class="btn btn-primary">Update</button><span>&nbsp;</span>
-            }
-
-            <button type="button" class="btn btn-secondary" @onclick="ExportIdea">Export</button><span>&nbsp;</span>
-
-            <button type="button" class="btn btn-info" @onclick="CloseForm">Close</button><span>&nbsp;</span>
-
-            if (this.idea.Status.Equals("New"))
-            {
-                <button type="button" class="btn btn-success" @onclick="ApproveIdea">Approve</button><span>&nbsp;</span>
-            }
-
-            <button type="button" class="btn btn-danger" @onclick="DeleteIdea">Delete</button><span>&nbsp;</span>
-        }
 
     </EditForm>
 </div>
@@ -185,8 +163,7 @@
 @code{
     public enum FormButtons
     {
-        Submit,
-        Approver
+        Submit
     }
 
     public static bool IsUploading
@@ -222,9 +199,6 @@
         }
     }
 
-    [CascadingParameter]
-    private Task<AuthenticationState> authenticationState { get; set; }
-
     private ProjectInformation idea = new ProjectInformation();
 
     private string DownloadFileName => $"{idea.ProjectTitle}-Export.pdf";
@@ -242,11 +216,6 @@
     protected override void OnInitialized()
     {
         base.OnInitialized();
-
-        if (this.ShowFormButton == FormButtons.Approver)
-        {
-            this.idea.IsDirty = false;
-        }
     }
 
     private async Task HandleValidSubmit()
@@ -338,46 +307,6 @@
         idea.SponsorLastName = string.Empty;
         idea.SponsorEmail = string.Empty;
         idea.SponsorPhone = string.Empty;
-    }
-
-    private async Task UpdateRecordAsync(EventArgs e)
-    {
-        if (!idea.IsDirty)
-        {
-            return;
-        }
-
-        idea.IsDirty = !await ProjectManager.UpdateAsync(idea);
-    }
-
-    private async Task ApproveIdea(MouseEventArgs e)
-    {
-        this.idea.Status = "Approved";
-        await UpdateRecordAsync(e);
-    }
-
-    private async Task ExportIdea(MouseEventArgs e)
-    {
-        var location = await this.ProjectManager.ExportAsync(idea);
-
-        NavigationManager.NavigateTo($"{ProjectManager.FileManager.DownloadPath}{location}", true);
-
-        this.CloseForm(EventArgs.Empty);
-    }
-
-    private async Task DeleteIdea(MouseEventArgs e)
-    {
-        var authState = await authenticationState;
-        string error = await this.ProjectManager.DeleteAsync(idea, authState.User);
-
-        if (string.IsNullOrEmpty(error))
-        {
-            this.CloseForm(EventArgs.Empty);
-        }
-        else
-        {
-            this.Error = error;
-        }
     }
 
     private void CloseForm(EventArgs e)
