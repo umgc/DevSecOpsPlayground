@@ -1,4 +1,8 @@
 @page "/"
+@using System.Linq
+@using CaPPMS.Data
+@using CaPPMS.Model
+@using MudBlazor
 
 <h2>Previous Projects</h2>
 
@@ -8,80 +12,112 @@
 <hr />
 
 @inject ProjectManagerService ProjectManager
-@foreach (ProjectInformation idea in sortedProjects)
+
+@if (sortedProjects == null || !sortedProjects.Any())
+{
+    <p>No completed projects available yet. Check back later!</p>
+}
+else
+{
+    <MudTextField T="string" @bind="SearchTerm" Label="Search projects" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" Class="mb-4" />
+
+<MudGrid>
+    @foreach (ProjectInformation idea in filteredProjects)
 {
     termStr = idea.SemesterTerm + idea.SemesterYear;
     if (!activeTerms.Contains(termStr))
     {
-        <h3>@idea.SemesterTerm @idea.SemesterYear </h3>
-        activeTerms.Add(termStr);
+        <MudItem xs="12">
+            <h3>@idea.SemesterTerm @idea.SemesterYear</h3>
+            activeTerms.Add(termStr);
+        </MudItem>
     }
 
-    <h5><b>@idea.ProjectTitle </b></h5>
-    <p> @idea.ProjectDescription </p>
-    if (idea.Github.Length > 0)
-    {
-        <b>Project GitHub Link: </b>
-        <a href="@idea.Github" target="_blank" rel="noopener noreferrer">@idea.Github</a>
-        <br />
+    <MudItem xs="12" sm="6" md="4" lg="3">
+        <div class="project-card">
+            <MudCard>
+                <MudCardHeader>
+                    <CardHeaderContent>
+                        <span>@idea.ProjectTitle</span>
+                    </CardHeaderContent>
+                </MudCardHeader>
+                <MudCardContent>
+                    <p>@idea.ProjectDescription</p>
+                    @if (idea.Github.Length > 0)
+                    {
+                        <div class="mb-2">
+                            <b>Project GitHub Link: </b>
+                            <a href="@idea.Github" target="_blank" rel="noopener noreferrer">@idea.Github</a>
+                        </div>
+                    }
+                    @if (idea.Url.Length > 0)
+                    {
+                        <div class="mb-2">
+                            <b>Project Website Link: </b>
+                            <a href="@idea.Url" target="_blank" rel="noopener noreferrer">@idea.Url</a>
+                        </div>
+                    }
+                </MudCardContent>
+                @if (idea.CompletedDocuments.Count > 0)
+                {
+                    @foreach (CompletedProjectDocumentation proj in idea.CompletedDocuments)
+                    {
+                        <MudCardContent>
+                            <div class="mb-2"><b>Team: </b>@proj.TeamName</div>
+                            @if (proj.GitHubLink.Length > 0)
+                            {
+                                <div class="mb-2">
+                                    <b>Team GitHub Link: </b>
+                                    <a href="@proj.GitHubLink" target="_blank" rel="noopener noreferrer">@proj.GitHubLink</a>
+                                </div>
+                            }
+                            @if (proj.VideoLink.Length > 0)
+                            {
+                                <div class="mb-2">
+                                    <b>Team Video Link: </b>
+                                    <a href="@proj.VideoLink" target="_blank" rel="noopener noreferrer">@proj.VideoLink</a>
+                                </div>
+                            }
+                            @if (proj.WebsiteLink.Length > 0)
+                            {
+                                <div class="mb-2">
+                                    <b>Team Website Link: </b>
+                                    <a href="@proj.WebsiteLink" target="_blank" rel="noopener noreferrer">@proj.WebsiteLink</a>
+                                </div>
+                            }
+                            <div class="mb-2"><b>Documents for Team @proj.TeamName: </b></div>
+                            <ul class="list-unstyled small">
+                                <li><a href="/download/@proj.ProjectPlanLink" download="@proj.ProjectPlan" target="_top">Project Plan</a></li>
+                                <li><a href="/download/@proj.SRSLink" download="@proj.SRS" target="_top">Software Requirements Specification (SRS)</a></li>
+                                <li><a href="/download/@proj.TDDLink" download="@proj.TDD" target="_top">Technical Design Document (TDD)</a></li>
+                                <li><a href="/download/@proj.RunbookLink" download="@proj.Runbook" target="_top">Deployment and Operations Guide (Runbook)</a></li>
+                                <li><a href="/download/@proj.ProgrammersGuideLink" download="@proj.ProgrammersGuide" target="_top">Programmer Guide</a></li>
+                                <li><a href="/download/@proj.UsersGuideLink" download="@proj.UsersGuide" target="_top">User Guide</a></li>
+                                <li><a href="/download/@proj.TestReportLink" download="@proj.TestReport" target="_top">Test Report</a></li>
+                            </ul>
+                        </MudCardContent>
+                    }
+                }
+            </MudCard>
+        </div>
+    </MudItem>
     }
-    if (idea.Url.Length > 0)
-    {
-        <b> Project Website Link: </b>
-        <a href="@idea.Url" target="_blank" rel="noopener noreferrer">@idea.Url</a>
-        <br />
-    }
-
-    if (idea.CompletedDocuments.Count > 0)
-    {
-        @foreach (CompletedProjectDocumentation proj in idea.CompletedDocuments)
-        {
-            <b> Team:</b>
-            <p>@proj.TeamName</p>
-
-            if (proj.GitHubLink.Length > 0)
-            {
-                <b>Team GitHub Link: </b>
-                <a href="@proj.GitHubLink" target="_blank" rel="noopener noreferrer">@proj.GitHubLink</a>
-                <br />
-            }
-            if (proj.VideoLink.Length > 0)
-            {
-                <b>Team Video Link: </b>
-                <a href="@proj.VideoLink" target="_blank" rel="noopener noreferrer">@proj.VideoLink</a>
-                <br />
-            }
-            if (proj.WebsiteLink.Length > 0)
-            {
-                <b> Team Website Link: </b>
-                <a href="@proj.WebsiteLink" target="_blank" rel="noopener noreferrer">@proj.WebsiteLink</a>
-                <br />
-            }
-
-            <b> Documents for Team @proj.TeamName: </b>
-            <ul>
-                <li> <a href="/download/@proj.ProjectPlanLink" download="@proj.ProjectPlan" target="_top">Project Plan</a> </li>
-                <li> <a href="/download/@proj.SRSLink" download="@proj.SRS" target="_top">Software Requirements Specification (SRS)</a> </li>
-                <li> <a href="/download/@proj.TDDLink" download="@proj.TDD" target="_top">Technical Design Document (TDD)</a> </li>
-                <li> <a href="/download/@proj.RunbookLink" download="@proj.Runbook" target="_top">Deployment and Operations Guide (Runbook)</a> </li>
-                <li> <a href="/download/@proj.ProgrammersGuideLink" download="@proj.ProgrammersGuide" target="_top">Programmer Guide</a> </li>
-                <li> <a href="/download/@proj.UsersGuideLink" download="@proj.UsersGuide" target="_top">User Guide</a> </li>
-                <li> <a href="/download/@proj.TestReportLink" download="@proj.TestReport" target="_top">Test Report</a> </li>
-            </ul>
-
-        }
-
-    }
-
-    <hr />
+</MudGrid>
 }
-<br />
-<br />
-<br />
-
 
 @code {
     IEnumerable<ProjectInformation> sortedProjects;
+    private string SearchTerm = string.Empty;
+    private List<string> activeTerms = new List<string>();
+    private string termStr;
+
+    private IEnumerable<ProjectInformation> filteredProjects =>
+        string.IsNullOrWhiteSpace(SearchTerm)
+            ? sortedProjects
+            : sortedProjects.Where(p =>
+                (p.ProjectTitle?.Contains(SearchTerm, StringComparison.OrdinalIgnoreCase) ?? false) ||
+                (p.ProjectDescription?.Contains(SearchTerm, StringComparison.OrdinalIgnoreCase) ?? false));
+
     protected override void OnInitialized()
     {
         SetCompletedProjectsList();
@@ -92,8 +128,6 @@
         base.OnInitialized();
     }
 
-    private List<string> activeTerms = new List<string>();
-    private string termStr;
     private void SetCompletedProjectsList()
     {
         List<ProjectInformation> completedProjects = new List<ProjectInformation>();
