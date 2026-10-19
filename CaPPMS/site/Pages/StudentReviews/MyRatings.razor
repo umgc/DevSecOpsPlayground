@@ -1,5 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Components.Forms
 @using CaPPMS.Pages.StudentReviews
+@attribute [Authorize]
 
 @inject DBOperationsService DBOperationsService
 @page "/StudentReviews/MyRatings"
@@ -19,13 +20,13 @@
     }
 
     .headerColor {
-    background-color: rgb(30,30,120);
-    color: white;
+        background-color: darkred;
+        color: white;
     }
 
     .entriesColor {
-    background-color: rgb(51,16,90);
-    color: white;
+        background-color: darkred;
+        color: white;
     }
 
     .card-body {
@@ -38,7 +39,7 @@
     /* Style for the outer table */
     table.outerTable {
     border-collapse: collapse;
-    border: 2px solid black; /* Add a border to the entire outer table */
+    border: 2px solid darkred; /* Add a border to the entire outer table */
     }
 
     /* Style for the outer table cells (except for the inner table) */
@@ -87,36 +88,39 @@
         <table id="studentsTable" class="table table-hover">
             <thead>
                 <tr>
-                    <th style="width: 75px;">Average</th>
+                    <th style="width: 75px; background-color: darkred; color: white;">Average</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td valign="top">@studentScores[0].AverageScore</td>
-                    <td>
-                        <div id="tableContainer" class="card-body tableContainer" style="padding: 1px;">
-                            <table id="studentsTable" class="table table-striped table-hover" border="1">
-                                <thead>
-                                    <tr class="entriesColor">
-                                        <th style="width: 150px; background-color: lightgray;">Week</th>
-                                        <th style="width: 75px; background-color: lightgray; ">Score</th>
-                                        <th style="background-color: lightgray; ">Comments</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var scoreDetails in studentScores)
-                                    {
-                                        <tr>
-                                            <td>@scoreDetails.Week</td>
-                                            <td>@scoreDetails.Score</td>
-                                            <td>@scoreDetails.Comments</td>
+                @if (studentScores.Any())
+                {
+                    <tr>
+                        <td valign="top">@studentScores[0].AverageScore</td>
+                        <td>
+                            <div id="tableContainer" class="card-body tableContainer" style="padding: 1px;">
+                                <table id="studentsTable" class="table table-striped table-hover" border="1">
+                                    <thead>
+                                        <tr class="entriesColor">
+                                            <th style="width: 150px; background-color: darkred; color: white;">Week</th>
+                                            <th style="width: 75px; background-color: darkred; color: white;">Score</th>
+                                            <th style="background-color: darkred; color: white;">Comments</th>
                                         </tr>
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
-                    </td>
-                </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var scoreDetails in studentScores)
+                                        {
+                                            <tr>
+                                                <td>@scoreDetails.Week</td>
+                                                <td>@scoreDetails.Score</td>
+                                                <td>@scoreDetails.Comments</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+                }
             </tbody>
         </table>
     </div>

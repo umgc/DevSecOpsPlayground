@@ -95,6 +95,11 @@ namespace CaPPMS.Data
             return true;
         }
 
+        public void NotifyProjectIdeasChanged()
+        {
+            ProjectIdeasChanged?.Invoke(this, EventArgs.Empty);
+        }
+
         public async Task<string> RemoveAsync(ProjectInformation idea, IPrincipal user)
         {
             string error = string.Empty;
