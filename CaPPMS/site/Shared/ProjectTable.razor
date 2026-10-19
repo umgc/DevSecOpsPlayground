@@ -40,14 +40,13 @@
 
 <div class="filter-container">
     <MudTextField T="string" @bind="Filter" Label="Filter projects" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" />
+    <button @onclick="CreateNewProject" class="btn btn-primary btn-sm" style="margin-left: 10px;">Create New Project</button>
 </div>
 
 @if (selectedIdea != null)
 {
     <div class="popOver">
-        <CascadingAuthenticationState>
-            <Idea ShowComments="true" ShowFileAttachments="true" ShowFormButton="Idea.FormButtons.Approver" ProjectIdea="selectedIdea" Parent="this" />
-        </CascadingAuthenticationState>
+        <Idea ShowComments="true" ShowFileAttachments="true" ShowFormButton="Idea.FormButtons.Submit" ProjectIdea="selectedIdea" Parent="this" />
     </div>
 }
 
@@ -117,6 +116,11 @@
     }
 
     private bool IsCollapsed(ProjectInformation idea) => idea is not null && collapsedIds.Contains(idea.ProjectID);
+
+    private void CreateNewProject()
+    {
+        selectedIdea = new ProjectInformation();
+    }
 
     public void CloseIdea(Idea idea)
     {
