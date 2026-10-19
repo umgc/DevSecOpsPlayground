@@ -1,4 +1,5 @@
 @page "/"
+@using System.Linq
 @using CaPPMS.Data
 @using CaPPMS.Model
 @using MudBlazor
@@ -12,7 +13,13 @@
 
 @inject ProjectManagerService ProjectManager
 
-<MudTextField T="string" @bind="SearchTerm" Label="Search projects" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" Class="mb-4" />
+@if (sortedProjects == null || !sortedProjects.Any())
+{
+    <p>No completed projects available yet. Check back later!</p>
+}
+else
+{
+    <MudTextField T="string" @bind="SearchTerm" Label="Search projects" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" Class="mb-4" />
 
 <MudGrid>
     @foreach (ProjectInformation idea in filteredProjects)
@@ -96,6 +103,7 @@
     </MudItem>
     }
 </MudGrid>
+}
 
 @code {
     IEnumerable<ProjectInformation> sortedProjects;
