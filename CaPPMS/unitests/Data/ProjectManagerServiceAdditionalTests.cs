@@ -1,5 +1,6 @@
 ﻿﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Principal;
@@ -12,6 +13,9 @@ namespace CaPPMSTests.Data
     [TestClass()]
     public class ProjectManagerServiceAdditionalTests
     {
+        // Track files created in the files/ subdirectory so cleanup removes them.
+        private readonly List<string> _createdFiles = new();
+
         [TestInitialize]
         public void Initialize()
         {
@@ -21,10 +25,24 @@ namespace CaPPMSTests.Data
         [TestCleanup]
         public void Cleanup()
         {
+            // Delete top-level project database files we created.
             foreach (var file in ProjectManagerService.BaseDirInfo.GetFiles())
             {
                 try { file.Delete(); } catch (IOException) { }
             }
+
+            // Delete any compressed files we created in the files/ subdirectory.
+            foreach (var file in _createdFiles)
+            {
+                try
+                {
+                    if (File.Exists(file)) File.Delete(file);
+                    var gz = file + ".gz";
+                    if (File.Exists(gz)) File.Delete(gz);
+                }
+                catch (IOException) { }
+            }
+            _createdFiles.Clear();
         }
 
         private ProjectInformation CreateIdea(string title = "Test Project")
@@ -76,6 +94,7 @@ namespace CaPPMSTests.Data
             // Create the compressed file in the files subdirectory where DeleteAsync looks for it
             var filePath = Path.Combine(ProjectManagerService.BaseDirInfo.FullName, "files", "testfile.txt.gz");
             File.WriteAllText(filePath, "test content");
+            _createdFiles.Add(filePath);
             var file = new ProjectFile { Location = "testfile.txt" };
             idea.Attachments.Add(file);
             var principal = new GenericPrincipal(new GenericIdentity("test@greatTest.com"), new string[] { "Global Administrator" });
