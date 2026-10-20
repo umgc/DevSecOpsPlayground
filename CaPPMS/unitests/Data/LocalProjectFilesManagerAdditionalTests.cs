@@ -1,7 +1,7 @@
 ﻿﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Collections.Generic;
 using System.IO;
-using System.IO.Compression;
 using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,16 +12,33 @@ namespace CaPPMSTests.Data
     [TestClass()]
     public class LocalProjectFilesManagerAdditionalTests
     {
+        // Track files created during tests so cleanup only removes what we created.
+        private readonly List<string> _createdFiles = new();
+
         [TestCleanup]
         public void Cleanup()
         {
-            if (ProjectManagerService.BaseDirInfo.Exists)
+            // Only delete files we explicitly created during tests.
+            foreach (var file in _createdFiles)
             {
-                foreach (var dirInfo in ProjectManagerService.BaseDirInfo.GetDirectories("*", SearchOption.AllDirectories))
+                try
                 {
-                    try { dirInfo.Delete(true); } catch { }
+                    if (File.Exists(file)) File.Delete(file);
+                    var gz = file + ".gz";
+                    if (File.Exists(gz)) File.Delete(gz);
                 }
+                catch (IOException) { }
             }
+            _createdFiles.Clear();
+        }
+
+        private string CreateTestFile(string contents = "test content")
+        {
+            var dir = ProjectManagerService.BaseDirInfo.FullName;
+            var file = Path.Combine(dir, $"test-{Guid.NewGuid():N}.txt");
+            File.WriteAllText(file, contents);
+            _createdFiles.Add(file);
+            return file;
         }
 
         #region Path traversal tests
@@ -116,6 +133,7 @@ namespace CaPPMSTests.Data
             var fullPath = Path.Combine(manager.FileDirInfo.FullName, location);
             Assert.IsTrue(File.Exists(fullPath + ".gz"));
             Assert.IsFalse(File.Exists(fullPath));
+            _createdFiles.Add(fullPath + ".gz");
         }
 
         #endregion
