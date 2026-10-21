@@ -3,6 +3,7 @@
 @using CaPPMS.Attributes
 @using MudBlazor
 @namespace CaPPMS.Shared
+@using System
 
 
 @inject ProjectManagerService ProjectManager
@@ -33,14 +34,26 @@
             <MudTableTd>@item.Status</MudTableTd>
         </MudTableRow>
     </RowTemplate>
-    <PagerContent>
-        <MudTablePager />
-    </PagerContent>
+
 </MudTable>
 
 <div class="filter-container">
     <MudTextField T="string" @bind-Value="filter" Label="Filter projects" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" />
 </div>
+<div class="pagination">
+    @if (TotalCount > 0)
+    {
+        <button @onclick="@PreviousPage">‹ Prev</button>
+        <span>Showing @(((page - 1) * pageSize + 1))–@(Math.Min(page * pageSize, TotalCount)) of @TotalCount items (@FilteredItems.Count() total)</span>
+        <button @onclick="@NextPage" disabled="@(page >= PageCount)">Next ›</button>
+    }
+    else
+    {
+        <span>No results</span>
+    }
+</div>
+
+
 
 
 
@@ -110,9 +123,27 @@
 
     private bool IsCollapsed(ProjectInformation idea) => idea is not null && collapsedIds.Contains(idea.ProjectID);
 
+    private int TotalCount => FilteredItems.Count();
+    private int PageCount => Math.Max(1, (int)Math.Ceiling((double)TotalCount / pageSize));
 
-    public void CloseIdea(Idea idea)
-{
+    private void PreviousPage()
+    {
+        if (page > 1)
+        {
+            --page;
+            StateHasChanged();
+        }
+    }
 
-}
+    private void NextPage()
+    {
+        if (page < PageCount)
+        {
+            ++page;
+            StateHasChanged();
+        }
+    }
+
+
+
 }
