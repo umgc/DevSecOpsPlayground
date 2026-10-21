@@ -13,7 +13,7 @@ _(none yet)_
 _(add items here)_
 
 ## Done
-- [x] (2026-10-21) CaPPMS teardown Unit A — removed the public idea-submission surface from `site/Shared/ProjectTable.razor`: deleted the editable `<Idea>` popOver form (`@if(selectedIdea != null)` block), the "Create New Project" button in filter-container, the now-unused `selectedIdea` field and `CreateNewProject()` method, dropped `@implements IIDE`, and converted `CloseIdea(Idea idea)` to a no-op stub (nothing invokes it from the list page anymore). Existing projects remain display-only read-only rows (title/description/status); service layer (`AddAsync`) untouched. Build verified: `dotnet build -c Release --no-restore` → 0 errors, only pre-existing warnings in other files.
+- [x] (2026-10-21) CaPPMS teardown Unit A — removed the public idea-submission surface from `site/Shared/ProjectTable.razor`: deleted the editable `<Idea>` popOver form (`@if(selectedIdea != null)` block), the "Create New Project" button in filter-container, the now-unused `selectedIdea` field and `CreateNewProject()` method, dropped `@implements IIDE`, and converted `CloseIdea(Idea idea)` to a no-op stub (nothing invokes it from the list page anymore). Existing projects remain display-only read-only rows (title/description/status); service layer (`AddAsync`) untouched. Build verified: `dotnet build -c Release --no-restore` → 0 errors, only pre-existing warnings in other files.. Also fixed a dead project-list filter input (@bind-Value) found during review — the retained search box now actually filters rows; same latent bug exists on homepage Search projects (PreviousProjects.razor line 22), tracked as follow-up.
 
 ---
 
