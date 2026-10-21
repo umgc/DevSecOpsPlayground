@@ -3,7 +3,7 @@
 @using CaPPMS.Attributes
 @using MudBlazor
 @namespace CaPPMS.Shared
-@implements IIdea
+
 
 @inject ProjectManagerService ProjectManager
 
@@ -39,16 +39,10 @@
 </MudTable>
 
 <div class="filter-container">
-    <MudTextField T="string" @bind="Filter" Label="Filter projects" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" />
-    <button @onclick="CreateNewProject" class="btn btn-primary btn-sm" style="margin-left: 10px;">Create New Project</button>
+    <MudTextField T="string" @bind-Value="filter" Label="Filter projects" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" />
 </div>
 
-@if (selectedIdea != null)
-{
-    <div class="popOver">
-        <Idea ShowComments="true" ShowFileAttachments="true" ShowFormButton="Idea.FormButtons.Submit" ProjectIdea="selectedIdea" Parent="this" />
-    </div>
-}
+
 
 @code {
     [Parameter]
@@ -62,7 +56,6 @@
     private bool sortAscending = true;
     private int page = 1;
     private int pageSize = 10;
-    private ProjectInformation? selectedIdea;
     private readonly HashSet<Guid> collapsedIds = new();
 
     private IEnumerable<ProjectInformation> SortedItems =>
@@ -117,13 +110,9 @@
 
     private bool IsCollapsed(ProjectInformation idea) => idea is not null && collapsedIds.Contains(idea.ProjectID);
 
-    private void CreateNewProject()
-    {
-        selectedIdea = new ProjectInformation();
-    }
 
     public void CloseIdea(Idea idea)
-    {
-        selectedIdea = null;
-    }
+{
+
+}
 }
