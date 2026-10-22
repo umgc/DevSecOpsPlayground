@@ -3,17 +3,19 @@
 Working plan for this project. Items move down the list as they complete.
 
 ## In Progress
-_(none yet)_
+- feat/cappms-status-sort-fix — pending-first project list sort; build green.
 
 ## Next
 - [ ] Baseline: `dotnet restore`, `dotnet build`, `dotnet test` from CaPPMS/ — confirm clean state
 - [ ] Run locally (`dotnet run` in site/) — confirm it boots and the main pages work
 
 ## Backlog
-_(add items here)_
+- [ ] Bug: `InvalidOperationException` "Missing `<MudPopoverProvider />`, please add it to your layout" — MudBlazor popovers throw at runtime when the provider is absent from the component tree (error page + stack trace via PopoverService.CreatePopoverAsync captured in screenshot). Add `<MudPopoverProvider />` to App/layout and confirm no other components depend on implicit context.
 
 ## Done
 - [x] (2026-10-21) CaPPMS teardown Unit A — removed the public idea-submission surface from `site/Shared/ProjectTable.razor`: deleted the editable `<Idea>` popOver form (`@if(selectedIdea != null)` block), the "Create New Project" button in filter-container, the now-unused `selectedIdea` field and `CreateNewProject()` method, dropped `@implements IIDE`, and converted `CloseIdea(Idea idea)` to a no-op stub (nothing invokes it from the list page anymore). Existing projects remain display-only read-only rows (title/description/status); service layer (`AddAsync`) untouched. Build verified: `dotnet build -c Release --no-restore` → 0 errors, only pre-existing warnings in other files.. Also fixed a dead project-list filter input (@bind-Value) found during review — the retained search box now actually filters rows; same latent bug exists on homepage Search projects (PreviousProjects.razor line 22), tracked as follow-up.
+
+- [x] CaPPMS Phase 1: dead project-list pagination wired with Prev/Next buttons and "Showing X–Y of Z items" range; build green. Branch feat/cappms-phase-1-pagination-fix merged into developmer (PR #282).
 
 ---
 
@@ -115,12 +117,12 @@ Grounded in files I actually read: `ProjectList.razor`, `Shared/ProjectTable.raz
 ## Plan: CaPPMS UX/Bug/Security Review
 
 ### Phase 0 – Tear out idea submission (external agencies cannot submit ideas; maintainer creates projects directly)
-- [ ] Explore all Idea/submission references (`Idea.razor`, Submit flow, `ProjectManagerService.AddAsync`) and map what removal breaks.
-- [ ] Remove external agency submit surface so new ideas cannot be created by agencies; decide with reviewer whether existing submitted data stays read-only or is removed.
+- [x] Explore all Idea/submission references (`Idea.razor`, Submit flow, `ProjectManagerService.AddAsync`) and map what removal breaks.
+- [x] Remove external agency submit surface so new ideas cannot be created by agencies; decide with reviewer whether existing submitted data stays read-only or is removed.
 
 ### Phase 1 – Bug fixes: test first exposed in unit tests, then fix
 (reprioritized from both lists after teardown)
-- [ ] ProjectTable pagination dead (page never advanced); wire page advance + total range ("Showing 1–10 of N").
+- [ ] ProjectTable pagination dead (page never advanced); wire page advance + total range ("Showing X–Y of Z items"). — fixed via branch feat/cappms-phase-1-pagination-fix merged into developmer as PR #282.
 - [ ] Status alphabetical sort buries "New" last → pending-first ordering / filter defaulting to New.
 - [ ] Filter box below table; move above and add submitter contact column/filter if model supports it.
 - [ ] Authorization gaps: review actions reachable anonymously despite identity configured in Startup — guard list/actions or show explicit "log in to review" prompt.
