@@ -5,7 +5,12 @@
 @page "/projectlist"
 
     <CascadingAuthenticationState>
-        <ProjectTable DataSource="new List<ProjectInformation>(ProjectManager.ProjectIdeas.Values.OrderBy(i => i.Status).ToList())" CssClass="table border p-2" />
+        @{
+            var ordered = ProjectManager.ProjectIdeas.Values
+                .OrderBy(i => i.Status == "New" ? 0 : 1)
+                .ThenBy(i => i.Status).ToList();
+        }
+        <ProjectTable DataSource="new List<ProjectInformation>(ordered)" CssClass="table border p-2" />
     </CascadingAuthenticationState>
 
 @code {
