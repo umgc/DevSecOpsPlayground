@@ -18,7 +18,7 @@ namespace CaPPMSTests.ComponentTests
         public void PreviousProjectsRendersWithoutCrashing()
         {
             // Arrange: Register a ProjectManagerService with no projects.
-            TestContext.Services.AddSingleton(new ProjectManagerService("previousprojects-test.json"));
+            TestContext!.Services.AddSingleton(new ProjectManagerService("previousprojects-test.json"));
 
             // Act: Render the component.
             var cut = RenderComponent<CaPPMS.Pages.PreviousProjects>();
@@ -46,7 +46,7 @@ namespace CaPPMSTests.ComponentTests
             };
             Task.Run(async () => await projectManager.AddAsync(idea)).Wait();
 
-            TestContext.Services.AddSingleton(projectManager);
+            TestContext!.Services.AddSingleton(projectManager);
 
             // Act: Render the component.
             var cut = RenderComponent<CaPPMS.Pages.PreviousProjects>();
@@ -67,7 +67,7 @@ namespace CaPPMSTests.ComponentTests
         public void PreviousProjectsShowsEmptyStateWhenNoProjects()
         {
             // Arrange: Register a ProjectManagerService with no completed projects.
-            TestContext.Services.AddSingleton(new ProjectManagerService("previousprojects-empty-test.json"));
+            TestContext!.Services.AddSingleton(new ProjectManagerService("previousprojects-empty-test.json"));
 
             // Act: Render the component.
             var cut = RenderComponent<CaPPMS.Pages.PreviousProjects>();
@@ -105,7 +105,7 @@ namespace CaPPMSTests.ComponentTests
             Task.Run(async () => await projectManager.AddAsync(completedIdea)).Wait();
             Task.Run(async () => await projectManager.AddAsync(newIdea)).Wait();
 
-            TestContext.Services.AddSingleton(projectManager);
+            TestContext!.Services.AddSingleton(projectManager);
 
             // Act: Render the component.
             var cut = RenderComponent<CaPPMS.Pages.PreviousProjects>();
@@ -139,7 +139,7 @@ namespace CaPPMSTests.ComponentTests
             Task.Run(async () => await projectManager.AddAsync(idea1)).Wait();
             Task.Run(async () => await projectManager.AddAsync(idea2)).Wait();
 
-            TestContext.Services.AddSingleton(projectManager);
+            TestContext!.Services.AddSingleton(projectManager);
 
             // Act: Render the component.
             var cut = RenderComponent<CaPPMS.Pages.PreviousProjects>();
@@ -169,7 +169,7 @@ namespace CaPPMSTests.ComponentTests
             };
             Task.Run(async () => await projectManager.AddAsync(idea)).Wait();
 
-            TestContext.Services.AddSingleton(projectManager);
+            TestContext!.Services.AddSingleton(projectManager);
 
             // Act: Render the component.
             var cut = RenderComponent<CaPPMS.Pages.PreviousProjects>();
@@ -205,7 +205,7 @@ namespace CaPPMSTests.ComponentTests
             Task.Run(async () => await projectManager.AddAsync(idea1)).Wait();
             Task.Run(async () => await projectManager.AddAsync(idea2)).Wait();
 
-            TestContext.Services.AddSingleton(projectManager);
+            TestContext!.Services.AddSingleton(projectManager);
 
             // Act: Render the component.
             var cut = RenderComponent<CaPPMS.Pages.PreviousProjects>();
@@ -234,7 +234,7 @@ namespace CaPPMSTests.ComponentTests
             };
             Task.Run(async () => await projectManager.AddAsync(idea)).Wait();
 
-            TestContext.Services.AddSingleton(projectManager);
+            TestContext!.Services.AddSingleton(projectManager);
 
             // Act: Render the component.
             var cut = RenderComponent<CaPPMS.Pages.PreviousProjects>();
@@ -268,7 +268,7 @@ namespace CaPPMSTests.ComponentTests
             Task.Run(async () => await projectManager.AddAsync(fall2025)).Wait();
             Task.Run(async () => await projectManager.AddAsync(spring2026)).Wait();
 
-            TestContext.Services.AddSingleton(projectManager);
+            TestContext!.Services.AddSingleton(projectManager);
 
             // Act: Render the component.
             var cut = RenderComponent<CaPPMS.Pages.PreviousProjects>();
@@ -307,7 +307,7 @@ namespace CaPPMSTests.ComponentTests
             };
             Task.Run(async () => await projectManager.AddAsync(idea)).Wait();
 
-            TestContext.Services.AddSingleton(projectManager);
+            TestContext!.Services.AddSingleton(projectManager);
 
             // Act: Render the component.
             var cut = RenderComponent<CaPPMS.Pages.PreviousProjects>();

@@ -54,19 +54,16 @@
 
 @code {
     [Parameter] public EventCallback<FaqInformation> SelectedFaqChanged { get; set; }
-    [Parameter] public FaqInformation SelectedFaq
-    {
-        get { return _selectedFaq; }
-        set
-        {
-            _selectedFaq = value;
-            SetupPlaceholder();
-        }
-    }
-    [Parameter] public string Title { get; set; } = null;
+    [Parameter] public FaqInformation? SelectedFaq { get; set; } = null;
+    [Parameter] public string Title { get; set; } = string.Empty;
 
-    private FaqInformation _selectedFaq;
-    private FaqInformation _faqPlaceholder;
+    private FaqInformation _faqPlaceholder = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        SetupPlaceholder();
+        await base.OnInitializedAsync();
+    }
 
     public void SetupPlaceholder()
     {

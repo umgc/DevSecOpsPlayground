@@ -13,7 +13,7 @@ namespace CaPPMS.Model
 
         public abstract DirectoryInfo FileDirInfo { get; }
 
-        public abstract Task<string> DeleteAsync(string fileLocation, IPrincipal principal);
+        public abstract Task<string?> DeleteAsync(string fileLocation, IPrincipal principal);
 
         public abstract Task<Stream?> ReadAsync(string fileLocation);
 

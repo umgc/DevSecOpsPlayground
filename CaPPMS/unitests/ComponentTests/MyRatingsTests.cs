@@ -14,7 +14,7 @@ namespace CaPPMSTests.ComponentTests
         {
             // Arrange: Register a DBOperationsService. Even if the database call
             // fails, the component must not crash on an empty studentScores list.
-            TestContext.Services.AddSingleton(new CaPPMS.Data.DBOperationsService(
+            TestContext!.Services.AddSingleton(new CaPPMS.Data.DBOperationsService(
                 "Data\\StudentReviews-test.db",
                 NullLogger<CaPPMS.Data.DBOperationsService>.Instance));
 

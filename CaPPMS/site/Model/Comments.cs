@@ -57,7 +57,7 @@ namespace CaPPMS.Model
 
         public bool Remove(Guid key)
         {
-            return this.comments.TryRemove(key, out Comment _);
+            return this.comments.TryRemove(key, out _);
         }
 
         public bool TryGetValue(Guid key, [MaybeNullWhen(false)] out Comment value)

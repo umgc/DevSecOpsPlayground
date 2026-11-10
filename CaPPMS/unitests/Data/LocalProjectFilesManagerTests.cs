@@ -149,7 +149,7 @@ namespace CaPPMSTests.Data.Table
             {
                 using (var ms = new MemoryStream())
                 {
-                    readStream.CopyTo(ms);
+                    readStream!.CopyTo(ms);
 
                     Assert.AreEqual(testDocument, Encoding.UTF8.GetString(ms.ToArray()));
                 }

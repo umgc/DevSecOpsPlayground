@@ -1,4 +1,5 @@
-﻿using CaPPMS.Attributes;
+﻿using System.Diagnostics.CodeAnalysis;
+using CaPPMS.Attributes;
 using CaPPMS.Extensions;
 using CaPPMS.Model;
 using Humanizer;
@@ -38,9 +39,9 @@ namespace CaPPMS.Data
 
         private string connectionString;
         private string databaseFilePath;
-        private ILogger logger;
+        private ILogger? logger;
 
-        public DBOperationsService(string dboperationsFilePath, ILogger logger)
+        public DBOperationsService(string dboperationsFilePath, ILogger? logger)
         {
             if (string.IsNullOrWhiteSpace(dboperationsFilePath))
             {
@@ -61,7 +62,7 @@ namespace CaPPMS.Data
 
             this.connectionString = string.Format(ConnectionStringFormat, fullFilePath);
             this.databaseFilePath = fullFilePath;
-            this.logger = logger;
+            this.logger = logger ?? Microsoft.Extensions.Logging.Abstractions.NullLogger<DBOperationsService>.Instance;
         }
 
         /// <summary>
@@ -237,7 +238,7 @@ namespace CaPPMS.Data
         /// <param name="record"></param>
         /// <returns></returns>
         /// <exception cref="InvalidOperationException"></exception>
-        public async Task<bool> AddRecord<T>(T record) where T : ISqlTableModel, new()
+        public async Task<bool> AddRecord<T>([AllowNull] T record) where T : ISqlTableModel, new()
         {
             ArgumentNullException.ThrowIfNull(record);
 
@@ -286,7 +287,7 @@ namespace CaPPMS.Data
         /// <param name="record">Record to update.</param>
         /// <returns><c>true</c> if record changed > 0</returns>
         /// <exception cref="InvalidOperationException"></exception>
-        public async Task<bool> UpdateRecord<T>(T record) where T : ISqlTableModel, new()
+        public async Task<bool> UpdateRecord<T>([AllowNull] T record) where T : ISqlTableModel, new()
         {
             ArgumentNullException.ThrowIfNull(record);
 
@@ -345,7 +346,7 @@ namespace CaPPMS.Data
         /// <param name="record">Record to take action on.</param>
         /// <returns><c>true</c> if record changed > 0</returns>
         /// <exception cref="InvalidOperationException"></exception>
-        public async Task<bool> RemoveRecord<T>(T record)
+        public async Task<bool> RemoveRecord<T>([AllowNull] T record)
         {
             ArgumentNullException.ThrowIfNull(record);
 
@@ -410,7 +411,7 @@ namespace CaPPMS.Data
                 }
                 catch (Exception ex)
                 {
-                    logger.LogError($"Error creating database. Error:{ex.GetBaseException()}");
+                    logger!.LogError($"Error creating database. Error:{ex.GetBaseException()}");
                 }
             }
 
@@ -522,16 +523,16 @@ namespace CaPPMS.Data
 
         private async Task CreateDbAsync()
         {
-            this.logger.LogDebug($"Creating database at {this.databaseFilePath}");
+            this.logger!.LogDebug($"Creating database at {this.databaseFilePath}");
             string dbCreationScript = GetResourceData(StudentDataBaseCreation);
             try
             {
                 int result = await ExecuteNonQueryAsync(dbCreationScript);
-                this.logger.LogDebug($"Database creation result: {result > -1}");
+                this.logger!.LogDebug($"Database creation result: {result > -1}");
             }
             catch (Exception ex)
             {
-                this.logger.LogError($"Error creating database. Error:{ex.GetBaseException()}");
+                this.logger!.LogError($"Error creating database. Error:{ex.GetBaseException()}");
             }
         }
 
@@ -546,18 +547,18 @@ namespace CaPPMS.Data
                 string tableName = ReflectionHelper.GetTableName(type);
                 if (string.IsNullOrEmpty(tableName))
                 {
-                    logger.LogWarning(TableNameNotFoundMessage, type.Name);
+                    logger!.LogWarning(TableNameNotFoundMessage, type.Name);
                     continue;
                 }
 
                 bool result = await VerifyColumnsExistAsync(type, tableName);
                 if (result)
                 {
-                    logger.LogDebug($"Table '{tableName}' verification succeeded for type '{type.Name}'.");
+                    logger!.LogDebug($"Table '{tableName}' verification succeeded for type '{type.Name}'.");
                 }
                 else
                 {
-                    logger.LogWarning($"Table '{tableName}' verification failed for type '{type.Name}'.");
+                    logger!.LogWarning($"Table '{tableName}' verification failed for type '{type.Name}'.");
                 }
             }
         }
@@ -571,11 +572,11 @@ namespace CaPPMS.Data
             {
                 if (!columnNames.Contains(property.Name))
                 {
-                    logger.LogWarning($"Column '{property.Name}' does not exist in table '{tableName}'. Attempting to add it.");
+                    logger!.LogWarning($"Column '{property.Name}' does not exist in table '{tableName}'. Attempting to add it.");
                     bool columnAdded = await TryAddColumnAsync(tableName, property);
                     if (!columnAdded)
                     {
-                        logger.LogError($"Failed to add column '{property.Name}' to table '{tableName}'.");
+                        logger!.LogError($"Failed to add column '{property.Name}' to table '{tableName}'.");
                         return false;
                     }
                 }
@@ -596,7 +597,7 @@ namespace CaPPMS.Data
             }
             catch (Exception ex)
             {
-                logger.LogError($"Error adding column '{property.Name}' to table '{tableName}': {ex.Message}");
+                logger!.LogError($"Error adding column '{property.Name}' to table '{tableName}': {ex.Message}");
                 return false;
             }
         }

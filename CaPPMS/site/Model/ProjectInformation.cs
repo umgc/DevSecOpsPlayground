@@ -352,7 +352,11 @@ namespace CaPPMS.Model
 
             foreach(var file in files)
             {
-                this.Attachments.Add(file as ProjectFile);
+                var pf = file as ProjectFile;
+                if (pf != null)
+                {
+                    this.Attachments.Add(pf);
+                }
             }
 
             this.IsDirty = true;
@@ -369,7 +373,11 @@ namespace CaPPMS.Model
 
             foreach (var file in files)
             {
-                this.Attachments.Add(file as ProjectFile);
+                var pf = file as ProjectFile;
+                if (pf != null)
+                {
+                    this.Attachments.Add(pf);
+                }
             }
 
             this.IsDirty = true;
@@ -379,13 +387,14 @@ namespace CaPPMS.Model
         {
             foreach(var prop in this.GetType().GetProperties())
             {
+                if (prop is null) continue;
                 var canExport = prop.GetCustomAttribute<ExportAttribute>()?.CanExport ?? false;
 
                 if (canExport)
                 {
                     string name = prop.GetCustomAttribute<DisplayNameAttribute>()?.DisplayName ?? prop.Name;
 
-                    yield return Tuple.Create(name, prop.GetValue(this));
+                    yield return Tuple.Create(name, prop.GetValue(this)!);
                 }
             }
         }

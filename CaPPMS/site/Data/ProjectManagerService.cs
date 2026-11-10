@@ -82,6 +82,7 @@ namespace CaPPMS.Data
         {
             foreach(var file in idea.Attachments)
             {
+                if (file.BrowserFile == null) continue;
                 using var stream = file.BrowserFile.OpenReadStream(MaxMBSizePerFile);
                 file.Location = await FileManager.SaveAsync(stream, file.File_ID.ToString(), file.Name);
             }
@@ -108,7 +109,7 @@ namespace CaPPMS.Data
             {
                 foreach(var file in idea.Attachments)
                 {
-                    string fileError = await this.FileManager.DeleteAsync(file.Location, user);
+                    string? fileError = await this.FileManager.DeleteAsync(file.Location, user);
 
                     if (!string.IsNullOrEmpty(fileError) && !fileError.StartsWith("File does not exist."))
                     {
@@ -124,7 +125,7 @@ namespace CaPPMS.Data
 
                 if (string.IsNullOrEmpty(error))
                 {
-                    _ = this.ProjectIdeas.Remove(idea.ProjectID, out ProjectInformation _);
+                    _ = this.ProjectIdeas.Remove(idea.ProjectID, out _);
                     ProjectIdeasChanged?.Invoke(this.ProjectIdeas.Values, EventArgs.Empty);
                 }
             }

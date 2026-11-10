@@ -65,7 +65,7 @@ namespace CaPPMS.Model
         }
         
         [JsonIgnore]
-        public IBrowserFile BrowserFile { get; private set; }
+        public IBrowserFile? BrowserFile { get; private set; } = null!;
 
         public override string ToString()
         {

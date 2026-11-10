@@ -31,7 +31,7 @@ namespace CaPPMSTests.Model
                 }
                 else if (prop.PropertyType == typeof(Guid))
                 {
-                    Assert.IsFalse((Guid)prop.GetValue(comment) == Guid.Empty);
+                    Assert.IsFalse((Guid)prop.GetValue(comment)! == Guid.Empty);
                 }
             }
             Assert.AreEqual(projectID, comment.ProjectID);

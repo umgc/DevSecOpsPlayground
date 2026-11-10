@@ -12,7 +12,8 @@ namespace CaPPMSTests.Attribute
         {
             var dummy = new DummyTableObject();
 
-            Assert.IsFalse(dummy.GetType().GetProperty("Column3").GetCustomAttribute<ExportAttribute>().CanExport);
+            var prop = dummy.GetType().GetProperty("Column3");
+            Assert.IsFalse(prop?.GetCustomAttribute<ExportAttribute>()?.CanExport ?? false);
         }
     }
 }

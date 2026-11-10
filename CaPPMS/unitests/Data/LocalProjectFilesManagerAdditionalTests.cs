@@ -1,4 +1,4 @@
-﻿﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -48,7 +48,7 @@ namespace CaPPMSTests.Data
         {
             var manager = new LocalProjectFilesManager();
             var ms = new MemoryStream(Encoding.UTF8.GetBytes("traversal test"));
-            var ex = Assert.ThrowsException<AggregateException>(() =>
+            var ex = Assert.ThrowsExactly<AggregateException>(() =>
                 Task.Run(async () => await manager.SaveAsync(ms, "../../escape", ".txt")).Result);
             Assert.IsInstanceOfType(ex.InnerException, typeof(UnauthorizedAccessException));
             Assert.IsTrue(ex.InnerException.Message.Contains("Path not within the specified storage location"));

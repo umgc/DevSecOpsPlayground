@@ -22,7 +22,7 @@ namespace CaPPMS.Model
         /// <param name="fileLocation">Location of the stored file.</param>
         /// <param name="principal">User making the request.</param>
         /// <returns>Error</returns>
-        Task<string> DeleteAsync(string fileLocation, IPrincipal principal);
+        public abstract Task<string?> DeleteAsync(string fileLocation, IPrincipal principal);
 
         /// <summary>
         /// Reads the file stream.

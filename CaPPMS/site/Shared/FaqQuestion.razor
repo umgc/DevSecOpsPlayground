@@ -31,7 +31,7 @@
 
 @code {
     [Parameter] public bool IsAuthenticated { get; set; }
-    [Parameter] public FaqInformation FaqInformation { get; set; }
+    [Parameter] public FaqInformation FaqInformation { get; set; } = new();
     [Parameter] public EventCallback<FaqInformation> OnSelectedQuestion { get; set; }
     [Parameter] public string CollapseQuestion { get; set; } = "collapse";
     private bool IsCollapsedReply = true;

@@ -83,7 +83,7 @@
 
                 </td>
             </tr>
-            @if (ProjectInformation.CompletedDocuments.Count > 0)
+            @if (ProjectInformation?.CompletedDocuments.Count > 0)
             {
                 @foreach (CompletedProjectDocumentation proj in ProjectInformation.CompletedDocuments)
                 {
@@ -183,27 +183,27 @@
             <tr>
                 <td>
                     <CascadingAuthenticationState>
-                        <CommentsComponent ProjectGuid="ProjectInformation.ProjectID" />
+                        <CommentsComponent ProjectGuid="@(ProjectInformation?.ProjectID ?? Guid.Empty)" />
                     </CascadingAuthenticationState>
                 </td>
             </tr>
-            @if (ProjectInformation.Status.Equals("Approved"))
+            @if (ProjectInformation?.Status.Equals("Approved") ?? false)
             {
                 <tr>
                     <td>
                         <button class="btn btn-primary" type="button" @onclick="e => completeClicked = !completeClicked">Complete Project</button>
                         @if (completeClicked)
                         {
-                            <TeamSelection @bind-ProjectInformation="projectInformation" />
+                            <TeamSelection @bind-ProjectInformation="ProjectInformation" />
                         }
                     </td>
                 </tr>
             }
             <tr>
                 <td>
-                    @if (ProjectInformation.Status.Equals("Complete"))
+                    @if (ProjectInformation?.Status.Equals("Complete") ?? false)
                     {
-                        <b>Project Completed @projectInformation.SemesterTerm @projectInformation.SemesterYear </b>
+                        <b>Project Completed @_projectInformation?.SemesterTerm @_projectInformation?.SemesterYear </b>
                     }
                     <hr />
                 </td>
@@ -220,7 +220,7 @@
                 <b>Successfully Created Repository!</b>
             </div>
         </table>
-        @if (!ProjectInformation.IsDirty && ProjectInformation.Status.Equals("New"))
+        @if (ProjectInformation is { } p && !p.IsDirty && p.Status.Equals("New"))
         {
             <p>
                 Create GitHub Repository:&nbsp;&emsp;<InputCheckbox @bind-Value="createGitHubRepository" class="form-check-input" />
@@ -265,34 +265,12 @@
 
 @code {
 
-    [Parameter]
-    public ProjectInformation? ProjectInformation
-    {
-        get
-        {
-            return projectInformation;
-        }
-        set
-        {
-            if (!(value is ProjectInformation projectValue))
-            {
-                return;
-            }
+    [Parameter] public ProjectInformation? ProjectInformation { get; set; }
 
-            projectInformation = value;
-            SetupPlaceholder();
-            attachmentSelection.Clear();
-            foreach (ProjectFile file in projectInformation.Attachments)
-            {
-                attachmentSelection.Add(file, false);
-            }
-        }
-    }
-
-    [CascadingParameter] private Task<AuthenticationState> authenticationState { get; set; }
+    [CascadingParameter] private Task<AuthenticationState>? authenticationState { get; set; }
     [Parameter] public string CollapseEntry { get; set; } = "collapse";
-    private ProjectInformation? projectInformation;
-    private ProjectInformation? infoPlaceholder;
+    private ProjectInformation? _projectInformation;
+    private ProjectInformation infoPlaceholder = new();
     private bool completeClicked = false;
 
     private Dictionary<ProjectFile, bool> attachmentSelection = new Dictionary<ProjectFile, bool>();
@@ -325,27 +303,43 @@
         base.OnInitialized();
     }
 
+    protected override async Task OnParametersSetAsync()
+    {
+        if (!(ProjectInformation is ProjectInformation projectValue))
+        {
+            return;
+        }
+        _projectInformation = projectValue;
+        SetupPlaceholder();
+        attachmentSelection.Clear();
+        foreach (ProjectFile file in projectValue.Attachments)
+        {
+            attachmentSelection.Add(file, false);
+        }
+        await base.OnParametersSetAsync();
+    }
+
     private void SetupPlaceholder()
     {
-        if (projectInformation == null)
+        if (_projectInformation == null)
         {
             return;
         }
 
         infoPlaceholder = new ProjectInformation();
-        infoPlaceholder.VideoLink = projectInformation.VideoLink;
-        infoPlaceholder.ProjectTitle = projectInformation.ProjectTitle;
-        infoPlaceholder.ProjectDescription = projectInformation.ProjectDescription;
-        infoPlaceholder.Url = projectInformation.Url;
-        infoPlaceholder.Github = projectInformation.Github;
-        infoPlaceholder.FirstName = projectInformation.FirstName;
-        infoPlaceholder.LastName = projectInformation.LastName;
-        infoPlaceholder.Email = projectInformation.Email;
-        infoPlaceholder.Phone = projectInformation.Phone;
-        infoPlaceholder.SponsorFirstName = projectInformation.SponsorFirstName;
-        infoPlaceholder.SponsorLastName = projectInformation.SponsorLastName;
-        infoPlaceholder.SponsorEmail = projectInformation.SponsorEmail;
-        infoPlaceholder.SponsorPhone = projectInformation.SponsorPhone;
+        infoPlaceholder.VideoLink = _projectInformation.VideoLink;
+        infoPlaceholder.ProjectTitle = _projectInformation.ProjectTitle;
+        infoPlaceholder.ProjectDescription = _projectInformation.ProjectDescription;
+        infoPlaceholder.Url = _projectInformation.Url;
+        infoPlaceholder.Github = _projectInformation.Github;
+        infoPlaceholder.FirstName = _projectInformation.FirstName;
+        infoPlaceholder.LastName = _projectInformation.LastName;
+        infoPlaceholder.Email = _projectInformation.Email;
+        infoPlaceholder.Phone = _projectInformation.Phone;
+        infoPlaceholder.SponsorFirstName = _projectInformation.SponsorFirstName;
+        infoPlaceholder.SponsorLastName = _projectInformation.SponsorLastName;
+        infoPlaceholder.SponsorEmail = _projectInformation.SponsorEmail;
+        infoPlaceholder.SponsorPhone = _projectInformation.SponsorPhone;
     }
 
     private async Task DeleteRecord(bool confirmed)
@@ -355,13 +349,14 @@
             return;
         }
 
+        if (authenticationState is null) return;
         var authState = await authenticationState;
-        string error = await ProjectManager.DeleteAsync(projectInformation, authState.User);
+        string error = await ProjectManager.DeleteAsync(_projectInformation, authState.User);
     }
 
     private async Task ExportEntry()
     {
-        var location = await this.ProjectManager.ExportAsync(projectInformation);
+        var location = await this.ProjectManager.ExportAsync(_projectInformation);
 
         NavigationManager.NavigateTo($"{ProjectManager.FileManager.DownloadPath}{location}", true);
 
@@ -369,6 +364,8 @@
 
     private async Task ApproveIdea(MouseEventArgs e)
     {
+        if (ProjectInformation is null) return;
+        if (_projectInformation is null) return;
         if (createGitHubRepository)
         {
             var gitHubOrganization = "umgc";
@@ -376,7 +373,7 @@
             try
             {
                 this.gitHubState = "none";
-                gitHubError = await GitHub.DoAllTasks(gitHubOrganization, formattedRepoName, projectInformation.ProjectDescription);
+                gitHubError = await GitHub.DoAllTasks(gitHubOrganization, formattedRepoName, _projectInformation.ProjectDescription);
                 this.gitHubState = "block";
                 if (!string.IsNullOrEmpty(gitHubError))
                 {
@@ -404,25 +401,27 @@
 
     private async Task UpdateRecord(bool confirmed)
     {
+        if (ProjectInformation is null) return;
+        if (_projectInformation is null) return;
         this.tableState = "none";
         if (!confirmed)
         {
             return;
         }
 
-        projectInformation.VideoLink = infoPlaceholder.VideoLink;
-        projectInformation.ProjectTitle = infoPlaceholder.ProjectTitle;
-        projectInformation.ProjectDescription = infoPlaceholder.ProjectDescription;
-        projectInformation.Url = infoPlaceholder.Url;
-        projectInformation.Github = infoPlaceholder.Github;
-        projectInformation.FirstName = infoPlaceholder.FirstName;
-        projectInformation.LastName = infoPlaceholder.LastName;
-        projectInformation.Email = infoPlaceholder.Email;
-        projectInformation.Phone = infoPlaceholder.Phone;
-        projectInformation.SponsorFirstName = infoPlaceholder.SponsorFirstName;
-        projectInformation.SponsorLastName = infoPlaceholder.SponsorLastName;
-        projectInformation.SponsorEmail = infoPlaceholder.SponsorEmail;
-        projectInformation.SponsorPhone = infoPlaceholder.SponsorPhone;
+        _projectInformation.VideoLink = infoPlaceholder.VideoLink;
+        _projectInformation.ProjectTitle = infoPlaceholder.ProjectTitle;
+        _projectInformation.ProjectDescription = infoPlaceholder.ProjectDescription;
+        _projectInformation.Url = infoPlaceholder.Url;
+        _projectInformation.Github = infoPlaceholder.Github;
+        _projectInformation.FirstName = infoPlaceholder.FirstName;
+        _projectInformation.LastName = infoPlaceholder.LastName;
+        _projectInformation.Email = infoPlaceholder.Email;
+        _projectInformation.Phone = infoPlaceholder.Phone;
+        _projectInformation.SponsorFirstName = infoPlaceholder.SponsorFirstName;
+        _projectInformation.SponsorLastName = infoPlaceholder.SponsorLastName;
+        _projectInformation.SponsorEmail = infoPlaceholder.SponsorEmail;
+        _projectInformation.SponsorPhone = infoPlaceholder.SponsorPhone;
 
         string link = "";
         if ((!ProjectInformation.Url.StartsWith("http://") && !ProjectInformation.Url.StartsWith("https://")) && ProjectInformation.Url.Length != 0)
@@ -468,11 +467,11 @@
 
         await Task.Run(async () =>
         {
-            var uploaded = await ProjectManager.UpdateAsync(projectInformation);
+            var uploaded = await ProjectManager.UpdateAsync(_projectInformation);
 
             if (uploaded)
             {
-                projectInformation.IsDirty = false;
+                _projectInformation.IsDirty = false;
             }
         });
 
@@ -486,18 +485,20 @@
             return;
         }
 
+        if (authenticationState is null) return;
         var authState = await authenticationState;
         foreach (ProjectFile file in attachmentSelection.Keys)
         {
             if (attachmentSelection[file])
             {
-                await ProjectManager.RemoveFileAsync(projectInformation, file, authState.User);
+                await ProjectManager.RemoveFileAsync(_projectInformation!, file, authState.User);
             }
         }
     }
 
     private void LoadFiles(InputFileChangeEventArgs inputFile)
     {
+        if (_projectInformation is null) return;
         List<IProjectFile> loadedFiles = new();
 
         foreach (var file in inputFile.GetMultipleFiles().Take(ProjectManager.MaxNumberOfFiles))
@@ -512,7 +513,7 @@
             loadedFiles.Add(projectFile);
         }
 
-        projectInformation.AddAttachments(loadedFiles);
+        _projectInformation.AddAttachments(loadedFiles);
     }
 
     private string GetSuggestedName()

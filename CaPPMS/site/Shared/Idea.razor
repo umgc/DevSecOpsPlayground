@@ -184,7 +184,7 @@
     public FormButtons ShowFormButton { get; set; } = FormButtons.Submit;
 
     [Parameter]
-    public IIdea Parent { get; set; } = null;
+    public IIdea? Parent { get; set; } = null;
 
     [Parameter]
     public ProjectInformation ProjectIdea
@@ -203,7 +203,7 @@
 
     private string DownloadFileName => $"{idea.ProjectTitle}-Export.pdf";
 
-    private string Error { get; set; }
+    private string Error { get; set; } = string.Empty;
 
     private List<IProjectFile> loadedFiles = new();
 
