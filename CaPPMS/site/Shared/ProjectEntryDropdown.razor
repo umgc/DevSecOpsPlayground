@@ -28,7 +28,7 @@
                     <table>
                         <tr>
                             <td style="padding-top:0px;">Project Title:</td>
-                            <td style="padding-top:0px;">@ProjectInformation.ProjectTitle</td>
+                            <td style="padding-top:0px;">@ProjectInformation!.ProjectTitle</td>
 
                         </tr>
                         <tr>
@@ -106,7 +106,7 @@
 </div>
 
 @code {
-    [Parameter] public ProjectInformation ProjectInformation { get; set; }
+    [Parameter] public ProjectInformation? ProjectInformation { get; set; }
 
     [Parameter] public string CollapseEntry { get; set; } = "collapse";
 }

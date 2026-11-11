@@ -61,7 +61,7 @@ namespace CaPPMS.Data
 
         public bool Remove(FaqInformation faqInformation)
         {
-            if (!FaqInfo.TryRemove(faqInformation.Guid, out FaqInformation faq))
+            if (!FaqInfo.TryRemove(faqInformation.Guid, out _))
             {
                 return false;
             }

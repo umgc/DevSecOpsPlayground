@@ -2,6 +2,7 @@
 @using CaPPMS.Model
 @using CaPPMS.Attributes
 @using MudBlazor
+@using MudBlazor.Components
 @namespace CaPPMS.Shared
 @using System
 
@@ -10,29 +11,29 @@
 
 <MudTable Items="PagedItems" Class="@CssClass" Dense="true">
     <HeaderContent>
-        <MudTableRow>
-            <MudTableTh Style="cursor:pointer" OnClick="() => SortByColumn(nameof(ProjectInformation.ProjectTitle))">
+        <MudTr>
+            <MudTh Style="cursor:pointer" @onclick="() => SortByColumn(nameof(ProjectInformation.ProjectTitle))">
                 Project Title
-            </MudTableTh>
-            <MudTableTh Style="cursor:pointer" OnClick="() => SortByColumn(nameof(ProjectInformation.ProjectDescription))">
+            </MudTh>
+            <MudTh Style="cursor:pointer" @onclick="() => SortByColumn(nameof(ProjectInformation.ProjectDescription))">
                 Project Description
-            </MudTableTh>
-            <MudTableTh Style="cursor:pointer" OnClick="() => SortByColumn(nameof(ProjectInformation.Status))">
+            </MudTh>
+            <MudTh Style="cursor:pointer" @onclick="() => SortByColumn(nameof(ProjectInformation.Status))">
                 Status
-            </MudTableTh>
-        </MudTableRow>
+            </MudTh>
+        </MudTr>
     </HeaderContent>
     <RowTemplate Context="item">
-        <MudTableRow>
-            <MudTableTd>
+        <MudTr>
+            <MudTd>
                 <button @onclick="() => ToggleCollapse(item)" class="btn btn-primary btn-sm">
                     @(IsCollapsed(item) ? "+" : "-")
                 </button>
-            </MudTableTd>
-            <MudTableTd>@item.ProjectTitle</MudTableTd>
-            <MudTableTd>@item.ProjectDescription</MudTableTd>
-            <MudTableTd>@item.Status</MudTableTd>
-        </MudTableRow>
+            </MudTd>
+            <MudTd>@item.ProjectTitle</MudTd>
+            <MudTd>@item.ProjectDescription</MudTd>
+            <MudTd>@item.Status</MudTd>
+        </MudTr>
     </RowTemplate>
 
 </MudTable>

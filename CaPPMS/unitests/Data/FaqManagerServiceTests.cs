@@ -65,7 +65,7 @@ namespace CaPPMSTests.Data
             var fileData = File.ReadAllText(filePath);
 
             var faqData = JsonConvert.DeserializeObject<Dictionary<string, FaqInformation>>(fileData);
-            Assert.AreEqual(1, faqData.Count);
+            Assert.AreEqual(1, faqData!.Count);
         }
 
         [TestMethod]

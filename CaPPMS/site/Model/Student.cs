@@ -253,7 +253,7 @@ namespace CaPPMS.Model
         /// </summary>
         /// <param name="filter">Search Term.</param>
         /// <returns>If object matches the filter.</returns>
-        public bool IsMatch(string filter)
+        public bool IsMatch(string? filter)
         {
             if (string.IsNullOrEmpty(filter))
             {

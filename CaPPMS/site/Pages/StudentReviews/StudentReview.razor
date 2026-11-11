@@ -204,7 +204,7 @@
         IEnumerable<Student> students = await DBOperationsService.GetRecords<Student>();
         foreach (Student student in students)
         {
-            if (student.Email == consentHandler.User.Identity.Name)
+            if (student.Email == consentHandler.User?.Identity?.Name)
             {
                 loggedInStudent = student.Clone();
                 break;

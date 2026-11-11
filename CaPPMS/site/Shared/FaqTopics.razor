@@ -48,31 +48,30 @@
 
     public bool showPopup = false;
 
-    [CascadingParameter] private Task<AuthenticationState> AuthenticationState { get; set; }
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationState { get; set; }
     [Parameter] public EventCallback<string> TitleChanged { get; set; }
-    [Parameter] public string Title { get; set; }
+    [Parameter] public string Title { get; set; } = string.Empty;
     [Parameter] public EventCallback<FaqInformation> SelectedFaqChanged { get; set; }
-    [Parameter] public FaqInformation SelectedFaq { get; set; } = null;
-    [Parameter] public string Filter { get; set; }
+    [Parameter] public FaqInformation? SelectedFaq { get; set; } = null;
+    [Parameter] public string Filter { get; set; } = string.Empty;
 
-    [Parameter]
-    public IEnumerable<FaqInformation> FaqKeys
+    [Parameter] public IEnumerable<FaqInformation> FaqKeys { get; set; } = new List<FaqInformation>();
+
+    protected override async Task OnParametersSetAsync()
     {
-        set
+        if (FaqKeys is IEnumerable<FaqInformation> faqInfos)
         {
-            if (value is IEnumerable<FaqInformation>)
+            this.faqTopicCollapseMap.Clear();
+            foreach (FaqInformation faqInfo in faqInfos)
             {
-                this.faqTopicCollapseMap.Clear();
-                foreach (FaqInformation faqInfo in value)
+                if (!this.faqTopicCollapseMap.ContainsKey(faqInfo.Topic))
                 {
-                    if (!this.faqTopicCollapseMap.ContainsKey(faqInfo.Topic))
-                    {
-                        this.faqTopicCollapseMap.Add(faqInfo.Topic, new FaqTopicCollaper());
-                    }
-                    this.faqTopicCollapseMap[faqInfo.Topic].faqsWithTopic.Add(faqInfo);
+                    this.faqTopicCollapseMap.Add(faqInfo.Topic, new FaqTopicCollaper());
                 }
+                this.faqTopicCollapseMap[faqInfo.Topic].faqsWithTopic.Add(faqInfo);
             }
         }
+        await base.OnParametersSetAsync();
     }
 
     private bool IsTopicWithAnsweredQuestions(string topic) {
@@ -107,8 +106,8 @@
     private bool isAuthenticated;
     protected override async Task OnInitializedAsync()
     {
-        var authState = await AuthenticationState;
-        this.isAuthenticated = authState.User?.Identity.IsAuthenticated ?? false;
+        var authState = await AuthenticationState!;
+        this.isAuthenticated = authState.User?.Identity?.IsAuthenticated ?? false;
         await base.OnInitializedAsync();
     }
     private void OpenModify(FaqInformation faqInfo)

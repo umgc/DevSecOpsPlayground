@@ -84,15 +84,15 @@ else
     public Guid ProjectGuid { get; set; }
 
     [CascadingParameter]
-    private Task<AuthenticationState> authenticationStateTask { get; set; }
+    private Task<AuthenticationState>? authenticationStateTask { get; set; }
     private bool isAuthenticated;
 
-    private Comment NewComment { get; set; }
-    private Contact NewContact { get; set; }
+    private Comment NewComment { get; set; } = new();
+    private Contact NewContact { get; set; } = new();
 
     private ICommentManager CommentManager => ProjectManager;
 
-    private IEnumerable<Comment> Comments;
+    private IEnumerable<Comment> Comments = new List<Comment>();
 
     protected override async Task OnInitializedAsync()
     {
@@ -108,8 +108,8 @@ else
             ShouldUpdateState();
         };
         
-        var authState = await authenticationStateTask;
-        this.isAuthenticated = authState.User?.Identity.IsAuthenticated ?? false;
+        var authState = await authenticationStateTask!;
+        this.isAuthenticated = authState.User?.Identity?.IsAuthenticated ?? false;
         Comments = CommentManager.GetComments(ProjectGuid);
         NewComment = new Comment(ProjectGuid);
         NewContact = new Contact();
@@ -132,7 +132,7 @@ else
     {
         if (this.isAuthenticated)
         {
-            var authState = await authenticationStateTask;
+            var authState = await authenticationStateTask!;
             NewComment.UserEmail = authState.User?.Identity?.Name ?? "Unidentified User";
         }
 

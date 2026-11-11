@@ -7,7 +7,7 @@ namespace CaPPMS.Model
         /// <summary>
         /// Files received from the browser.
         /// </summary>
-        IBrowserFile BrowserFile { get; }
+        IBrowserFile? BrowserFile { get; }
 
         /// <summary>
         /// Location stored on the backend.
@@ -17,7 +17,7 @@ namespace CaPPMS.Model
         /// <summary>
         /// Bring the file name forward for easy enumeration.
         /// </summary>
-        string Name => BrowserFile.Name;
+        string? Name => BrowserFile?.Name;
 
         long Size { get; set; }
     }

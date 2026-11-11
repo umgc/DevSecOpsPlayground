@@ -19,7 +19,7 @@
 }
 else
 {
-    <MudTextField T="string" @bind="SearchTerm" Label="Search projects" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" Class="mb-4" />
+    <MudTextField T="string" @bind-Value="SearchTerm" Label="Search projects" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" Class="mb-4" />
 
 <MudGrid>
     @foreach (ProjectInformation idea in filteredProjects)
@@ -106,10 +106,10 @@ else
 }
 
 @code {
-    IEnumerable<ProjectInformation> sortedProjects;
+    IEnumerable<ProjectInformation> sortedProjects = Enumerable.Empty<ProjectInformation>();
     private string SearchTerm = string.Empty;
     private List<string> activeTerms = new List<string>();
-    private string termStr;
+    private string termStr = string.Empty;
 
     private IEnumerable<ProjectInformation> filteredProjects =>
         string.IsNullOrWhiteSpace(SearchTerm)

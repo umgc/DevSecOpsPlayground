@@ -1,4 +1,4 @@
-﻿﻿using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -55,10 +55,9 @@ namespace CaPPMSTests.Data
         }
 
         [TestMethod()]
-        [ExpectedException(typeof(ArgumentException))]
         public void Constructor_WithPathOutsideBaseDirectory_ThrowsArgumentException()
         {
-            var service = new DBOperationsService("../../../escape.db", null);
+            Assert.ThrowsExactly<ArgumentException>(() => new DBOperationsService("../../../escape.db", null));
         }
 
         #endregion
@@ -150,21 +149,21 @@ namespace CaPPMSTests.Data
         public async Task AddRecord_WithNullRecord_ThrowsArgumentNullException()
         {
             var service = new DBOperationsService(GetUniqueDbName("add-null-record"), null);
-            await Assert.ThrowsExceptionAsync<ArgumentNullException>(() => service.AddRecord<Student>(null));
+            await Assert.ThrowsExactlyAsync<ArgumentNullException>(() => service.AddRecord<Student>(null));
         }
 
         [TestMethod()]
         public async Task UpdateRecord_WithNullRecord_ThrowsArgumentNullException()
         {
             var service = new DBOperationsService(GetUniqueDbName("update-null-record"), null);
-            await Assert.ThrowsExceptionAsync<ArgumentNullException>(() => service.UpdateRecord<Student>(null));
+            await Assert.ThrowsExactlyAsync<ArgumentNullException>(() => service.UpdateRecord<Student>(null));
         }
 
         [TestMethod()]
         public async Task RemoveRecord_WithNullRecord_ThrowsArgumentNullException()
         {
             var service = new DBOperationsService(GetUniqueDbName("remove-null-record"), null);
-            await Assert.ThrowsExceptionAsync<ArgumentNullException>(() => service.RemoveRecord<Student>(null));
+            await Assert.ThrowsExactlyAsync<ArgumentNullException>(() => service.RemoveRecord<Student>(null));
         }
 
         [TestMethod()]

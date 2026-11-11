@@ -20,7 +20,7 @@ namespace CaPPMSTests.Model
                 }
                 else if (prop.PropertyType == typeof(Guid))
                 {
-                    Assert.IsFalse((Guid)prop.GetValue(contact) == Guid.Empty);
+                    Assert.IsFalse((Guid)prop.GetValue(contact)! == Guid.Empty);
                 }
             }
         }

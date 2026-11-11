@@ -22,7 +22,7 @@
 </div>
 
 @code {
-    [Parameter] public Comment comment { get; set; }
+    [Parameter] public Comment comment { get; set; } = new();
     [Parameter] public bool IsAuthenticated { get; set; }
 
     private ICommentManager CommentManager => ProjectManager;

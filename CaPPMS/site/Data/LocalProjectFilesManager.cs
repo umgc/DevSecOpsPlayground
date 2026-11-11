@@ -83,17 +83,17 @@ namespace CaPPMS.Data
         /// </summary>
         /// <param name="fileLocation"></param>
         /// <returns></returns>
-        public Task<string> DeleteAsync(string fileLocation)
+        public Task<string?> DeleteAsync(string fileLocation)
         {
-            return Task.FromResult(Delete(fileLocation, true));
+            return Task.FromResult<string?>(Delete(fileLocation, true));
         }
 
         /// <inheritdoc/>
-        public override Task<string> DeleteAsync(string fileLocation, IPrincipal principal)
+        public override Task<string?> DeleteAsync(string fileLocation, IPrincipal principal)
         {
             if (!principal.Identity?.IsAuthenticated ?? false)
             {
-                return Task.FromResult("User is not authenticated");
+                return Task.FromResult<string?>("User is not authenticated");
             }
 
             //if (!principal.IsInRole("Contributor"))
@@ -106,7 +106,7 @@ namespace CaPPMS.Data
             if (!IsWithinFileDir(filePath))
             {
                 // Maybe log this in
-                return Task.FromResult($"Path not within the specified storage location. User:{principal?.Identity?.Name}. Attempted path:{filePath}");
+                return Task.FromResult<string?>($"Path not within the specified storage location. User:{principal?.Identity?.Name}. Attempted path:{filePath}");
             }
 
             // Clean up both compressed (.gz) and legacy (raw) variants so a
@@ -210,7 +210,7 @@ namespace CaPPMS.Data
         /// <param name="fileLocation">Location of the File</param>
         /// <param name="fromTest">If from test or not.</param>
         /// <returns></returns>
-        private string Delete(string fileLocation, bool fromTest)
+        private string? Delete(string fileLocation, bool fromTest)
         {
             Regex testLocation = new Regex(@"[\\/][Bb]in[\\/](Debug|Release)[\\/]");
 

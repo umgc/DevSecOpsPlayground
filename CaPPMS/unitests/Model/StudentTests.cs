@@ -24,19 +24,19 @@ namespace CaPPMSTests.Model
         [TestMethod]
         public void ParseData_EmptyData_ThrowsArgumentException()
         {
-            Assert.ThrowsException<System.ArgumentException>(() => Student.ParseData(string.Empty, 1, out var dropped));
+            Assert.ThrowsExactly<System.ArgumentException>(() => Student.ParseData(string.Empty, 1, out var dropped));
         }
 
         [TestMethod]
         public void ParseData_NullData_ThrowsArgumentException()
         {
-            Assert.ThrowsException<System.ArgumentException>(() => Student.ParseData(null!, 1, out var dropped));
+            Assert.ThrowsExactly<System.ArgumentException>(() => Student.ParseData(null!, 1, out var dropped));
         }
 
         [TestMethod]
         public void ParseData_InvalidClassId_ThrowsArgumentException()
         {
-            Assert.ThrowsException<System.ArgumentException>(() => Student.ParseData("LastName,FirstName,Email Address,Github.com account", -1, out var dropped));
+            Assert.ThrowsExactly<System.ArgumentException>(() => Student.ParseData("LastName,FirstName,Email Address,Github.com account", -1, out var dropped));
         }
 
         [TestMethod]
